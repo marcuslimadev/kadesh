@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 // Rotas públicas
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/projects', [ProjectController::class, 'index']); // Lista pública de projetos
+Route::get('/projects', [ProjectController::class, 'index'])->name('api.projects.index');
 
 // Rotas protegidas
 Route::middleware('auth:sanctum')->group(function () {
@@ -16,13 +16,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     
-    // Projetos
-    Route::apiResource('projects', ProjectController::class);
-    Route::post('projects/{project}/confirm-winner', [ProjectController::class, 'confirmWinner']);
+    // Projetos (API)
+    Route::post('/projects', [ProjectController::class, 'store'])->name('api.projects.store');
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('api.projects.show');
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('api.projects.update');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('api.projects.destroy');
+    Route::post('projects/{project}/confirm-winner', [ProjectController::class, 'confirmWinner'])->name('api.projects.confirmWinner');
     
-    // Lances
-    Route::apiResource('bids', BidController::class)->only(['store', 'update', 'destroy']);
-    Route::get('projects/{project}/bids', [BidController::class, 'projectBids']);
+    // Lances (API)
+    Route::post('/bids', [BidController::class, 'store'])->name('api.bids.store');
+    Route::put('/bids/{bid}', [BidController::class, 'update'])->name('api.bids.update');
+    Route::delete('/bids/{bid}', [BidController::class, 'destroy'])->name('api.bids.destroy');
+    Route::get('projects/{project}/bids', [BidController::class, 'projectBids'])->name('api.projects.bids');
     
     // Dashboard stats
     Route::get('/dashboard/stats', function () {

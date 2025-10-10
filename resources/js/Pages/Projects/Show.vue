@@ -254,11 +254,6 @@
           </div>
         </div>
 
-        <!-- Debug simples -->
-        <div v-if="$page.props.auth.user && $page.props.auth.user.user_type === 'provider'" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          <strong>✅ Você é um fornecedor! O formulário deve aparecer abaixo.</strong>
-        </div>
-
         <!-- Formulário para enviar propostas (apenas se for fornecedor e projeto ainda aberto) -->
         <div v-if="$page.props.auth.user && $page.props.auth.user.user_type === 'provider' && project.status === 'open' && !isExpired" class="bg-white shadow overflow-hidden sm:rounded-lg mt-8">
           <div class="px-4 py-5 sm:px-6 border-b border-gray-200">

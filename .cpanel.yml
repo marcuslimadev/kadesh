@@ -1,0 +1,56 @@
+---
+deployment:
+  tasks:
+    # Definir caminho de deploy
+    - export DEPLOYPATH=/home/mmbsites/public_html/kadesh
+    
+    # Criar diretório se não existir
+    - mkdir -p $DEPLOYPATH
+    
+    # Copiar arquivos do projeto
+    - /bin/cp -R * $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp -R .[^.]* $DEPLOYPATH/ 2>/dev/null || true
+    
+    # Navegar para o diretório de deploy
+    - cd $DEPLOYPATH
+    
+    # Configurar ambiente de produção
+    - cp .env.production .env
+    
+    # Instalar dependências PHP (sem dev)
+    - composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
+    
+    # Gerar chave se necessário
+    - php artisan key:generate --force
+    
+    # Limpar caches antigos
+    - php artisan config:clear
+    - php artisan route:clear
+    - php artisan view:clear
+    - php artisan cache:clear
+    
+    # Executar migrações
+    - php artisan migrate --force
+    
+    # Cachear para produção
+    - php artisan config:cache
+    - php artisan route:cache
+    - php artisan view:cache
+    
+    # Instalar dependências Node.js
+    - npm ci --production --silent
+    
+    # Compilar assets para produção
+    - npm run build
+    
+    # Configurar permissões corretas
+    - find $DEPLOYPATH -type f -exec chmod 644 {} \;
+    - find $DEPLOYPATH -type d -exec chmod 755 {} \;
+    - chmod -R 775 $DEPLOYPATH/storage
+    - chmod -R 775 $DEPLOYPATH/bootstrap/cache
+    
+    # Otimizar autoloader final
+    - composer dump-autoload --optimize
+    
+    # Criar link simbólico para storage (se necessário)
+    - php artisan storage:link
