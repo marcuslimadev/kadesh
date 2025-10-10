@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
 
-        // CORS deve vir primeiro
+        // CORS aplicado ao grupo API; Sanctum stateful continua ativo
         $middleware->api(prepend: [
             \App\Http\Middleware\Cors::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
