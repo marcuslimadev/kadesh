@@ -5,7 +5,7 @@ deployment:
     - mkdir -p $DEPLOYPATH
     - /bin/cp -R * $DEPLOYPATH/
     - cd $DEPLOYPATH
-    - cp .env.production .env
+    - cp .env.cpanel .env
     - composer install --optimize-autoloader --no-dev --no-interaction
     - php artisan key:generate --force
     - php artisan config:clear
