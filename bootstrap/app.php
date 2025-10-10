@@ -12,8 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // MIDDLEWARE GLOBAL: corrige TODOS os cookies automaticamente (PRIMEIRO na pilha)
-        $middleware->prepend([
+        // MIDDLEWARE GLOBAL: corrige TODOS os cookies automaticamente
+        $middleware->use([
             \App\Http\Middleware\TestMiddleware::class,
             \App\Http\Middleware\FixSessionCookies::class,
         ]);
