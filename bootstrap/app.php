@@ -33,6 +33,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\FixSessionCookies::class,
         ]);
     })
+    ->withProviders([
+        App\Providers\CookieFixServiceProvider::class,
+    ])
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
