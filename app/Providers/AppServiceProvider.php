@@ -34,13 +34,24 @@ class AppServiceProvider extends ServiceProvider
         // Ao definir null, o Laravel emite cookie host-only (sem Domain), o que é seguro.
         config(['session.domain' => null]);
 
-        // CORREÇÃO SIMPLES: Força configurações de sessão corretas em runtime
+        // CORREÇÃO RADICAL: Força configurações de sessão corretas MUITO CEDO
         // Isso previne que cookies sejam gerados com domains malformados
+        
+        // Primeiro, limpa qualquer configuração corrompida
+        config()->forget('session.domain');
+        
+        // Depois força as configurações corretas
         config([
             'session.domain' => null,  // Host-only (sem domain attribute)
             'session.secure' => true,  // HTTPS apenas
             'session.same_site' => 'lax',
             'session.http_only' => true,
+            'session.driver' => 'cookie',
+        ]);
+        
+        // Força também para Sanctum
+        config([
+            'sanctum.domain' => null,
         ]);
     }
 }

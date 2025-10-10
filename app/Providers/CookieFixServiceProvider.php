@@ -10,15 +10,43 @@ class CookieFixServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        // Hook global que executa APÓS cada resposta ser preparada
-        $this->app->resolving('response', function ($response) {
-            $this->fixMalformedCookies($response);
-        });
-        
-        // Também para JsonResponse
-        $this->app->resolving(JsonResponse::class, function ($response) {
-            $this->fixMalformedCookies($response);
-        });
+        // ABORDAGEM RADICAL: Intercepta a CRIAÇÃO de cookies via output buffering
+        if (!defined('COOKIE_FIX_ENABLED')) {
+            define('COOKIE_FIX_ENABLED', true);
+            
+            // Inicia output buffering para capturar headers
+            ob_start(function ($buffer) {
+                // Pega todos os headers que foram definidos
+                $headers = headers_list();
+                $cookieHeaders = [];
+                
+                foreach ($headers as $header) {
+                    if (stripos($header, 'Set-Cookie:') === 0) {
+                        $cookieHeaders[] = $header;
+                    }
+                }
+                
+                // Remove headers malformados e redefine
+                foreach ($cookieHeaders as $cookieHeader) {
+                    if (strpos($cookieHeader, 'DB_CHARSET') !== false) {
+                        // Remove o header malformado
+                        header_remove('Set-Cookie');
+                        
+                        // Corrige e readiciona
+                        $fixed = preg_replace('/;\s*domain=[^;]*DB_[^;]*/', '', $cookieHeader);
+                        $fixed = preg_replace('/;\s*domain=[^;]*/', '', $fixed);
+                        $fixed = str_replace('Set-Cookie: ', '', $fixed);
+                        
+                        // Readiciona o cookie corrigido
+                        header('Set-Cookie: ' . $fixed, false);
+                        
+                        error_log('Cookie corrigido: ' . $fixed);
+                    }
+                }
+                
+                return $buffer;
+            });
+        }
     }
     
     private function fixMalformedCookies($response): void
