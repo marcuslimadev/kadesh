@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class FixSessionCookies
@@ -16,6 +17,9 @@ class FixSessionCookies
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Log para debug
+        Log::info('FixSessionCookies middleware executado para: ' . $request->url());
+        
         $response = $next($request);
 
         // Force configuração de sessão segura em runtime (ignora .env)
@@ -29,6 +33,8 @@ class FixSessionCookies
         // Se a resposta tem Set-Cookie, limpa domínios inválidos
         $headers = $response->headers;
         $cookies = $headers->get('set-cookie', [], false);
+        
+        Log::info('Cookies originais encontrados: ' . count($cookies), $cookies);
         
         if (!empty($cookies)) {
             $fixedCookies = [];
@@ -54,6 +60,8 @@ class FixSessionCookies
             foreach ($fixedCookies as $fixedCookie) {
                 $headers->set('set-cookie', $fixedCookie, false);
             }
+            
+            Log::info('Cookies corrigidos aplicados: ' . count($fixedCookies), $fixedCookies);
         }
 
         return $response;
