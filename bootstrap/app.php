@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // MIDDLEWARE GLOBAL: corrige TODOS os cookies automaticamente
+        $middleware->append([
+            \App\Http\Middleware\FixSessionCookies::class,
+        ]);
+        
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
@@ -21,7 +26,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\Cors::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
-
 
     })
     ->withExceptions(function (Exceptions $exceptions): void {
