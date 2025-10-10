@@ -22,17 +22,24 @@ class Cors
             $response = $next($request);
         }
 
-        $allowedOrigins = array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', ''))));
+        // Pegar as origens permitidas do .env
+        $allowedOriginsString = env('CORS_ALLOWED_ORIGINS', '');
+        $allowedOrigins = array_filter(array_map('trim', explode(',', $allowedOriginsString)));
+        
+        // Pegar o Origin da requisição
         $origin = $request->headers->get('Origin');
-        // Se não houver Origin, usa o host atual (mesma origem)
-        $fallback = $request->getSchemeAndHttpHost();
-        if ($origin && ($allowedOrigins === [] || in_array($origin, $allowedOrigins, true))) {
+
+        // Se há um Origin e ele está na lista de permitidos, usa ele
+        if ($origin && in_array($origin, $allowedOrigins, true)) {
             $response->headers->set('Access-Control-Allow-Origin', $origin);
-        } else {
-            $response->headers->set('Access-Control-Allow-Origin', $fallback);
+        } 
+        // Se não há Origin ou não está permitido, usa o primeiro da lista como fallback
+        elseif (!empty($allowedOrigins)) {
+            $response->headers->set('Access-Control-Allow-Origin', $allowedOrigins[0]);
         }
+        
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN, X-XSRF-TOKEN');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
 
         return $response;

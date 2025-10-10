@@ -12,27 +12,26 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // MIDDLEWARE aplicado a WEB E API para capturar todos os endpoints
+        // Remover HandleCors global do Laravel (causa conflito)
+        $middleware->remove(\Illuminate\Http\Middleware\HandleCors::class);
+        
+        // MIDDLEWARE customizado de CORS aplicado PRIMEIRO em todas as requisições
+        $middleware->prepend(\App\Http\Middleware\Cors::class);
+
         $middleware->web(append: [
             \App\Http\Middleware\TestMiddleware::class,
             \App\Http\Middleware\FixSessionCookies::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ]);
-        
+
+        $middleware->api(prepend: [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        ]);
+
         $middleware->api(append: [
             \App\Http\Middleware\TestMiddleware::class,
             \App\Http\Middleware\FixSessionCookies::class,
         ]);
-        
-        $middleware->web(append: [
-            \App\Http\Middleware\HandleInertiaRequests::class,
-        ]);
-
-        // CORS aplicado ao grupo API; Sanctum stateful continua ativo
-        $middleware->api(prepend: [
-            \App\Http\Middleware\Cors::class,
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
-
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
