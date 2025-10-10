@@ -37,10 +37,7 @@ class AppServiceProvider extends ServiceProvider
         // CORREÇÃO RADICAL: Força configurações de sessão corretas MUITO CEDO
         // Isso previne que cookies sejam gerados com domains malformados
         
-        // Primeiro, limpa qualquer configuração corrompida
-        config()->forget('session.domain');
-        
-        // Depois força as configurações corretas
+        // Força as configurações corretas diretamente
         config([
             'session.domain' => null,  // Host-only (sem domain attribute)
             'session.secure' => true,  // HTTPS apenas

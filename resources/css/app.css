@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Alpine.js cloak - esconde elementos até que o Alpine.js seja carregado */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Estilos para menu responsivo */
+.nav-menu-transition {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Fix para z-index do menu mobile */
+.mobile-menu {
+    z-index: 50;
+}
+
+/* Correção para overflow durante transições */
+body.menu-open {
+    overflow: hidden;
+}
