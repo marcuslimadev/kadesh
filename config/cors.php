@@ -19,7 +19,8 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5175'],
+    // Defina as origens permitidas via variável de ambiente (separadas por vírgula)
+    'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:5175')), 
 
     'allowed_origins_patterns' => [],
 
