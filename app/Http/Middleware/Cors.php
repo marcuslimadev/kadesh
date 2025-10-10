@@ -22,10 +22,15 @@ class Cors
             $response = $next($request);
         }
 
-    $allowedOrigins = explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:5175'));
-    $origin = $request->headers->get('Origin');
-    $allow = in_array($origin, $allowedOrigins, true) ? $origin : $allowedOrigins[0];
-    $response->headers->set('Access-Control-Allow-Origin', $allow);
+        $allowedOrigins = array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', ''))));
+        $origin = $request->headers->get('Origin');
+        // Se não houver Origin, usa o host atual (mesma origem)
+        $fallback = $request->getSchemeAndHttpHost();
+        if ($origin && ($allowedOrigins === [] || in_array($origin, $allowedOrigins, true))) {
+            $response->headers->set('Access-Control-Allow-Origin', $origin);
+        } else {
+            $response->headers->set('Access-Control-Allow-Origin', $fallback);
+        }
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN');
         $response->headers->set('Access-Control-Allow-Credentials', 'true');
