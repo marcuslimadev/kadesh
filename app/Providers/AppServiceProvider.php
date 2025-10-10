@@ -33,5 +33,31 @@ class AppServiceProvider extends ServiceProvider
         // (e.g., "domain=.mmbsites.com.brDB_CHARSET=utf8mb4").
         // Ao definir null, o Laravel emite cookie host-only (sem Domain), o que é seguro.
         config(['session.domain' => null]);
+
+        // INTERCEPTADOR GLOBAL DE RESPOSTA para corrigir cookies malformados
+        // Aplica-se automaticamente a TODAS as requisições
+        $this->app->terminating(function ($request, $response) {
+            if (method_exists($response, 'headers')) {
+                $headers = $response->headers;
+                $cookies = $headers->get('set-cookie', [], false);
+                
+                if (!empty($cookies)) {
+                    $fixedCookies = [];
+                    foreach ($cookies as $cookie) {
+                        // Remove domínios malformados (ex: ".mmbsites.com.brDB_CHARSET=utf8mb4")
+                        $fixed = preg_replace('/;\s*domain=[^;]*DB_[^;]*/', '', $cookie);
+                        // Remove QUALQUER domain para forçar host-only sempre
+                        $fixed = preg_replace('/;\s*domain=[^;]*/', '', $fixed);
+                        $fixedCookies[] = $fixed;
+                    }
+                    
+                    // Substitui todos os Set-Cookie pelos corrigidos
+                    $headers->remove('set-cookie');
+                    foreach ($fixedCookies as $fixedCookie) {
+                        $headers->set('set-cookie', $fixedCookie, false);
+                    }
+                }
+            }
+        });
     }
 }
