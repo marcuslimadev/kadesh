@@ -28,7 +28,7 @@ class CookieFixServiceProvider extends ServiceProvider
                 }
 
                 if (! empty($cookieHeaders)) {
-                    Log::debug('CookieFixServiceProvider captured cookie headers', $cookieHeaders);
+                    Log::info('CookieFixServiceProvider captured cookie headers', $cookieHeaders);
                 }
                 
                 // Remove headers malformados e redefine
@@ -45,7 +45,7 @@ class CookieFixServiceProvider extends ServiceProvider
                         // Readiciona o cookie corrigido
                         header('Set-Cookie: ' . $fixed, false);
                         
-                        Log::debug('CookieFixServiceProvider rewrote malformed cookie', ['original' => $cookieHeader, 'fixed' => $fixed]);
+                        Log::info('CookieFixServiceProvider rewrote malformed cookie', ['original' => $cookieHeader, 'fixed' => $fixed]);
                     }
                 }
                 

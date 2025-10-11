@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
 
         if (! $loggedBeforeOverride) {
             $loggedBeforeOverride = true;
-            Log::debug('Session domain diagnostics (before overrides)', [
+            Log::info('Session domain diagnostics (before overrides)', [
                 'env' => $envSessionDomain,
                 'getenv' => $getenvSessionDomain,
                 '_ENV' => $superGlobalEnv,
@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
         static $loggedAfterOverride = false;
         if (! $loggedAfterOverride) {
             $loggedAfterOverride = true;
-            Log::debug('Session domain diagnostics (after overrides)', [
+            Log::info('Session domain diagnostics (after overrides)', [
                 'config_after' => config('session.domain'),
                 'session_driver' => config('session.driver'),
                 'sanctum_domain' => config('sanctum.domain'),
