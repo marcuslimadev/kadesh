@@ -31,6 +31,11 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    
+    # FIX: Remove domain malformado dos cookies Set-Cookie
+    # Remove "domain=.mmbsites.com.brDB_CHARSET=utf8mb4" e similar
+    Header edit Set-Cookie ";\s*domain=[^;]*DB_CHARSET[^;]*" ""
+    Header edit Set-Cookie ";\s*domain=[^;]+" ""
 </IfModule>
 
 # Compression
