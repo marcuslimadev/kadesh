@@ -32,34 +32,50 @@ foreach ($lines as $i => $line) {
     }
 }
 
-echo "\n=== CONFIG VALUES (before boot) ===\n";
-echo "config('session.domain'): ";
-var_dump(config('session.domain'));
-
-echo "\nconfig('session.cookie'): ";
-var_dump(config('session.cookie'));
-
-echo "\nconfig('session.secure'): ";
-var_dump(config('session.secure'));
-
-// Boot the application
+// Boot the application first
 $app->boot();
 
-echo "\n\n=== CONFIG VALUES (after boot) ===\n";
-echo "config('session.domain'): ";
-var_dump(config('session.domain'));
+echo "\n=== CONFIG VALUES ===\n";
+$sessionDomain = $app['config']->get('session.domain');
+echo "session.domain: " . var_export($sessionDomain, true) . "\n";
 
-echo "\nconfig('sanctum.domain'): ";
-var_dump(config('sanctum.domain'));
+$sessionCookie = $app['config']->get('session.cookie');
+echo "session.cookie: " . var_export($sessionCookie, true) . "\n";
 
-echo "\n\n=== DATABASE CONFIG ===\n";
-echo "config('database.connections.mysql.charset'): ";
-var_dump(config('database.connections.mysql.charset'));
+$dbCharset = $app['config']->get('database.connections.mysql.charset');
+echo "database charset: " . var_export($dbCharset, true) . "\n";
 
-echo "\n\n=== TESTING COOKIE GENERATION ===\n";
-$cookie = cookie('test-cookie', 'test-value', 60, '/', config('session.domain'), true, false, false, 'lax');
-echo "Cookie domain from cookie() helper: ";
-var_dump($cookie->getDomain());
+echo "\n=== TESTING SetCookie STRING ===\n";
+// Simula o que o Symfony faz para gerar o Set-Cookie header
+$name = 'test-cookie';
+$value = 'test-value';
+$expire = time() + 3600;
+$path = '/';
+$domain = $sessionDomain;
+$secure = true;
+$httpOnly = true;
+$sameSite = 'lax';
 
-echo "\nCookie as string: ";
-echo (string) $cookie;
+echo "Domain value being used: " . var_export($domain, true) . "\n";
+echo "Database charset value: " . var_export($dbCharset, true) . "\n";
+
+// Monta o cookie header manualmente como o Symfony faz
+$cookie = $name . '=' . urlencode($value);
+$cookie .= '; expires=' . gmdate('D, d M Y H:i:s T', $expire);
+$cookie .= '; Max-Age=' . ($expire - time());
+$cookie .= '; path=' . $path;
+if ($domain !== null) {
+    $cookie .= '; domain=' . $domain;
+}
+if ($secure) {
+    $cookie .= '; secure';
+}
+if ($httpOnly) {
+    $cookie .= '; httponly';
+}
+if ($sameSite) {
+    $cookie .= '; samesite=' . $sameSite;
+}
+
+echo "\nGenerated Set-Cookie header:\n";
+echo $cookie . "\n";
