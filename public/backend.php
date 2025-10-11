@@ -7,23 +7,24 @@
 // Start session ANTES de qualquer output
 session_start();
 
-// CORS headers - Permite o próprio domínio (SPA no mesmo servidor)
-$origin = $_SERVER['HTTP_ORIGIN'] ?? 'https://kadesh.mmbsites.com.br';
+// Headers - SEM CSRF, SEM Sanctum, SEM Laravel
+header('Content-Type: application/json; charset=utf-8');
+
+// CORS apenas se vier de origem diferente (desenvolvimento)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 $allowedOrigins = [
-    'https://kadesh.mmbsites.com.br',
     'http://localhost:5173',
     'http://localhost:5174',
-    'http://localhost:5175'
+    'http://localhost:5175',
+    'http://localhost:8000'
 ];
 
-if (in_array($origin, $allowedOrigins)) {
+if ($origin && in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 }
-
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-XSRF-TOKEN');
 
 // Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -78,12 +79,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 try {
     // PUBLIC ROUTES
-    if ($path === '/sanctum/csrf-cookie' || $path === '/api/csrf-cookie') {
-        // CSRF cookie endpoint (compatibility)
-        http_response_code(204);
-        exit;
-    }
-    
     if ($path === '/api/register' && $method === 'POST') {
         handleRegister();
         exit;

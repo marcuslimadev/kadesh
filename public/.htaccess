@@ -1,19 +1,15 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # API routes go to backend.php
+    # API routes go to backend.php (PHP puro)
     RewriteCond %{REQUEST_URI} ^/api/
     RewriteRule ^(.*)$ /backend.php [L,QSA]
     
-    # Sanctum routes go to backend.php
-    RewriteCond %{REQUEST_URI} ^/sanctum/
-    RewriteRule ^(.*)$ /backend.php [L,QSA]
-    
-    # Static files (if they exist, serve them)
+    # Static files (JS, CSS, images, etc)
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^ - [L]
     
-    # Everything else goes to index.html (SPA)
+    # Everything else goes to index.html (Vue SPA)
     RewriteRule ^ /index.html [L]
 </IfModule>
 
