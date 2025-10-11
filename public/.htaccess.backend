@@ -1,0 +1,13 @@
+# Kadesh Backend - Roteamento para backend.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redireciona /api/* para backend.php
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^(.*)$ /backend.php [L,QSA]
+    
+    # Redireciona /sanctum/* para backend.php
+    RewriteCond %{REQUEST_URI} ^/sanctum/
+    RewriteRule ^(.*)$ /backend.php [L,QSA]
+</IfModule>
