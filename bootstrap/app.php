@@ -17,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         
         // MIDDLEWARE customizado de CORS aplicado PRIMEIRO em todas as requisições
         $middleware->prepend(\App\Http\Middleware\Cors::class);
+        
+        // MIDDLEWARE que corrige cookies malformados - DEVE SER O ÚLTIMO
+        $middleware->append(\App\Http\Middleware\FixMalformedCookies::class);
 
         $middleware->web(append: [
             \App\Http\Middleware\TestMiddleware::class,
