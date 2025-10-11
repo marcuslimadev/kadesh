@@ -26,58 +26,15 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
-        // Compatibilidade com MySQL/MariaDB que possuem limite de índice de 1000 bytes
-        // Evita erros "Specified key was too long" em colunas string não especificadas.
         Schema::defaultStringLength(191);
 
-        static $loggedBeforeOverride = false;
-        $envSessionDomain = env('SESSION_DOMAIN');
-        $getenvSessionDomain = getenv('SESSION_DOMAIN') === false ? null : getenv('SESSION_DOMAIN');
-        $superGlobalEnv = $_ENV['SESSION_DOMAIN'] ?? null;
-        $superGlobalServer = $_SERVER['SESSION_DOMAIN'] ?? null;
-        $configSessionDomainBefore = config('session.domain');
-
-        if (! $loggedBeforeOverride) {
-            $loggedBeforeOverride = true;
-            Log::info('Session domain diagnostics (before overrides)', [
-                'env' => $envSessionDomain,
-                'getenv' => $getenvSessionDomain,
-                '_ENV' => $superGlobalEnv,
-                '_SERVER' => $superGlobalServer,
-                'config_before' => $configSessionDomainBefore,
-            ]);
-        }
-
-        // Garante que o domínio do cookie de sessão não venha corrompido por .env
-        // (e.g., "domain=.mmbsites.com.brDB_CHARSET=utf8mb4").
-        // Ao definir null, o Laravel emite cookie host-only (sem Domain), o que é seguro.
-        config(['session.domain' => null]);
-
-        // CORREÇÃO RADICAL: Força configurações de sessão corretas MUITO CEDO
-        // Isso previne que cookies sejam gerados com domains malformados
-        
-        // Força as configurações corretas diretamente
+        // SOLUÇÃO DEFINITIVA: Força domain=null sem usar env() que pode estar corrompido
         config([
-            'session.domain' => null,  // Host-only (sem domain attribute)
-            'session.secure' => true,  // HTTPS apenas
+            'session.domain' => null,
+            'session.secure' => true,
             'session.same_site' => 'lax',
             'session.http_only' => true,
-            'session.driver' => 'cookie',
-        ]);
-        
-        // Força também para Sanctum
-        config([
             'sanctum.domain' => null,
         ]);
-
-        static $loggedAfterOverride = false;
-        if (! $loggedAfterOverride) {
-            $loggedAfterOverride = true;
-            Log::info('Session domain diagnostics (after overrides)', [
-                'config_after' => config('session.domain'),
-                'session_driver' => config('session.driver'),
-                'sanctum_domain' => config('sanctum.domain'),
-            ]);
-        }
     }
 }
