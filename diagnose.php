@@ -3,6 +3,7 @@
 require __DIR__.'/vendor/autoload.php';
 
 $app = require_once __DIR__.'/bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 echo "=== ENV DIAGNOSTICS ===\n\n";
 
@@ -31,6 +32,34 @@ foreach ($lines as $i => $line) {
     }
 }
 
-echo "\n=== CONFIG VALUES ===\n";
+echo "\n=== CONFIG VALUES (before boot) ===\n";
 echo "config('session.domain'): ";
 var_dump(config('session.domain'));
+
+echo "\nconfig('session.cookie'): ";
+var_dump(config('session.cookie'));
+
+echo "\nconfig('session.secure'): ";
+var_dump(config('session.secure'));
+
+// Boot the application
+$app->boot();
+
+echo "\n\n=== CONFIG VALUES (after boot) ===\n";
+echo "config('session.domain'): ";
+var_dump(config('session.domain'));
+
+echo "\nconfig('sanctum.domain'): ";
+var_dump(config('sanctum.domain'));
+
+echo "\n\n=== DATABASE CONFIG ===\n";
+echo "config('database.connections.mysql.charset'): ";
+var_dump(config('database.connections.mysql.charset'));
+
+echo "\n\n=== TESTING COOKIE GENERATION ===\n";
+$cookie = cookie('test-cookie', 'test-value', 60, '/', config('session.domain'), true, false, false, 'lax');
+echo "Cookie domain from cookie() helper: ";
+var_dump($cookie->getDomain());
+
+echo "\nCookie as string: ";
+echo (string) $cookie;
