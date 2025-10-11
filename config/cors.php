@@ -20,7 +20,9 @@ return [
     'allowed_methods' => ['*'],
 
     // Defina as origens permitidas via variável de ambiente (separadas por vírgula)
-    'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS','https://kadesh.mmbsites.com.br/',  'http://localhost:5175')), 
+    'allowed_origins' => explode(',', env('CORS_ALLOWED_ORIGINS','https://kadesh.mmbsites.com.br/')), 
+
+    //'http://localhost:5175'
 
     'allowed_origins_patterns' => [],
 

@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\ServiceProvider;
 
 class CookieFixServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,10 @@ class CookieFixServiceProvider extends ServiceProvider
                         $cookieHeaders[] = $header;
                     }
                 }
+
+                if (! empty($cookieHeaders)) {
+                    Log::debug('CookieFixServiceProvider captured cookie headers', $cookieHeaders);
+                }
                 
                 // Remove headers malformados e redefine
                 foreach ($cookieHeaders as $cookieHeader) {
@@ -40,7 +45,7 @@ class CookieFixServiceProvider extends ServiceProvider
                         // Readiciona o cookie corrigido
                         header('Set-Cookie: ' . $fixed, false);
                         
-                        error_log('Cookie corrigido: ' . $fixed);
+                        Log::debug('CookieFixServiceProvider rewrote malformed cookie', ['original' => $cookieHeader, 'fixed' => $fixed]);
                     }
                 }
                 
