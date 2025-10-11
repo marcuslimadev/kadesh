@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 // Detecta ambiente: produção ou desenvolvimento
-const baseURL = import.meta.env.PROD 
-  ? 'https://kadesh.mmbsites.com.br'  // Produção - backend PHP puro
-  : 'http://localhost:8000';           // Desenvolvimento - Laravel
+const isProd = import.meta.env.PROD;
+const baseURL = isProd
+  ? ''  // Produção - mesma origem (SPA + backend no mesmo servidor)
+  : 'http://localhost:8000';  // Desenvolvimento - Laravel
 
 const api = axios.create({
   baseURL,
-  withCredentials: true,
+  withCredentials: !isProd,  // Apenas em dev (cross-origin)
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

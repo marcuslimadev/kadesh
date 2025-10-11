@@ -7,9 +7,20 @@
 // Start session ANTES de qualquer output
 session_start();
 
-// CORS headers
+// CORS headers - Permite o próprio domínio (SPA no mesmo servidor)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? 'https://kadesh.mmbsites.com.br';
+$allowedOrigins = [
+    'https://kadesh.mmbsites.com.br',
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175'
+];
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
+
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: https://kadesh.mmbsites.com.br');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-XSRF-TOKEN');
