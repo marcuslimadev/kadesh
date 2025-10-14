@@ -9,7 +9,7 @@ export default defineConfig({
     cors: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8000', // backend Laravel
+        target: 'http://localhost', // backend Apache/XAMPP local
         changeOrigin: true,
       }
     }

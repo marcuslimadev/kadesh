@@ -1,14 +1,9 @@
 import axios from 'axios';
 
-// Detecta ambiente: produção ou desenvolvimento
-const isProd = import.meta.env.PROD;
-const baseURL = isProd
-  ? ''  // Produção - mesma origem (SPA + backend no mesmo servidor)
-  : 'http://localhost:8000';  // Desenvolvimento - Laravel
-
+// Mesma origem em produção e desenvolvimento (em dev o Vite proxy redireciona /api)
 const api = axios.create({
-  baseURL,
-  withCredentials: !isProd,  // Apenas em dev (cross-origin)
+  baseURL: '',
+  withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
