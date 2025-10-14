@@ -1,24 +1,17 @@
 ---
+# cPanel Git Deployment for Kadesh (SPA + PHP backend)
+# This deployment copies ONLY the `public/` folder to the subdomain's docroot.
+# It does NOT run Composer, Artisan, or Node builds on the server.
+# Ensure the repository already contains production-ready files in `public/`.
+
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/mmbsites/public_html/kadesh
-    - mkdir -p $DEPLOYPATH
-    - /bin/cp -R * $DEPLOYPATH/
-    - cd $DEPLOYPATH
-    - cp .env.cpanel .env
-    - composer install --optimize-autoloader --no-dev --no-interaction
-    - php artisan key:generate --force
-    - php artisan config:clear
-    - php artisan route:clear  
-    - php artisan view:clear
-    - php artisan cache:clear
-    - php artisan migrate --force
-    - php artisan config:cache
-    - php artisan route:cache
-    - php artisan view:cache
-    - npm ci --production
-    - npm run build
-    - chmod -R 755 storage
-    - chmod -R 755 bootstrap/cache
-    - composer dump-autoload --optimize
-    - php artisan storage:link
+    - /bin/echo "[Kadesh] Deploy started at $(/bin/date)"
+    - export DOCROOT="/home/mmbsites/public_html/kadesh"
+    - /bin/mkdir -p "$DOCROOT"
+    # Sync public/ to docroot (delete removed files to avoid stale assets)
+    - /bin/rsync -a --delete public/ "$DOCROOT/"
+    # Optional hardening permissions
+    - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;
+    - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;
+    - /bin/echo "[Kadesh] Deploy finished at $(/bin/date)"

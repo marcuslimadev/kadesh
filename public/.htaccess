@@ -1,16 +1,22 @@
+# Kadesh - Backend PHP + Frontend SPA
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # API routes go to backend.php (PHP puro)
+    # Redireciona /api/* para backend.php
     RewriteCond %{REQUEST_URI} ^/api/
     RewriteRule ^(.*)$ /backend.php [L,QSA]
     
-    # Static files (JS, CSS, images, etc)
-    RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^ - [L]
+    # Redireciona /sanctum/* para backend.php
+    RewriteCond %{REQUEST_URI} ^/sanctum/
+    RewriteRule ^(.*)$ /backend.php [L,QSA]
     
-    # Everything else goes to index.html (Vue SPA)
-    RewriteRule ^ /index.html [L]
+    # SPA: Serve arquivos estáticos se existirem
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # SPA: Todas as outras rotas vão para index.html
+    RewriteRule ^(.*)$ /index.html [L]
 </IfModule>
 
 # Security Headers
@@ -20,11 +26,6 @@
     Header always set X-XSS-Protection "1; mode=block"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-    
-    # FIX: Remove domain malformado dos cookies Set-Cookie
-    # Remove "domain=.mmbsites.com.brDB_CHARSET=utf8mb4" e similar
-    Header edit Set-Cookie ";\s*domain=[^;]*DB_CHARSET[^;]*" ""
-    Header edit Set-Cookie ";\s*domain=[^;]+" ""
 </IfModule>
 
 # Compression
@@ -44,22 +45,12 @@
 # Cache Control
 <IfModule mod_expires.c>
     ExpiresActive On
-    ExpiresByType text/css "access plus 1 year"
-    ExpiresByType application/javascript "access plus 1 year"
-    ExpiresByType application/x-javascript "access plus 1 year"
-    ExpiresByType text/javascript "access plus 1 year"
-    ExpiresByType image/png "access plus 1 month"
-    ExpiresByType image/jpg "access plus 1 month"
-    ExpiresByType image/jpeg "access plus 1 month"
-    ExpiresByType image/gif "access plus 1 month"
-    ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType application/pdf "access plus 1 month"
-    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-font-woff "access plus 1 year"
 </IfModule>
-
-# Block access to sensitive files
-<FilesMatch "(^#.*#|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op])|~)$">
-    Order allow,deny
-    Deny from all
-    Satisfy All
-</FilesMatch>
