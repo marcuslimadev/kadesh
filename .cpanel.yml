@@ -10,7 +10,7 @@ deployment:
     - export DOCROOT="/home/mmbsites/public_html/kadesh"
     - /bin/mkdir -p "$DOCROOT"
     # Sync public/ to docroot (delete removed files to avoid stale assets)
-    - /bin/rsync -a --delete public/ "$DOCROOT/"
+  - /bin/rsync -a --delete --exclude=.htaccess public/ "$DOCROOT/"
     # Optional hardening permissions
     - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;
     - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;
