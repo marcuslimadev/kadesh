@@ -78,6 +78,12 @@ $path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
+    // HEALTHCHECK (PUBLIC)
+    if ($path === '/api/health' && $method === 'GET') {
+        handleHealth();
+        exit;
+    }
+
     // PUBLIC ROUTES
     if ($path === '/api/register' && $method === 'POST') {
         handleRegister();
@@ -160,6 +166,15 @@ try {
 }
 
 // ==================== HANDLERS ====================
+
+function handleHealth() {
+    echo json_encode([
+        'status' => 'ok',
+        'time' => date('c'),
+        'app' => 'kadesh-backend-php',
+        'php' => PHP_VERSION,
+    ]);
+}
 
 function handleRegister() {
     $input = json_decode(file_get_contents('php://input'), true);
