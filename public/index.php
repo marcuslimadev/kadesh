@@ -18,7 +18,8 @@ if (preg_match('#^/(api|sanctum)(/|$)#', $path)) {
 
 // 2) Tentar servir arquivo estático se existir
 $target = realpath($docroot . $path);
-if ($target !== false && str_starts_with($target, realpath($docroot)) && is_file($target)) {
+$docrootReal = realpath($docroot);
+if ($target !== false && $docrootReal !== false && strpos($target, $docrootReal) === 0 && is_file($target)) {
     // Mapear mime básico
     $ext = strtolower(pathinfo($target, PATHINFO_EXTENSION));
     $mime = [

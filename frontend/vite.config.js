@@ -9,8 +9,9 @@ export default defineConfig({
     cors: true,
     proxy: {
       '/api': {
-        target: 'http://localhost', // backend Apache/XAMPP local
+        target: 'http://localhost/kadesh', // backend Apache/XAMPP local (subpasta /kadesh)
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
       }
     }
   }
