@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   plugins: [vue()],
+  base: '/kadesh/', // Base path para assets em subpasta
   server: {
     port: 5175, // porta SPA distinta da raiz
     host: 'localhost',
