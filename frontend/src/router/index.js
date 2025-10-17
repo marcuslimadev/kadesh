@@ -2,20 +2,18 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
+import ForgotPassword from '../views/ForgotPassword.vue';
 import Projects from '../views/Projects.vue';
 import ProjectCreate from '../views/ProjectCreate.vue';
 import ProjectShow from '../views/ProjectShow.vue';
 
-function isAuthenticated() {
-  return !!localStorage.getItem('token');
-}
-
 const routes = [
   { path: '/', component: Home },
-  { path: '/login', component: Login, meta: { guest: true } },
-  { path: '/register', component: Register, meta: { guest: true } },
+  { path: '/login', component: Login },
+  { path: '/register', component: Register },
+  { path: '/forgot-password', component: ForgotPassword },
   { path: '/projects', component: Projects },
-  { path: '/projects/create', component: ProjectCreate, meta: { auth: true } },
+  { path: '/projects/create', component: ProjectCreate },
   { path: '/projects/:id', component: ProjectShow },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
@@ -23,16 +21,6 @@ const routes = [
 const router = createRouter({
   history: createWebHistory('/kadesh/'),
   routes,
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.meta.auth && !isAuthenticated()) {
-    return next('/login');
-  }
-  if (to.meta.guest && isAuthenticated()) {
-    return next('/projects');
-  }
-  next();
 });
 
 export default router;

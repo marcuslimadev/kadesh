@@ -1,17 +1,37 @@
----
-# cPanel Git Deployment for Kadesh (SPA + PHP backend)
-# This deployment copies ONLY the `public/` folder to the subdomain's docroot.
-# It does NOT run Composer, Artisan, or Node builds on the server.
-# Ensure the repository already contains production-ready files in `public/`.
+------
 
-deployment:
+# cPanel Git Deployment for Kadesh (SPA + PHP backend)# cPanel Git Deployment for Kadesh (SPA + PHP backend)
+
+# Deploy direto da raiz (arquivos já estão prontos para produção)# This deployment copies ONLY the `public/` folder to the subdomain's docroot.
+
+# It does NOT run Composer, Artisan, or Node builds on the server.
+
+deployment:# Ensure the repository already contains production-ready files in `public/`.
+
   tasks:
-    - /bin/echo "[Kadesh] Deploy started at $(/bin/date)"
-    - export DOCROOT="/home/mmbsites/public_html/kadesh"
-    - /bin/mkdir -p "$DOCROOT"
-    # Sync public/ to docroot SEM --delete para preservar outros arquivos
-    - /bin/rsync -a public/ "$DOCROOT/"
-    # Optional hardening permissions
-    - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;
-    - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;
+
+    - /bin/echo "[Kadesh] Deploy started at $(/bin/date)"deployment:
+
+    - export DOCROOT="/home/mmbsites/public_html/kadesh"  tasks:
+
+    - /bin/mkdir -p "$DOCROOT"    - /bin/echo "[Kadesh] Deploy started at $(/bin/date)"
+
+        - export DOCROOT="/home/mmbsites/public_html/kadesh"
+
+    # Copiar arquivos essenciais para docroot (excluir .git, frontend, docs)    - /bin/mkdir -p "$DOCROOT"
+
+    - /bin/rsync -a --exclude='.git' --exclude='frontend' --exclude='LIMPEZA.md' --exclude='.env' $DEPLOYPATH/ "$DOCROOT/"    # Sync public/ to docroot SEM --delete para preservar outros arquivos
+
+        - /bin/rsync -a public/ "$DOCROOT/"
+
+    # Hardening permissions    # Optional hardening permissions
+
+    - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;    - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;
+
+    - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;    - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;
+
+        - /bin/echo "[Kadesh] Deploy finished at $(/bin/date)"
+    # Garantir que .htaccess seja lido
+    - /bin/chmod 644 "$DOCROOT/.htaccess"
+    
     - /bin/echo "[Kadesh] Deploy finished at $(/bin/date)"

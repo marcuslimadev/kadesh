@@ -1,6 +1,11 @@
+DirectoryIndex index.php index.html
+
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    
-    # Redirecionar tudo para a pasta public/
-    RewriteRule ^(.*)$ public/$1 [L]
+RewriteEngine On
+RewriteBase /kadesh/
+RewriteCond %{REQUEST_URI} /api/
+RewriteRule ^(.*)$ backend.php [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
 </IfModule>

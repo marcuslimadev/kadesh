@@ -1,24 +1,60 @@
-*.log
-.DS_Store
-.env
-.env.backup
+# Ambiente*.log
+
+.env.DS_Store
+
+.env.*.env
+
+!.env.cpanel.env.backup
+
 .env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
+
+# Node.js.phpactor.json
+
+node_modules/.phpunit.result.cache
+
+frontend/node_modules//.fleet
+
+npm-debug.log/.idea
+
+yarn-error.log/.nova
+
 /.phpunit.cache
-/.vscode
-/.zed
+
+# Build/.vscode
+
+frontend/dist//.zed
+
 /auth.json
-/node_modules
-/public/build
-/public/hot
+
+# Logs/node_modules
+
+*.log/public/build
+
+error.log/public/hot
+
 /public/storage
-/storage/*.key
-/storage/pail
-/vendor
+
+# OS/storage/*.key
+
+.DS_Store/storage/pail
+
+Thumbs.db/vendor
+
 Homestead.json
-Homestead.yaml
-Thumbs.db
+
+# IDEHomestead.yaml
+
+.vscode/Thumbs.db
+
+.idea/
+*.sublime-*
+.phpactor.json
+
+# Temporários
+*.tmp
+*.temp
+*.cache
+.phpunit.cache
+
+# Sessões PHP
+/tmp/sess_*

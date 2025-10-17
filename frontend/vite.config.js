@@ -4,16 +4,11 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   base: '/kadesh/', // Base path para assets em subpasta
+  
+  // Server config (NÃO USADO - acesso direto via http://localhost/kadesh/)
+  // Mantido apenas para eventual desenvolvimento futuro com hot-reload
   server: {
-    port: 5175, // porta SPA distinta da raiz
-    host: 'localhost',
-    cors: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost/kadesh', // backend Apache/XAMPP local (subpasta /kadesh)
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/api'),
-      }
-    }
+    port: 5175,
+    host: 'localhost'
   }
 });
