@@ -80,7 +80,11 @@ function getDB() {
 
 // ==================== AUTH HELPERS ====================
 function requireAuth() {
-    if (!isset($_SESSION['user_id'])) {
+    // ✅ Aceitar tanto usuário comum quanto admin
+    $isUser = isset($_SESSION['user_id']);
+    $isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+    
+    if (!$isUser && !$isAdmin) {
         http_response_code(401);
         echo json_encode(['message' => 'Não autenticado']);
         exit;
@@ -177,16 +181,17 @@ try {
         exit;
     }
     
+    // ✅ USER INFO ENDPOINT (Verifica se há usuário/admin logado - NÃO REQUER AUTH)
+    if ($path === '/api/user' && $method === 'GET') {
+        handleGetUser();
+        exit;
+    }
+    
     // PROTECTED ROUTES
     requireAuth();
     
     if ($path === '/api/logout' && $method === 'POST') {
         handleLogout();
-        exit;
-    }
-    
-    if ($path === '/api/user' && $method === 'GET') {
-        handleGetUser();
         exit;
     }
     
@@ -552,7 +557,21 @@ function handleLogout() {
 }
 
 function handleGetUser() {
-    // Retorna usuário atual ou null se não autenticado
+    // ✅ Retornar dados de ADMIN se estiver logado como admin
+    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']) {
+        echo json_encode([
+            'user' => [
+                'id' => $_SESSION['admin_id'] ?? null,
+                'name' => $_SESSION['admin_name'] ?? 'Admin',
+                'email' => $_SESSION['admin_email'] ?? '',
+                'user_type' => 'admin',
+                'is_admin' => true
+            ]
+        ]);
+        return;
+    }
+    
+    // Retorna usuário comum ou null se não autenticado
     if (!isset($_SESSION['user_id'])) {
         http_response_code(401);
         echo json_encode(['message' => 'Não autenticado', 'user' => null]);
