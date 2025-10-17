@@ -8,7 +8,16 @@
 // Base paths
 $docroot = __DIR__;
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+
+// Detectar base path (ex: /kadesh se estiver em subpasta)
+$basePath = rtrim(dirname($scriptName), '/');
 $path = parse_url($requestUri, PHP_URL_PATH) ?: '/';
+
+// Remover base path do caminho
+if ($basePath && strpos($path, $basePath) === 0) {
+    $path = substr($path, strlen($basePath)) ?: '/';
+}
 
 // 1) API endpoints vão para backend.php
 if (preg_match('#^/(api|sanctum)(/|$)#', $path)) {

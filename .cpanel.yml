@@ -9,8 +9,8 @@ deployment:
     - /bin/echo "[Kadesh] Deploy started at $(/bin/date)"
     - export DOCROOT="/home/mmbsites/public_html/kadesh"
     - /bin/mkdir -p "$DOCROOT"
-    # Sync public/ to docroot (delete removed files to avoid stale assets)
-  - /bin/rsync -a --delete public/ "$DOCROOT/"
+    # Sync public/ to docroot SEM --delete para preservar outros arquivos
+    - /bin/rsync -a public/ "$DOCROOT/"
     # Optional hardening permissions
     - /bin/find "$DOCROOT" -type d -exec /bin/chmod 755 {} \;
     - /bin/find "$DOCROOT" -type f -exec /bin/chmod 644 {} \;
