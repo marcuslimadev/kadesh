@@ -10,9 +10,12 @@
 // Configurar session cookie params ANTES de session_start()
 $isProduction = !empty($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'mmbsites.com.br') !== false;
 
+// Path do cookie: / em localhost, /kadesh/ em produção
+$cookiePath = ($_SERVER['HTTP_HOST'] ?? '') === 'localhost' ? '/' : '/kadesh/';
+
 session_set_cookie_params([
     'lifetime' => 0,              // Sessão expira ao fechar navegador
-    'path' => '/kadesh/',         // Cookie só enviado em /kadesh/*
+    'path' => $cookiePath,        // Cookie path baseado no ambiente
     'domain' => '',               // Vazio = usa domínio atual automaticamente
     'secure' => $isProduction,    // true em HTTPS (produção), false em HTTP (local)
     'httponly' => true,           // Previne acesso via JavaScript
@@ -158,6 +161,19 @@ try {
     // ADMIN LOGIN (PUBLIC)
     if ($path === '/api/admin/login' && $method === 'POST') {
         handleAdminLogin();
+        exit;
+    }
+    
+    // 🐛 DEBUG ENDPOINT (REMOVER EM PRODUÇÃO)
+    if ($path === '/api/debug/session' && $method === 'GET') {
+        echo json_encode([
+            'session_id' => session_id(),
+            'session_data' => $_SESSION,
+            'cookies' => $_COOKIE,
+            'is_admin' => $_SESSION['is_admin'] ?? false,
+            'admin_id' => $_SESSION['admin_id'] ?? null,
+            'user_id' => $_SESSION['user_id'] ?? null
+        ], JSON_PRETTY_PRINT);
         exit;
     }
     
