@@ -1180,13 +1180,22 @@ function handleAdminGetSettings() {
     
     $pdo = getDB();
     
-    $stmt = $pdo->query("SELECT * FROM system_settings");
+    $stmt = $pdo->query("SELECT setting_key, setting_value, setting_category FROM system_settings");
     $settings = $stmt->fetchAll();
     
-    // Converter array de settings em objeto chave-valor
+    // Converter array de settings em objeto agrupado por categoria
     $settingsObj = [];
     foreach ($settings as $setting) {
-        $settingsObj[$setting['key']] = $setting['value'];
+        $category = $setting['setting_category'];
+        $key = $setting['setting_key'];
+        
+        if (!isset($settingsObj[$category])) {
+            $settingsObj[$category] = [];
+        }
+        
+        $settingsObj[$category][$key] = [
+            'value' => $setting['setting_value']
+        ];
     }
     
     echo json_encode($settingsObj);
@@ -1202,14 +1211,18 @@ function handleAdminUpdateSettings() {
     $data = json_decode(file_get_contents('php://input'), true);
     $pdo = getDB();
     
-    // Atualizar ou inserir cada configuração
-    foreach ($data as $key => $value) {
-        $stmt = $pdo->prepare("
-            INSERT INTO system_settings (`key`, `value`) 
-            VALUES (?, ?) 
-            ON DUPLICATE KEY UPDATE `value` = ?
-        ");
-        $stmt->execute([$key, $value, $value]);
+    // Atualizar configurações (data vem agrupado por categoria)
+    foreach ($data as $category => $settings) {
+        foreach ($settings as $key => $config) {
+            $value = $config['value'] ?? $config;
+            
+            $stmt = $pdo->prepare("
+                UPDATE system_settings 
+                SET setting_value = ?, updated_at = NOW() 
+                WHERE setting_key = ?
+            ");
+            $stmt->execute([$value, $key]);
+        }
     }
     
     echo json_encode(['success' => true, 'message' => 'Configurações atualizadas']);
