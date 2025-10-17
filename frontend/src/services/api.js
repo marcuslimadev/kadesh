@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-// Mesma origem em produção e desenvolvimento (em dev o Vite proxy redireciona /api)
+// Detectar ambiente e definir baseURL correto
+const isDev = import.meta.env.DEV;
+const baseURL = isDev ? '' : '/kadesh'; // Em dev usa proxy, em prod usa /kadesh
+
 const api = axios.create({
-  baseURL: '',
+  baseURL,
   withCredentials: false,
   headers: {
     'Content-Type': 'application/json',
