@@ -103,7 +103,14 @@ async function submit() {
     
     console.log('✅ Login response:', response.data);
     console.log('🔍 user_type recebido:', response.data.user_type, typeof response.data.user_type);
+    console.log('🔍 response.data completo:', JSON.stringify(response.data, null, 2));
     console.log('🔍 É admin?', response.data.user_type === 'admin');
+    console.log('🔍 Comparação:', {
+      recebido: response.data.user_type,
+      esperado: 'admin',
+      iguais: response.data.user_type === 'admin',
+      tipoRecebido: typeof response.data.user_type
+    });
     
     // ✅ Detectar tipo de usuário e redirecionar
     if (response.data.user_type === 'admin') {
