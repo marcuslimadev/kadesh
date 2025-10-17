@@ -1,58 +1,113 @@
-# Ambiente*.log
+# Ambiente# Ambiente*.log
 
-.env.DS_Store
+.env
 
-.env.*.env
+.env.*.env.DS_Store
 
-!.env.cpanel.env.backup
+!.env.example
+
+.env.backup.env.*.env
 
 .env.production
 
-# Node.js.phpactor.json
+!.env.cpanel.env.backup
+
+# Node.js
+
+node_modules/.env.production
+
+npm-debug.log
+
+yarn-error.log# Node.js.phpactor.json
+
+package-lock.json
 
 node_modules/.phpunit.result.cache
 
-frontend/node_modules//.fleet
+# Logs
+
+*.logfrontend/node_modules//.fleet
+
+error.log
 
 npm-debug.log/.idea
 
-yarn-error.log/.nova
+# OS
+
+.DS_Storeyarn-error.log/.nova
+
+Thumbs.db
 
 /.phpunit.cache
 
-# Build/.vscode
+# IDEs
 
-frontend/dist//.zed
+.vscode/# Build/.vscode
+
+.idea/
+
+*.sublime-*frontend/dist//.zed
+
+.phpactor.json
+
+.phpunit.result.cache/auth.json
+
+/.fleet
+
+/.nova# Logs/node_modules
+
+/.phpunit.cache
+
+/.zed*.log/public/build
+
+
+
+# PHPerror.log/public/hot
 
 /auth.json
 
-# Logs/node_modules
+/vendor/public/storage
 
-*.log/public/build
 
-error.log/public/hot
 
-/public/storage
+# Laravel# OS/storage/*.key
 
-# OS/storage/*.key
+/public/hot
 
-.DS_Store/storage/pail
+/public/storage.DS_Store/storage/pail
 
-Thumbs.db/vendor
+/storage/*.key
+
+/storage/pailThumbs.db/vendor
 
 Homestead.json
 
-# IDEHomestead.yaml
+Homestead.yamlHomestead.json
+
+
+
+# Build - COMENTADO PARA INCLUIR NO GIT (cPanel precisa dos arquivos compilados)# IDEHomestead.yaml
+
+# /public/build
 
 .vscode/Thumbs.db
 
-.idea/
-*.sublime-*
-.phpactor.json
+# Arquivos temporários de desenvolvimento
 
-# Temporários
-*.tmp
-*.temp
+*.php.bak.idea/
+
+*.sql.bak*.sublime-*
+
+check-admin.php.phpactor.json
+
+create-admin.php
+
+setup-*.php# Temporários
+
+update-*.php*.tmp
+
+test-*.php*.temp
+
 *.cache
 .phpunit.cache
 
