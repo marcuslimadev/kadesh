@@ -1,3 +1,6 @@
+# Define arquivo padrão
+DirectoryIndex index.php index.html
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
@@ -16,8 +19,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     
-    # SPA: Todas as outras rotas vão para index.html
-    RewriteRule ^(.*)$ index.html [L]
+    # SPA: Todas as outras rotas vão para index.php
+    RewriteRule ^(.*)$ index.php [L]
 </IfModule>
 
 # Security Headers
