@@ -8,11 +8,11 @@ DirectoryIndex index.php index.html
     RewriteBase /kadesh/
     
     # Redireciona /api/* para backend.php
-    RewriteCond %{REQUEST_URI} ^/kadesh/api/
+    RewriteCond %{REQUEST_URI} /api/
     RewriteRule ^(.*)$ backend.php [L,QSA]
     
     # Redireciona /sanctum/* para backend.php
-    RewriteCond %{REQUEST_URI} ^/kadesh/sanctum/
+    RewriteCond %{REQUEST_URI} /sanctum/
     RewriteRule ^(.*)$ backend.php [L,QSA]
     
     # SPA: Serve arquivos estáticos se existirem

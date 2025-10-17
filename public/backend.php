@@ -96,6 +96,9 @@ $basePath = str_replace('backend.php', '', $scriptName);
 $path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 $method = $_SERVER['REQUEST_METHOD'];
 
+// Remover /kadesh do path se existir (para funcionar em subpasta)
+$path = preg_replace('#^/kadesh#', '', $path);
+
 try {
     // HEALTHCHECK (PUBLIC)
     if ($path === '/api/health' && $method === 'GET') {
