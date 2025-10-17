@@ -22,6 +22,14 @@ session_set_cookie_params([
 // Start session ANTES de qualquer output
 session_start();
 
+// 🐛 DEBUG: Log de sessão (REMOVER EM PRODUÇÃO)
+error_log("=== SESSION DEBUG ===");
+error_log("Session ID: " . session_id());
+error_log("Request URI: " . $_SERVER['REQUEST_URI']);
+error_log("Session content: " . json_encode($_SESSION));
+error_log("Cookies: " . json_encode($_COOKIE));
+error_log("===================");
+
 // Include modular endpoints (COMENTADO - arquivos foram consolidados neste arquivo)
 // require_once __DIR__ . '/backend-provider.php';
 // require_once __DIR__ . '/backend-reviews.php';
@@ -411,6 +419,7 @@ function handleLogin() {
         $stmt->execute([$_SERVER['REMOTE_ADDR'] ?? null, $admin['id']]);
         
         // Criar sessão de ADMIN
+        $_SESSION['is_admin'] = true;
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_name'] = $admin['name'];
         $_SESSION['admin_email'] = $admin['email'];
@@ -438,6 +447,7 @@ function handleLogin() {
     
     if ($adminUser && password_verify($password, $adminUser['password'])) {
         // Criar sessão de ADMIN (da tabela users)
+        $_SESSION['is_admin'] = true;
         $_SESSION['admin_id'] = $adminUser['id'];
         $_SESSION['admin_name'] = $adminUser['name'];
         $_SESSION['admin_email'] = $adminUser['email'];
