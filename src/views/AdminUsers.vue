@@ -1,7 +1,7 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow-2xl">
+    <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow">
       <div class="max-w-7xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
@@ -10,7 +10,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
               </svg>
             </router-link>
-            <h1 class="text-3xl font-black">👥 Gerenciamento de Usuários</h1>
+            <h1 class="text-3xl font-semibold">👥 Gerenciamento de Usuários</h1>
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
 
     <div class="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
       <!-- Filtros e Busca -->
-      <div class="bg-white rounded-2xl shadow-lg p-6">
+      <div class="bg-white rounded shadow-lg p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">🔍 Buscar</label>
@@ -27,15 +27,15 @@
               @input="loadUsers"
               type="text"
               placeholder="Nome ou email..."
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
             />
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">👤 Tipo de Usuário</label>
+            <label class="block text-sm font-bold text-gray-700 mb-2"> Tipo de Usuário</label>
             <select
               v-model="filters.type"
               @change="loadUsers"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="contractor">Contratantes</option>
@@ -45,8 +45,8 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">📊 Estatísticas</label>
-            <div class="text-2xl font-black text-neutral-900">{{ users.length }} usuário(s)</div>
+            <label class="block text-sm font-bold text-gray-700 mb-2"> Estatísticas</label>
+            <div class="text-2xl font-semibold text-neutral-900">{{ users.length }} usuário(s)</div>
           </div>
         </div>
       </div>
@@ -62,13 +62,13 @@
         <div
           v-for="user in users"
           :key="user.id"
-          class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow"
+          class="bg-white rounded shadow-lg p-6 hover:shadow transition-shadow"
         >
           <div class="flex flex-col md:flex-row justify-between gap-4">
             <!-- Info do Usuário -->
             <div class="flex-1">
               <div class="flex items-start gap-4">
-                <div class="w-16 h-16 rounded-full bg-neutral-900 flex items-center justify-center text-white text-2xl font-black">
+                <div class="w-16 h-16 rounded-full bg-neutral-900 flex items-center justify-center text-white text-2xl font-semibold">
                   {{ user.name.charAt(0).toUpperCase() }}
                 </div>
                 <div class="flex-1">
@@ -91,15 +91,15 @@
               <!-- Estatísticas -->
               <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
                 <div class="text-center">
-                  <div class="text-2xl font-black text-neutral-900">{{ user.projects_count || 0 }}</div>
+                  <div class="text-2xl font-semibold text-neutral-900">{{ user.projects_count || 0 }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Projetos</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-black text-neutral-900">{{ user.bids_count || 0 }}</div>
+                  <div class="text-2xl font-semibold text-neutral-900">{{ user.bids_count || 0 }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Lances</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-black text-yellow-600">{{ (user.average_rating || 0).toFixed(1) }} ⭐</div>
+                  <div class="text-2xl font-semibold text-yellow-600">{{ (user.average_rating || 0).toFixed(1) }} </div>
                   <div class="text-xs text-gray-600 font-semibold">Avaliação</div>
                 </div>
               </div>
@@ -109,7 +109,7 @@
             <div class="flex flex-col gap-2 min-w-[200px]">
               <button
                 @click="resetPassword(user.id)"
-                class="bg-neutral-700 hover:bg-neutral-700 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-neutral-700 hover:bg-neutral-700 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🔑 Resetar Senha
               </button>
@@ -118,20 +118,20 @@
                 :class="user.email_verified_at 
                   ? 'bg-neutral-600 hover:bg-neutral-600' 
                   : 'bg-neutral-800 hover:bg-neutral-800'"
-                class="text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
-                {{ user.email_verified_at ? '🚫 Desativar' : '✅ Ativar' }}
+                {{ user.email_verified_at ? '🚫 Desativar' : ' Ativar' }}
               </button>
               <button
                 @click="viewUser(user.id)"
-                class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 👁️ Ver Detalhes
               </button>
               <button
                 v-if="user.user_type !== 'admin'"
                 @click="deleteUser(user.id)"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🗑️ Remover
               </button>
@@ -149,20 +149,20 @@
 
     <!-- Modal de Senha Resetada -->
     <div v-if="resetPasswordModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <div class="bg-white rounded-lg p-8 max-w-md w-full shadow">
         <div class="text-center">
           <div class="w-20 h-20 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-4xl">✅</span>
+            <span class="text-4xl"></span>
           </div>
-          <h3 class="text-2xl font-black text-gray-900 mb-2">Senha Resetada!</h3>
+          <h3 class="text-2xl font-semibold text-gray-900 mb-2">Senha Resetada!</h3>
           <p class="text-gray-600 mb-4">A senha temporária do usuário é:</p>
-          <div class="bg-gray-100 p-4 rounded-xl mb-6">
+          <div class="bg-gray-100 p-4 rounded mb-6">
             <code class="text-2xl font-mono font-bold text-neutral-900">{{ tempPassword }}</code>
           </div>
           <p class="text-sm text-gray-500 mb-6">⚠️ Copie esta senha e envie para o usuário. Ela não será exibida novamente.</p>
           <button
             @click="resetPasswordModal = false"
-            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-xl font-bold w-full"
+            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded font-bold w-full"
           >
             Entendi
           </button>
@@ -278,5 +278,7 @@ onMounted(() => {
   loadUsers()
 })
 </script>
+
+
 
 

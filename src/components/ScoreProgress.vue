@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="score-progress">
     <!-- Header do placar -->
     <div class="flex justify-between items-center text-sm mb-2">
@@ -24,7 +24,7 @@
     <div v-if="showBreakdown" class="mt-3 space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
       <div class="text-xs text-gray-700">
         <div class="flex justify-between items-center mb-1">
-          <span class="font-semibold">💰 Preço ({{ priceWeight }}%)</span>
+          <span class="font-semibold"> Preço ({{ priceWeight }}%)</span>
           <span class="font-bold text-gray-950">{{ Math.round(priceScore) }}pts</span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
@@ -37,7 +37,7 @@
       
       <div class="text-xs text-gray-700">
         <div class="flex justify-between items-center mb-1">
-          <span class="font-semibold">⭐ Reputação ({{ reputationWeight }}%)</span>
+          <span class="font-semibold"> Reputação ({{ reputationWeight }}%)</span>
           <span class="font-bold text-gray-950">{{ Math.round(reputationScore) }}pts</span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
@@ -197,7 +197,9 @@ watch(totalScore, (newScore) => {
 .score-progress:hover .bg-gray-700,
 .score-progress:hover .bg-gray-600 {
   transform: scaleY(1.1);
-  transition: transform 0.2s ease;
+  transition: 0.2s ease;
 }
 </style>
+
+
 

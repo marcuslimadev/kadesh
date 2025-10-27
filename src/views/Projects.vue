@@ -1,28 +1,28 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <!-- Header Hero -->
       <div class="text-center mb-10">
         <div class="inline-block mb-4">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-950 rounded-2xl shadow-lg flex items-center justify-center">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-950 rounded shadow-lg flex items-center justify-center">
             <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
           </div>
         </div>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-950 mb-4 leading-tight">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-950 mb-4 leading-tight">
           🚀 Projetos Disponíveis
         </h1>
         <p class="text-base sm:text-lg text-gray-600 font-medium max-w-2xl mx-auto mb-6">
           Descubra oportunidades fantásticas ou publique seu próximo grande projeto!
         </p>
         <router-link to="/projects/create" 
-                     class="inline-flex items-center gap-2 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+                     class="inline-flex items-center gap-2 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
           <span>Criar Novo Projeto</span>
-          <span>✨</span>
+          <span></span>
         </router-link>
       </div>
 
@@ -41,7 +41,7 @@
         <router-link :to="`/projects/${p.id}`" 
                      v-for="p in projects" 
                      :key="p.id" 
-                     class="group bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-gray-950">
+                     class="group bg-white rounded-lg shadow-sm hover:shadow transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-gray-950">
           
           <!-- Card Header -->
           <div class="h-2 bg-gray-950"></div>
@@ -53,7 +53,7 @@
                 {{ getStatusText(p.status) }}
               </span>
               <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                <span class="text-xl">🎯</span>
+                <span class="text-xl"></span>
               </div>
             </div>
 
@@ -87,9 +87,9 @@
               <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
                 <div class="flex justify-between items-center">
                   <span class="text-sm text-gray-700 font-bold flex items-center gap-2">
-                    <span class="text-xl">💰</span> Orçamento
+                    <span class="text-xl"></span> Orçamento
                   </span>
-                  <span class="text-xl font-black text-gray-950">
+                  <span class="text-xl font-semibold text-gray-950">
                     R$ {{ formatMoney(p.max_budget) }}
                   </span>
                 </div>
@@ -97,12 +97,12 @@
 
               <div class="grid grid-cols-2 gap-3">
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
-                  <p class="text-2xl font-black text-gray-950">{{ p.bids_count || 0 }}</p>
-                  <p class="text-xs text-gray-600 font-semibold">📊 Propostas</p>
+                  <p class="text-2xl font-semibold text-gray-950">{{ p.bids_count || 0 }}</p>
+                  <p class="text-xs text-gray-600 font-semibold"> Propostas</p>
                 </div>
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
                   <p class="text-xs font-bold text-gray-950">{{ formatDate(p.bidding_ends_at) }}</p>
-                  <p class="text-xs text-gray-600 font-semibold">⏰ Termina</p>
+                  <p class="text-xs text-gray-600 font-semibold"> Termina</p>
                 </div>
               </div>
             </div>
@@ -112,7 +112,7 @@
           <div class="bg-gray-950 px-6 py-4 group-hover:bg-gray-900 transition-all">
             <div class="flex items-center justify-between text-white">
               <span class="text-sm font-bold">Ver Detalhes e Participar</span>
-              <svg class="w-6 h-6 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
               </svg>
             </div>
@@ -130,19 +130,19 @@
           </div>
           <div class="absolute -top-4 -right-4 text-6xl">🚀</div>
         </div>
-        <h3 class="text-3xl sm:text-4xl font-black text-gray-950 mb-4">
-          Nenhum projeto ainda! 🎯
+        <h3 class="text-3xl sm:text-4xl font-semibold text-gray-950 mb-4">
+          Nenhum projeto ainda! 
         </h3>
         <p class="text-lg text-gray-600 font-medium mb-8 max-w-md mx-auto">
           Seja o <span class="text-gray-950 font-bold">pioneiro</span> e publique o primeiro projeto incrível!
         </p>
         <router-link to="/projects/create" 
-                     class="inline-flex items-center gap-3 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+                     class="inline-flex items-center gap-3 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
           </svg>
           <span>Criar Primeiro Projeto</span>
-          <span class="text-2xl animate-pulse">✨</span>
+          <span class="text-2xl "></span>
         </router-link>
       </div>
     </div>
@@ -215,5 +215,7 @@ function formatDate(dateString) {
 
 onMounted(load);
 </script>
+
+
 
 

@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center p-4">
     <div class="max-w-md w-full">
       <!-- Logo/Header -->
       <div class="text-center mb-8">
-        <div class="inline-block bg-white p-4 rounded-2xl shadow-2xl mb-4">
+        <div class="inline-block bg-white p-4 rounded shadow mb-4">
           <div class="text-5xl">🔐</div>
         </div>
         <h1 class="text-3xl font-bold text-white mb-2">Painel Administrativo</h1>
@@ -11,7 +11,7 @@
       </div>
 
       <!-- Form -->
-      <div class="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
+      <div class="bg-white rounded shadow p-8 space-y-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Email do Administrador</label>
           <input
@@ -20,7 +20,7 @@
             type="email"
             placeholder="admin@kadesh.com"
             autocomplete="username"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -32,20 +32,20 @@
             type="password"
             placeholder="••••••••"
             autocomplete="current-password"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
         <button
           @click="handleLogin"
           :disabled="loading || !email || !password"
-          class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {{ loading ? '⏳ Entrando...' : '🚀 Entrar no Painel' }}
         </button>
 
-        <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded-xl text-sm">
-          ❌ {{ error }}
+        <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded text-sm">
+           {{ error }}
         </div>
 
         <div class="text-center pt-4 border-t-2 border-gray-100">
@@ -100,5 +100,7 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+
 
 

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
@@ -8,7 +8,7 @@
             <router-link to="/admin/dashboard" class="text-neutral-900 hover:text-white text-sm mb-2 inline-block">
               ← Voltar ao Dashboard
             </router-link>
-            <h1 class="text-3xl font-bold">⚙️ Configurações do Sistema</h1>
+            <h1 class="text-3xl font-bold"> Configurações do Sistema</h1>
           </div>
           <button
             @click="saveSettings"
@@ -30,7 +30,7 @@
 
       <template v-else>
         <!-- MERCADO PAGO -->
-        <div class="bg-white rounded-2xl shadow-lg p-6">
+        <div class="bg-white rounded shadow-lg p-6">
           <div class="flex items-center gap-3 mb-6">
             <div class="text-4xl">💳</div>
             <div>
@@ -44,7 +44,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Ambiente</label>
               <select
                 v-model="settings.payment.mp_environment.value"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               >
                 <option value="test">🧪 Teste (Sandbox)</option>
                 <option value="prod">🚀 Produção (Live)</option>
@@ -59,7 +59,7 @@
                   v-model="settings.payment.mp_public_key_test.value"
                   type="text"
                   placeholder="TEST-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
                 />
               </div>
 
@@ -69,7 +69,7 @@
                   v-model="settings.payment.mp_access_token_test.value"
                   type="password"
                   placeholder="TEST-xxxxxxxxxxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
                 />
               </div>
 
@@ -79,7 +79,7 @@
                   v-model="settings.payment.mp_public_key_prod.value"
                   type="text"
                   placeholder="APP_USR-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
                 />
               </div>
 
@@ -89,7 +89,7 @@
                   v-model="settings.payment.mp_access_token_prod.value"
                   type="password"
                   placeholder="APP_USR-xxxxxxxxxxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
                 />
               </div>
             </div>
@@ -103,7 +103,7 @@
                   min="0"
                   max="100"
                   step="0.5"
-                  class="w-32 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                  class="w-32 px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
                 />
                 <span class="text-2xl font-bold text-neutral-900">{{ settings.payment.platform_fee_percentage.value }}%</span>
                 <span class="text-sm text-gray-600">
@@ -112,7 +112,7 @@
               </div>
             </div>
 
-            <div class="bg-blue-50 border-2 border-neutral-300 rounded-xl p-4">
+            <div class="bg-blue-50 border-2 border-neutral-300 rounded p-4">
               <p class="text-sm text-neutral-900 font-medium mb-2">📘 Como obter suas credenciais:</p>
               <ol class="text-sm text-neutral-900 space-y-1 ml-4 list-decimal">
                 <li>Acesse <a href="https://www.mercadopago.com.br/developers/panel/app" target="_blank" class="underline font-medium">https://www.mercadopago.com.br/developers/panel/app</a></li>
@@ -125,7 +125,7 @@
         </div>
 
         <!-- GERAL -->
-        <div class="bg-white rounded-2xl shadow-lg p-6">
+        <div class="bg-white rounded shadow-lg p-6">
           <div class="flex items-center gap-3 mb-6">
             <div class="text-4xl">🏢</div>
             <div>
@@ -140,7 +140,7 @@
               <input
                 v-model="settings.general.site_name.value"
                 type="text"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -149,7 +149,7 @@
               <input
                 v-model="settings.general.site_email.value"
                 type="email"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -159,7 +159,7 @@
                 v-model="settings.general.site_phone.value"
                 type="tel"
                 placeholder="(11) 98765-4321"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -178,9 +178,9 @@
         </div>
 
         <!-- LIMITES -->
-        <div class="bg-white rounded-2xl shadow-lg p-6">
+        <div class="bg-white rounded shadow-lg p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="text-4xl">📊</div>
+            <div class="text-4xl"></div>
             <div>
               <h2 class="text-2xl font-bold text-gray-900">Limites do Sistema</h2>
               <p class="text-gray-600 text-sm">Restrições e quotas</p>
@@ -194,7 +194,7 @@
                 v-model.number="settings.limits.max_projects_per_user.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -204,7 +204,7 @@
                 v-model.number="settings.limits.max_bids_per_project.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -214,7 +214,7 @@
                 v-model.number="settings.limits.max_portfolio_images.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
 
@@ -225,7 +225,7 @@
                 type="number"
                 min="1"
                 max="50"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
               />
             </div>
           </div>
@@ -236,14 +236,14 @@
           <button
             @click="saveSettings"
             :disabled="saving"
-            class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {{ saving ? '⏳ Salvando...' : '💾 Salvar Todas as Configurações' }}
           </button>
         </div>
 
         <!-- Mensagem -->
-        <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+        <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
           {{ message }}
         </div>
       </template>
@@ -315,10 +315,10 @@ const saveSettings = async () => {
 
     await axios.put('/kadesh/api/admin/settings', data)
     
-    message.value = '✅ Configurações salvas com sucesso! Arquivo .env.mp atualizado.'
+    message.value = ' Configurações salvas com sucesso! Arquivo .env.mp atualizado.'
     messageType.value = 'success'
   } catch (error) {
-    message.value = '❌ Erro ao salvar configurações: ' + (error.response?.data?.message || error.message)
+    message.value = ' Erro ao salvar configurações: ' + (error.response?.data?.message || error.message)
     messageType.value = 'error'
   } finally {
     saving.value = false
@@ -333,5 +333,7 @@ onMounted(() => {
   loadSettings()
 })
 </script>
+
+
 
 

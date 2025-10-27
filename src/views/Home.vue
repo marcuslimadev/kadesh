@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="bg-gray-50">
     <!-- Hero Section -->
     <section class="bg-gray-950 text-white relative overflow-hidden border-b-4 border-gray-900">
@@ -21,7 +21,7 @@
           
           <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button @click="scrollToProjects" 
-                    class="bg-white text-gray-950 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+                    class="bg-white text-gray-950 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
               📋 Ver Leilões Ativos
             </button>
             <router-link to="/register" 
@@ -57,15 +57,15 @@
     <section ref="projectsSection" class="bg-gray-50 py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-950 mb-4">
-            🎯 Leilões Ativos
+          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-950 mb-4">
+             Leilões Ativos
           </h2>
           <p class="text-xl text-gray-600 mb-6">
             Padrão: 70% preço + 30% reputação
           </p>
           
           <!-- Filtros avançados -->
-          <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-8 max-w-4xl mx-auto">
+          <div class="bg-white rounded shadow-md border border-gray-200 p-6 mb-8 max-w-4xl mx-auto">
             <div class="grid md:grid-cols-4 gap-4">
               <!-- Filtro por categoria -->
               <div>
@@ -80,7 +80,7 @@
 
               <!-- Filtro por orçamento -->
               <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2">💰 Orçamento</label>
+                <label class="block text-sm font-bold text-gray-900 mb-2"> Orçamento</label>
                 <select v-model="budgetFilter" 
                         class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white focus:border-gray-900 focus:ring-2 focus:ring-gray-200 transition-all">
                   <option value="">Todos os valores</option>
@@ -107,7 +107,7 @@
 
               <!-- Filtro por urgência -->
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">⏰ Urgência</label>
+                <label class="block text-sm font-bold text-gray-700 mb-2"> Urgência</label>
                 <select v-model="urgencyFilter" 
                         class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
                   <option value="">Todos os prazos</option>
@@ -134,7 +134,7 @@
             <!-- Contador de resultados e status de auto-refresh -->
             <div class="mt-4 flex flex-col sm:flex-row items-center justify-between">
               <p class="text-sm text-gray-600">
-                📊 Mostrando <strong>{{ filteredProjects.length }}</strong> de <strong>{{ projects.length }}</strong> leilões ativos
+                 Mostrando <strong>{{ filteredProjects.length }}</strong> de <strong>{{ projects.length }}</strong> leilões ativos
               </p>
               
               <div class="flex items-center gap-4 mt-2 sm:mt-0">
@@ -178,7 +178,7 @@
         <!-- Grid de Projetos -->
         <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="project in filteredProjects" :key="project.id" 
-               class="bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-gray-900 overflow-hidden">
+               class="bg-white rounded-lg shadow-sm hover:shadow transition-all duration-300 border-2 border-gray-200 hover:border-gray-900 overflow-hidden">
             
             <!-- Imagem do projeto -->
             <div class="h-48 bg-gray-100 relative overflow-hidden">
@@ -245,7 +245,7 @@
               <!-- Botão de ação -->
               <button @click="handleBidClick(project)" 
                       class="w-full bg-gray-950 hover:bg-gray-900 text-white py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg">
-                💰 Dar meu lance
+                 Dar meu lance
               </button>
             </div>
           </div>
@@ -274,13 +274,13 @@
                   📂 {{ selectedCategory }}
                 </span>
                 <span v-if="budgetFilter" class="bg-neutral-100 text-neutral-800 px-2 py-1 rounded text-xs">
-                  💰 {{ getBudgetLabel(budgetFilter) }}
+                   {{ getBudgetLabel(budgetFilter) }}
                 </span>
                 <span v-if="locationFilter" class="bg-purple-100 text-neutral-900 px-2 py-1 rounded text-xs">
                   📍 {{ getLocationLabel(locationFilter) }}
                 </span>
                 <span v-if="urgencyFilter" class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">
-                  ⏰ {{ getUrgencyLabel(urgencyFilter) }}
+                   {{ getUrgencyLabel(urgencyFilter) }}
                 </span>
                 <span v-if="searchText" class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">
                   🔍 "{{ searchText }}"
@@ -307,8 +307,8 @@
     <section class="py-20 bg-white border-t border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-950 mb-4">
-            ⚡ Como Funciona
+          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-950 mb-4">
+             Como Funciona
           </h2>
           <p class="text-xl text-gray-600">
             Sistema de leilão reverso que garante os melhores preços e qualidade
@@ -318,7 +318,7 @@
         <div class="grid md:grid-cols-3 gap-8">
           <!-- Passo 1 -->
           <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-950 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+            <div class="w-20 h-20 bg-gray-950 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
               <span class="text-3xl">📋</span>
             </div>
             <h3 class="text-2xl font-bold text-gray-950 mb-4">1. Encontre Serviços</h3>
@@ -329,8 +329,8 @@
 
           <!-- Passo 2 -->
           <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
-              <span class="text-3xl">💰</span>
+            <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
+              <span class="text-3xl"></span>
             </div>
             <h3 class="text-2xl font-bold text-gray-950 mb-4">2. Dê Seu Lance</h3>
             <p class="text-gray-600 leading-relaxed">
@@ -340,7 +340,7 @@
 
           <!-- Passo 3 -->
           <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
               <span class="text-3xl">🔒</span>
             </div>
             <h3 class="text-2xl font-bold text-gray-950 mb-4">3. Execute com Segurança</h3>
@@ -355,14 +355,14 @@
     <!-- CTA Final -->
     <section class="py-20 bg-gray-950 text-white border-t-4 border-gray-900">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-extrabold mb-6">
-          🎯 Pronto para começar seu projeto?
+        <h2 class="text-3xl lg:text-4xl font-semibold mb-6">
+           Pronto para começar seu projeto?
         </h2>
         <p class="text-xl text-gray-300 mb-8 leading-relaxed">
           Junte-se a milhares de empresas que já economizam com nosso sistema de leilão reverso.
         </p>
         <router-link to="/register" 
-                     class="inline-block bg-white text-gray-950 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl">
+                     class="inline-block bg-white text-gray-950 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow">
           🚀 Criar Conta Gratuita
         </router-link>
       </div>
@@ -714,5 +714,7 @@ function stopAutoRefresh() {
   overflow: hidden;
 }
 </style>
+
+
 
 

@@ -1,20 +1,20 @@
-<template>
+﻿<template>
   <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto">
     <!-- Background overlay -->
     <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" @click="close"></div>
     
     <!-- Modal content -->
     <div class="flex min-h-screen items-center justify-center p-4">
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div class="relative bg-white rounded shadow max-w-4xl w-full max-h-[90vh] overflow-hidden">
         <!-- Header -->
         <div class="bg-neutral-900 p-6">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-              <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+              <div class="w-14 h-14 bg-white/20 rounded flex items-center justify-center">
                 <span class="text-4xl">🚀</span>
               </div>
               <div>
-                <h3 class="text-3xl font-black text-white">Enviar Lance</h3>
+                <h3 class="text-3xl font-semibold text-white">Enviar Lance</h3>
                 <p class="text-neutral-900 font-semibold">{{ project?.title || 'Carregando...' }}</p>
               </div>
             </div>
@@ -29,27 +29,27 @@
         <!-- Content -->
         <div class="p-6 overflow-y-auto max-h-[70vh]">
           <!-- Project Info Summary -->
-          <div class="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 mb-6 border-2 border-neutral-300">
+          <div class="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded p-6 mb-6 border-2 border-neutral-300">
             <div class="grid md:grid-cols-3 gap-4">
               <!-- Budget Info -->
               <div class="text-center">
-                <div class="text-3xl mb-2">💰</div>
+                <div class="text-3xl mb-2"></div>
                 <p class="text-sm font-bold text-gray-600 uppercase">Orçamento Max</p>
-                <p class="text-2xl font-black text-neutral-900">R$ {{ formatCurrency(project?.max_budget || 0) }}</p>
+                <p class="text-2xl font-semibold text-neutral-900">R$ {{ formatCurrency(project?.max_budget || 0) }}</p>
               </div>
 
               <!-- Current Best Bid -->
               <div class="text-center">
-                <div class="text-3xl mb-2">🎯</div>
+                <div class="text-3xl mb-2"></div>
                 <p class="text-sm font-bold text-gray-600 uppercase">Melhor Lance</p>
-                <p class="text-2xl font-black text-success-600">
+                <p class="text-2xl font-semibold text-success-600">
                   {{ bestBid ? `R$ ${formatCurrency(bestBid)}` : 'Nenhum' }}
                 </p>
               </div>
 
               <!-- Time Remaining -->
               <div class="text-center">
-                <div class="text-3xl mb-2">⏰</div>
+                <div class="text-3xl mb-2"></div>
                 <p class="text-sm font-bold text-gray-600 uppercase">Tempo Restante</p>
                 <CountdownTimer 
                   v-if="project?.bidding_ends_at"
@@ -67,8 +67,8 @@
             <!-- Amount and Days -->
             <div class="grid md:grid-cols-2 gap-6">
               <div>
-                <label class="block text-sm font-black text-gray-700 uppercase tracking-wider mb-3">
-                  💰 Valor da Proposta (R$)
+                <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                   Valor da Proposta (R$)
                 </label>
                 <input 
                   v-model.number="bidForm.amount" 
@@ -76,7 +76,7 @@
                   step="0.01" 
                   :max="project?.max_budget"
                   required
-                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
+                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
                   placeholder="Ex: 2500.00" 
                 />
                 <p class="text-sm text-gray-500 mt-2">
@@ -85,7 +85,7 @@
               </div>
               
               <div>
-                <label class="block text-sm font-black text-gray-700 uppercase tracking-wider mb-3">
+                <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">
                   ⏱️ Prazo de Entrega (dias)
                 </label>
                 <input 
@@ -93,16 +93,16 @@
                   type="number" 
                   min="1" 
                   required
-                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
+                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
                   placeholder="Ex: 7" 
                 />
               </div>
             </div>
 
             <!-- Real-time Score Preview -->
-            <div v-if="bidForm.amount && bidForm.amount > 0" class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200">
+            <div v-if="bidForm.amount && bidForm.amount > 0" class="bg-gradient-to-br from-green-50 to-emerald-50 rounded p-6 border-2 border-green-200">
               <h4 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span class="text-2xl">📊</span>
+                <span class="text-2xl"></span>
                 Preview do Seu Placar
               </h4>
               <ScoreProgress
@@ -114,20 +114,20 @@
                 @scoreChange="onScorePreview"
               />
               <p class="text-sm text-gray-600 mt-2">
-                💡 <strong>Dica:</strong> O placar combina 70% desconto no preço + 30% sua reputação
+                 <strong>Dica:</strong> O placar combina 70% desconto no preço + 30% sua reputação
               </p>
             </div>
 
             <!-- Proposal Text -->
             <div>
-              <label class="block text-sm font-black text-gray-700 uppercase tracking-wider mb-3">
-                📝 Detalhes da Proposta
+              <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                 Detalhes da Proposta
               </label>
               <textarea 
                 v-model="bidForm.proposal" 
                 rows="6" 
                 required
-                class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-semibold resize-none text-base"
+                class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-semibold resize-none text-base"
                 placeholder="Descreva sua proposta, experiência relevante e por que você é o profissional ideal para este projeto..."
               ></textarea>
               <p class="text-sm text-gray-500 mt-2">
@@ -136,11 +136,11 @@
             </div>
 
             <!-- Error Message -->
-            <div v-if="error" class="bg-neutral-500 border-4 border-neutral-300 rounded-2xl p-6">
+            <div v-if="error" class="bg-neutral-500 border-4 border-neutral-300 rounded p-6">
               <div class="flex items-center gap-3">
                 <span class="text-4xl">⚠️</span>
                 <div>
-                  <p class="text-lg font-black text-red-800">Erro ao Enviar Lance</p>
+                  <p class="text-lg font-semibold text-red-800">Erro ao Enviar Lance</p>
                   <p class="text-red-700 font-semibold">{{ error }}</p>
                 </div>
               </div>
@@ -151,14 +151,14 @@
               <button 
                 type="button" 
                 @click="close"
-                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-4 px-8 rounded-2xl transition-all"
+                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-4 px-8 rounded transition-all"
               >
                 Cancelar
               </button>
               <button 
                 type="submit" 
                 :disabled="isSubmitting || !bidForm.amount || !bidForm.proposal"
-                class="flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-xl"
+                class="flex-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:via-indigo-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded transition-all hover:opacity-90 shadow"
               >
                 <span v-if="isSubmitting" class="flex items-center justify-center gap-2">
                   <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -312,4 +312,6 @@ watch(() => props.project?.max_budget, (newBudget) => {
   background: #94a3b8;
 }
 </style>
+
+
 

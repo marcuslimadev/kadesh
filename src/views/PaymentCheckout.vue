@@ -1,19 +1,19 @@
-<template>
+﻿<template>
   <div class="max-w-2xl mx-auto p-4 md:p-6">
-    <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-6 rounded-2xl text-white shadow-xl mb-6">
+    <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-6 rounded text-white shadow mb-6">
       <h1 class="text-2xl md:text-3xl font-bold mb-2">💳 Pagamento do Projeto</h1>
       <p class="opacity-90">Finalize o pagamento via Mercado Pago</p>
     </div>
 
     <!-- Loading -->
-    <div v-if="loading" class="bg-white rounded-2xl shadow-lg p-12 text-center">
+    <div v-if="loading" class="bg-white rounded shadow-lg p-12 text-center">
       <div class="inline-block w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
       <p class="mt-4 text-gray-600">Preparando pagamento...</p>
     </div>
 
     <!-- Detalhes do Pagamento -->
     <div v-else-if="project" class="space-y-6">
-      <div class="bg-white rounded-2xl shadow-lg p-6">
+      <div class="bg-white rounded shadow-lg p-6">
         <h2 class="text-xl font-bold text-gray-900 mb-4">📋 Detalhes do Projeto</h2>
         
         <div class="space-y-3 text-sm">
@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="bg-blue-50 border-2 border-neutral-300 rounded-xl p-4 text-sm text-neutral-900">
+      <div class="bg-blue-50 border-2 border-neutral-300 rounded p-4 text-sm text-neutral-900">
         <p class="font-medium mb-2">ℹ️ Informações importantes:</p>
         <ul class="space-y-1 ml-4 list-disc">
           <li>Pagamento seguro via Mercado Pago</li>
@@ -43,8 +43,8 @@
       </div>
 
       <!-- Erro -->
-      <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded-xl">
-        ❌ {{ error }}
+      <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded">
+         {{ error }}
       </div>
 
       <!-- Botão de Pagamento -->
@@ -52,7 +52,7 @@
         <button
           @click="createPayment"
           :disabled="creatingPayment"
-          class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
         >
           {{ creatingPayment ? '⏳ Preparando...' : '💳 Ir para Pagamento' }}
         </button>
@@ -60,14 +60,14 @@
 
       <!-- Link do Mercado Pago -->
       <div v-else class="space-y-4">
-        <div class="bg-neutral-800 border-2 border-green-300 text-neutral-900 p-4 rounded-xl">
-          ✅ Pagamento preparado! Clique no botão abaixo para finalizar.
+        <div class="bg-neutral-800 border-2 border-green-300 text-neutral-900 p-4 rounded">
+           Pagamento preparado! Clique no botão abaixo para finalizar.
         </div>
         
         <a
           :href="paymentPreference.init_point"
           target="_blank"
-          class="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl text-center transition-all"
+          class="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow text-center transition-all"
         >
           🚀 Abrir Mercado Pago
         </a>
@@ -77,13 +77,13 @@
         </p>
 
         <!-- Instruções -->
-        <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-4 text-sm text-gray-700">
+        <div class="bg-gray-50 border-2 border-gray-200 rounded p-4 text-sm text-gray-700">
           <p class="font-medium mb-2">📱 Opções de pagamento disponíveis:</p>
           <ul class="space-y-1 ml-4 list-disc">
             <li>💳 Cartão de crédito (até 12x)</li>
-            <li>💰 Cartão de débito</li>
+            <li> Cartão de débito</li>
             <li>🏦 Boleto bancário</li>
-            <li>⚡ Pix (aprovação instantânea)</li>
+            <li> Pix (aprovação instantânea)</li>
           </ul>
         </div>
       </div>
@@ -96,7 +96,7 @@
     </div>
 
     <!-- Projeto não encontrado -->
-    <div v-else class="bg-white rounded-2xl shadow-lg p-12 text-center">
+    <div v-else class="bg-white rounded shadow-lg p-12 text-center">
       <div class="text-6xl mb-4">😕</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-2">Projeto não encontrado</h2>
       <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900">
@@ -172,5 +172,7 @@ onMounted(() => {
   loadProject()
 })
 </script>
+
+
 
 

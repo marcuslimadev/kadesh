@@ -1,14 +1,14 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-neutral-900 flex items-center justify-center p-3 sm:p-4">
     <div class="max-w-md w-full">
-      <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-2 border-neutral-300">
+      <div class="bg-white rounded shadow p-6 sm:p-8 border-2 border-neutral-300">
         <div class="text-center mb-6 sm:mb-8">
-          <div class="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform hover:rotate-12 transition-transform">
+          <div class="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 rounded flex items-center justify-center mb-4 shadow-lg hover:rotate-12 transition-transform">
             <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
             </svg>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+          <h2 class="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
             🔑 Recuperar Senha
           </h2>
           <p class="text-gray-600 mt-2 text-sm sm:text-base font-medium">
@@ -19,14 +19,14 @@
         <div v-if="!success" class="space-y-5">
           <form @submit.prevent="submit">
             <div>
-              <label class="block text-sm font-bold text-gray-700 mb-2">📧 Email Cadastrado</label>
+              <label class="block text-sm font-bold text-gray-700 mb-2"> Email Cadastrado</label>
               <input v-model="email" type="email" 
-                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 font-medium" 
+                     class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 font-medium" 
                      placeholder="seu@email.com" required />
             </div>
 
             <button :disabled="loading" 
-                    class="w-full mt-5 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 hover:from-amber-700 hover:via-orange-700 hover:to-red-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl">
+                    class="w-full mt-5 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 hover:from-amber-700 hover:via-orange-700 hover:to-red-700 text-white font-bold py-3.5 px-4 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow">
               <span v-if="loading" class="flex items-center justify-center">
                 <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -37,7 +37,7 @@
               <span v-else>📨 Enviar Link de Recuperação</span>
             </button>
 
-            <div v-if="error" class="mt-4 bg-gradient-to-r from-red-50 to-rose-50 border-2 border-neutral-300 rounded-xl p-4">
+            <div v-if="error" class="mt-4 bg-gradient-to-r from-red-50 to-rose-50 border-2 border-neutral-300 rounded p-4">
               <div class="flex items-center">
                 <svg class="w-5 h-5 text-red-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -55,12 +55,12 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          <h3 class="text-xl font-bold text-gray-900 mb-2">✅ Email Enviado!</h3>
+          <h3 class="text-xl font-bold text-gray-900 mb-2"> Email Enviado!</h3>
           <p class="text-gray-600 text-sm mb-6">
             Verifique sua caixa de entrada em <span class="font-bold">{{ email }}</span>
           </p>
           <router-link to="/login" 
-                       class="inline-block bg-neutral-900 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                       class="inline-block bg-neutral-900 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded font-bold text-sm transition-all shadow-lg hover:shadow hover:opacity-90">
             🔐 Voltar para Login
           </router-link>
         </div>
@@ -107,5 +107,7 @@ async function submit() {
   }
 }
 </script>
+
+
 
 

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
     <h2 class="text-xl font-semibold mb-4">Novo Projeto</h2>
     <form @submit.prevent="submit" class="space-y-4">
@@ -75,5 +75,7 @@ async function submit() {
   }
 }
 </script>
+
+
 
 

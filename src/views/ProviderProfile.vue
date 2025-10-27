@@ -1,12 +1,12 @@
-<template>
+﻿<template>
   <div class="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
-    <div class="bg-neutral-900 p-6 rounded-2xl text-white shadow-xl">
-      <h1 class="text-2xl md:text-3xl font-bold mb-2">✨ Meu Perfil Profissional</h1>
+    <div class="bg-neutral-900 p-6 rounded text-white shadow">
+      <h1 class="text-2xl md:text-3xl font-bold mb-2"> Meu Perfil Profissional</h1>
       <p class="opacity-90">Mostre seus trabalhos e conquiste mais clientes!</p>
     </div>
 
     <!-- INFORMAÇÕES BÁSICAS -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4">
+    <div class="bg-white rounded shadow-lg p-6 space-y-4">
       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
         🏢 Informações do Negócio
       </h2>
@@ -18,7 +18,7 @@
             v-model="profile.business_name"
             type="text"
             placeholder="Ex: João Reformas e Pinturas"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -28,7 +28,7 @@
             v-model="profile.tagline"
             type="text"
             placeholder="Ex: Qualidade e pontualidade garantidas!"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
       </div>
@@ -39,7 +39,7 @@
           v-model="profile.about"
           rows="5"
           placeholder="Conte sua história, experiência, diferenciais..."
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
         ></textarea>
       </div>
 
@@ -51,7 +51,7 @@
             type="number"
             min="0"
             placeholder="5"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -62,16 +62,16 @@
             type="number"
             min="1"
             placeholder="3"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
       </div>
     </div>
 
     <!-- ESPECIALIDADES -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4">
+    <div class="bg-white rounded shadow-lg p-6 space-y-4">
       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-        🎯 Especialidades e Serviços
+         Especialidades e Serviços
       </h2>
       
       <div>
@@ -81,7 +81,7 @@
           @keyup.enter="addSpecialty"
           type="text"
           placeholder="Ex: Pintura Residencial"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
         />
         <div class="flex flex-wrap gap-2 mt-3">
           <span
@@ -102,7 +102,7 @@
           @keyup.enter="addService"
           type="text"
           placeholder="Ex: Pintura de fachadas"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
         />
         <div class="flex flex-wrap gap-2 mt-3">
           <span
@@ -118,7 +118,7 @@
     </div>
 
     <!-- LOCALIZAÇÃO E CONTATO -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4">
+    <div class="bg-white rounded shadow-lg p-6 space-y-4">
       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
         📍 Localização e Contato
       </h2>
@@ -130,7 +130,7 @@
             v-model="profile.city"
             type="text"
             placeholder="Ex: São Paulo"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -141,7 +141,7 @@
             type="text"
             placeholder="Ex: SP"
             maxlength="2"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
       </div>
@@ -153,7 +153,7 @@
             v-model="profile.phone"
             type="tel"
             placeholder="(11) 98765-4321"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -163,7 +163,7 @@
             v-model="profile.whatsapp"
             type="tel"
             placeholder="(11) 98765-4321"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
       </div>
@@ -174,15 +174,15 @@
           v-model="profile.website"
           type="url"
           placeholder="https://instagram.com/seu_perfil"
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
         />
       </div>
     </div>
 
     <!-- DISPONIBILIDADE -->
-    <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4">
+    <div class="bg-white rounded shadow-lg p-6 space-y-4">
       <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-        ⏰ Disponibilidade
+         Disponibilidade
       </h2>
       
       <div class="grid md:grid-cols-2 gap-4">
@@ -190,11 +190,11 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
           <select
             v-model="profile.availability_status"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           >
-            <option value="available">✅ Disponível</option>
+            <option value="available"> Disponível</option>
             <option value="busy">⚠️ Ocupado (aceito novos projetos)</option>
-            <option value="unavailable">❌ Indisponível</option>
+            <option value="unavailable"> Indisponível</option>
           </select>
         </div>
 
@@ -225,14 +225,14 @@
       <button
         @click="saveProfile"
         :disabled="loading"
-        class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {{ loading ? '⏳ Salvando...' : '💾 Salvar Perfil' }}
       </button>
     </div>
 
     <!-- MENSAGENS -->
-    <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+    <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
       {{ message }}
     </div>
   </div>
@@ -305,10 +305,10 @@ const saveProfile = async () => {
   
   try {
     await axios.put('/kadesh/api/profile', profile.value)
-    message.value = '✅ Perfil atualizado com sucesso!'
+    message.value = ' Perfil atualizado com sucesso!'
     messageType.value = 'success'
   } catch (error) {
-    message.value = '❌ Erro ao salvar perfil: ' + (error.response?.data?.message || error.message)
+    message.value = ' Erro ao salvar perfil: ' + (error.response?.data?.message || error.message)
     messageType.value = 'error'
   } finally {
     loading.value = false
@@ -323,5 +323,7 @@ onMounted(() => {
 <style scoped>
 /* Animações adicionais se necessário */
 </style>
+
+
 
 

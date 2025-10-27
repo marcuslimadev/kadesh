@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="countdown-timer" :class="urgencyClass">
     <div v-if="isExpired" class="expired-state">
       <span class="font-bold text-neutral-500 text-sm bg-neutral-100 px-3 py-1 rounded-full">
@@ -109,7 +109,7 @@ const mainTimeClass = computed(() => {
   const colors = {
     normal: 'text-success-600',
     urgent: 'text-warning-600',
-    critical: 'text-danger-600 animate-pulse',
+    critical: 'text-danger-600 ',
     expired: 'text-neutral-500'
   };
   
@@ -216,4 +216,6 @@ defineExpose({
   }
 }
 </style>
+
+
 

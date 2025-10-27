@@ -1,12 +1,12 @@
-<template>
+﻿<template>
   <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-    <div class="bg-neutral-900 p-6 rounded-2xl text-white shadow-xl">
-      <h1 class="text-2xl md:text-3xl font-bold mb-2">📸 Meu Portfólio</h1>
+    <div class="bg-neutral-900 p-6 rounded text-white shadow">
+      <h1 class="text-2xl md:text-3xl font-bold mb-2"> Meu Portfólio</h1>
       <p class="opacity-90">Mostre seus melhores trabalhos e conquiste clientes!</p>
     </div>
 
     <!-- UPLOAD DE IMAGEM -->
-    <div class="bg-white rounded-2xl shadow-lg p-6">
+    <div class="bg-white rounded shadow-lg p-6">
       <h2 class="text-xl font-bold text-gray-800 mb-4">➕ Adicionar Foto</h2>
       
       <div class="space-y-4">
@@ -17,12 +17,12 @@
             ref="fileInput"
             @change="handleFileSelect"
             accept="image/jpeg,image/png,image/jpg,image/webp"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
           />
           <p class="text-sm text-gray-500 mt-1">JPG, PNG ou WebP - Máximo 5MB</p>
         </div>
 
-        <div v-if="previewUrl" class="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200">
+        <div v-if="previewUrl" class="relative w-full h-64 rounded overflow-hidden border-2 border-gray-200">
           <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover" />
           <button
             @click="clearPreview"
@@ -39,7 +39,7 @@
               v-model="uploadForm.title"
               type="text"
               placeholder="Ex: Reforma Completa - Sala de Estar"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
             />
           </div>
 
@@ -49,7 +49,7 @@
               v-model="uploadForm.project_type"
               type="text"
               placeholder="Ex: Residencial, Comercial"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
             />
           </div>
         </div>
@@ -60,7 +60,7 @@
             v-model="uploadForm.description"
             rows="3"
             placeholder="Descreva o trabalho realizado..."
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
           ></textarea>
         </div>
 
@@ -72,14 +72,14 @@
             class="w-5 h-5 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
           />
           <label for="featured" class="text-sm font-medium text-gray-700 cursor-pointer">
-            ⭐ Destacar esta imagem (aparece primeiro)
+             Destacar esta imagem (aparece primeiro)
           </label>
         </div>
 
         <button
           @click="uploadImage"
           :disabled="!selectedFile || uploading"
-          class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {{ uploading ? '⏳ Enviando...' : '📤 Enviar Imagem' }}
         </button>
@@ -87,7 +87,7 @@
     </div>
 
     <!-- GALERIA -->
-    <div class="bg-white rounded-2xl shadow-lg p-6">
+    <div class="bg-white rounded shadow-lg p-6">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-gray-800">🖼️ Minhas Fotos ({{ portfolio.length }})</h2>
         <button
@@ -104,7 +104,7 @@
       </div>
 
       <div v-else-if="portfolio.length === 0" class="text-center py-12">
-        <div class="text-6xl mb-4">📸</div>
+        <div class="text-6xl mb-4"></div>
         <p class="text-gray-600 text-lg">Nenhuma foto ainda</p>
         <p class="text-gray-500 text-sm">Adicione fotos dos seus melhores trabalhos!</p>
       </div>
@@ -113,11 +113,11 @@
         <div
           v-for="item in portfolio"
           :key="item.id"
-          class="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all border-2 border-gray-100"
+          class="group relative bg-white rounded overflow-hidden shadow-md hover:shadow transition-all border-2 border-gray-100"
         >
           <!-- Badge Destaque -->
           <div v-if="item.is_featured" class="absolute top-3 left-3 z-10 bg-neutral-600 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-            ⭐ Destaque
+             Destaque
           </div>
 
           <!-- Imagem -->
@@ -125,7 +125,7 @@
             <img
               :src="getImageUrl(item.file_path)"
               :alt="item.title"
-              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              class="w-full h-full object-cover group-hover:opacity-90 transition-duration-300"
               @error="handleImageError"
             />
           </div>
@@ -151,7 +151,7 @@
     </div>
 
     <!-- MENSAGENS -->
-    <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+    <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
       {{ message }}
     </div>
   </div>
@@ -184,14 +184,14 @@ const handleFileSelect = (event) => {
   // Validar tipo
   const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']
   if (!allowedTypes.includes(file.type)) {
-    message.value = '❌ Tipo de arquivo não permitido. Use JPG, PNG ou WebP'
+    message.value = ' Tipo de arquivo não permitido. Use JPG, PNG ou WebP'
     messageType.value = 'error'
     return
   }
 
   // Validar tamanho (5MB)
   if (file.size > 5 * 1024 * 1024) {
-    message.value = '❌ Arquivo muito grande. Máximo 5MB'
+    message.value = ' Arquivo muito grande. Máximo 5MB'
     messageType.value = 'error'
     return
   }
@@ -227,7 +227,7 @@ const uploadImage = async () => {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
 
-    message.value = '✅ Imagem enviada com sucesso!'
+    message.value = ' Imagem enviada com sucesso!'
     messageType.value = 'success'
 
     // Resetar form
@@ -242,7 +242,7 @@ const uploadImage = async () => {
     // Recarregar portfólio
     await loadPortfolio()
   } catch (error) {
-    message.value = '❌ Erro ao enviar imagem: ' + (error.response?.data?.message || error.message)
+    message.value = ' Erro ao enviar imagem: ' + (error.response?.data?.message || error.message)
     messageType.value = 'error'
   } finally {
     uploading.value = false
@@ -260,7 +260,7 @@ const loadPortfolio = async () => {
     const response = await axios.get(`/kadesh/api/providers/${userId}/profile`)
     portfolio.value = response.data.portfolio || []
   } catch (error) {
-    message.value = '❌ Erro ao carregar portfólio: ' + (error.response?.data?.message || error.message)
+    message.value = ' Erro ao carregar portfólio: ' + (error.response?.data?.message || error.message)
     messageType.value = 'error'
   } finally {
     loading.value = false
@@ -272,11 +272,11 @@ const deleteImage = async (id) => {
 
   try {
     await axios.delete(`/kadesh/api/portfolio/${id}`)
-    message.value = '✅ Imagem removida com sucesso!'
+    message.value = ' Imagem removida com sucesso!'
     messageType.value = 'success'
     await loadPortfolio()
   } catch (error) {
-    message.value = '❌ Erro ao remover imagem: ' + (error.response?.data?.message || error.message)
+    message.value = ' Erro ao remover imagem: ' + (error.response?.data?.message || error.message)
     messageType.value = 'error'
   }
 }
@@ -303,5 +303,7 @@ onMounted(() => {
   overflow: hidden;
 }
 </style>
+
+
 
 
