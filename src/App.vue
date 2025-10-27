@@ -18,17 +18,17 @@
           <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center space-x-6">
             <router-link v-if="!isAdmin" to="/projects" 
-                         class="text-neutral-700 hover:text-primary-600 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
+                         class="text-gray-700 hover:text-gray-950 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
               <span class="text-lg">📋</span> Projetos
             </router-link>
 
             <template v-if="isAdmin">
               <router-link to="/admin/dashboard" 
-                           class="text-neutral-700 hover:text-primary-600 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
+                           class="text-gray-700 hover:text-gray-950 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
                 <span class="text-lg">📊</span> Dashboard
               </router-link>
               <router-link to="/admin/settings" 
-                           class="text-neutral-700 hover:text-warning-600 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
+                           class="text-gray-700 hover:text-gray-900 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
                 <span class="text-lg">⚙️</span> Configurações
               </router-link>
             </template>
@@ -36,11 +36,11 @@
             <!-- Provider Links -->
             <template v-if="!isAdmin && canAccessProvider">
               <router-link to="/provider/profile" 
-                           class="text-neutral-700 hover:text-success-600 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
+                           class="text-gray-700 hover:text-gray-900 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
                 <span class="text-lg">�</span> Meu Perfil
               </router-link>
               <router-link to="/provider/portfolio" 
-                           class="text-neutral-700 hover:text-success-600 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
+                           class="text-gray-700 hover:text-gray-900 transition-all font-semibold hover:scale-105 transform flex items-center gap-2">
                 <span class="text-lg">📸</span> Portfólio
               </router-link>
             </template>
@@ -48,19 +48,19 @@
             <!-- New Project Button (contractors only) -->
             <router-link v-if="!isAdmin && canCreateProjects" 
                          to="/projects/create" 
-                         class="bg-gradient-success hover:opacity-90 text-white px-5 py-2 rounded-xl transition-all duration-200 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
+                         class="bg-gray-950 hover:bg-gray-900 text-white px-5 py-2 rounded-xl transition-all duration-200 font-bold text-sm shadow-lg hover:shadow-xl transform hover:scale-105">
               + Novo Projeto
             </router-link>
           </div>
 
           <!-- User Info + Logout -->
           <div class="flex items-center space-x-3">
-            <div class="flex items-center space-x-2 bg-gradient-to-r from-neutral-50 to-primary-50 px-3 py-2 rounded-lg border border-neutral-200">
-              <div class="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center shadow-md">
+            <div class="flex items-center space-x-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+              <div class="w-8 h-8 bg-gray-950 rounded-full flex items-center justify-center shadow-md">
                 <span class="text-white text-sm font-bold">{{ displayInitial }}</span>
               </div>
               <div class="hidden sm:block">
-                <p class="text-sm font-semibold text-neutral-900">{{ displayName }}</p>
+                <p class="text-sm font-semibold text-gray-900">{{ displayName }}</p>
                 <p class="text-xs font-medium" :class="roleInfo.class">
                   {{ roleInfo.label }}
                 </p>
@@ -68,7 +68,7 @@
             </div>
             
             <button @click="logout" 
-                    class="text-danger-500 hover:text-danger-600 hover:bg-danger-50 transition-all p-2 rounded-lg"
+                    class="text-gray-700 hover:text-gray-950 hover:bg-gray-50 transition-all p-2 rounded-lg"
                     title="Sair">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -80,7 +80,7 @@
         <!-- Mobile Bottom Navigation -->
         <div class="md:hidden border-t border-neutral-200 py-2 flex justify-around items-center">
           <router-link v-if="!isAdmin" to="/projects" 
-                       class="flex flex-col items-center space-y-1 text-neutral-600 hover:text-primary-600 transition-colors px-3 py-1">
+                       class="flex flex-col items-center space-y-1 text-gray-600 hover:text-gray-950 transition-colors px-3 py-1">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
@@ -90,7 +90,7 @@
           <!-- New Project (mobile - contractors) -->
           <router-link v-if="!isAdmin && canCreateProjects" 
                        to="/projects/create" 
-                       class="flex flex-col items-center space-y-1 text-success-600 hover:text-success-700 transition-colors px-3 py-1">
+                       class="flex flex-col items-center space-y-1 text-gray-900 hover:text-gray-950 transition-colors px-3 py-1">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
@@ -100,19 +100,19 @@
           <!-- Provider Profile (mobile) -->
           <router-link v-if="!isAdmin && canAccessProvider" 
                        to="/provider/profile" 
-                       class="flex flex-col items-center space-y-1 text-neutral-600 hover:text-success-600 transition-colors px-3 py-1">
+                       class="flex flex-col items-center space-y-1 text-gray-600 hover:text-gray-900 transition-colors px-3 py-1">
             <span class="text-lg">�</span>
             <span class="text-xs font-semibold">Perfil</span>
           </router-link>
 
           <!-- Admin Quick Links (mobile) -->
           <router-link v-if="isAdmin" to="/admin/dashboard" 
-                       class="flex flex-col items-center space-y-1 text-neutral-600 hover:text-primary-600 transition-colors px-3 py-1">
+                       class="flex flex-col items-center space-y-1 text-gray-600 hover:text-gray-950 transition-colors px-3 py-1">
             <span class="text-lg">📊</span>
             <span class="text-xs font-semibold">Dashboard</span>
           </router-link>
           <router-link v-if="isAdmin" to="/admin/settings" 
-                       class="flex flex-col items-center space-y-1 text-warning-600 hover:text-warning-700 transition-colors px-3 py-1">
+                       class="flex flex-col items-center space-y-1 text-gray-600 hover:text-gray-900 transition-colors px-3 py-1">
             <span class="text-lg">⚙️</span>
             <span class="text-xs font-semibold">Config</span>
           </router-link>
@@ -126,24 +126,24 @@
         <div class="flex justify-between items-center h-16">
           <!-- Logo -->
           <router-link to="/" class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-lg">
+            <div class="w-10 h-10 bg-gray-950 rounded-xl flex items-center justify-center shadow-lg">
               <span class="text-white font-bold text-lg">K</span>
             </div>
-            <span class="text-xl font-bold text-primary-900">Kadesh</span>
+            <span class="text-xl font-bold text-gray-950">Kadesh</span>
           </router-link>
 
           <!-- Navigation -->
           <div class="flex items-center space-x-6">
             <router-link to="/projects" 
-                         class="text-neutral-700 hover:text-primary-600 font-semibold transition-colors">
+                         class="text-gray-700 hover:text-gray-950 font-semibold transition-colors">
               Leilões
             </router-link>
             <router-link to="/login" 
-                         class="text-primary-600 hover:text-primary-700 font-semibold transition-colors">
+                         class="text-gray-900 hover:text-gray-950 font-semibold transition-colors">
               Entrar
             </router-link>
             <router-link to="/register" 
-                         class="bg-gradient-primary hover:opacity-90 text-white px-6 py-2 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                         class="bg-gray-950 hover:bg-gray-900 text-white px-6 py-2 rounded-xl font-bold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
               Cadastrar
             </router-link>
           </div>
@@ -160,7 +160,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row justify-between items-center">
           <div class="flex items-center space-x-3 mb-4 md:mb-0">
-            <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-gray-950 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold text-sm">K</span>
             </div>
             <span class="text-lg font-bold text-white">Kadesh</span>
