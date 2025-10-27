@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // Detectar ambiente e definir baseURL correto
 const isDev = import.meta.env.DEV;
-const baseURL = isDev ? '' : '/kadesh'; // Em dev usa proxy, em prod usa /kadesh
+// Em dev, usa proxy do Vite (que vai redirecionar /api para http://localhost/kadesh/api)
+// Em prod, usa /kadesh diretamente
+const baseURL = isDev ? '' : '/kadesh';
 
 const api = axios.create({
   baseURL,

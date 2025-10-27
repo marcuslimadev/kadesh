@@ -25,20 +25,22 @@ session_set_cookie_params([
 // Start session ANTES de qualquer output
 session_start();
 
-// 🐛 DEBUG: Log de sessão (REMOVER EM PRODUÇÃO)
-error_log("=== SESSION DEBUG ===");
-error_log("Session ID: " . session_id());
-error_log("Request URI: " . $_SERVER['REQUEST_URI']);
-error_log("Session content: " . json_encode($_SESSION));
-error_log("Cookies: " . json_encode($_COOKIE));
-error_log("===================");
+// Headers CORS para desenvolvimento (permitir requisições do Vite dev server)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (strpos($origin, 'localhost:') !== false || strpos($origin, '127.0.0.1:') !== false) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+}
 
-// Include modular endpoints (COMENTADO - arquivos foram consolidados neste arquivo)
-// require_once __DIR__ . '/backend-provider.php';
-// require_once __DIR__ . '/backend-reviews.php';
-// require_once __DIR__ . '/backend-admin.php';
+// Responder OPTIONS (preflight)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
-// Headers
+// Headers de resposta
 header('Content-Type: application/json; charset=utf-8');
 
 // ==================== DATABASE ====================

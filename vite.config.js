@@ -12,10 +12,28 @@ export default defineConfig({
   
   publicDir: false, // Desabilita cópia de pasta public (evita conflito)
   
-  // Server config (NÃO USADO - acesso direto via http://localhost/kadesh/)
-  // Mantido apenas para eventual desenvolvimento futuro com hot-reload
+  // Server config para desenvolvimento
   server: {
     port: 5175,
-    host: 'localhost'
+    host: 'localhost',
+    proxy: {
+      // Proxy para API - redireciona /api/* para http://localhost/kadesh/api/*
+      '/api': {
+        target: 'http://localhost/kadesh',
+        changeOrigin: true,
+        secure: false,
+        configure: (proxy, options) => {
+          proxy.on('error', (err, req, res) => {
+            console.log('proxy error', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log('Sending Request:', req.method, req.url, '→', options.target + req.url);
+          });
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            console.log('Received Response:', proxyRes.statusCode, req.url);
+          });
+        }
+      }
+    }
   }
 });
