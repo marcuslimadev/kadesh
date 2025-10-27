@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <button :disabled="loading" class="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50">Criar</button>
+      <button :disabled="loading" class="bg-neutral-800 text-white px-4 py-2 rounded disabled:opacity-50">Criar</button>
       <p v-if="error" class="text-red-600 text-sm">{{ error }}</p>
     </form>
   </div>
@@ -75,3 +75,5 @@ async function submit() {
   }
 }
 </script>
+
+

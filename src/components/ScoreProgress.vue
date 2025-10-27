@@ -17,8 +17,6 @@
         :class="progressBarClass"
         :style="{ width: `${Math.min(100, Math.max(0, totalScore))}%` }"
       >
-        <!-- Animação de brilho -->
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse"></div>
       </div>
     </div>
     
@@ -31,7 +29,7 @@
         </div>
         <div class="w-full bg-neutral-100 rounded-full h-1.5 mt-1">
           <div 
-            class="h-full bg-primary-400 rounded-full transition-all duration-500"
+            class="h-full bg-neutral-600 rounded-full transition-all duration-500"
             :style="{ width: `${priceScore}%` }"
           ></div>
         </div>
@@ -44,7 +42,7 @@
         </div>
         <div class="w-full bg-neutral-100 rounded-full h-1.5 mt-1">
           <div 
-            class="h-full bg-success-400 rounded-full transition-all duration-500"
+            class="h-full bg-neutral-600 rounded-full transition-all duration-500"
             :style="{ width: `${reputationScore}%` }"
           ></div>
         </div>
@@ -136,21 +134,21 @@ const totalScore = computed(() => {
 const scoreColorClass = computed(() => {
   const score = totalScore.value;
   
-  if (score >= 90) return 'text-success-600';
-  if (score >= 70) return 'text-success-500';
-  if (score >= 50) return 'text-warning-600';
-  if (score >= 30) return 'text-warning-500';
-  return 'text-danger-500';
+  if (score >= 90) return 'text-neutral-900';
+  if (score >= 70) return 'text-neutral-800';
+  if (score >= 50) return 'text-neutral-700';
+  if (score >= 30) return 'text-neutral-600';
+  return 'text-neutral-500';
 });
 
 const progressBarClass = computed(() => {
   const score = totalScore.value;
   
-  if (score >= 90) return 'bg-gradient-to-r from-success-500 to-success-600';
-  if (score >= 70) return 'bg-gradient-to-r from-success-400 to-success-500';
-  if (score >= 50) return 'bg-gradient-to-r from-warning-400 to-warning-500';
-  if (score >= 30) return 'bg-gradient-to-r from-warning-300 to-warning-400';
-  return 'bg-gradient-to-r from-danger-400 to-danger-500';
+  if (score >= 90) return 'bg-neutral-900';
+  if (score >= 70) return 'bg-neutral-800';
+  if (score >= 50) return 'bg-neutral-700';
+  if (score >= 30) return 'bg-neutral-600';
+  return 'bg-neutral-500';
 });
 
 const infoText = computed(() => {
@@ -193,8 +191,13 @@ watch(totalScore, (newScore) => {
 }
 
 /* Hover effects */
-.score-progress:hover .bg-gradient-to-r {
+.score-progress:hover .bg-neutral-900,
+.score-progress:hover .bg-neutral-800,
+.score-progress:hover .bg-neutral-700,
+.score-progress:hover .bg-neutral-600,
+.score-progress:hover .bg-neutral-500 {
   transform: scaleY(1.1);
   transition: transform 0.2s ease;
 }
 </style>
+

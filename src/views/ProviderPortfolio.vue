@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-    <div class="bg-gradient-to-br from-pink-600 to-purple-600 p-6 rounded-2xl text-white shadow-xl">
+    <div class="bg-neutral-900 p-6 rounded-2xl text-white shadow-xl">
       <h1 class="text-2xl md:text-3xl font-bold mb-2">📸 Meu Portfólio</h1>
       <p class="opacity-90">Mostre seus melhores trabalhos e conquiste clientes!</p>
     </div>
@@ -17,7 +17,7 @@
             ref="fileInput"
             @change="handleFileSelect"
             accept="image/jpeg,image/png,image/jpg,image/webp"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
           />
           <p class="text-sm text-gray-500 mt-1">JPG, PNG ou WebP - Máximo 5MB</p>
         </div>
@@ -26,7 +26,7 @@
           <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover" />
           <button
             @click="clearPreview"
-            class="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full hover:bg-red-600 transition-all"
+            class="absolute top-2 right-2 bg-neutral-600 text-white w-8 h-8 rounded-full hover:bg-neutral-600 transition-all"
           >
             ✕
           </button>
@@ -39,7 +39,7 @@
               v-model="uploadForm.title"
               type="text"
               placeholder="Ex: Reforma Completa - Sala de Estar"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
             />
           </div>
 
@@ -49,7 +49,7 @@
               v-model="uploadForm.project_type"
               type="text"
               placeholder="Ex: Residencial, Comercial"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
             />
           </div>
         </div>
@@ -60,7 +60,7 @@
             v-model="uploadForm.description"
             rows="3"
             placeholder="Descreva o trabalho realizado..."
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 transition-all"
           ></textarea>
         </div>
 
@@ -69,7 +69,7 @@
             v-model="uploadForm.is_featured"
             type="checkbox"
             id="featured"
-            class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            class="w-5 h-5 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
           />
           <label for="featured" class="text-sm font-medium text-gray-700 cursor-pointer">
             ⭐ Destacar esta imagem (aparece primeiro)
@@ -92,14 +92,14 @@
         <h2 class="text-xl font-bold text-gray-800">🖼️ Minhas Fotos ({{ portfolio.length }})</h2>
         <button
           @click="loadPortfolio"
-          class="text-purple-600 hover:text-purple-700 font-medium"
+          class="text-neutral-900 hover:text-neutral-900 font-medium"
         >
           🔄 Atualizar
         </button>
       </div>
 
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-block w-12 h-12 border-4 border-neutral-300 border-t-transparent rounded-full animate-spin"></div>
         <p class="mt-4 text-gray-600">Carregando portfólio...</p>
       </div>
 
@@ -116,7 +116,7 @@
           class="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all border-2 border-gray-100"
         >
           <!-- Badge Destaque -->
-          <div v-if="item.is_featured" class="absolute top-3 left-3 z-10 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+          <div v-if="item.is_featured" class="absolute top-3 left-3 z-10 bg-neutral-600 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
             ⭐ Destaque
           </div>
 
@@ -134,7 +134,7 @@
           <div class="p-4 space-y-2">
             <h3 class="font-bold text-gray-800 truncate">{{ item.title || 'Sem título' }}</h3>
             <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2">{{ item.description }}</p>
-            <div v-if="item.project_type" class="inline-block bg-purple-100 text-purple-700 px-2 py-1 rounded-md text-xs font-medium">
+            <div v-if="item.project_type" class="inline-block bg-purple-100 text-neutral-900 px-2 py-1 rounded-md text-xs font-medium">
               {{ item.project_type }}
             </div>
           </div>
@@ -142,7 +142,7 @@
           <!-- Botão Deletar -->
           <button
             @click="deleteImage(item.id)"
-            class="absolute top-3 right-3 bg-red-500 text-white w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600 flex items-center justify-center"
+            class="absolute top-3 right-3 bg-neutral-600 text-white w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-neutral-600 flex items-center justify-center"
           >
             🗑️
           </button>
@@ -151,7 +151,7 @@
     </div>
 
     <!-- MENSAGENS -->
-    <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+    <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
       {{ message }}
     </div>
   </div>
@@ -303,3 +303,5 @@ onMounted(() => {
   overflow: hidden;
 }
 </style>
+
+

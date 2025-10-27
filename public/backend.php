@@ -111,9 +111,34 @@ $basePath = str_replace('backend.php', '', $scriptName);
 $path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 $method = $_SERVER['REQUEST_METHOD'];
 
+// DEBUG: Mostrar informações de roteamento
+error_log("=== BACKEND ROUTER DEBUG ===");
+error_log("REQUEST_URI: " . $requestUri);
+error_log("SCRIPT_NAME: " . $scriptName);
+error_log("BASE_PATH: " . $basePath);
+error_log("PARSED PATH: " . $path);
+error_log("METHOD: " . $method);
+error_log("===========================");
+
 // Garantir que path começa com /
 if (!empty($path) && $path[0] !== '/') {
     $path = '/' . $path;
+}
+
+// DEBUG: Mostrar path calculado se query string contém debug=1
+if (isset($_GET['debug']) && $_GET['debug'] === '1') {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'REQUEST_URI' => $requestUri,
+        'SCRIPT_NAME' => $scriptName,
+        'BASE_PATH' => $basePath,
+        'CALCULATED_PATH' => $path,
+        'METHOD' => $method,
+        'GET' => $_GET,
+        'POST_RAW' => file_get_contents('php://input'),
+        'POST_PARSED' => json_decode(file_get_contents('php://input'), true)
+    ], JSON_PRETTY_PRINT);
+    exit;
 }
 
 try {

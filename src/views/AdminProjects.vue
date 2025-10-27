@@ -27,7 +27,7 @@
               @input="loadProjects"
               type="text"
               placeholder="Título ou descrição..."
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             />
           </div>
           <div>
@@ -35,7 +35,7 @@
             <select
               v-model="filters.status"
               @change="loadProjects"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="open">Aberto</option>
@@ -47,14 +47,14 @@
           </div>
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">📈 Total</label>
-            <div class="text-2xl font-black text-purple-600">{{ projects.length }} projeto(s)</div>
+            <div class="text-2xl font-black text-neutral-900">{{ projects.length }} projeto(s)</div>
           </div>
         </div>
       </div>
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
-        <div class="w-16 h-16 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+        <div class="w-16 h-16 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
         <p class="mt-4 text-gray-600 font-bold">Carregando projetos...</p>
       </div>
 
@@ -83,15 +83,15 @@
               <!-- Estatísticas do Projeto -->
               <div class="grid grid-cols-4 gap-4 pt-4 border-t border-gray-200">
                 <div class="text-center">
-                  <div class="text-lg font-black text-green-600">R$ {{ formatMoney(project.max_budget) }}</div>
+                  <div class="text-lg font-black text-neutral-900">R$ {{ formatMoney(project.max_budget) }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Orçamento Max</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-lg font-black text-blue-600">{{ project.bids_count || 0 }}</div>
+                  <div class="text-lg font-black text-neutral-900">{{ project.bids_count || 0 }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Lances</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-lg font-black text-purple-600">
+                  <div class="text-lg font-black text-neutral-900">
                     {{ project.lowest_bid ? `R$ ${formatMoney(project.lowest_bid)}` : '-' }}
                   </div>
                   <div class="text-xs text-gray-600 font-semibold">Menor Lance</div>
@@ -114,14 +114,14 @@
               <button
                 v-if="project.status !== 'cancelled' && project.status !== 'completed'"
                 @click="closeProject(project.id)"
-                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-neutral-600 hover:bg-neutral-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🚫 Encerrar
               </button>
               <button
                 v-if="project.bids_count > 0"
                 @click="viewBids(project.id)"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-neutral-700 hover:bg-neutral-700 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
               >
                 💰 Ver Lances
               </button>
@@ -154,11 +154,11 @@ const filters = ref({
 
 const getStatusBadge = (status) => {
   const badges = {
-    'open': 'bg-green-100 text-green-700',
-    'bidding': 'bg-blue-100 text-blue-700',
-    'in_progress': 'bg-yellow-100 text-yellow-700',
-    'completed': 'bg-purple-100 text-purple-700',
-    'cancelled': 'bg-red-100 text-red-700'
+    'open': 'bg-neutral-800 text-neutral-900',
+    'bidding': 'bg-neutral-700 text-neutral-900',
+    'in_progress': 'bg-neutral-600 text-yellow-700',
+    'completed': 'bg-purple-100 text-neutral-900',
+    'cancelled': 'bg-neutral-600 text-red-700'
   }
   return badges[status] || 'bg-gray-100 text-gray-700'
 }
@@ -230,3 +230,5 @@ onMounted(() => {
   loadProjects()
 })
 </script>
+
+

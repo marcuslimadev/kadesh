@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 flex items-center justify-center p-3 sm:p-4">
+  <div class="min-h-screen bg-neutral-900 flex items-center justify-center p-3 sm:p-4">
     <div class="max-w-md w-full">
-      <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-2 border-indigo-100">
+      <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-2 border-neutral-300">
         <div class="text-center mb-6 sm:mb-8">
           <div class="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform hover:rotate-12 transition-transform">
             <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
               <span v-else>📨 Enviar Link de Recuperação</span>
             </button>
 
-            <div v-if="error" class="mt-4 bg-gradient-to-r from-red-50 to-rose-50 border-2 border-red-300 rounded-xl p-4">
+            <div v-if="error" class="mt-4 bg-gradient-to-r from-red-50 to-rose-50 border-2 border-neutral-300 rounded-xl p-4">
               <div class="flex items-center">
                 <svg class="w-5 h-5 text-red-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -51,7 +51,7 @@
         <!-- Success State -->
         <div v-else class="text-center py-4">
           <div class="mx-auto w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-8 h-8 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
@@ -60,7 +60,7 @@
             Verifique sua caixa de entrada em <span class="font-bold">{{ email }}</span>
           </p>
           <router-link to="/login" 
-                       class="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                       class="inline-block bg-neutral-900 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
             🔐 Voltar para Login
           </router-link>
         </div>
@@ -68,7 +68,7 @@
         <div class="mt-6 sm:mt-8 text-center space-y-2">
           <p class="text-gray-600 text-sm font-medium">
             Lembrou a senha? 
-            <router-link to="/login" class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all">
+            <router-link to="/login" class="font-bold text-transparent bg-clip-text bg-neutral-900 hover:from-indigo-700 hover:to-purple-700 transition-all">
               Faça login 👉
             </router-link>
           </p>
@@ -107,3 +107,5 @@ async function submit() {
   }
 }
 </script>
+
+

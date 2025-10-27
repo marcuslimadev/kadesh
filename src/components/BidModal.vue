@@ -7,7 +7,7 @@
     <div class="flex min-h-screen items-center justify-center p-4">
       <div class="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6">
+        <div class="bg-neutral-900 p-6">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
               <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -15,10 +15,10 @@
               </div>
               <div>
                 <h3 class="text-3xl font-black text-white">Enviar Lance</h3>
-                <p class="text-purple-100 font-semibold">{{ project?.title || 'Carregando...' }}</p>
+                <p class="text-neutral-900 font-semibold">{{ project?.title || 'Carregando...' }}</p>
               </div>
             </div>
-            <button @click="close" class="text-white hover:text-purple-200 transition-colors">
+            <button @click="close" class="text-white hover:text-neutral-900 transition-colors">
               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
@@ -29,13 +29,13 @@
         <!-- Content -->
         <div class="p-6 overflow-y-auto max-h-[70vh]">
           <!-- Project Info Summary -->
-          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border-2 border-blue-100">
+          <div class="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 mb-6 border-2 border-neutral-300">
             <div class="grid md:grid-cols-3 gap-4">
               <!-- Budget Info -->
               <div class="text-center">
                 <div class="text-3xl mb-2">💰</div>
                 <p class="text-sm font-bold text-gray-600 uppercase">Orçamento Max</p>
-                <p class="text-2xl font-black text-blue-600">R$ {{ formatCurrency(project?.max_budget || 0) }}</p>
+                <p class="text-2xl font-black text-neutral-900">R$ {{ formatCurrency(project?.max_budget || 0) }}</p>
               </div>
 
               <!-- Current Best Bid -->
@@ -76,7 +76,7 @@
                   step="0.01" 
                   :max="project?.max_budget"
                   required
-                  class="w-full px-5 py-4 border-4 border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-purple-500 transition-all font-bold text-xl"
+                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
                   placeholder="Ex: 2500.00" 
                 />
                 <p class="text-sm text-gray-500 mt-2">
@@ -93,7 +93,7 @@
                   type="number" 
                   min="1" 
                   required
-                  class="w-full px-5 py-4 border-4 border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-purple-500 transition-all font-bold text-xl"
+                  class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
                   placeholder="Ex: 7" 
                 />
               </div>
@@ -127,7 +127,7 @@
                 v-model="bidForm.proposal" 
                 rows="6" 
                 required
-                class="w-full px-5 py-4 border-4 border-purple-200 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-purple-500 transition-all font-semibold resize-none text-base"
+                class="w-full px-5 py-4 border-4 border-neutral-300 rounded-2xl focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-semibold resize-none text-base"
                 placeholder="Descreva sua proposta, experiência relevante e por que você é o profissional ideal para este projeto..."
               ></textarea>
               <p class="text-sm text-gray-500 mt-2">
@@ -136,7 +136,7 @@
             </div>
 
             <!-- Error Message -->
-            <div v-if="error" class="bg-gradient-to-r from-red-50 via-rose-50 to-pink-50 border-4 border-red-400 rounded-2xl p-6">
+            <div v-if="error" class="bg-neutral-500 border-4 border-neutral-300 rounded-2xl p-6">
               <div class="flex items-center gap-3">
                 <span class="text-4xl">⚠️</span>
                 <div>
@@ -312,3 +312,4 @@ watch(() => props.project?.max_budget, (newBudget) => {
   background: #94a3b8;
 }
 </style>
+

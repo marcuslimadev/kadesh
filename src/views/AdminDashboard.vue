@@ -11,7 +11,7 @@
               </div>
               <div>
                 <h1 class="text-3xl md:text-4xl font-black">Painel Administrativo</h1>
-                <p class="text-purple-100 font-semibold">Bem-vindo, <span class="text-yellow-300">{{ adminName }}</span></p>
+                <p class="text-neutral-900 font-semibold">Bem-vindo, <span class="text-yellow-300">{{ adminName }}</span></p>
               </div>
             </div>
           </div>
@@ -39,10 +39,10 @@
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
         <div class="relative inline-block mb-6">
-          <div class="w-20 h-20 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+          <div class="w-20 h-20 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin"></div>
           <div class="absolute inset-0 w-20 h-20 border-8 border-transparent border-r-pink-600 rounded-full animate-spin animation-delay-150"></div>
         </div>
-        <p class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 animate-pulse">
+        <p class="text-xl font-bold text-transparent bg-clip-text bg-neutral-900 animate-pulse">
           Carregando estatísticas...
         </p>
       </div>
@@ -51,7 +51,7 @@
         <!-- KPIs Principais - Redesign Moderno -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Usuários -->
-          <div class="group bg-white rounded-3xl shadow-xl hover:shadow-2xl p-8 border-4 border-transparent hover:border-blue-300 transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 relative overflow-hidden">
+          <div class="group bg-white rounded-3xl shadow-xl hover:shadow-2xl p-8 border-4 border-transparent hover:border-neutral-300 transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500"></div>
             <div class="flex items-start justify-between mb-6">
               <div class="w-16 h-16 bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 rounded-2xl shadow-lg flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
@@ -62,9 +62,9 @@
                 <p class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mt-1">{{ stats.users?.total || 0 }}</p>
               </div>
             </div>
-            <div class="flex items-center justify-between pt-4 border-t-2 border-blue-100">
+            <div class="flex items-center justify-between pt-4 border-t-2 border-neutral-300">
               <span class="text-xs text-gray-600 font-bold">Novos este mês</span>
-              <span class="text-sm font-black text-green-600 flex items-center gap-1">
+              <span class="text-sm font-black text-neutral-900 flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
                 </svg>
@@ -74,7 +74,7 @@
           </div>
 
           <!-- Projetos -->
-          <div class="group bg-white rounded-3xl shadow-xl hover:shadow-2xl p-8 border-4 border-transparent hover:border-purple-300 transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 relative overflow-hidden">
+          <div class="group bg-white rounded-3xl shadow-xl hover:shadow-2xl p-8 border-4 border-transparent hover:border-neutral-300 transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500"></div>
             <div class="flex items-start justify-between mb-6">
               <div class="w-16 h-16 bg-gradient-to-br from-purple-500 via-pink-500 to-rose-500 rounded-2xl shadow-lg flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
@@ -82,32 +82,32 @@
               </div>
               <div class="text-right">
                 <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Projetos</p>
-                <p class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mt-1">{{ stats.projects?.total || 0 }}</p>
+                <p class="text-4xl font-black text-transparent bg-clip-text bg-neutral-900 mt-1">{{ stats.projects?.total || 0 }}</p>
               </div>
             </div>
-            <div class="flex items-center justify-between pt-4 border-t-2 border-purple-100">
+            <div class="flex items-center justify-between pt-4 border-t-2 border-neutral-300">
               <span class="text-xs text-gray-600 font-bold">Abertos agora</span>
-              <span class="text-sm font-black text-purple-600">{{ stats.projects?.open || 0 }} ativos</span>
+              <span class="text-sm font-black text-neutral-900">{{ stats.projects?.open || 0 }} ativos</span>
             </div>
           </div>
 
           <!-- Receita -->
           <div class="group bg-white rounded-3xl shadow-xl hover:shadow-2xl p-8 border-4 border-transparent hover:border-green-300 transition-all duration-500 transform hover:-translate-y-2 hover:rotate-1 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500"></div>
+            <div class="absolute top-0 left-0 w-full h-2 bg-neutral-800"></div>
             <div class="flex items-start justify-between mb-6">
-              <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500 rounded-2xl shadow-lg flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
+              <div class="w-16 h-16 bg-neutral-800 rounded-2xl shadow-lg flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
                 <span class="text-3xl">💰</span>
               </div>
               <div class="text-right">
                 <p class="text-sm text-gray-500 font-bold uppercase tracking-wider">Receita</p>
-                <p class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600 mt-1">
+                <p class="text-3xl font-black text-neutral-900 mt-1">
                   R$ {{ formatMoney(stats.payments?.platform_fee || 0) }}
                 </p>
               </div>
             </div>
             <div class="flex items-center justify-between pt-4 border-t-2 border-green-100">
               <span class="text-xs text-gray-600 font-bold">Este mês</span>
-              <span class="text-sm font-black text-green-600">R$ {{ formatMoney(stats.payments?.revenue_this_month || 0) }}</span>
+              <span class="text-sm font-black text-neutral-900">R$ {{ formatMoney(stats.payments?.revenue_this_month || 0) }}</span>
             </div>
           </div>
 
@@ -142,11 +142,11 @@
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">🔨 Fornecedores</span>
-                <span class="font-bold text-purple-600">{{ stats.users?.providers || 0 }}</span>
+                <span class="font-bold text-neutral-900">{{ stats.users?.providers || 0 }}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">🏢 Contratantes</span>
-                <span class="font-bold text-blue-600">{{ stats.users?.contractors || 0 }}</span>
+                <span class="font-bold text-neutral-900">{{ stats.users?.contractors || 0 }}</span>
               </div>
               <div class="flex justify-between items-center pt-3 border-t-2 border-gray-100">
                 <span class="text-gray-900 font-medium">Total</span>
@@ -163,7 +163,7 @@
             <div class="space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">🟢 Abertos</span>
-                <span class="font-bold text-green-600">{{ stats.projects?.open || 0 }}</span>
+                <span class="font-bold text-neutral-900">{{ stats.projects?.open || 0 }}</span>
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">🟡 Em Andamento</span>
@@ -171,7 +171,7 @@
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">✅ Concluídos</span>
-                <span class="font-bold text-blue-600">{{ stats.projects?.completed || 0 }}</span>
+                <span class="font-bold text-neutral-900">{{ stats.projects?.completed || 0 }}</span>
               </div>
             </div>
           </div>
@@ -188,11 +188,11 @@
               </div>
               <div class="flex justify-between items-center">
                 <span class="text-gray-600">Volume Total</span>
-                <span class="font-bold text-green-600">R$ {{ formatMoney(stats.payments?.total_amount || 0) }}</span>
+                <span class="font-bold text-neutral-900">R$ {{ formatMoney(stats.payments?.total_amount || 0) }}</span>
               </div>
               <div class="flex justify-between items-center pt-3 border-t-2 border-gray-100">
                 <span class="text-gray-900 font-medium">Taxa Plataforma</span>
-                <span class="font-bold text-purple-600">R$ {{ formatMoney(stats.payments?.platform_fee || 0) }}</span>
+                <span class="font-bold text-neutral-900">R$ {{ formatMoney(stats.payments?.platform_fee || 0) }}</span>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@
           >
             <div class="text-4xl mb-3">👥</div>
             <h3 class="text-xl font-bold mb-2">Gerenciar Usuários</h3>
-            <p class="text-blue-100 text-sm">Visualizar e administrar todos os usuários</p>
+            <p class="text-neutral-900 text-sm">Visualizar e administrar todos os usuários</p>
           </router-link>
 
           <router-link
@@ -240,7 +240,7 @@
           >
             <div class="text-4xl mb-3">�</div>
             <h3 class="text-xl font-bold mb-2">Gerenciar Projetos</h3>
-            <p class="text-purple-100 text-sm">Todos os projetos da plataforma</p>
+            <p class="text-neutral-900 text-sm">Todos os projetos da plataforma</p>
           </router-link>
 
           <router-link
@@ -249,7 +249,7 @@
           >
             <div class="text-4xl mb-3">💳</div>
             <h3 class="text-xl font-bold mb-2">Ver Pagamentos</h3>
-            <p class="text-green-100 text-sm">Histórico completo de transações</p>
+            <p class="text-neutral-900 text-sm">Histórico completo de transações</p>
           </router-link>
         </div>
       </template>
@@ -324,3 +324,5 @@ onMounted(() => {
   loadStats()
 })
 </script>
+
+

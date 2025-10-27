@@ -21,15 +21,15 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div class="bg-white rounded-2xl shadow-lg p-6">
           <div class="text-sm text-gray-600 font-bold mb-2">💰 Total Transacionado</div>
-          <div class="text-3xl font-black text-green-600">R$ {{ formatMoney(summary.total_amount) }}</div>
+          <div class="text-3xl font-black text-neutral-900">R$ {{ formatMoney(summary.total_amount) }}</div>
         </div>
         <div class="bg-white rounded-2xl shadow-lg p-6">
           <div class="text-sm text-gray-600 font-bold mb-2">💸 Taxa Plataforma (10%)</div>
-          <div class="text-3xl font-black text-purple-600">R$ {{ formatMoney(summary.platform_fee) }}</div>
+          <div class="text-3xl font-black text-neutral-900">R$ {{ formatMoney(summary.platform_fee) }}</div>
         </div>
         <div class="bg-white rounded-2xl shadow-lg p-6">
           <div class="text-sm text-gray-600 font-bold mb-2">📊 Transações</div>
-          <div class="text-3xl font-black text-blue-600">{{ payments.length }}</div>
+          <div class="text-3xl font-black text-neutral-900">{{ payments.length }}</div>
         </div>
         <div class="bg-white rounded-2xl shadow-lg p-6">
           <div class="text-sm text-gray-600 font-bold mb-2">✅ Completas</div>
@@ -46,7 +46,7 @@
               v-model="filters.start_date"
               @change="loadPayments"
               type="date"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             />
           </div>
           <div>
@@ -55,7 +55,7 @@
               v-model="filters.end_date"
               @change="loadPayments"
               type="date"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             />
           </div>
           <div>
@@ -63,7 +63,7 @@
             <select
               v-model="filters.status"
               @change="loadPayments"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="pending">Pendente</option>
@@ -75,7 +75,7 @@
           <div class="flex items-end">
             <button
               @click="exportData"
-              class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+              class="w-full bg-neutral-800 hover:bg-neutral-800 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
             >
               📥 Exportar CSV
             </button>
@@ -85,7 +85,7 @@
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
-        <div class="w-16 h-16 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+        <div class="w-16 h-16 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
         <p class="mt-4 text-gray-600 font-bold">Carregando transações...</p>
       </div>
 
@@ -114,7 +114,7 @@
                 <td class="px-6 py-4 text-sm font-mono text-gray-600">#{{ payment.id }}</td>
                 <td class="px-6 py-4 text-sm text-gray-900">{{ formatDateTime(payment.created_at) }}</td>
                 <td class="px-6 py-4 text-sm">
-                  <router-link :to="`/projects/${payment.project_id}`" class="text-purple-600 hover:text-purple-800 font-semibold">
+                  <router-link :to="`/projects/${payment.project_id}`" class="text-neutral-900 hover:text-neutral-900 font-semibold">
                     {{ payment.project_title || `Projeto #${payment.project_id}` }}
                   </router-link>
                 </td>
@@ -122,10 +122,10 @@
                   <div class="font-semibold text-gray-900">{{ payment.user_name }}</div>
                   <div class="text-gray-500 text-xs">{{ payment.user_email }}</div>
                 </td>
-                <td class="px-6 py-4 text-sm font-bold text-green-600">
+                <td class="px-6 py-4 text-sm font-bold text-neutral-900">
                   R$ {{ formatMoney(payment.amount) }}
                 </td>
-                <td class="px-6 py-4 text-sm font-bold text-purple-600">
+                <td class="px-6 py-4 text-sm font-bold text-neutral-900">
                   R$ {{ formatMoney(payment.amount * 0.10) }}
                 </td>
                 <td class="px-6 py-4 text-sm">
@@ -178,10 +178,10 @@ const summary = computed(() => {
 
 const getStatusBadge = (status) => {
   const badges = {
-    'pending': 'bg-yellow-100 text-yellow-700',
-    'completed': 'bg-green-100 text-green-700',
-    'failed': 'bg-red-100 text-red-700',
-    'refunded': 'bg-blue-100 text-blue-700'
+    'pending': 'bg-neutral-600 text-yellow-700',
+    'completed': 'bg-neutral-800 text-neutral-900',
+    'failed': 'bg-neutral-600 text-red-700',
+    'refunded': 'bg-neutral-700 text-neutral-900'
   }
   return badges[status] || 'bg-gray-100 text-gray-700'
 }
@@ -265,3 +265,5 @@ onMounted(() => {
   loadPayments()
 })
 </script>
+
+

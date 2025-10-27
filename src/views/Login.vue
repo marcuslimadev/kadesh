@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 flex items-center justify-center p-3 sm:p-4">
+  <div class="min-h-screen bg-neutral-900 flex items-center justify-center p-3 sm:p-4">
     <div class="max-w-md w-full">
-      <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-2 border-indigo-100">
+      <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border-2 border-neutral-300">
         <div class="text-center mb-6 sm:mb-8">
           <div class="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg transform hover:rotate-12 transition-transform">
             <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 class="text-2xl sm:text-3xl font-extrabold bg-neutral-900 bg-clip-text text-transparent">
             👋 Bem-vindo de volta!
           </h2>
           <p class="text-gray-600 mt-2 text-sm sm:text-base font-medium">Acesse sua conta no Kadesh</p>
@@ -18,19 +18,19 @@
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">📧 Email</label>
             <input v-model="form.email" type="email" 
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 font-medium" 
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-neutral-300 transition-all duration-200 font-medium" 
                    placeholder="seu@email.com" required />
           </div>
 
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">🔒 Senha</label>
             <input v-model="form.password" type="password" 
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 font-medium" 
+                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-neutral-300 transition-all duration-200 font-medium" 
                    placeholder="••••••••" required />
           </div>
 
           <button :disabled="loading" 
-                  class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl">
+                  class="w-full bg-neutral-900 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl">
             <span v-if="loading" class="flex items-center justify-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -41,7 +41,7 @@
             <span v-else>🚀 Entrar</span>
           </button>
 
-          <div v-if="error" class="bg-gradient-to-r from-red-50 to-rose-50 border-2 border-red-300 rounded-xl p-4">
+          <div v-if="error" class="bg-gradient-to-r from-red-50 to-rose-50 border-2 border-neutral-300 rounded-xl p-4">
             <div class="flex items-start">
               <svg class="w-5 h-5 text-red-600 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -60,7 +60,7 @@
         <div class="mt-6 sm:mt-8 text-center space-y-2">
           <p class="text-gray-600 text-sm font-medium">
             Não tem uma conta? 
-            <router-link to="/register" class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all">
+            <router-link to="/register" class="font-bold text-transparent bg-clip-text bg-neutral-900 hover:from-indigo-700 hover:to-purple-700 transition-all">
               Registre-se gratuitamente ✨
             </router-link>
           </p>
@@ -165,3 +165,5 @@ async function submit() {
   }
 }
 </script>
+
+

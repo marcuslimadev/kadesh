@@ -27,7 +27,7 @@
               @input="loadUsers"
               type="text"
               placeholder="Nome ou email..."
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             />
           </div>
           <div>
@@ -35,7 +35,7 @@
             <select
               v-model="filters.type"
               @change="loadUsers"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-purple-500 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl focus:border-neutral-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="contractor">Contratantes</option>
@@ -46,14 +46,14 @@
           </div>
           <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">📊 Estatísticas</label>
-            <div class="text-2xl font-black text-purple-600">{{ users.length }} usuário(s)</div>
+            <div class="text-2xl font-black text-neutral-900">{{ users.length }} usuário(s)</div>
           </div>
         </div>
       </div>
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
-        <div class="w-16 h-16 border-8 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+        <div class="w-16 h-16 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
         <p class="mt-4 text-gray-600 font-bold">Carregando usuários...</p>
       </div>
 
@@ -68,7 +68,7 @@
             <!-- Info do Usuário -->
             <div class="flex-1">
               <div class="flex items-start gap-4">
-                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-2xl font-black">
+                <div class="w-16 h-16 rounded-full bg-neutral-900 flex items-center justify-center text-white text-2xl font-black">
                   {{ user.name.charAt(0).toUpperCase() }}
                 </div>
                 <div class="flex-1">
@@ -78,7 +78,7 @@
                     <span :class="getUserTypeBadge(user.user_type)" class="px-3 py-1 rounded-full text-xs font-bold">
                       {{ getUserTypeLabel(user.user_type) }}
                     </span>
-                    <span v-if="user.email_verified_at" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                    <span v-if="user.email_verified_at" class="bg-neutral-800 text-neutral-900 px-3 py-1 rounded-full text-xs font-bold">
                       ✓ Verificado
                     </span>
                     <span v-else class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold">
@@ -91,11 +91,11 @@
               <!-- Estatísticas -->
               <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
                 <div class="text-center">
-                  <div class="text-2xl font-black text-purple-600">{{ user.projects_count || 0 }}</div>
+                  <div class="text-2xl font-black text-neutral-900">{{ user.projects_count || 0 }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Projetos</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-black text-blue-600">{{ user.bids_count || 0 }}</div>
+                  <div class="text-2xl font-black text-neutral-900">{{ user.bids_count || 0 }}</div>
                   <div class="text-xs text-gray-600 font-semibold">Lances</div>
                 </div>
                 <div class="text-center">
@@ -109,15 +109,15 @@
             <div class="flex flex-col gap-2 min-w-[200px]">
               <button
                 @click="resetPassword(user.id)"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-neutral-700 hover:bg-neutral-700 text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🔑 Resetar Senha
               </button>
               <button
                 @click="toggleStatus(user.id)"
                 :class="user.email_verified_at 
-                  ? 'bg-red-500 hover:bg-red-600' 
-                  : 'bg-green-500 hover:bg-green-600'"
+                  ? 'bg-neutral-600 hover:bg-neutral-600' 
+                  : 'bg-neutral-800 hover:bg-neutral-800'"
                 class="text-white px-4 py-2 rounded-xl font-bold transition-colors flex items-center justify-center gap-2"
               >
                 {{ user.email_verified_at ? '🚫 Desativar' : '✅ Ativar' }}
@@ -151,13 +151,13 @@
     <div v-if="resetPasswordModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
         <div class="text-center">
-          <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div class="w-20 h-20 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
             <span class="text-4xl">✅</span>
           </div>
           <h3 class="text-2xl font-black text-gray-900 mb-2">Senha Resetada!</h3>
           <p class="text-gray-600 mb-4">A senha temporária do usuário é:</p>
           <div class="bg-gray-100 p-4 rounded-xl mb-6">
-            <code class="text-2xl font-mono font-bold text-purple-600">{{ tempPassword }}</code>
+            <code class="text-2xl font-mono font-bold text-neutral-900">{{ tempPassword }}</code>
           </div>
           <p class="text-sm text-gray-500 mb-6">⚠️ Copie esta senha e envie para o usuário. Ela não será exibida novamente.</p>
           <button
@@ -190,10 +190,10 @@ const tempPassword = ref('')
 
 const getUserTypeBadge = (type) => {
   const badges = {
-    'contractor': 'bg-blue-100 text-blue-700',
-    'provider': 'bg-purple-100 text-purple-700',
-    'both': 'bg-indigo-100 text-indigo-700',
-    'admin': 'bg-red-100 text-red-700'
+    'contractor': 'bg-neutral-700 text-neutral-900',
+    'provider': 'bg-purple-100 text-neutral-900',
+    'both': 'bg-indigo-100 text-neutral-900',
+    'admin': 'bg-neutral-600 text-red-700'
   }
   return badges[type] || 'bg-gray-100 text-gray-700'
 }
@@ -278,3 +278,5 @@ onMounted(() => {
   loadUsers()
 })
 </script>
+
+

@@ -3,7 +3,7 @@
     <div class="max-w-6xl mx-auto px-4 space-y-6">
       <!-- Loading -->
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-block w-12 h-12 border-4 border-neutral-300 border-t-transparent rounded-full animate-spin"></div>
         <p class="mt-4 text-gray-600">Carregando perfil...</p>
       </div>
 
@@ -11,7 +11,7 @@
       <div v-else-if="!profile" class="text-center py-12">
         <div class="text-6xl mb-4">😕</div>
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Fornecedor não encontrado</h2>
-        <router-link to="/projects" class="text-purple-600 hover:text-purple-700">
+        <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900">
           ← Voltar para projetos
         </router-link>
       </div>
@@ -28,35 +28,35 @@
               <h1 class="text-3xl md:text-4xl font-bold mb-2">
                 {{ profile.business_name || profile.name }}
               </h1>
-              <p v-if="profile.tagline" class="text-xl text-purple-100 mb-4">{{ profile.tagline }}</p>
+              <p v-if="profile.tagline" class="text-xl text-neutral-900 mb-4">{{ profile.tagline }}</p>
               
               <div class="flex flex-wrap gap-4 text-sm">
                 <div class="flex items-center gap-2">
                   <span>⭐</span>
                   <span class="font-bold">{{ profile.average_rating || 0 }}</span>
-                  <span class="text-purple-200">({{ profile.total_reviews || 0 }} avaliações)</span>
+                  <span class="text-neutral-900">({{ profile.total_reviews || 0 }} avaliações)</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span>✅</span>
                   <span class="font-bold">{{ profile.completed_projects || 0 }}</span>
-                  <span class="text-purple-200">projetos concluídos</span>
+                  <span class="text-neutral-900">projetos concluídos</span>
                 </div>
                 <div v-if="profile.years_experience" class="flex items-center gap-2">
                   <span>📅</span>
                   <span class="font-bold">{{ profile.years_experience }}</span>
-                  <span class="text-purple-200">anos de experiência</span>
+                  <span class="text-neutral-900">anos de experiência</span>
                 </div>
               </div>
             </div>
 
             <div class="flex flex-col gap-3">
-              <div v-if="profile.availability_status === 'available'" class="bg-green-500 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-if="profile.availability_status === 'available'" class="bg-neutral-800 px-4 py-2 rounded-lg font-bold text-center">
                 ✅ Disponível
               </div>
-              <div v-else-if="profile.availability_status === 'busy'" class="bg-yellow-500 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-else-if="profile.availability_status === 'busy'" class="bg-neutral-600 px-4 py-2 rounded-lg font-bold text-center">
                 ⚠️ Ocupado
               </div>
-              <div v-else class="bg-red-500 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-else class="bg-neutral-600 px-4 py-2 rounded-lg font-bold text-center">
                 ❌ Indisponível
               </div>
             </div>
@@ -87,7 +87,7 @@
                   class="relative group cursor-pointer"
                   @click="openImage(item)"
                 >
-                  <div v-if="item.is_featured" class="absolute top-2 left-2 z-10 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-md text-xs font-bold">
+                  <div v-if="item.is_featured" class="absolute top-2 left-2 z-10 bg-neutral-600 text-yellow-900 px-2 py-1 rounded-md text-xs font-bold">
                     ⭐
                   </div>
                   <img
@@ -141,9 +141,9 @@
                   </div>
 
                   <!-- Resposta do fornecedor -->
-                  <div v-if="review.provider_response" class="bg-purple-50 border-l-4 border-purple-500 p-3 mt-3">
-                    <p class="font-medium text-purple-900 text-sm mb-1">Resposta do fornecedor:</p>
-                    <p class="text-purple-800 text-sm">{{ review.provider_response }}</p>
+                  <div v-if="review.provider_response" class="bg-purple-50 border-l-4 border-neutral-300 p-3 mt-3">
+                    <p class="font-medium text-neutral-900 text-sm mb-1">Resposta do fornecedor:</p>
+                    <p class="text-neutral-900 text-sm">{{ review.provider_response }}</p>
                   </div>
 
                   <p class="text-xs text-gray-500 mt-2">{{ formatDate(review.created_at) }}</p>
@@ -161,7 +161,7 @@
                 <span
                   v-for="(spec, index) in profile.specialties"
                   :key="index"
-                  class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium"
+                  class="bg-purple-100 text-neutral-900 px-3 py-1 rounded-full text-sm font-medium"
                 >
                   {{ spec }}
                 </span>
@@ -177,7 +177,7 @@
                   :key="index"
                   class="flex items-start gap-2 text-sm text-gray-700"
                 >
-                  <span class="text-green-500">✓</span>
+                  <span class="text-neutral-900">✓</span>
                   <span>{{ service }}</span>
                 </div>
               </div>
@@ -193,17 +193,17 @@
                 </div>
                 <div v-if="profile.phone" class="flex items-center gap-2">
                   <span>📞</span>
-                  <a :href="'tel:' + profile.phone" class="text-purple-600 hover:text-purple-700">{{ profile.phone }}</a>
+                  <a :href="'tel:' + profile.phone" class="text-neutral-900 hover:text-neutral-900">{{ profile.phone }}</a>
                 </div>
                 <div v-if="profile.whatsapp" class="flex items-center gap-2">
                   <span>💬</span>
-                  <a :href="'https://wa.me/' + profile.whatsapp.replace(/\D/g, '')" target="_blank" class="text-green-600 hover:text-green-700">
+                  <a :href="'https://wa.me/' + profile.whatsapp.replace(/\D/g, '')" target="_blank" class="text-neutral-900 hover:text-neutral-900">
                     WhatsApp
                   </a>
                 </div>
                 <div v-if="profile.website" class="flex items-center gap-2">
                   <span>🌐</span>
-                  <a :href="profile.website" target="_blank" class="text-blue-600 hover:text-blue-700 truncate">
+                  <a :href="profile.website" target="_blank" class="text-neutral-900 hover:text-neutral-900 truncate">
                     {{ profile.website }}
                   </a>
                 </div>
@@ -269,3 +269,5 @@ onMounted(() => {
   loadProviderProfile()
 })
 </script>
+
+

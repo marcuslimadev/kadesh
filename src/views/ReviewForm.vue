@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-3xl mx-auto p-4 md:p-6">
-    <div class="bg-gradient-to-br from-yellow-500 to-orange-500 p-6 rounded-2xl text-white shadow-xl mb-6">
+    <div class="bg-neutral-600 p-6 rounded-2xl text-white shadow-xl mb-6">
       <h1 class="text-2xl md:text-3xl font-bold mb-2">⭐ Avaliar Fornecedor</h1>
       <p class="opacity-90">Compartilhe sua experiência com {{ providerName }}</p>
     </div>
@@ -28,7 +28,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">✨ Qualidade do Trabalho</label>
           <select
             v-model.number="form.quality_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Ruim</option>
@@ -43,7 +43,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">💬 Comunicação</label>
           <select
             v-model.number="form.communication_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Ruim</option>
@@ -58,7 +58,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-2">⏰ Cumprimento de Prazo</label>
           <select
             v-model.number="form.deadline_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Atrasado</option>
@@ -77,7 +77,7 @@
           v-model="form.comment"
           rows="5"
           placeholder="Conte sobre sua experiência, o que foi bom, o que poderia melhorar..."
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500"
+          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300"
         ></textarea>
       </div>
 
@@ -87,7 +87,7 @@
           v-model="form.would_hire_again"
           type="checkbox"
           id="hire-again"
-          class="w-6 h-6 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+          class="w-6 h-6 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
         />
         <label for="hire-again" class="text-sm font-medium text-gray-900 cursor-pointer">
           👍 Sim, eu contrataria este fornecedor novamente
@@ -105,13 +105,13 @@
         <button
           @click="submitReview"
           :disabled="!form.rating || loading"
-          class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+          class="flex-1 bg-neutral-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
         >
           {{ loading ? '⏳ Enviando...' : '⭐ Enviar Avaliação' }}
         </button>
       </div>
 
-      <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+      <div v-if="message" class="p-4 rounded-xl" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
         {{ message }}
       </div>
     </div>
@@ -177,3 +177,5 @@ onMounted(async () => {
   }
 })
 </script>
+
+

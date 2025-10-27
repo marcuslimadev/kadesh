@@ -7,7 +7,7 @@
           <div class="text-5xl">🔐</div>
         </div>
         <h1 class="text-3xl font-bold text-white mb-2">Painel Administrativo</h1>
-        <p class="text-purple-200">Kadesh - Gerenciamento da Plataforma</p>
+        <p class="text-neutral-900">Kadesh - Gerenciamento da Plataforma</p>
       </div>
 
       <!-- Form -->
@@ -20,7 +20,7 @@
             type="email"
             placeholder="admin@kadesh.com"
             autocomplete="username"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -32,7 +32,7 @@
             type="password"
             placeholder="••••••••"
             autocomplete="current-password"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-neutral-300 focus:ring-2 focus:ring-purple-200 transition-all"
           />
         </div>
 
@@ -44,19 +44,19 @@
           {{ loading ? '⏳ Entrando...' : '🚀 Entrar no Painel' }}
         </button>
 
-        <div v-if="error" class="bg-red-100 border-2 border-red-300 text-red-800 p-4 rounded-xl text-sm">
+        <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded-xl text-sm">
           ❌ {{ error }}
         </div>
 
         <div class="text-center pt-4 border-t-2 border-gray-100">
-          <router-link to="/" class="text-purple-600 hover:text-purple-700 text-sm font-medium">
+          <router-link to="/" class="text-neutral-900 hover:text-neutral-900 text-sm font-medium">
             ← Voltar para o site
           </router-link>
         </div>
       </div>
 
       <!-- Info -->
-      <div class="mt-6 text-center text-purple-200 text-sm">
+      <div class="mt-6 text-center text-neutral-900 text-sm">
         <p>⚠️ Área restrita para administradores</p>
         <p class="mt-1 text-xs opacity-75">Credencial padrão: admin@kadesh.com / Kadesh@2025</p>
       </div>
@@ -100,3 +100,5 @@ const handleLogin = async () => {
   }
 }
 </script>
+
+

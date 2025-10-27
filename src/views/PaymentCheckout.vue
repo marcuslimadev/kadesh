@@ -27,12 +27,12 @@
           </div>
           <div class="flex justify-between text-lg pt-3 border-t-2 border-gray-100">
             <span class="font-bold text-gray-900">Valor Total:</span>
-            <span class="font-bold text-green-600">R$ {{ formatMoney(amount) }}</span>
+            <span class="font-bold text-neutral-900">R$ {{ formatMoney(amount) }}</span>
           </div>
         </div>
       </div>
 
-      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-sm text-blue-900">
+      <div class="bg-blue-50 border-2 border-neutral-300 rounded-xl p-4 text-sm text-neutral-900">
         <p class="font-medium mb-2">ℹ️ Informações importantes:</p>
         <ul class="space-y-1 ml-4 list-disc">
           <li>Pagamento seguro via Mercado Pago</li>
@@ -43,7 +43,7 @@
       </div>
 
       <!-- Erro -->
-      <div v-if="error" class="bg-red-100 border-2 border-red-300 text-red-800 p-4 rounded-xl">
+      <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded-xl">
         ❌ {{ error }}
       </div>
 
@@ -60,7 +60,7 @@
 
       <!-- Link do Mercado Pago -->
       <div v-else class="space-y-4">
-        <div class="bg-green-100 border-2 border-green-300 text-green-800 p-4 rounded-xl">
+        <div class="bg-neutral-800 border-2 border-green-300 text-neutral-900 p-4 rounded-xl">
           ✅ Pagamento preparado! Clique no botão abaixo para finalizar.
         </div>
         
@@ -89,7 +89,7 @@
       </div>
 
       <div class="text-center">
-        <router-link to="/projects" class="text-purple-600 hover:text-purple-700 text-sm">
+        <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900 text-sm">
           ← Voltar para projetos
         </router-link>
       </div>
@@ -99,7 +99,7 @@
     <div v-else class="bg-white rounded-2xl shadow-lg p-12 text-center">
       <div class="text-6xl mb-4">😕</div>
       <h2 class="text-2xl font-bold text-gray-900 mb-2">Projeto não encontrado</h2>
-      <router-link to="/projects" class="text-purple-600 hover:text-purple-700">
+      <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900">
         ← Voltar para projetos
       </router-link>
     </div>
@@ -172,3 +172,5 @@ onMounted(() => {
   loadProject()
 })
 </script>
+
+
