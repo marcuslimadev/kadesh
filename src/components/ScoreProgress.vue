@@ -2,16 +2,16 @@
   <div class="score-progress">
     <!-- Header do placar -->
     <div class="flex justify-between items-center text-sm mb-2">
-      <span class="text-neutral-600 font-medium">
+      <span class="text-gray-700 font-semibold">
         {{ label }}
       </span>
-      <span class="font-bold" :class="scoreColorClass">
+      <span class="font-bold text-lg" :class="scoreColorClass">
         {{ Math.round(totalScore) }}%
       </span>
     </div>
     
     <!-- Barra de progresso -->
-    <div class="w-full bg-neutral-200 rounded-full h-3 overflow-hidden shadow-inner">
+    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner border border-gray-300">
       <div 
         class="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden"
         :class="progressBarClass"
@@ -21,28 +21,28 @@
     </div>
     
     <!-- Breakdown detalhado (opcional) -->
-    <div v-if="showBreakdown" class="mt-3 space-y-2">
-      <div class="text-xs text-neutral-600">
-        <div class="flex justify-between items-center">
-          <span>💰 Preço ({{ priceWeight }}%)</span>
-          <span class="font-semibold">{{ Math.round(priceScore) }}pts</span>
+    <div v-if="showBreakdown" class="mt-3 space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+      <div class="text-xs text-gray-700">
+        <div class="flex justify-between items-center mb-1">
+          <span class="font-semibold">💰 Preço ({{ priceWeight }}%)</span>
+          <span class="font-bold text-gray-950">{{ Math.round(priceScore) }}pts</span>
         </div>
-        <div class="w-full bg-neutral-100 rounded-full h-1.5 mt-1">
+        <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
           <div 
-            class="h-full bg-neutral-600 rounded-full transition-all duration-500"
+            class="h-full bg-gray-900 rounded-full transition-all duration-500"
             :style="{ width: `${priceScore}%` }"
           ></div>
         </div>
       </div>
       
-      <div class="text-xs text-neutral-600">
-        <div class="flex justify-between items-center">
-          <span>⭐ Reputação ({{ reputationWeight }}%)</span>
-          <span class="font-semibold">{{ Math.round(reputationScore) }}pts</span>
+      <div class="text-xs text-gray-700">
+        <div class="flex justify-between items-center mb-1">
+          <span class="font-semibold">⭐ Reputação ({{ reputationWeight }}%)</span>
+          <span class="font-bold text-gray-950">{{ Math.round(reputationScore) }}pts</span>
         </div>
-        <div class="w-full bg-neutral-100 rounded-full h-1.5 mt-1">
+        <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
           <div 
-            class="h-full bg-neutral-600 rounded-full transition-all duration-500"
+            class="h-full bg-gray-700 rounded-full transition-all duration-500"
             :style="{ width: `${reputationScore}%` }"
           ></div>
         </div>
@@ -50,7 +50,7 @@
     </div>
     
     <!-- Info adicional -->
-    <div v-if="showInfo" class="mt-2 text-xs text-neutral-500">
+    <div v-if="showInfo" class="mt-2 text-xs text-gray-600 font-medium">
       {{ infoText }}
     </div>
   </div>
@@ -134,21 +134,21 @@ const totalScore = computed(() => {
 const scoreColorClass = computed(() => {
   const score = totalScore.value;
   
-  if (score >= 90) return 'text-neutral-900';
-  if (score >= 70) return 'text-neutral-800';
-  if (score >= 50) return 'text-neutral-700';
-  if (score >= 30) return 'text-neutral-600';
-  return 'text-neutral-500';
+  if (score >= 90) return 'text-gray-950';
+  if (score >= 70) return 'text-gray-900';
+  if (score >= 50) return 'text-gray-800';
+  if (score >= 30) return 'text-gray-700';
+  return 'text-gray-600';
 });
 
 const progressBarClass = computed(() => {
   const score = totalScore.value;
   
-  if (score >= 90) return 'bg-neutral-900';
-  if (score >= 70) return 'bg-neutral-800';
-  if (score >= 50) return 'bg-neutral-700';
-  if (score >= 30) return 'bg-neutral-600';
-  return 'bg-neutral-500';
+  if (score >= 90) return 'bg-gray-950 shadow-lg';
+  if (score >= 70) return 'bg-gray-900 shadow-md';
+  if (score >= 50) return 'bg-gray-800';
+  if (score >= 30) return 'bg-gray-700';
+  return 'bg-gray-600';
 });
 
 const infoText = computed(() => {
@@ -191,11 +191,11 @@ watch(totalScore, (newScore) => {
 }
 
 /* Hover effects */
-.score-progress:hover .bg-neutral-900,
-.score-progress:hover .bg-neutral-800,
-.score-progress:hover .bg-neutral-700,
-.score-progress:hover .bg-neutral-600,
-.score-progress:hover .bg-neutral-500 {
+.score-progress:hover .bg-gray-950,
+.score-progress:hover .bg-gray-900,
+.score-progress:hover .bg-gray-800,
+.score-progress:hover .bg-gray-700,
+.score-progress:hover .bg-gray-600 {
   transform: scaleY(1.1);
   transition: transform 0.2s ease;
 }

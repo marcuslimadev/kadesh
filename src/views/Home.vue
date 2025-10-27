@@ -1,52 +1,52 @@
 <template>
-  <div>
-    <!-- Hero Section - Simplificado -->
-    <section class="bg-neutral-900 text-white relative overflow-hidden">
+  <div class="bg-gray-50">
+    <!-- Hero Section -->
+    <section class="bg-gray-950 text-white relative overflow-hidden border-b-4 border-gray-900">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <div class="text-center">
           <!-- Logo/Badge -->
-          <div class="inline-flex items-center gap-3 bg-white/10 rounded-full px-6 py-3 mb-8">
-            <div class="w-8 h-8 bg-neutral-700 rounded-full flex items-center justify-center">
-              <span class="text-white font-bold text-sm">K</span>
+          <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
+            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+              <span class="text-gray-950 font-bold text-sm">K</span>
             </div>
-            <span class="text-lg font-semibold">Kadesh</span>
+            <span class="text-lg font-semibold tracking-wide">Kadesh</span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
             Ganhe contratos com lances reversos
           </h1>
-          <p class="text-xl text-neutral-300 mb-8 max-w-3xl mx-auto">
+          <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
             Menor preço + reputação. Sistema de leilão profissional para construção civil e serviços.
           </p>
           
           <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button @click="scrollToProjects" 
-                    class="bg-white text-neutral-900 hover:bg-neutral-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                    class="bg-white text-gray-950 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               📋 Ver Leilões Ativos
             </button>
             <router-link to="/register" 
-                         class="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                         class="border-2 border-white text-white hover:bg-white hover:text-gray-950 px-8 py-4 rounded-lg font-bold text-lg transition-all">
               🚀 Participar Agora
             </router-link>
           </div>
 
           <!-- Estatísticas rápidas -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-3xl mx-auto">
-            <div class="text-center">
-              <div class="text-3xl font-bold">{{ stats.totalProjects }}+</div>
-              <div class="text-neutral-300 text-sm">Projetos ativos</div>
+            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+              <div class="text-3xl font-bold text-white">{{ stats.totalProjects }}+</div>
+              <div class="text-gray-400 text-sm font-medium">Projetos ativos</div>
             </div>
-            <div class="text-center">
-              <div class="text-3xl font-bold">{{ stats.totalProviders }}+</div>
-              <div class="text-neutral-300 text-sm">Fornecedores</div>
+            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+              <div class="text-3xl font-bold text-white">{{ stats.totalProviders }}+</div>
+              <div class="text-gray-400 text-sm font-medium">Fornecedores</div>
             </div>
-            <div class="text-center">
-              <div class="text-3xl font-bold">35%</div>
-              <div class="text-neutral-300 text-sm">Economia média</div>
+            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+              <div class="text-3xl font-bold text-white">35%</div>
+              <div class="text-gray-400 text-sm font-medium">Economia média</div>
             </div>
-            <div class="text-center">
-              <div class="text-3xl font-extrabold">24h</div>
-              <div class="text-neutral-300 text-sm">Tempo médio</div>
+            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
+              <div class="text-3xl font-bold text-white">24h</div>
+              <div class="text-gray-400 text-sm font-medium">Tempo médio</div>
             </div>
           </div>
         </div>
@@ -54,24 +54,24 @@
     </section>
 
     <!-- Leilões Ativos - PÚBLICO (sem login) -->
-    <section ref="projectsSection" class="bg-neutral-50 py-16">
+    <section ref="projectsSection" class="bg-gray-50 py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl lg:text-4xl font-extrabold text-neutral-900 mb-4">
+          <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-950 mb-4">
             🎯 Leilões Ativos
           </h2>
-          <p class="text-xl text-neutral-600 mb-6">
+          <p class="text-xl text-gray-600 mb-6">
             Padrão: 70% preço + 30% reputação
           </p>
           
           <!-- Filtros avançados -->
-          <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-4xl mx-auto">
+          <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-8 max-w-4xl mx-auto">
             <div class="grid md:grid-cols-4 gap-4">
               <!-- Filtro por categoria -->
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">🏷️ Categoria</label>
+                <label class="block text-sm font-bold text-gray-900 mb-2">🏷️ Categoria</label>
                 <select v-model="selectedCategory" 
-                        class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
+                        class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white focus:border-gray-900 focus:ring-2 focus:ring-gray-200 transition-all">
                   <option v-for="category in categories" :key="category" :value="category">
                     {{ category }}
                   </option>
@@ -80,9 +80,9 @@
 
               <!-- Filtro por orçamento -->
               <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">💰 Orçamento</label>
+                <label class="block text-sm font-bold text-gray-900 mb-2">💰 Orçamento</label>
                 <select v-model="budgetFilter" 
-                        class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
+                        class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white focus:border-gray-900 focus:ring-2 focus:ring-gray-200 transition-all">
                   <option value="">Todos os valores</option>
                   <option value="0-1000">Até R$ 1.000</option>
                   <option value="1000-5000">R$ 1.000 - R$ 5.000</option>
@@ -178,7 +178,7 @@
         <!-- Grid de Projetos -->
         <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="project in filteredProjects" :key="project.id" 
-               class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200">
+               class="bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 border-2 border-gray-200 hover:border-gray-900 overflow-hidden">
             
             <!-- Imagem do projeto -->
             <div class="h-48 bg-gray-100 relative overflow-hidden">
@@ -191,30 +191,30 @@
               </div>
               
               <!-- Badge categoria -->
-              <div class="absolute top-3 right-3 bg-neutral-800 text-white px-3 py-1 rounded-md text-xs font-semibold">
+              <div class="absolute top-3 right-3 bg-gray-950 text-white px-3 py-1.5 rounded-md text-xs font-bold shadow-lg">
                 {{ project.category || 'Obra' }}
               </div>
             </div>
             
             <!-- Conteúdo -->
             <div class="p-5">
-              <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+              <h3 class="text-lg font-bold text-gray-950 mb-2 line-clamp-2">
                 {{ project.title }}
               </h3>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+              <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
                 {{ project.description }}
               </p>
               
               <!-- Métricas principais -->
-              <div class="flex justify-between items-center mb-4 p-3 bg-gray-50 rounded-lg">
+              <div class="flex justify-between items-center mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <div>
-                  <span class="text-xs text-gray-500 block">Menor lance</span>
-                  <div class="text-xl font-bold text-neutral-900">
+                  <span class="text-xs text-gray-500 font-medium block mb-1">Menor lance</span>
+                  <div class="text-xl font-bold text-gray-950">
                     R$ {{ formatCurrency(project.lowest_bid) }}
                   </div>
                 </div>
                 <div class="text-right">
-                  <span class="text-xs text-gray-500 block">Tempo restante</span>
+                  <span class="text-xs text-gray-500 font-medium block mb-1">Tempo restante</span>
                   <CountdownTimer 
                     :end-date="project.bidding_ends_at"
                     size="medium"
@@ -237,14 +237,14 @@
               </div>
               
               <!-- Informações extras -->
-              <div class="flex items-center justify-between text-sm text-neutral-500 mb-4">
+              <div class="flex items-center justify-between text-sm text-gray-600 mb-4 font-medium">
                 <span>📍 {{ project.location || 'São Paulo - SP' }}</span>
-                <span>👥 {{ project.bids_count || 0 }} lances</span>
+                <span class="bg-gray-100 px-2 py-1 rounded">👥 {{ project.bids_count || 0 }} lances</span>
               </div>
               
               <!-- Botão de ação -->
               <button @click="handleBidClick(project)" 
-                      class="w-full bg-neutral-900 hover:bg-neutral-800 text-white py-3 rounded-lg font-semibold transition-colors">
+                      class="w-full bg-gray-950 hover:bg-gray-900 text-white py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg">
                 💰 Dar meu lance
               </button>
             </div>
@@ -304,47 +304,47 @@
     </section>
 
     <!-- Como Funciona -->
-    <section class="py-20 bg-white">
+    <section class="py-20 bg-white border-t border-gray-200">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-extrabold text-neutral-900 mb-4">
+          <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-950 mb-4">
             ⚡ Como Funciona
           </h2>
-          <p class="text-xl text-neutral-600">
+          <p class="text-xl text-gray-600">
             Sistema de leilão reverso que garante os melhores preços e qualidade
           </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
           <!-- Passo 1 -->
-          <div class="text-center">
-            <div class="w-20 h-20 bg-neutral-800 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span class="text-3xl text-white">📋</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-gray-950 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-3xl">📋</span>
             </div>
-            <h3 class="text-2xl font-bold text-neutral-900 mb-4">1. Encontre Serviços</h3>
-            <p class="text-neutral-600">
+            <h3 class="text-2xl font-bold text-gray-950 mb-4">1. Encontre Serviços</h3>
+            <p class="text-gray-600 leading-relaxed">
               Use filtros por categoria, localização e prazo. Veja reputação e histórico dos fornecedores.
             </p>
           </div>
 
           <!-- Passo 2 -->
-          <div class="text-center">
-            <div class="w-20 h-20 bg-neutral-800 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span class="text-3xl text-white">💰</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-3xl">💰</span>
             </div>
-            <h3 class="text-2xl font-bold text-neutral-900 mb-4">2. Dê Seu Lance</h3>
-            <p class="text-neutral-600">
+            <h3 class="text-2xl font-bold text-gray-950 mb-4">2. Dê Seu Lance</h3>
+            <p class="text-gray-600 leading-relaxed">
               Lances reversos: ganha o menor preço ponderado por credibilidade. Placar em tempo real.
             </p>
           </div>
 
           <!-- Passo 3 -->
-          <div class="text-center">
-            <div class="w-20 h-20 bg-neutral-800 rounded-lg flex items-center justify-center mx-auto mb-6">
-              <span class="text-3xl text-white">🔒</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+              <span class="text-3xl">🔒</span>
             </div>
-            <h3 class="text-2xl font-bold text-neutral-900 mb-4">3. Execute com Segurança</h3>
-            <p class="text-neutral-600">
+            <h3 class="text-2xl font-bold text-gray-950 mb-4">3. Execute com Segurança</h3>
+            <p class="text-gray-600 leading-relaxed">
               Escrow, milestones e liberação por aceite garantem segurança mútua para ambas as partes.
             </p>
           </div>
@@ -353,16 +353,16 @@
     </section>
 
     <!-- CTA Final -->
-    <section class="py-20 bg-neutral-900 text-white">
+    <section class="py-20 bg-gray-950 text-white border-t-4 border-gray-900">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl lg:text-4xl font-extrabold mb-6">
           🎯 Pronto para começar seu projeto?
         </h2>
-        <p class="text-xl text-neutral-300 mb-8">
+        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
           Junte-se a milhares de empresas que já economizam com nosso sistema de leilão reverso.
         </p>
         <router-link to="/register" 
-                     class="inline-block bg-white text-neutral-900 px-8 py-4 rounded-lg font-bold text-lg hover:bg-neutral-100 transition-colors">
+                     class="inline-block bg-white text-gray-950 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl">
           🚀 Criar Conta Gratuita
         </router-link>
       </div>
