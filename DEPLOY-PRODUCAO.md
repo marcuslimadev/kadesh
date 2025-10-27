@@ -75,6 +75,28 @@ git push origin producao
 
 **✅ Verifique no GitHub**: A pasta `public/build/` deve estar visível no repositório.
 
+### 1.5. Trocar .htaccess para Produção
+
+**⚠️ CRÍTICO**: O `.htaccess` local usa `/kadesh/` mas produção precisa de `/`.
+
+```bash
+# Copiar versão de produção
+copy .htaccess.production .htaccess
+
+# Verificar mudança
+type .htaccess
+
+# Commit
+git add .htaccess
+git commit -m "fix: ajustar RewriteBase para produção (raiz)"
+git push origin producao
+```
+
+**Para voltar ao desenvolvimento local**:
+```bash
+copy .htaccess.local .htaccess
+```
+
 ---
 
 ## 🎯 PASSO 2: Configurar cPanel

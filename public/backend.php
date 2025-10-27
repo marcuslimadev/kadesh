@@ -10,8 +10,8 @@
 // Configurar session cookie params ANTES de session_start()
 $isProduction = !empty($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'mmbsites.com.br') !== false;
 
-// Path do cookie: / em localhost, /kadesh/ em produção
-$cookiePath = ($_SERVER['HTTP_HOST'] ?? '') === 'localhost' ? '/' : '/kadesh/';
+// Path do cookie: sempre / (funciona tanto em localhost quanto subdomínio)
+$cookiePath = '/';
 
 session_set_cookie_params([
     'lifetime' => 0,              // Sessão expira ao fechar navegador
@@ -108,9 +108,6 @@ $scriptName = $_SERVER['SCRIPT_NAME'];
 $basePath = str_replace('backend.php', '', $scriptName);
 $path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
 $method = $_SERVER['REQUEST_METHOD'];
-
-// Remover /kadesh do path se existir (para funcionar em subpasta)
-$path = preg_replace('#^/kadesh#', '', $path);
 
 // Garantir que path começa com /
 if (!empty($path) && $path[0] !== '/') {
