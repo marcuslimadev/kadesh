@@ -12,11 +12,6 @@
             👋 Bem-vindo de volta!
           </h2>
           <p class="text-gray-600 mt-2 text-sm sm:text-base font-medium">Acesse sua conta no Kadesh</p>
-          <div class="mt-3 text-xs bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 border border-indigo-200">
-            <p class="text-gray-700 font-semibold">
-              ✨ <span class="text-indigo-600">Login único:</span> Admin ou Usuário detectado automaticamente
-            </p>
-          </div>
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
