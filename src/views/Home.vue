@@ -1,52 +1,55 @@
 ﻿<template>
-  <div class="bg-gray-50">
+  <div class="bg-light">
     <!-- Hero Section -->
-    <section class="bg-gray-950 text-white relative overflow-hidden border-b-4 border-gray-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <section class="hero-clear">
+      <div class="container py-5 py-lg-6">
         <div class="text-center">
           <!-- Logo/Badge -->
-          <div class="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 mb-8 border border-white/20">
-            <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-              <span class="text-gray-950 font-bold text-sm">K</span>
-            </div>
-            <span class="text-lg font-semibold tracking-wide">Kadesh</span>
+          <div class="d-inline-flex align-items-center gap-3 px-4 py-2 mb-4 border border-light-subtle bg-transparent">
+            <span class="fs-5 fw-semibold text-uppercase">KADESH</span>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+          <h1 class="hero-title">
             Ganhe contratos com lances reversos
           </h1>
-          <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p class="hero-subtitle">
             Menor preço + reputação. Sistema de leilão profissional para construção civil e serviços.
           </p>
           
-          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button @click="scrollToProjects" 
-                    class="bg-white text-gray-950 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
-              📋 Ver Leilões Ativos
+          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
+            <button @click="scrollToProjects" class="btn btn-primary btn-lg hero-btn">
+              Ver leilões ativos
             </button>
-            <router-link to="/register" 
-                         class="border-2 border-white text-white hover:bg-white hover:text-gray-950 px-8 py-4 rounded-lg font-bold text-lg transition-all">
-              🚀 Participar Agora
+            <router-link to="/register" class="btn btn-outline-primary btn-lg hero-btn">
+              Participar agora
             </router-link>
           </div>
 
           <!-- Estatísticas rápidas -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-3xl mx-auto">
-            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
-              <div class="text-3xl font-bold text-white">{{ stats.totalProjects }}+</div>
-              <div class="text-gray-400 text-sm font-medium">Projetos ativos</div>
+          <div class="row g-3 justify-content-center" style="max-width: 48rem; margin: 0 auto;">
+            <div class="col-6 col-lg-3">
+              <div class="stat-card text-center">
+                <div class="h3 fw-bold text-dark mb-0"><span class="stat-icon">+</span>{{ stats.totalProjects }}+</div>
+                <div class="text-dark small fw-medium">Projetos ativos</div>
+              </div>
             </div>
-            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
-              <div class="text-3xl font-bold text-white">{{ stats.totalProviders }}+</div>
-              <div class="text-gray-400 text-sm font-medium">Fornecedores</div>
+            <div class="col-6 col-lg-3">
+              <div class="stat-card text-center">
+                <div class="h3 fw-bold text-dark mb-0"><span class="stat-icon">+</span>{{ stats.totalProviders }}+</div>
+                <div class="text-dark small fw-medium">Fornecedores</div>
+              </div>
             </div>
-            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
-              <div class="text-3xl font-bold text-white">35%</div>
-              <div class="text-gray-400 text-sm font-medium">Economia média</div>
+            <div class="col-6 col-lg-3">
+              <div class="stat-card text-center">
+                <div class="h3 fw-bold text-dark mb-0">35%</div>
+                <div class="text-dark small fw-medium">Economia média</div>
+              </div>
             </div>
-            <div class="text-center p-4 bg-white/5 rounded-lg backdrop-blur-sm">
-              <div class="text-3xl font-bold text-white">24h</div>
-              <div class="text-gray-400 text-sm font-medium">Tempo médio</div>
+            <div class="col-6 col-lg-3">
+              <div class="stat-card text-center">
+                <div class="h3 fw-bold text-dark mb-0">24h</div>
+                <div class="text-dark small fw-medium">Tempo médio</div>
+              </div>
             </div>
           </div>
         </div>
@@ -54,24 +57,29 @@
     </section>
 
     <!-- Leilões Ativos - PÚBLICO (sem login) -->
-    <section ref="projectsSection" class="bg-gray-50 py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-950 mb-4">
+    <section ref="projectsSection" class="projects-section">
+      <div class="container">
+        <!-- Barra de categorias -->
+        <div class="mb-2">
+          <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
+            <span v-for="cat in categories" :key="cat" class="badge rounded-pill text-bg-light px-3 py-2">{{ cat }}</span>
+          </div>
+        </div>
+        <div class="text-center mb-4">
+          <h2 class="h1 fw-semibold mb-2">
              Leilões Ativos
           </h2>
-          <p class="text-xl text-gray-600 mb-6">
+          <p class="fs-5 text-dark mb-3">
             Padrão: 70% preço + 30% reputação
           </p>
           
           <!-- Filtros avançados -->
-          <div class="bg-white rounded shadow-md border border-gray-200 p-6 mb-8 max-w-4xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-4">
+          <div class="bg-white border p-4 mb-4 mx-auto" style="max-width: 56rem;">
+            <div class="row g-3">
               <!-- Filtro por categoria -->
-              <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2">🏷️ Categoria</label>
-                <select v-model="selectedCategory" 
-                        class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white focus:border-gray-900 focus:ring-2 focus:ring-gray-200 transition-all">
+              <div class="col-md-3">
+                <label class="form-label small fw-semibold">Categoria</label>
+                <select v-model="selectedCategory" class="form-select">
                   <option v-for="category in categories" :key="category" :value="category">
                     {{ category }}
                   </option>
@@ -79,10 +87,9 @@
               </div>
 
               <!-- Filtro por orçamento -->
-              <div>
-                <label class="block text-sm font-bold text-gray-900 mb-2"> Orçamento</label>
-                <select v-model="budgetFilter" 
-                        class="w-full border-2 border-gray-300 rounded-lg px-3 py-2 text-gray-900 bg-white focus:border-gray-900 focus:ring-2 focus:ring-gray-200 transition-all">
+              <div class="col-md-3">
+                <label class="form-label small fw-semibold">Orçamento</label>
+                <select v-model="budgetFilter" class="form-select">
                   <option value="">Todos os valores</option>
                   <option value="0-1000">Até R$ 1.000</option>
                   <option value="1000-5000">R$ 1.000 - R$ 5.000</option>
@@ -92,10 +99,9 @@
               </div>
 
               <!-- Filtro por localização -->
-              <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">📍 Localização</label>
-                <select v-model="locationFilter" 
-                        class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
+              <div class="col-md-3">
+                <label class="form-label small fw-semibold">Localização</label>
+                <select v-model="locationFilter" class="form-select">
                   <option value="">Todas as cidades</option>
                   <option value="SP">São Paulo - SP</option>
                   <option value="RJ">Rio de Janeiro - RJ</option>
@@ -106,10 +112,9 @@
               </div>
 
               <!-- Filtro por urgência -->
-              <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2"> Urgência</label>
-                <select v-model="urgencyFilter" 
-                        class="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
+              <div class="col-md-3">
+                <label class="form-label small fw-semibold">Urgência</label>
+                <select v-model="urgencyFilter" class="form-select">
                   <option value="">Todos os prazos</option>
                   <option value="urgent">Urgente (< 24h)</option>
                   <option value="soon">Breve (< 3 dias)</option>
@@ -119,50 +124,44 @@
             </div>
 
             <!-- Busca por texto -->
-            <div class="mt-4">
-              <div class="relative">
-                <input v-model="searchText" 
-                       type="text" 
-                       placeholder="🔍 Buscar por título, descrição ou habilidades..."
-                       class="w-full border-2 border-gray-200 rounded-lg px-4 py-3 pl-10 focus:border-neutral-400 focus:ring-2 focus:ring-neutral-200 transition-all">
-                <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-              </div>
+            <div class="mt-3">
+              <input v-model="searchText" type="text" placeholder="Buscar por título, descrição ou habilidades" class="form-control">
             </div>
 
             <!-- Contador de resultados e status de auto-refresh -->
-            <div class="mt-4 flex flex-col sm:flex-row items-center justify-between">
-              <p class="text-sm text-gray-600">
+            <div class="mt-3 d-flex flex-column flex-sm-row align-items-center justify-content-between">
+              <p class="small text-dark mb-2 mb-sm-0">
                  Mostrando <strong>{{ filteredProjects.length }}</strong> de <strong>{{ projects.length }}</strong> leilões ativos
               </p>
               
-              <div class="flex items-center gap-4 mt-2 sm:mt-0">
+              <div class="d-flex align-items-center gap-3">
+                <!-- Ordenação -->
+                <div class="d-flex align-items-center gap-2">
+                  <label class="small text-muted">Ordenar por</label>
+                  <select class="form-select form-select-sm" style="min-width: 180px;">
+                    <option>Placar (maior)</option>
+                    <option>Menor preço</option>
+                    <option>Maior reputação</option>
+                    <option>Menor tempo restante</option>
+                  </select>
+                </div>
                 <!-- Auto refresh toggle -->
-                <label class="flex items-center gap-2 text-sm">
-                  <input 
-                    v-model="autoRefresh" 
-                    @change="autoRefresh ? startAutoRefresh() : stopAutoRefresh()"
-                    type="checkbox" 
-                    class="rounded border-gray-300 text-neutral-800 focus:ring-neutral-500"
-                  />
-                  <span class="text-gray-600">🔄 Atualização automática</span>
-                </label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="autoRefresh" @change="autoRefresh ? startAutoRefresh() : stopAutoRefresh()" id="autoRefreshChk">
+                  <label class="form-check-label" for="autoRefreshChk">
+                    Atualização automática
+                  </label>
+                </div>
                 
                 <!-- Manual refresh button -->
-                <button 
-                  @click="fetchProjects()" 
-                  :disabled="loading"
-                  class="text-sm bg-neutral-200 hover:bg-neutral-300 text-neutral-900 px-3 py-1 rounded-lg transition-all disabled:opacity-50"
-                >
-                  <span v-if="loading">⏳</span>
-                  <span v-else>🔄</span>
-                  Atualizar
+                <button @click="fetchProjects()" :disabled="loading" class="btn btn-dark btn-sm">
+                  <span v-if="loading">Atualizando…</span>
+                  <span v-else>Atualizar</span>
                 </button>
                 
                 <!-- Last refresh time -->
-                <span class="text-xs text-gray-500">
-                  Atualizado {{ getLastRefreshTime() }}
+                <span class="text-muted small">
+                  Atualizado {{ getLastRefreshTime() }} atrás
                 </span>
               </div>
             </div>
@@ -170,181 +169,151 @@
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-          <p class="mt-4 text-neutral-600">Carregando leilões...</p>
+        <div v-if="loading" class="text-center py-4">
+          <div class="spinner-border text-dark" role="status"></div>
+          <p class="mt-3 text-muted">Carregando leilões...</p>
         </div>
 
         <!-- Grid de Projetos -->
-        <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="project in filteredProjects" :key="project.id" 
-               class="bg-white rounded-lg shadow-sm hover:shadow transition-all duration-300 border-2 border-gray-200 hover:border-gray-900 overflow-hidden">
-            
-            <!-- Imagem do projeto -->
-            <div class="h-48 bg-gray-100 relative overflow-hidden">
-              <img v-if="project.image" 
-                   :src="project.image" 
-                   :alt="project.title"
-                   class="w-full h-full object-cover" />
-              <div v-else class="w-full h-full bg-gray-100 flex items-center justify-center">
-                <span class="text-4xl text-gray-400">🏗️</span>
+        <div v-else class="row g-3 g-lg-4">
+          <div v-for="project in filteredProjects" :key="project.id" class="col-md-6 col-lg-4">
+            <div class="card h-100 border card-hover">
+              <!-- Imagem do projeto -->
+              <div class="position-relative" style="height: 12rem; background: #f8f9fa; overflow: hidden;">
+                <img v-if="project.image" :src="project.image" :alt="project.title" class="w-100 h-100" style="object-fit: cover;" />
+                <div v-else class="w-100 h-100 d-flex align-items-center justify-content-center text-uppercase small fw-semibold text-dark" style="background: #e9ecef;">
+                  Sem imagem
+                </div>
+                <!-- Badge categoria -->
+                <div class="position-absolute top-0 end-0 m-2">
+                  <span class="badge bg-dark">{{ project.category || 'Obra' }}</span>
+                </div>
               </div>
-              
-              <!-- Badge categoria -->
-              <div class="absolute top-3 right-3 bg-gray-950 text-white px-3 py-1.5 rounded-md text-xs font-bold shadow-lg">
-                {{ project.category || 'Obra' }}
-              </div>
-            </div>
-            
-            <!-- Conteúdo -->
-            <div class="p-5">
-              <h3 class="text-lg font-bold text-gray-950 mb-2 line-clamp-2">
-                {{ project.title }}
-              </h3>
-              <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-                {{ project.description }}
-              </p>
-              
-              <!-- Métricas principais -->
-              <div class="flex justify-between items-center mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <div>
-                  <span class="text-xs text-gray-500 font-medium block mb-1">Menor lance</span>
-                  <div class="text-xl font-bold text-gray-950">
-                    R$ {{ formatCurrency(project.lowest_bid) }}
+
+              <!-- Conteúdo -->
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="badge text-bg-primary">LANCE REVERSO</span>
+                  <span class="badge text-bg-light"><i class="bi bi-star-fill text-warning me-1"></i>{{ project.provider_rating?.toFixed ? project.provider_rating.toFixed(1) : project.provider_rating || '4.5' }}</span>
+                </div>
+                <h3 class="h5 fw-semibold mb-2 line-clamp-2">{{ project.title }}</h3>
+                <p class="small text-dark mb-3 line-clamp-2">
+                  {{ project.description }}
+                </p>
+                
+                <!-- Métricas principais -->
+                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border">
+                  <div>
+                    <span class="small text-muted text-uppercase fw-semibold d-block mb-1">Menor lance</span>
+                    <div class="h6 mb-0">
+                      R$ {{ formatCurrency(project.lowest_bid) }}
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <span class="small text-muted text-uppercase fw-semibold d-block mb-1">Tempo restante</span>
+                    <CountdownTimer :end-date="project.bidding_ends_at" size="medium" @expired="() => onTimerExpired(project)" @urgent="() => onTimerUrgent(project)" />
                   </div>
                 </div>
-                <div class="text-right">
-                  <span class="text-xs text-gray-500 font-medium block mb-1">Tempo restante</span>
-                  <CountdownTimer 
-                    :end-date="project.bidding_ends_at"
-                    size="medium"
-                    @expired="() => onTimerExpired(project)"
-                    @urgent="() => onTimerUrgent(project)"
-                  />
+                
+                <!-- Placar dinâmico -->
+                <div class="mb-3">
+                  <div class="small text-muted mb-1">Placar (70% preço + 30% reputação)</div>
+                  <ScoreProgress :bid-amount="project.lowest_bid" :max-budget="project.max_budget" :provider-rating="project.provider_rating" :price-weight="70" :reputation-weight="30" @score-change="(scoreData) => onScoreChange(project, scoreData)" />
                 </div>
+                
+                <!-- Informações extras -->
+                <div class="d-flex justify-content-between align-items-center small text-dark mb-3 fw-semibold">
+                  <span>{{ project.location || 'São Paulo - SP' }}</span>
+                  <span class="badge text-bg-light text-uppercase">{{ project.bids_count || 0 }} lances</span>
+                </div>
+                
+                <!-- Botão de ação -->
+                <button @click="handleBidClick(project)" class="btn btn-primary w-100 text-uppercase fw-semibold">
+                  Dar meu lance
+                </button>
               </div>
-              
-              <!-- Placar dinâmico -->
-              <div class="mb-4">
-                <ScoreProgress
-                  :bid-amount="project.lowest_bid"
-                  :max-budget="project.max_budget"
-                  :provider-rating="project.provider_rating"
-                  :price-weight="70"
-                  :reputation-weight="30"
-                  @score-change="(scoreData) => onScoreChange(project, scoreData)"
-                />
-              </div>
-              
-              <!-- Informações extras -->
-              <div class="flex items-center justify-between text-sm text-gray-600 mb-4 font-medium">
-                <span>📍 {{ project.location || 'São Paulo - SP' }}</span>
-                <span class="bg-gray-100 px-2 py-1 rounded">👥 {{ project.bids_count || 0 }} lances</span>
-              </div>
-              
-              <!-- Botão de ação -->
-              <button @click="handleBidClick(project)" 
-                      class="w-full bg-gray-950 hover:bg-gray-900 text-white py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg">
-                 Dar meu lance
-              </button>
             </div>
           </div>
         </div>
 
         <!-- Empty State -->
-        <div v-if="!loading && filteredProjects.length === 0" class="text-center py-12">
-          <div class="bg-white rounded-lg border border-neutral-200 p-8 max-w-md mx-auto">
-            <div class="text-6xl mb-4">🔍</div>
-            <h3 class="text-2xl font-bold text-neutral-700 mb-2">Nenhum leilão encontrado</h3>
-            <p class="text-neutral-500 mb-6">
-              Não encontramos leilões que correspondam aos seus filtros.
+        <div v-if="!loading && filteredProjects.length === 0" class="text-center py-4">
+          <div class="bg-white border p-4 mx-auto" style="max-width: 28rem;">
+            <h3 class="h3 fw-semibold mb-2">Nenhum leilão encontrado</h3>
+            <p class="text-muted mb-3">
+              Ajuste os filtros ou limpe a pesquisa para visualizar novos resultados disponíveis.
             </p>
             
             <!-- Clear filters button -->
-            <button @click="clearAllFilters" 
-                    class="bg-neutral-900 hover:bg-neutral-800 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-              🔄 Limpar Filtros
+            <button @click="clearAllFilters" class="btn btn-dark btn-sm text-uppercase">
+              Limpar filtros
             </button>
             
             <!-- Current filter info -->
-            <div v-if="hasActiveFilters" class="mt-4 text-sm text-gray-600">
-              <p class="font-medium mb-2">Filtros ativos:</p>
-              <div class="flex flex-wrap gap-2 justify-center">
-                <span v-if="selectedCategory !== 'Todos'" class="bg-neutral-100 text-neutral-800 px-2 py-1 rounded text-xs">
-                  📂 {{ selectedCategory }}
-                </span>
-                <span v-if="budgetFilter" class="bg-neutral-100 text-neutral-800 px-2 py-1 rounded text-xs">
-                   {{ getBudgetLabel(budgetFilter) }}
-                </span>
-                <span v-if="locationFilter" class="bg-purple-100 text-neutral-900 px-2 py-1 rounded text-xs">
-                  📍 {{ getLocationLabel(locationFilter) }}
-                </span>
-                <span v-if="urgencyFilter" class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">
-                   {{ getUrgencyLabel(urgencyFilter) }}
-                </span>
-                <span v-if="searchText" class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">
-                  🔍 "{{ searchText }}"
-                </span>
+            <div v-if="hasActiveFilters" class="mt-3 small text-dark">
+              <p class="fw-medium mb-2">Filtros ativos:</p>
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <span v-if="selectedCategory !== 'Todos'" class="badge text-bg-light text-uppercase">{{ selectedCategory }}</span>
+                <span v-if="budgetFilter" class="badge text-bg-light text-uppercase">{{ getBudgetLabel(budgetFilter) }}</span>
+                <span v-if="locationFilter" class="badge text-bg-light text-uppercase">{{ getLocationLabel(locationFilter) }}</span>
+                <span v-if="urgencyFilter" class="badge text-bg-light text-uppercase">{{ getUrgencyLabel(urgencyFilter) }}</span>
+                <span v-if="searchText" class="badge text-bg-light text-uppercase">"{{ searchText }}"</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Call to Action -->
-        <div class="text-center mt-16">
-          <router-link to="/projects" 
-                       class="inline-flex items-center gap-2 text-neutral-900 hover:text-neutral-700 font-semibold text-lg">
-            Ver todos os leilões
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
+        <div class="text-center mt-4">
+          <router-link to="/projects" class="btn btn-link fw-semibold">
+            Ver todos os leilões ›
           </router-link>
         </div>
       </div>
     </section>
 
     <!-- Como Funciona -->
-    <section class="py-20 bg-white border-t border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-semibold text-gray-950 mb-4">
+    <section class="como-funciona-section">
+      <div class="container">
+        <div class="text-center mb-4">
+          <h2 class="h1 fw-semibold mb-2">
              Como Funciona
           </h2>
-          <p class="text-xl text-gray-600">
+          <p class="fs-5 text-dark">
             Sistema de leilão reverso que garante os melhores preços e qualidade
           </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="row g-4">
           <!-- Passo 1 -->
-          <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-950 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
-              <span class="text-3xl">📋</span>
+          <div class="col-md-4 text-center">
+            <div class="d-flex align-items-center justify-content-center bg-dark text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
+              <span class="text-uppercase small fw-semibold">Etapa 1</span>
             </div>
-            <h3 class="text-2xl font-bold text-gray-950 mb-4">1. Encontre Serviços</h3>
-            <p class="text-gray-600 leading-relaxed">
+            <h3 class="h4 fw-semibold mb-2">1. Encontre serviços</h3>
+            <p class="text-dark mb-0">
               Use filtros por categoria, localização e prazo. Veja reputação e histórico dos fornecedores.
             </p>
           </div>
 
           <!-- Passo 2 -->
-          <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-900 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
-              <span class="text-3xl"></span>
+          <div class="col-md-4 text-center">
+            <div class="d-flex align-items-center justify-content-center bg-dark text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
+              <span class="text-uppercase small fw-semibold">Etapa 2</span>
             </div>
-            <h3 class="text-2xl font-bold text-gray-950 mb-4">2. Dê Seu Lance</h3>
-            <p class="text-gray-600 leading-relaxed">
+            <h3 class="h4 fw-semibold mb-2">2. Envie sua proposta</h3>
+            <p class="text-dark mb-0">
               Lances reversos: ganha o menor preço ponderado por credibilidade. Placar em tempo real.
             </p>
           </div>
 
           <!-- Passo 3 -->
-          <div class="text-center group">
-            <div class="w-20 h-20 bg-gray-800 rounded-lg flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:opacity-90 transition-transform">
-              <span class="text-3xl">🔒</span>
+          <div class="col-md-4 text-center">
+            <div class="d-flex align-items-center justify-content-center bg-secondary text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
+              <span class="text-uppercase small fw-semibold">Etapa 3</span>
             </div>
-            <h3 class="text-2xl font-bold text-gray-950 mb-4">3. Execute com Segurança</h3>
-            <p class="text-gray-600 leading-relaxed">
+            <h3 class="h4 fw-semibold mb-2">3. Execute com segurança</h3>
+            <p class="text-dark mb-0">
               Escrow, milestones e liberação por aceite garantem segurança mútua para ambas as partes.
             </p>
           </div>
@@ -353,17 +322,16 @@
     </section>
 
     <!-- CTA Final -->
-    <section class="py-20 bg-gray-950 text-white border-t-4 border-gray-900">
-      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-semibold mb-6">
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2 class="h1 fw-semibold mb-3">
            Pronto para começar seu projeto?
         </h2>
-        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+        <p class="fs-5 text-dark mb-4">
           Junte-se a milhares de empresas que já economizam com nosso sistema de leilão reverso.
         </p>
-        <router-link to="/register" 
-                     class="inline-block bg-white text-gray-950 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-all shadow-lg hover:shadow">
-          🚀 Criar Conta Gratuita
+        <router-link to="/register" class="btn btn-light btn-lg text-dark">
+          Criar conta gratuita
         </router-link>
       </div>
     </section>
@@ -636,9 +604,9 @@ async function fetchProjects() {
   try {
     loading.value = true;
     const { data } = await api.get('/api/projects');
-    
-    // Filtrar apenas projetos abertos/em leilão
-    projects.value = data.projects.filter(p => 
+    // Permitir duas formas de retorno: { projects: [...] } ou [ ... ]
+    const projetos = Array.isArray(data.projects) ? data.projects : (Array.isArray(data) ? data : []);
+    projects.value = projetos.filter(p =>
       p.status === 'open' || p.status === 'bidding'
     ).map(project => ({
       ...project,
@@ -698,20 +666,64 @@ function stopAutoRefresh() {
 </script>
 
 <style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.hero-clear {
+  background: #fff;
+  border-bottom: 1px solid #ececec;
 }
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.hero-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #232323;
+}
+.hero-subtitle {
+  font-size: 1.18rem;
+  color: #757575;
+  margin-bottom: 2.8rem;
+}
+.hero-btn {
+  min-width: 180px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 28px 0 rgba(33, 37, 41, 0.09);
+  padding: 1.4rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 108px;
+  transition: box-shadow .19s;
+}
+.stat-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(0,123,255,.15);
+}
+.stat-icon {
+  font-size: 2.35rem;
+  color: #0275ff;
+  margin-bottom: .5rem;
+}
+.projects-section, .como-funciona-section, .cta-section {
+  background: #fff;
+  border-radius: 2.2rem;
+  box-shadow: 0 2px 24px 0 rgba(33,37,41,.07);
+  padding: 2.7rem 0 2.4rem 0;
+  margin-bottom: 2.3rem;
+}
+.card-hover {
+  transition: box-shadow 0.2s, border-color 0.15s;
+}
+.card-hover:hover {
+  box-shadow: 0 0.65rem 2rem rgba(33, 37, 41, 0.13);
+  border-color: #0d6efd!important;
+}
+.section-divider {
+  height: 2px;
+  background: linear-gradient(90deg, #0d6efd 0%, #6ab0ff 100%);
+  opacity: .08;
+  margin: 2.6rem auto 2.1rem auto;
+  border-radius: 33px;
+  width: 92%;
 }
 </style>
 

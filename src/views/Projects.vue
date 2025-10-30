@@ -1,148 +1,123 @@
 ﻿<template>
-  <div class="min-h-screen bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <div class="min-vh-100 bg-light">
+    <div class="container py-4 py-sm-5">
       <!-- Header Hero -->
-      <div class="text-center mb-10">
-        <div class="inline-block mb-4">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-950 rounded shadow-lg flex items-center justify-center">
-            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
-          </div>
+      <div class="text-center mb-4 mb-md-5">
+        <div class="d-inline-block mb-2 small text-uppercase text-muted fw-semibold">
+          Painel de projetos
         </div>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-950 mb-4 leading-tight">
-          🚀 Projetos Disponíveis
+        <h1 class="display-6 fw-semibold mb-2">
+          Projetos disponíveis
         </h1>
-        <p class="text-base sm:text-lg text-gray-600 font-medium max-w-2xl mx-auto mb-6">
-          Descubra oportunidades fantásticas ou publique seu próximo grande projeto!
+        <p class="lead mx-auto mb-3" style="max-width: 42rem;">
+          Consulte todas as oportunidades abertas e acompanhe o status de publicação dos seus contratos.
         </p>
-        <router-link to="/projects/create" 
-                     class="inline-flex items-center gap-2 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg>
-          <span>Criar Novo Projeto</span>
-          <span></span>
+        <router-link to="/projects/create" class="btn btn-dark btn-sm text-uppercase">
+          <span class="me-2">+</span>
+          <span>Novo projeto</span>
         </router-link>
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex flex-col justify-center items-center py-20">
-        <div class="relative mb-6">
-          <div class="w-24 h-24 rounded-full border-8 border-gray-200 border-t-gray-950 animate-spin"></div>
+      <div v-if="loading" class="d-flex flex-column align-items-center justify-content-center py-5">
+        <div class="mb-3">
+          <div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
         </div>
-        <p class="text-xl font-bold text-gray-950">
-          Carregando projetos...
-        </p>
+        <p class="h5 fw-bold mb-0">Carregando projetos...</p>
       </div>
 
       <!-- Projects Grid -->
-      <div v-else-if="projects.length > 0" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <router-link :to="`/projects/${p.id}`" 
-                     v-for="p in projects" 
-                     :key="p.id" 
-                     class="group bg-white rounded-lg shadow-sm hover:shadow transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-gray-950">
-          
-          <!-- Card Header -->
-          <div class="h-2 bg-gray-950"></div>
-          
-          <div class="p-6">
-            <!-- Status Badge -->
-            <div class="flex justify-between items-start mb-4">
-              <span :class="getStatusBadgeClass(p.status)" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider">
-                {{ getStatusText(p.status) }}
-              </span>
-              <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                <span class="text-xl"></span>
-              </div>
-            </div>
-
-            <!-- Title -->
-            <h3 class="text-xl font-bold text-gray-950 mb-3 line-clamp-2">
-              {{ p.title }}
-            </h3>
-
-            <!-- Description -->
-            <p class="text-sm text-gray-600 line-clamp-3 mb-5 leading-relaxed">
-              {{ p.description }}
-            </p>
-
-            <!-- Skills Pills -->
-            <div v-if="p.required_skills && p.required_skills.length" class="mb-5">
-              <div class="flex flex-wrap gap-2">
-                <span v-for="skill in p.required_skills.slice(0, 3)" 
-                      :key="skill" 
-                      class="bg-gray-100 text-gray-900 text-xs px-3 py-1.5 rounded-lg font-semibold border border-gray-300">
-                  {{ skill }}
-                </span>
-                <span v-if="p.required_skills.length > 3" 
-                      class="bg-gray-100 text-gray-700 text-xs px-3 py-1.5 rounded-lg font-semibold border border-gray-300">
-                  +{{ p.required_skills.length - 3 }} mais
-                </span>
-              </div>
-            </div>
-
-            <!-- Info Cards -->
-            <div class="space-y-3 mb-5">
-              <div class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
-                <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-700 font-bold flex items-center gap-2">
-                    <span class="text-xl"></span> Orçamento
+      <div v-else-if="projects.length > 0" class="row g-3 g-md-4">
+        <div class="col-md-6 col-lg-4" v-for="p in projects" :key="p.id">
+          <router-link :to="`/projects/${p.id}`" class="text-decoration-none">
+            <div class="card h-100 border card-hover">
+              <div class="card-body">
+                <!-- Status Badge and Ref -->
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <span :class="getStatusBadgeClass(p.status)">
+                    {{ getStatusText(p.status) }}
                   </span>
-                  <span class="text-xl font-semibold text-gray-950">
-                    R$ {{ formatMoney(p.max_budget) }}
+                  <div class="small text-uppercase text-muted">
+                    Ref. {{ p.reference || p.id }}
+                  </div>
+                </div>
+
+                <!-- Title -->
+                <h3 class="h5 card-title mb-2">
+                  {{ p.title }}
+                </h3>
+
+                <!-- Description -->
+                <p class="card-text mb-3 text-muted">
+                  {{ p.description }}
+                </p>
+
+                <!-- Skills Pills -->
+                <div v-if="p.required_skills && p.required_skills.length" class="mb-3">
+                  <div class="d-flex flex-wrap gap-2">
+                    <span v-for="skill in p.required_skills.slice(0, 3)" :key="skill" class="badge bg-light text-dark text-uppercase fw-semibold">
+                      {{ skill }}
+                    </span>
+                    <span v-if="p.required_skills.length > 3" class="badge bg-light text-dark text-uppercase fw-semibold">
+                      +{{ p.required_skills.length - 3 }} itens
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="mb-3">
+                  <div class="bg-light border rounded p-3 mb-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                  <span class="small text-uppercase fw-semibold text-muted">
+                    Orçamento máximo
                   </span>
+                  <span class="h6 mb-0">
+                    {{ displayMoney(p.max_budget) }}
+                  </span>
+                    </div>
+                  </div>
+
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <div class="bg-light border rounded text-center p-2">
+                        <p class="h5 mb-1 fw-semibold">{{ p.bids_count || 0 }}</p>
+                        <p class="small text-uppercase fw-semibold mb-0">Propostas</p>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="bg-light border rounded text-center p-2">
+                        <p class="small text-uppercase fw-semibold mb-1">{{ formatDate(p.bidding_ends_at) }}</p>
+                        <p class="small text-uppercase fw-semibold mb-0">Prazo final</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="grid grid-cols-2 gap-3">
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
-                  <p class="text-2xl font-semibold text-gray-950">{{ p.bids_count || 0 }}</p>
-                  <p class="text-xs text-gray-600 font-semibold"> Propostas</p>
-                </div>
-                <div class="bg-gray-50 rounded-lg p-3 border border-gray-200 text-center">
-                  <p class="text-xs font-bold text-gray-950">{{ formatDate(p.bidding_ends_at) }}</p>
-                  <p class="text-xs text-gray-600 font-semibold"> Termina</p>
-                </div>
+              <!-- Card Footer CTA -->
+              <div class="card-footer bg-white d-flex justify-content-between align-items-center border-top">
+                <span class="small text-uppercase fw-semibold text-primary">Detalhes do projeto</span>
+                <span class="text-primary" aria-hidden="true">›</span>
               </div>
             </div>
-          </div>
-
-          <!-- Card Footer CTA -->
-          <div class="bg-gray-950 px-6 py-4 group-hover:bg-gray-900 transition-all">
-            <div class="flex items-center justify-between text-white">
-              <span class="text-sm font-bold">Ver Detalhes e Participar</span>
-              <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </div>
-          </div>
-        </router-link>
+          </router-link>
+        </div>
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-20">
-        <div class="relative inline-block mb-8">
-          <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center shadow-lg border-4 border-gray-200">
-            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
-          </div>
-          <div class="absolute -top-4 -right-4 text-6xl">🚀</div>
-        </div>
-        <h3 class="text-3xl sm:text-4xl font-semibold text-gray-950 mb-4">
-          Nenhum projeto ainda! 
+      <div v-else class="text-center py-5">
+        <div class="small text-uppercase text-muted mb-2">Sem registros</div>
+        <h3 class="h2 fw-semibold mb-2">
+          Nenhum projeto cadastrado
         </h3>
-        <p class="text-lg text-gray-600 font-medium mb-8 max-w-md mx-auto">
-          Seja o <span class="text-gray-950 font-bold">pioneiro</span> e publique o primeiro projeto incrível!
+        <p class="lead mx-auto mb-3" style="max-width: 28rem;">
+          Inicie sua carteira de projetos registrando a primeira demanda no sistema.
         </p>
-        <router-link to="/projects/create" 
-                     class="inline-flex items-center gap-3 bg-gray-950 hover:bg-gray-900 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg>
-          <span>Criar Primeiro Projeto</span>
-          <span class="text-2xl "></span>
+        <router-link to="/projects/create" class="btn btn-dark btn-sm text-uppercase">
+          <span class="me-2">+</span>
+          <span>Novo projeto</span>
         </router-link>
       </div>
     </div>
@@ -172,24 +147,33 @@ async function load() {
 
 function getStatusBadgeClass(status) {
   const classes = {
-    'open': 'bg-gray-950 text-white',
-    'bidding': 'bg-gray-950 text-white',
-    'in_progress': 'bg-gray-700 text-white',
-    'completed': 'bg-gray-500 text-white',
-    'cancelled': 'bg-gray-600 text-white',
-    'awarded': 'bg-gray-800 text-white'
+    'open': 'badge bg-dark',
+    'bidding': 'badge bg-dark',
+    'in_progress': 'badge bg-secondary',
+    'completed': 'badge bg-success',
+    'cancelled': 'badge bg-danger',
+    'awarded': 'badge bg-primary'
   };
-  return classes[status] || 'bg-gray-400 text-white';
+  return classes[status] || 'badge bg-secondary';
+}
+
+function isFiniteNumber(value) {
+  return typeof value === 'number' && isFinite(value);
+}
+
+function displayMoney(value) {
+  if (!isFiniteNumber(value)) return '-';
+  return `R$ ${new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 0 }).format(value)}`;
 }
 
 function getStatusText(status) {
   const texts = {
-    'open': '🟢 Aberto',
-    'bidding': '🟢 Aberto',
-    'in_progress': '🔵 Em Progresso',
-    'completed': '⚫ Concluído',
-    'cancelled': '🔴 Cancelado',
-    'awarded': '🟡 Aceito'
+    'open': 'Aberto',
+    'bidding': 'Aberto',
+    'in_progress': 'Em execução',
+    'completed': 'Concluído',
+    'cancelled': 'Cancelado',
+    'awarded': 'Adjudicado'
   };
   return texts[status] || status;
 }
