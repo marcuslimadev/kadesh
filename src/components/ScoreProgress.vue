@@ -1,56 +1,58 @@
 ﻿<template>
   <div class="score-progress">
     <!-- Header do placar -->
-    <div class="flex justify-between items-center text-sm mb-2">
-      <span class="text-gray-700 font-semibold">
+    <div class="flex justify-between items-center text-sm mb-3">
+      <span class="text-neutral-700 font-semibold">
         {{ label }}
       </span>
       <span class="font-bold text-lg" :class="scoreColorClass">
         {{ Math.round(totalScore) }}%
       </span>
     </div>
-    
+
     <!-- Barra de progresso -->
-    <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner border border-gray-300">
-      <div 
+    <div class="w-full bg-neutral-200 rounded-full h-4 overflow-hidden shadow-inner border border-neutral-300">
+      <div
         class="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden"
         :class="progressBarClass"
         :style="{ width: `${Math.min(100, Math.max(0, totalScore))}%` }"
       >
+        <!-- Efeito de brilho na barra -->
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
       </div>
     </div>
-    
+
     <!-- Breakdown detalhado (opcional) -->
-    <div v-if="showBreakdown" class="mt-3 space-y-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
-      <div class="text-xs text-gray-700">
-        <div class="flex justify-between items-center mb-1">
-          <span class="font-semibold"> Preço ({{ priceWeight }}%)</span>
-          <span class="font-bold text-gray-950">{{ Math.round(priceScore) }}pts</span>
+    <div v-if="showBreakdown" class="mt-4 space-y-3 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+      <div class="text-xs text-neutral-700">
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold"> 💰 Preço ({{ priceWeight }}%)</span>
+          <span class="font-bold text-neutral-900">{{ Math.round(priceScore) }}pts</span>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
-          <div 
-            class="h-full bg-gray-900 rounded-full transition-all duration-500"
+        <div class="w-full bg-neutral-200 rounded-full h-2 border border-neutral-300 overflow-hidden">
+          <div
+            class="h-full bg-primary-500 rounded-full transition-all duration-500"
             :style="{ width: `${priceScore}%` }"
           ></div>
         </div>
       </div>
-      
-      <div class="text-xs text-gray-700">
-        <div class="flex justify-between items-center mb-1">
-          <span class="font-semibold"> Reputação ({{ reputationWeight }}%)</span>
-          <span class="font-bold text-gray-950">{{ Math.round(reputationScore) }}pts</span>
+
+      <div class="text-xs text-neutral-700">
+        <div class="flex justify-between items-center mb-2">
+          <span class="font-semibold"> ⭐ Reputação ({{ reputationWeight }}%)</span>
+          <span class="font-bold text-neutral-900">{{ Math.round(reputationScore) }}pts</span>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-2 border border-gray-300">
-          <div 
-            class="h-full bg-gray-700 rounded-full transition-all duration-500"
+        <div class="w-full bg-neutral-200 rounded-full h-2 border border-neutral-300 overflow-hidden">
+          <div
+            class="h-full bg-secondary-500 rounded-full transition-all duration-500"
             :style="{ width: `${reputationScore}%` }"
           ></div>
         </div>
       </div>
     </div>
-    
+
     <!-- Info adicional -->
-    <div v-if="showInfo" class="mt-2 text-xs text-gray-600 font-medium">
+    <div v-if="showInfo" class="mt-3 text-xs text-neutral-600 font-medium p-3 bg-blue-50 rounded border border-blue-200">
       {{ infoText }}
     </div>
   </div>
@@ -188,16 +190,6 @@ watch(totalScore, (newScore) => {
   100% {
     width: var(--final-width);
   }
-}
-
-/* Hover effects */
-.score-progress:hover .bg-gray-950,
-.score-progress:hover .bg-gray-900,
-.score-progress:hover .bg-gray-800,
-.score-progress:hover .bg-gray-700,
-.score-progress:hover .bg-gray-600 {
-  transform: scaleY(1.1);
-  transition: 0.2s ease;
 }
 </style>
 

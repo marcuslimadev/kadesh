@@ -1,46 +1,69 @@
 ﻿<template>
-  <div class="min-vh-100 bg-light d-flex align-items-center py-4">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-5">
-          <div class="card shadow-sm border-0">
-            <div class="card-body p-4 p-md-5">
-              <div class="text-center mb-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle rounded-circle mb-3" style="width:56px;height:56px;">
-                  <i class="bi bi-person fs-4 text-primary"></i>
-                </div>
-                <h2 class="h3 fw-semibold mb-1">Bem-vindo de volta</h2>
-                <p class="text-muted mb-0">Acesse sua conta no Kadesh</p>
+  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center py-8">
+    <div class="container-responsive">
+      <div class="max-w-md mx-auto">
+        <div class="card card-elevated">
+          <div class="card-body p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+              <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-3xl">🔐</span>
+              </div>
+              <h1 class="text-3xl font-bold text-neutral-900 mb-2">Bem-vindo de volta</h1>
+              <p class="text-neutral-600">Acesse sua conta no Kadesh</p>
+            </div>
+
+            <!-- Form -->
+            <form @submit.prevent="submit" class="space-y-6">
+              <div>
+                <label class="label">Email</label>
+                <input
+                  v-model="form.email"
+                  type="email"
+                  class="input input-lg"
+                  placeholder="seu@email.com"
+                  required
+                />
               </div>
 
-              <form @submit.prevent="submit" class="">
-                <div class="mb-3">
-                  <label class="form-label">Email</label>
-                  <input v-model="form.email" type="email" class="form-control form-control-lg" placeholder="seu@email.com" required />
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label">Senha</label>
-                  <input v-model="form.password" type="password" class="form-control form-control-lg" placeholder="••••••••" required />
-                </div>
-
-                <button :disabled="loading" class="btn btn-primary btn-lg w-100">
-                  <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                  <span>{{ loading ? 'Entrando...' : 'Entrar' }}</span>
-                </button>
-
-                <div v-if="error" class="alert alert-danger mt-3" role="alert">
-                  {{ error }}
-                  <router-link to="/forgot-password" class="ms-2 small">Esqueceu a senha?</router-link>
-                </div>
-              </form>
-
-              <div class="text-center mt-4">
-                <span class="text-muted">Não tem uma conta?</span>
-                <router-link to="/register" class="ms-1">Registre-se gratuitamente</router-link>
+              <div>
+                <label class="label">Senha</label>
+                <input
+                  v-model="form.password"
+                  type="password"
+                  class="input input-lg"
+                  placeholder="••••••••"
+                  required
+                />
               </div>
-              <div class="text-center mt-2">
-                <router-link to="/forgot-password" class="small">Esqueceu sua senha?</router-link>
+
+              <button :disabled="loading" class="btn-primary btn-lg w-full group">
+                <span v-if="loading" class="loading-spinner mr-2"></span>
+                <span>{{ loading ? 'Entrando...' : 'Entrar' }}</span>
+                <span v-if="!loading" class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </button>
+
+              <!-- Error Alert -->
+              <div v-if="error" class="alert alert-danger">
+                <span class="text-sm">{{ error }}</span>
+                <router-link to="/forgot-password" class="text-sm underline hover:no-underline ml-2">
+                  Esqueceu a senha?
+                </router-link>
+              </div>
+            </form>
+
+            <!-- Links -->
+            <div class="text-center mt-8 space-y-2">
+              <div>
+                <span class="text-neutral-600">Não tem uma conta?</span>
+                <router-link to="/register" class="text-primary-600 hover:text-primary-700 font-semibold ml-1">
+                  Registre-se gratuitamente
+                </router-link>
+              </div>
+              <div>
+                <router-link to="/forgot-password" class="text-neutral-500 hover:text-neutral-700 text-sm">
+                  Esqueceu sua senha?
+                </router-link>
               </div>
             </div>
           </div>
@@ -48,7 +71,7 @@
       </div>
     </div>
   </div>
-  </template>
+</template>
 
 <script setup>
 import { reactive, ref } from 'vue';

@@ -1,107 +1,139 @@
 ﻿<template>
-  <div class="max-w-2xl mx-auto p-4 md:p-6">
-    <div class="bg-gradient-to-br from-green-600 to-emerald-600 p-6 rounded text-white shadow mb-6">
-      <h1 class="text-2xl md:text-3xl font-bold mb-2">💳 Pagamento do Projeto</h1>
-      <p class="opacity-90">Finalize o pagamento via Mercado Pago</p>
-    </div>
-
-    <!-- Loading -->
-    <div v-if="loading" class="bg-white rounded shadow-lg p-12 text-center">
-      <div class="inline-block w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-4 text-gray-600">Preparando pagamento...</p>
-    </div>
-
-    <!-- Detalhes do Pagamento -->
-    <div v-else-if="project" class="space-y-6">
-      <div class="bg-white rounded shadow-lg p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">📋 Detalhes do Projeto</h2>
-        
-        <div class="space-y-3 text-sm">
-          <div class="flex justify-between">
-            <span class="text-gray-600">Projeto:</span>
-            <span class="font-bold text-gray-900">{{ project.title }}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-600">Fornecedor:</span>
-            <span class="font-bold text-gray-900">{{ project.provider_name }}</span>
-          </div>
-          <div class="flex justify-between text-lg pt-3 border-t-2 border-gray-100">
-            <span class="font-bold text-gray-900">Valor Total:</span>
-            <span class="font-bold text-neutral-900">R$ {{ formatMoney(amount) }}</span>
+  <div class="min-h-screen bg-neutral-50 py-8">
+    <div class="container-responsive">
+      <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="card card-elevated mb-8">
+          <div class="bg-gradient-to-r from-primary-600 to-secondary-600 p-6 text-white rounded-t-xl">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">💳 Pagamento do Projeto</h1>
+            <p class="opacity-90">Finalize o pagamento via Mercado Pago</p>
           </div>
         </div>
-      </div>
 
-      <div class="bg-blue-50 border-2 border-neutral-300 rounded p-4 text-sm text-neutral-900">
-        <p class="font-medium mb-2">ℹ️ Informações importantes:</p>
-        <ul class="space-y-1 ml-4 list-disc">
-          <li>Pagamento seguro via Mercado Pago</li>
-          <li>O fornecedor só recebe após confirmação</li>
-          <li>Você pode pagar com cartão, boleto ou Pix</li>
-          <li>Taxa da plataforma: {{ platformFee }}% (já incluída)</li>
-        </ul>
-      </div>
-
-      <!-- Erro -->
-      <div v-if="error" class="bg-neutral-600 border-2 border-neutral-300 text-red-800 p-4 rounded">
-         {{ error }}
-      </div>
-
-      <!-- Botão de Pagamento -->
-      <div v-if="!paymentPreference">
-        <button
-          @click="createPayment"
-          :disabled="creatingPayment"
-          class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-        >
-          {{ creatingPayment ? '⏳ Preparando...' : '💳 Ir para Pagamento' }}
-        </button>
-      </div>
-
-      <!-- Link do Mercado Pago -->
-      <div v-else class="space-y-4">
-        <div class="bg-neutral-800 border-2 border-green-300 text-neutral-900 p-4 rounded">
-           Pagamento preparado! Clique no botão abaixo para finalizar.
+        <!-- Loading -->
+        <div v-if="loading" class="card card-elevated p-12 text-center">
+          <div class="loading-spinner w-12 h-12 mx-auto mb-4"></div>
+          <p class="text-xl font-bold text-neutral-900">Preparando pagamento...</p>
         </div>
-        
-        <a
-          :href="paymentPreference.init_point"
-          target="_blank"
-          class="block w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow text-center transition-all"
-        >
-          🚀 Abrir Mercado Pago
-        </a>
 
-        <p class="text-center text-sm text-gray-600">
-          Você será redirecionado para o site do Mercado Pago para concluir o pagamento com segurança.
-        </p>
+        <!-- Detalhes do Pagamento -->
+        <div v-else-if="project" class="space-y-6">
+          <div class="card card-elevated">
+            <div class="card-body">
+              <h2 class="text-xl font-bold text-neutral-900 mb-6">📋 Detalhes do Projeto</h2>
 
-        <!-- Instruções -->
-        <div class="bg-gray-50 border-2 border-gray-200 rounded p-4 text-sm text-gray-700">
-          <p class="font-medium mb-2">📱 Opções de pagamento disponíveis:</p>
-          <ul class="space-y-1 ml-4 list-disc">
-            <li>💳 Cartão de crédito (até 12x)</li>
-            <li> Cartão de débito</li>
-            <li>🏦 Boleto bancário</li>
-            <li> Pix (aprovação instantânea)</li>
-          </ul>
+              <div class="space-y-4">
+                <div class="flex justify-between items-center py-3 border-b border-neutral-200">
+                  <span class="text-neutral-600 font-medium">Projeto:</span>
+                  <span class="font-bold text-neutral-900">{{ project.title }}</span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b border-neutral-200">
+                  <span class="text-neutral-600 font-medium">Fornecedor:</span>
+                  <span class="font-bold text-neutral-900">{{ project.provider_name }}</span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-b-2 border-primary-200 text-lg">
+                  <span class="font-bold text-neutral-900">Valor Total:</span>
+                  <span class="font-bold text-primary-600">R$ {{ formatMoney(amount) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Informações importantes -->
+          <div class="card card-elevated border-primary-200 bg-primary-50/50">
+            <div class="card-body">
+              <div class="flex items-start gap-3">
+                <span class="text-2xl">ℹ️</span>
+                <div>
+                  <p class="font-bold text-neutral-900 mb-3">Informações importantes:</p>
+                  <ul class="space-y-2 text-neutral-700">
+                    <li class="flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+                      Pagamento seguro via Mercado Pago
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+                      O fornecedor só recebe após confirmação
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+                      Você pode pagar com cartão, boleto ou Pix
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span class="w-1.5 h-1.5 bg-primary-500 rounded-full"></span>
+                      Taxa da plataforma: {{ platformFee }}% (já incluída)
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Erro -->
+          <div v-if="error" class="alert alert-error">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">⚠️</span>
+              <p class="font-semibold">{{ error }}</p>
+            </div>
+          </div>
+
+          <!-- Botão de Pagamento -->
+          <div v-if="!paymentPreference">
+            <button
+              @click="createPayment"
+              :disabled="creatingPayment"
+              class="btn btn-primary w-full text-lg py-4"
+            >
+              {{ creatingPayment ? '⏳ Preparando...' : '💳 Ir para Pagamento' }}
+            </button>
+          </div>
+
+          <!-- Link do Mercado Pago -->
+          <div v-else class="space-y-4">
+            <div class="alert alert-success">
+               Pagamento preparado! Clique no botão abaixo para finalizar.
+            </div>
+            
+            <a
+              :href="paymentPreference.init_point"
+              target="_blank"
+              class="btn btn-primary w-full text-lg py-4 text-center block"
+            >
+              🚀 Abrir Mercado Pago
+            </a>
+
+            <p class="text-center text-sm text-neutral-600">
+              Você será redirecionado para o site do Mercado Pago para concluir o pagamento com segurança.
+            </p>
+
+            <!-- Instruções -->
+            <div class="bg-neutral-50 border-2 border-neutral-200 rounded-lg p-4 text-sm text-neutral-700">
+              <p class="font-medium mb-2">📱 Opções de pagamento disponíveis:</p>
+              <ul class="space-y-1 ml-4 list-disc">
+                <li>💳 Cartão de crédito (até 12x)</li>
+                <li> Cartão de débito</li>
+                <li>🏦 Boleto bancário</li>
+                <li> Pix (aprovação instantânea)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <router-link to="/projects" class="text-primary-600 hover:text-primary-700 text-sm font-medium transition-colors">
+              ← Voltar para projetos
+            </router-link>
+          </div>
+        </div>
+
+        <!-- Projeto não encontrado -->
+        <div v-else class="card card-elevated p-12 text-center">
+          <div class="text-6xl mb-4">😕</div>
+          <h2 class="text-2xl font-bold text-neutral-900 mb-2">Projeto não encontrado</h2>
+          <router-link to="/projects" class="btn btn-outline-primary">
+            ← Voltar para projetos
+          </router-link>
         </div>
       </div>
-
-      <div class="text-center">
-        <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900 text-sm">
-          ← Voltar para projetos
-        </router-link>
-      </div>
-    </div>
-
-    <!-- Projeto não encontrado -->
-    <div v-else class="bg-white rounded shadow-lg p-12 text-center">
-      <div class="text-6xl mb-4">😕</div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Projeto não encontrado</h2>
-      <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900">
-        ← Voltar para projetos
-      </router-link>
     </div>
   </div>
 </template>

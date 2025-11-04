@@ -1,92 +1,167 @@
 ﻿<template>
-  <div class="min-vh-100 bg-light d-flex align-items-center py-4">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-7">
-          <div class="card shadow-sm border-0">
-            <div class="card-body p-4 p-md-5">
-              <div class="text-center mb-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle rounded-circle mb-3" style="width:56px;height:56px;">
-                  <i class="bi bi-person-plus fs-4 text-primary"></i>
+  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 py-8">
+    <div class="container-responsive">
+      <div class="max-w-2xl mx-auto">
+        <div class="card card-elevated">
+          <div class="card-body p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+              <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-3xl">👋</span>
+              </div>
+              <h1 class="text-3xl font-bold text-neutral-900 mb-2">Criar conta</h1>
+              <p class="text-neutral-600">Junte-se ao marketplace de serviços</p>
+            </div>
+
+            <!-- Form -->
+            <form @submit.prevent="submit" class="space-y-6">
+              <!-- Basic Info -->
+              <div class="grid grid-responsive-cols-2 gap-6">
+                <div>
+                  <label class="label">Nome completo</label>
+                  <input
+                    v-model="form.name"
+                    type="text"
+                    class="input input-lg"
+                    placeholder="Seu nome completo"
+                    required
+                  />
                 </div>
-                <h2 class="h3 fw-semibold mb-1">Criar conta</h2>
-                <p class="text-muted mb-0">Junte-se ao marketplace de serviços</p>
+                <div>
+                  <label class="label">Email</label>
+                  <input
+                    v-model="form.email"
+                    type="email"
+                    class="input input-lg"
+                    placeholder="seu@email.com"
+                    required
+                  />
+                </div>
               </div>
 
-              <form @submit.prevent="submit">
-                <div class="mb-3">
-                  <label class="form-label">Nome completo</label>
-                  <input v-model="form.name" type="text" class="form-control form-control-lg" placeholder="Seu nome completo" required />
+              <!-- Password -->
+              <div class="grid grid-responsive-cols-2 gap-6">
+                <div>
+                  <label class="label">Senha</label>
+                  <input
+                    v-model="form.password"
+                    type="password"
+                    class="input input-lg"
+                    placeholder="••••••••"
+                    required
+                  />
                 </div>
-                <div class="mb-3">
-                  <label class="form-label">Email</label>
-                  <input v-model="form.email" type="email" class="form-control form-control-lg" placeholder="seu@email.com" required />
+                <div>
+                  <label class="label">Confirmar senha</label>
+                  <input
+                    v-model="form.password_confirmation"
+                    type="password"
+                    class="input input-lg"
+                    placeholder="••••••••"
+                    required
+                  />
                 </div>
-
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label class="form-label">Senha</label>
-                    <input v-model="form.password" type="password" class="form-control form-control-lg" placeholder="••••••••" required />
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label">Confirmar</label>
-                    <input v-model="form.password_confirmation" type="password" class="form-control form-control-lg" placeholder="••••••••" required />
-                  </div>
-                </div>
-
-                <div class="bg-light rounded p-3 mt-3">
-                  <div class="form-label fw-semibold mb-2">Você é:</div>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" v-model="form.is_contractor" id="chkContractor">
-                        <label class="form-check-label" for="chkContractor">Contratante</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" v-model="form.is_provider" id="chkProvider">
-                        <label class="form-check-label" for="chkProvider">Fornecedor</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="form.is_provider" class="rounded p-3 mt-3 border">
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label">Profissão</label>
-                      <input v-model="form.profession" class="form-control" placeholder="Ex: Eletricista" />
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label">Taxa/Hora (R$)</label>
-                      <input v-model.number="form.hourly_rate" type="number" step="0.01" class="form-control" placeholder="0,00" />
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Sobre você</label>
-                      <textarea v-model="form.bio" rows="3" class="form-control" placeholder="Conte um pouco sobre sua experiência..."></textarea>
-                    </div>
-                  </div>
-                </div>
-
-                <button :disabled="loading" class="btn btn-primary btn-lg w-100 mt-3">
-                  <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-                  <span>{{ loading ? 'Criando conta...' : 'Criar conta' }}</span>
-                </button>
-
-                <div v-if="emailExists" class="alert alert-warning mt-3" role="alert">
-                  O email <strong>{{ form.email }}</strong> já possui uma conta.
-                  <router-link to="/login" class="ms-1">Fazer login</router-link>
-                  <span class="mx-1">•</span>
-                  <router-link to="/forgot-password">Esqueci a senha</router-link>
-                </div>
-                <div v-else-if="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
-              </form>
-
-              <div class="text-center mt-4">
-                <span class="text-muted">Já tem uma conta?</span>
-                <router-link to="/login" class="ms-1">Faça login</router-link>
               </div>
+
+              <!-- User Type Selection -->
+              <div class="bg-neutral-50 border border-neutral-200 rounded-lg p-6">
+                <div class="mb-4">
+                  <label class="label">Você é:</label>
+                </div>
+                <div class="grid grid-responsive-cols-2 gap-4">
+                  <label class="flex items-center space-x-3 p-4 border border-neutral-200 rounded-lg hover:bg-neutral-100 cursor-pointer transition-colors">
+                    <input
+                      class="checkbox"
+                      type="checkbox"
+                      v-model="form.is_contractor"
+                    />
+                    <div>
+                      <div class="font-semibold text-neutral-900">🏢 Contratante</div>
+                      <div class="text-sm text-neutral-600">Preciso contratar serviços</div>
+                    </div>
+                  </label>
+                  <label class="flex items-center space-x-3 p-4 border border-neutral-200 rounded-lg hover:bg-neutral-100 cursor-pointer transition-colors">
+                    <input
+                      class="checkbox"
+                      type="checkbox"
+                      v-model="form.is_provider"
+                    />
+                    <div>
+                      <div class="font-semibold text-neutral-900">🔧 Fornecedor</div>
+                      <div class="text-sm text-neutral-600">Ofereço serviços profissionais</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Provider Details -->
+              <div v-if="form.is_provider" class="border border-primary-200 rounded-lg p-6 bg-primary-50/50">
+                <h3 class="text-lg font-semibold text-neutral-900 mb-4">Informações do Profissional</h3>
+                <div class="grid grid-responsive-cols-2 gap-6 mb-6">
+                  <div>
+                    <label class="label">Profissão</label>
+                    <input
+                      v-model="form.profession"
+                      type="text"
+                      class="input"
+                      placeholder="Ex: Eletricista, Pintor..."
+                    />
+                  </div>
+                  <div>
+                    <label class="label">Taxa por hora (R$)</label>
+                    <input
+                      v-model.number="form.hourly_rate"
+                      type="number"
+                      step="0.01"
+                      class="input"
+                      placeholder="0,00"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="label">Sobre você</label>
+                  <textarea
+                    v-model="form.bio"
+                    rows="4"
+                    class="textarea"
+                    placeholder="Conte um pouco sobre sua experiência, especialidades e o que diferencia seus serviços..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button :disabled="loading" class="btn-primary btn-lg w-full group">
+                <span v-if="loading" class="loading-spinner mr-2"></span>
+                <span>{{ loading ? 'Criando conta...' : 'Criar conta' }}</span>
+                <span v-if="!loading" class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </button>
+
+              <!-- Alerts -->
+              <div v-if="emailExists" class="alert alert-warning">
+                <div class="flex items-center justify-between">
+                  <span>O email <strong>{{ form.email }}</strong> já possui uma conta.</span>
+                  <div class="flex gap-2">
+                    <router-link to="/login" class="text-sm underline hover:no-underline">
+                      Fazer login
+                    </router-link>
+                    <span class="text-neutral-400">•</span>
+                    <router-link to="/forgot-password" class="text-sm underline hover:no-underline">
+                      Esqueci a senha
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+              <div v-else-if="error" class="alert alert-danger">
+                {{ error }}
+              </div>
+            </form>
+
+            <!-- Footer Links -->
+            <div class="text-center mt-8">
+              <span class="text-neutral-600">Já tem uma conta?</span>
+              <router-link to="/login" class="text-primary-600 hover:text-primary-700 font-semibold ml-1">
+                Faça login
+              </router-link>
             </div>
           </div>
         </div>

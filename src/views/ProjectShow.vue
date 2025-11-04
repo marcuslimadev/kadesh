@@ -1,308 +1,278 @@
-﻿<template>
-  <div class="min-h-screen bg-neutral-900 py-8 px-4">
-    <!-- Loading State -->
-    <div v-if="loading" class="max-w-5xl mx-auto">
-      <div class="bg-white rounded-lg shadow p-12 text-center border-4 border-neutral-300">
-        <div class="relative inline-block mb-6">
-          <div class="w-20 h-20 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin"></div>
-          <div class="absolute inset-0 w-20 h-20 border-8 border-transparent border-r-pink-600 rounded-full animate-spin animation-delay-150"></div>
+<template>
+  <div class="min-h-screen bg-neutral-50 py-8">
+    <div class="container-responsive">
+      <!-- Loading State -->
+      <div v-if="loading" class="max-w-4xl mx-auto">
+        <div class="card card-elevated p-12 text-center">
+          <div class="loading-spinner w-16 h-16 mx-auto mb-6"></div>
+          <p class="text-xl font-bold text-neutral-900">
+            Carregando projeto incrível...
+          </p>
         </div>
-        <p class="text-xl font-bold text-transparent bg-clip-text bg-neutral-900 ">
-          Carregando projeto incrível...
-        </p>
       </div>
-    </div>
 
-    <!-- Error State -->
-    <div v-else-if="!project" class="max-w-5xl mx-auto">
-      <div class="bg-neutral-500 rounded-lg shadow p-12 text-center border-4 border-neutral-300">
-        <div class="relative inline-block mb-6">
-          <svg class="w-24 h-24 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
+      <!-- Error State -->
+      <div v-else-if="!project" class="max-w-4xl mx-auto">
+        <div class="card card-elevated p-12 text-center">
+          <div class="text-6xl mb-6">❌</div>
+          <h2 class="text-3xl font-bold text-neutral-900 mb-4">
+            Ops! Projeto não encontrado
+          </h2>
+          <p class="text-lg text-neutral-600 mb-8">Este projeto pode ter sido removido ou não existe mais.</p>
+          <router-link to="/projects" class="btn-primary btn-lg group">
+            <svg class="w-6 h-6 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Voltar para Projetos
+          </router-link>
         </div>
-        <h2 class="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-rose-600 mb-4">
-          Ops! Projeto não encontrado
-        </h2>
-        <p class="text-lg text-gray-700 font-semibold mb-8">Este projeto pode ter sido removido ou não existe mais.</p>
-        <router-link to="/projects" class="inline-flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-8 py-4 rounded font-bold text-lg shadow hover:shadow-neutral-500/50 hover:opacity-90 transition-all">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      </div>
+
+      <!-- Project Content -->
+      <div v-else class="max-w-4xl mx-auto space-y-8">
+        <!-- Back Button -->
+        <router-link to="/projects" class="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold text-lg transition-colors group">
+          <svg class="w-6 h-6 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
-          Voltar para Projetos
+          Voltar aos Projetos
         </router-link>
-      </div>
-    </div>
 
-    <!-- Project Content -->
-    <div v-else class="max-w-5xl mx-auto space-y-8">
-      <!-- Back Button -->
-      <router-link to="/projects" class="inline-flex items-center gap-2 text-neutral-900 hover:text-neutral-900 font-bold text-lg transition-colors group">
-        <svg class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        Voltar aos Projetos
-      </router-link>
+        <!-- Main Card -->
+        <div class="card card-elevated overflow-hidden">
+          <!-- Gradient Top Bar -->
+          <div class="h-2 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
 
-      <!-- Main Card -->
-      <div class="bg-white rounded-lg shadow overflow-hidden border-4 border-transparent hover:border-neutral-300 transition-all">
-        <!-- Gradient Top Bar -->
-        <div class="h-3 bg-neutral-900"></div>
-        
-        <div class="p-8 sm:p-10">
-          <!-- Status Badges Row -->
-          <div class="flex flex-wrap items-center gap-3 mb-6">
-            <span :class="statusClasses[project.status]" class="px-6 py-3 rounded-full text-sm font-semibold uppercase tracking-wider shadow-lg">
-              {{ statusLabels[project.status] }}
-            </span>
-            <span v-if="isMyProject" class="bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 text-white px-6 py-3 rounded-full text-sm font-semibold uppercase shadow-lg">
-              👔 Meu Projeto
-            </span>
-          </div>
-
-          <!-- Title -->
-          <h1 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-transparent bg-clip-text bg-neutral-900 mb-6 leading-tight">
-            {{ project.title }}
-          </h1>
-
-          <!-- Description -->
-          <div class="bg-gradient-to-br from-gray-50 to-slate-50 rounded p-6 mb-8 border-2 border-gray-200">
-            <p class="text-gray-800 text-lg leading-relaxed whitespace-pre-line font-medium">
-              {{ project.description }}
-            </p>
-          </div>
-
-          <!-- Info Cards Grid -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <!-- Budget Card -->
-            <div class="group bg-neutral-800 rounded p-6 shadow hover:shadow hover:-translate-y-2 transition-all duration-300">
-              <div class="text-white text-center">
-                <div class="text-4xl mb-2 group-hover:scale-125 transition-transform"></div>
-                <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-2">Orçamento</p>
-                <p class="text-2xl font-semibold">R$ {{ formatMoney(project.max_budget) }}</p>
-              </div>
-            </div>
-
-            <!-- Deadline Card -->
-            <div class="group bg-neutral-700 rounded p-6 shadow hover:shadow hover:-translate-y-2 transition-all duration-300">
-              <div class="text-white text-center">
-                <div class="text-4xl mb-2 group-hover:scale-125 transition-transform">📅</div>
-                <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-2">Prazo Final</p>
-                <p class="text-lg font-semibold">{{ formatDate(project.project_deadline) }}</p>
-              </div>
-            </div>
-
-            <!-- Bidding Ends Card -->
-            <div class="group bg-neutral-600 rounded p-6 shadow hover:shadow hover:-translate-y-2 transition-all duration-300">
-              <div class="text-white text-center">
-                <div class="text-4xl mb-2 group-hover:scale-125 transition-transform"></div>
-                <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-2">Propostas até</p>
-                <p class="text-lg font-semibold">{{ formatDate(project.bidding_ends_at) }}</p>
-              </div>
-            </div>
-
-            <!-- Bids Count Card -->
-            <div class="group bg-gradient-to-br from-amber-400 via-orange-400 to-yellow-400 rounded p-6 shadow hover:shadow hover:-translate-y-2 transition-all duration-300">
-              <div class="text-white text-center">
-                <div class="text-4xl mb-2 group-hover:scale-125 transition-transform"></div>
-                <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-2">Propostas</p>
-                <p class="text-3xl font-semibold">{{ bids.length }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Skills Tags -->
-          <div v-if="project.required_skills && project.required_skills.length" class="mb-6">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="text-lg font-semibold text-gray-700">🛠️ Habilidades Necessárias:</span>
-            </div>
-            <div class="flex flex-wrap gap-3">
-              <span v-for="(skill, i) in project.required_skills" :key="i" 
-                    class="bg-neutral-900 text-white text-sm font-bold px-5 py-2 rounded-full shadow-lg hover:shadow hover:opacity-90 transition-all">
-                {{ skill }}
+          <div class="card-body">
+            <!-- Status Badges Row -->
+            <div class="flex flex-wrap items-center gap-3 mb-6">
+              <span :class="statusClasses[project.status]" class="px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
+                {{ statusLabels[project.status] }}
+              </span>
+              <span v-if="isMyProject" class="badge badge-warning">
+                👔 Meu Projeto
               </span>
             </div>
+
+            <!-- Title -->
+            <h1 class="text-3xl lg:text-4xl font-bold text-neutral-900 mb-6 leading-tight">
+              {{ project.title }}
+            </h1>
+
+            <!-- Description -->
+            <div class="bg-neutral-50 border border-neutral-200 rounded-lg p-6 mb-8">
+              <p class="text-neutral-700 text-lg leading-relaxed whitespace-pre-line">
+                {{ project.description }}
+              </p>
+            </div>
+
+            <!-- Info Cards Grid -->
+            <div class="grid grid-responsive-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <!-- Budget Card -->
+              <div class="card card-hover group p-6 text-center">
+                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💰</div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Orçamento</p>
+                <p class="text-2xl font-bold text-success-600">R$ {{ formatMoney(project.max_budget) }}</p>
+              </div>
+
+              <!-- Deadline Card -->
+              <div class="card card-hover group p-6 text-center">
+                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📅</div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Prazo Final</p>
+                <p class="text-lg font-semibold text-neutral-900">{{ formatDate(project.project_deadline) }}</p>
+              </div>
+
+              <!-- Bidding Ends Card -->
+              <div class="card card-hover group p-6 text-center">
+                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">⏰</div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Propostas até</p>
+                <p class="text-lg font-semibold text-neutral-900">{{ formatDate(project.bidding_ends_at) }}</p>
+              </div>
+
+              <!-- Bids Count Card -->
+              <div class="card card-hover group p-6 text-center bg-gradient-to-br from-warning-50 to-warning-100 border-warning-200">
+                <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📊</div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-neutral-500 mb-2">Propostas</p>
+                <p class="text-3xl font-bold text-warning-600">{{ bids.length }}</p>
+              </div>
+            </div>
+
+            <!-- Skills Tags -->
+            <div v-if="project.required_skills && project.required_skills.length" class="mb-6">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-lg font-semibold text-neutral-700">🛠️ Habilidades Necessárias:</span>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <span v-for="(skill, i) in project.required_skills" :key="i"
+                      class="badge badge-primary">
+                  {{ skill }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Bids/Proposals Section -->
-      <div class="bg-white rounded-lg shadow overflow-hidden border-4 border-neutral-300">
-        <!-- Header -->
-        <div class="bg-neutral-900 p-6">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 bg-white/20 rounded flex items-center justify-center">
-                <span class="text-4xl"></span>
+        <!-- Bids/Proposals Section -->
+        <div class="card card-elevated overflow-hidden">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-primary-600 to-secondary-600 p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center">
+                  <span class="text-4xl">📋</span>
+                </div>
+                <div>
+                  <h2 class="text-3xl font-bold text-white">Propostas Recebidas</h2>
+                  <p class="text-white/90 font-semibold">{{ bids.length }} {{ bids.length === 1 ? 'proposta enviada' : 'propostas enviadas' }}</p>
+                </div>
               </div>
-              <div>
-                <h2 class="text-3xl font-semibold text-white">Propostas Recebidas</h2>
-                <p class="text-neutral-900 font-semibold">{{ bids.length }} {{ bids.length === 1 ? 'proposta enviada' : 'propostas enviadas' }}</p>
+              <div class="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-lg">
+                <p class="text-5xl font-bold text-white">{{ bids.length }}</p>
               </div>
-            </div>
-            <div class="bg-white/20 backdrop-blur-sm px-6 py-3 rounded">
-              <p class="text-5xl font-semibold text-white">{{ bids.length }}</p>
             </div>
           </div>
-        </div>
 
-        <div class="p-6 sm:p-8">
-          <!-- No Bids State -->
-          <div v-if="bids.length === 0" class="text-center py-16 bg-gradient-to-br from-gray-50 to-slate-50 rounded border-4 border-dashed border-gray-300">
-            <div class="relative inline-block mb-6">
-              <div class="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center">
-                <svg class="w-12 h-12 text-neutral-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                </svg>
-              </div>
-              <div class="absolute -top-2 -right-2 text-5xl "></div>
+          <div class="card-body">
+            <!-- No Bids State -->
+            <div v-if="bids.length === 0" class="text-center py-16 bg-neutral-50 border-2 border-dashed border-neutral-300 rounded-lg">
+              <div class="text-6xl mb-6">📝</div>
+              <h3 class="text-2xl font-bold text-neutral-900 mb-4">Nenhuma proposta ainda!</h3>
+              <p class="text-lg text-neutral-600">Seja o primeiro profissional a enviar sua proposta para este projeto.</p>
             </div>
-            <h3 class="text-2xl font-semibold text-gray-900 mb-2">Nenhuma proposta ainda!</h3>
-            <p class="text-lg text-gray-600 font-semibold">Seja o primeiro profissional a enviar sua proposta para este projeto.</p>
-          </div>
 
-          <!-- Bids List -->
-          <div v-else class="space-y-6">
-            <div v-for="bid in bids" :key="bid.id" 
-                 class="group bg-white rounded shadow-lg hover:shadow border-4 border-transparent hover:border-neutral-300 transition-all duration-300 overflow-hidden">
-              <!-- Gradient Top Bar -->
-              <div class="h-2 bg-neutral-900"></div>
-              
-              <div class="p-6">
-                <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-                  <div class="flex-1">
-                    <!-- Provider Info -->
-                    <div class="flex items-center gap-4 mb-6">
-                      <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded flex items-center justify-center shadow group-hover:opacity-90 transition-transform">
-                        <span class="text-white font-semibold text-2xl">{{ bid.provider?.name?.charAt(0).toUpperCase() || '?' }}</span>
+            <!-- Bids List -->
+            <div v-else class="space-y-6">
+              <div v-for="bid in bids" :key="bid.id"
+                   class="card card-hover group overflow-hidden">
+                <!-- Gradient Top Bar -->
+                <div class="h-2 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
+
+                <div class="p-6">
+                  <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                    <div class="flex-1">
+                      <!-- Provider Info -->
+                      <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                          <span class="text-white font-bold text-2xl">{{ bid.provider?.name?.charAt(0).toUpperCase() || '?' }}</span>
+                        </div>
+                        <div>
+                          <p class="text-xl font-bold text-neutral-900">{{ bid.provider?.name || 'Fornecedor' }}</p>
+                          <p class="text-sm text-neutral-600 flex items-center gap-1">
+                            <span>⭐</span>
+                            <span>4.8 (120 avaliações)</span>
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p class="text-xl font-semibold text-gray-900">{{ bid.provider?.name || 'Fornecedor' }}</p>
-                        <p class="text-sm text-gray-600 font-semibold flex items-center gap-1">
-                          <span></span>
-                          <span>4.8 (120 avaliações)</span>
-                        </p>
+
+                      <!-- Bid Amount & Time -->
+                      <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-primary-600 rounded-lg p-5 text-white text-center shadow-lg">
+                          <p class="text-sm font-bold uppercase tracking-wide opacity-90 mb-1">Valor</p>
+                          <p class="text-3xl font-bold">R$ {{ formatMoney(bid.amount) }}</p>
+                        </div>
+                        <div class="bg-secondary-600 rounded-lg p-5 text-white text-center shadow-lg">
+                          <p class="text-sm font-bold uppercase tracking-wide opacity-90 mb-1">⏱️ Prazo</p>
+                          <p class="text-3xl font-bold">{{ bid.delivery_time_days }} dias</p>
+                        </div>
                       </div>
+
+                      <!-- Proposal Text -->
+                      <div class="bg-neutral-50 border border-neutral-200 rounded-lg p-5 mb-4">
+                        <p class="text-sm font-bold text-neutral-600 uppercase tracking-wide mb-2">Proposta:</p>
+                        <p class="text-base text-neutral-800 leading-relaxed">{{ bid.proposal }}</p>
+                      </div>
+
+                      <!-- Bid Date -->
+                      <p class="text-sm text-neutral-500">📅 Enviado em {{ formatDate(bid.created_at) }}</p>
                     </div>
 
-                    <!-- Bid Amount & Time -->
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                      <div class="bg-neutral-800 rounded p-5 text-white text-center shadow-lg">
-                        <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-1"> Valor</p>
-                        <p class="text-3xl font-semibold">R$ {{ formatMoney(bid.amount) }}</p>
-                      </div>
-                      <div class="bg-neutral-700 rounded p-5 text-white text-center shadow-lg">
-                        <p class="text-xs font-bold uppercase tracking-wider opacity-90 mb-1">⏱️ Prazo</p>
-                        <p class="text-3xl font-semibold">{{ bid.delivery_time_days }} dias</p>
-                      </div>
+                    <!-- Accept Button (owner only) -->
+                    <div v-if="canConfirmWinner && project.status === 'bidding'" class="lg:ml-6">
+                      <button @click="confirmWinner(bid.id)"
+                              class="btn-primary w-full lg:w-auto">
+                        Aceitar Proposta
+                      </button>
                     </div>
-
-                    <!-- Proposal Text -->
-                    <div class="bg-gradient-to-br from-gray-50 to-slate-50 rounded p-5 border-2 border-gray-200 mb-4">
-                      <p class="text-sm font-bold text-gray-600 uppercase tracking-wider mb-2"> Proposta:</p>
-                      <p class="text-base text-gray-800 leading-relaxed font-medium">{{ bid.proposal }}</p>
-                    </div>
-
-                    <!-- Bid Date -->
-                    <p class="text-sm text-gray-500 font-semibold">📅 Enviado em {{ formatDate(bid.created_at) }}</p>
-                  </div>
-
-                  <!-- Accept Button (owner only) -->
-                  <div v-if="canConfirmWinner && project.status === 'bidding'" class="lg:ml-6">
-                    <button @click="confirmWinner(bid.id)" 
-                            class="w-full lg:w-auto bg-neutral-800 hover:bg-neutral-700 text-white font-semibold px-8 py-4 rounded shadow hover:shadow-neutral-500/50 hover:opacity-90 transition-all text-lg">
-                       Aceitar Proposta
-                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Bid Form (providers only) -->
-      <div v-if="canBid && project.status === 'bidding'" class="bg-white rounded-lg shadow overflow-hidden border-4 border-neutral-300">
-        <!-- Header -->
-        <div class="bg-neutral-900 p-6">
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 bg-white/20 rounded flex items-center justify-center">
-              <span class="text-4xl">🚀</span>
-            </div>
-            <div>
-              <h3 class="text-3xl font-semibold text-white">Enviar Minha Proposta</h3>
-              <p class="text-neutral-900 font-semibold">Destaque-se e ganhe este projeto!</p>
+        <!-- Bid Form (providers only) -->
+        <div v-if="canBid && project.status === 'bidding'" class="card card-elevated overflow-hidden">
+          <!-- Header -->
+          <div class="bg-gradient-to-r from-primary-600 to-secondary-600 p-6">
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-white/20 rounded-lg flex items-center justify-center">
+                <span class="text-4xl">🚀</span>
+              </div>
+              <div>
+                <h3 class="text-3xl font-bold text-white">Enviar Minha Proposta</h3>
+                <p class="text-white/90 font-semibold">Destaque-se e ganhe este projeto!</p>
+              </div>
             </div>
           </div>
+
+          <form @submit.prevent="submitBid" class="card-body space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="label">Valor da Proposta (R$)</label>
+                <input v-model.number="bidForm.amount" type="number" step="0.01" required
+                       class="input input-lg"
+                       placeholder="Ex: 2500.00" />
+              </div>
+              <div>
+                <label class="label">⏱️ Prazo de Entrega (dias)</label>
+                <input v-model.number="bidForm.delivery_time_days" type="number" min="1" required
+                       class="input input-lg"
+                       placeholder="Ex: 7" />
+              </div>
+            </div>
+
+            <div>
+              <label class="label">Detalhes da Proposta</label>
+              <textarea v-model="bidForm.proposal" rows="6" required
+                        class="textarea resize-none"
+                        placeholder="Descreva sua proposta, experiência relevante e por que você é o profissional ideal para este projeto..."></textarea>
+            </div>
+
+            <!-- Error Message -->
+            <div v-if="bidError" class="alert alert-danger">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">⚠️</span>
+                <p class="font-semibold">{{ bidError }}</p>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button :disabled="sendingBid" type="submit"
+                    class="btn-primary btn-lg w-full group">
+              <span v-if="sendingBid" class="flex items-center justify-center gap-3">
+                <span class="loading-spinner w-6 h-6"></span>
+                Enviando sua proposta...
+              </span>
+              <span v-else class="flex items-center justify-center gap-3">
+                🚀 <span>Enviar Minha Proposta</span>
+              </span>
+            </button>
+          </form>
         </div>
 
-        <form @submit.prevent="submitBid" class="p-6 sm:p-8 space-y-6">
-          <div class="grid sm:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3"> Valor da Proposta (R$)</label>
-              <input v-model.number="bidForm.amount" type="number" step="0.01" required
-                     class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
-                     placeholder="Ex: 2500.00" />
-            </div>
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3">⏱️ Prazo de Entrega (dias)</label>
-              <input v-model.number="bidForm.delivery_time_days" type="number" min="1" required
-                     class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-bold text-xl"
-                     placeholder="Ex: 7" />
-            </div>
+        <!-- Login Prompt (not logged in) -->
+        <div v-else-if="!user && project.status === 'bidding'" class="card card-elevated p-12 text-center">
+          <div class="text-6xl mb-6">🔑</div>
+          <h3 class="text-3xl font-bold text-neutral-900 mb-4">Faça login para enviar propostas!</h3>
+          <p class="text-lg text-neutral-600 mb-8">Crie sua conta gratuitamente e comece a conquistar projetos incríveis!</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <router-link to="/login" class="btn-primary btn-lg">
+              🔐 Fazer Login
+            </router-link>
+            <router-link to="/register" class="btn-ghost btn-lg">
+              Criar Conta Grátis
+            </router-link>
           </div>
-
-          <div>
-            <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3"> Detalhes da Proposta</label>
-            <textarea v-model="bidForm.proposal" rows="6" required
-                      class="w-full px-5 py-4 border-4 border-neutral-300 rounded focus:ring-4 focus:ring-purple-500 focus:border-neutral-300 transition-all font-semibold resize-none text-base"
-                      placeholder="Descreva sua proposta, experiência relevante e por que você é o profissional ideal para este projeto..."></textarea>
-          </div>
-
-          <!-- Error Message -->
-          <div v-if="bidError" class="bg-neutral-500 border-4 border-neutral-300 rounded p-6">
-            <div class="flex items-center gap-3">
-              <svg class="w-8 h-8 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <p class="text-red-800 font-semibold text-lg">{{ bidError }}</p>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <button :disabled="sendingBid" type="submit"
-                  class="w-full bg-neutral-900 hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-xl px-8 py-5 rounded shadow hover:shadow-neutral-500/50 hover:opacity-90 active:scale-95 transition-all">
-            <span v-if="sendingBid" class="flex items-center justify-center gap-3">
-              <svg class="animate-spin h-6 w-6" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Enviando sua proposta...
-            </span>
-            <span v-else class="flex items-center justify-center gap-3">
-              🚀 <span>Enviar Minha Proposta</span> 
-            </span>
-          </button>
-        </form>
-      </div>
-
-      <!-- Login Prompt (not logged in) -->
-      <div v-else-if="!user && project.status === 'bidding'" class="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-lg shadow p-10 text-center border-4 border-neutral-300">
-        <div class="relative inline-block mb-6">
-          <svg class="w-24 h-24 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-          </svg>
-          <div class="absolute -top-4 -right-4 text-5xl ">🔑</div>
-        </div>
-        <h3 class="text-3xl font-semibold text-gray-900 mb-4">Faça login para enviar propostas!</h3>
-        <p class="text-lg text-gray-700 font-semibold mb-8">Crie sua conta gratuitamente e comece a conquistar projetos incríveis! </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <router-link to="/login" class="inline-flex items-center justify-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white font-semibold px-8 py-4 rounded shadow hover:shadow-neutral-500/50 hover:opacity-90 transition-all text-lg">
-            🔐 Fazer Login
-          </router-link>
-          <router-link to="/register" class="inline-flex items-center justify-center gap-2 bg-white text-neutral-900 font-semibold px-8 py-4 rounded shadow hover:shadow hover:opacity-90 transition-all border-4 border-neutral-300 text-lg">
-             Criar Conta Grátis
-          </router-link>
         </div>
       </div>
     </div>
@@ -326,11 +296,11 @@ const bidError = ref('');
 const bidForm = reactive({ amount: null, delivery_time_days: 7, proposal: '' });
 
 const statusClasses = {
-  'open': 'bg-neutral-800 text-white',
-  'bidding': 'bg-neutral-700 text-white',
-  'in_progress': 'bg-neutral-600 text-white',
-  'completed': 'bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white',
-  'cancelled': 'bg-gradient-to-r from-rose-500 via-red-500 to-pink-600 text-white'
+  'open': 'badge badge-primary',
+  'bidding': 'badge badge-secondary',
+  'in_progress': 'badge badge-warning',
+  'completed': 'badge badge-success',
+  'cancelled': 'badge badge-danger'
 };
 
 const statusLabels = {
@@ -421,7 +391,3 @@ onMounted(async () => {
   await loadBids();
 });
 </script>
-
-
-
-

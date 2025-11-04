@@ -1,19 +1,19 @@
 ﻿<template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-primary-50">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
+    <div class="bg-primary-500 text-white shadow-primary">
       <div class="max-w-7xl mx-auto px-4 py-6">
         <div class="flex items-center justify-between">
           <div>
-            <router-link to="/admin/dashboard" class="text-neutral-900 hover:text-white text-sm mb-2 inline-block">
+            <router-link to="/admin/dashboard" class="text-white/80 hover:text-white text-sm mb-2 inline-block">
               ← Voltar ao Dashboard
             </router-link>
-            <h1 class="text-3xl font-bold"> Configurações do Sistema</h1>
+            <h1 class="text-3xl font-bold">⚙️ Configurações do Sistema</h1>
           </div>
           <button
             @click="saveSettings"
             :disabled="saving"
-            class="bg-white text-neutral-900 px-6 py-3 rounded-lg font-bold hover:bg-purple-50 transition-all disabled:opacity-50"
+            class="bg-white text-primary-900 px-6 py-3 rounded-lg font-bold hover:bg-neutral-100 transition-all disabled:opacity-50"
           >
             {{ saving ? '⏳ Salvando...' : '💾 Salvar Alterações' }}
           </button>
@@ -24,78 +24,78 @@
     <div class="max-w-4xl mx-auto p-6 space-y-6">
       <!-- Loading -->
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block w-12 h-12 border-4 border-neutral-300 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-gray-600">Carregando configurações...</p>
+        <div class="inline-block w-12 h-12 border-4 border-primary-200 border-t-primary-500 rounded-full animate-spin"></div>
+        <p class="mt-4 text-secondary-600">Carregando configurações...</p>
       </div>
 
       <template v-else>
         <!-- MERCADO PAGO -->
-        <div class="bg-white rounded shadow-lg p-6">
+        <div class="bg-white rounded shadow-primary p-6">
           <div class="flex items-center gap-3 mb-6">
             <div class="text-4xl">💳</div>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">Mercado Pago</h2>
-              <p class="text-gray-600 text-sm">Configurações de integração de pagamento</p>
+              <h2 class="text-2xl font-bold text-primary-900">Mercado Pago</h2>
+              <p class="text-secondary-600 text-sm">Configurações de integração de pagamento</p>
             </div>
           </div>
 
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Ambiente</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Ambiente</label>
               <select
                 v-model="settings.payment.mp_environment.value"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               >
                 <option value="test">🧪 Teste (Sandbox)</option>
                 <option value="prod">🚀 Produção (Live)</option>
               </select>
-              <p class="text-xs text-gray-500 mt-1">Use "Teste" durante desenvolvimento</p>
+              <p class="text-xs text-secondary-500 mt-1">Use "Teste" durante desenvolvimento</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Public Key (TEST)</label>
+                <label class="block text-sm font-medium text-secondary-700 mb-2">Public Key (TEST)</label>
                 <input
                   v-model="settings.payment.mp_public_key_test.value"
                   type="text"
                   placeholder="TEST-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all font-mono text-sm"
                 />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Access Token (TEST)</label>
+                <label class="block text-sm font-medium text-secondary-700 mb-2">Access Token (TEST)</label>
                 <input
                   v-model="settings.payment.mp_access_token_test.value"
                   type="password"
                   placeholder="TEST-xxxxxxxxxxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all font-mono text-sm"
                 />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Public Key (PRODUÇÃO)</label>
+                <label class="block text-sm font-medium text-secondary-700 mb-2">Public Key (PRODUÇÃO)</label>
                 <input
                   v-model="settings.payment.mp_public_key_prod.value"
                   type="text"
                   placeholder="APP_USR-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all font-mono text-sm"
                 />
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Access Token (PRODUÇÃO)</label>
+                <label class="block text-sm font-medium text-secondary-700 mb-2">Access Token (PRODUÇÃO)</label>
                 <input
                   v-model="settings.payment.mp_access_token_prod.value"
                   type="password"
                   placeholder="APP_USR-xxxxxxxxxxxx-xxxxxxxxxxxx"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all font-mono text-sm"
+                  class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all font-mono text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Taxa da Plataforma (%)</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Taxa da Plataforma (%)</label>
               <div class="flex items-center gap-4">
                 <input
                   v-model.number="settings.payment.platform_fee_percentage.value"
@@ -103,18 +103,18 @@
                   min="0"
                   max="100"
                   step="0.5"
-                  class="w-32 px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                  class="w-32 px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
                 />
-                <span class="text-2xl font-bold text-neutral-900">{{ settings.payment.platform_fee_percentage.value }}%</span>
-                <span class="text-sm text-gray-600">
+                <span class="text-2xl font-bold text-primary-900">{{ settings.payment.platform_fee_percentage.value }}%</span>
+                <span class="text-sm text-secondary-600">
                   Exemplo: Em R$ 100,00 → Plataforma recebe R$ {{ calculateFee(100) }}
                 </span>
               </div>
             </div>
 
-            <div class="bg-blue-50 border-2 border-neutral-300 rounded p-4">
-              <p class="text-sm text-neutral-900 font-medium mb-2">📘 Como obter suas credenciais:</p>
-              <ol class="text-sm text-neutral-900 space-y-1 ml-4 list-decimal">
+            <div class="bg-blue-50 border-2 border-primary-200 rounded p-4">
+              <p class="text-sm text-primary-900 font-medium mb-2">📘 Como obter suas credenciais:</p>
+              <ol class="text-sm text-primary-900 space-y-1 ml-4 list-decimal">
                 <li>Acesse <a href="https://www.mercadopago.com.br/developers/panel/app" target="_blank" class="underline font-medium">https://www.mercadopago.com.br/developers/panel/app</a></li>
                 <li>Crie uma aplicação ou selecione uma existente</li>
                 <li>Copie as credenciais de TEST e PRODUÇÃO</li>
@@ -125,41 +125,41 @@
         </div>
 
         <!-- GERAL -->
-        <div class="bg-white rounded shadow-lg p-6">
+        <div class="bg-white rounded shadow-primary p-6">
           <div class="flex items-center gap-3 mb-6">
             <div class="text-4xl">🏢</div>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">Configurações Gerais</h2>
-              <p class="text-gray-600 text-sm">Informações básicas do site</p>
+              <h2 class="text-2xl font-bold text-primary-900">Configurações Gerais</h2>
+              <p class="text-secondary-600 text-sm">Informações básicas do site</p>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Site</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Nome do Site</label>
               <input
                 v-model="settings.general.site_name.value"
                 type="text"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Email de Contato</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Email de Contato</label>
               <input
                 v-model="settings.general.site_email.value"
                 type="email"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Telefone</label>
               <input
                 v-model="settings.general.site_phone.value"
                 type="tel"
                 placeholder="(11) 98765-4321"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
@@ -168,9 +168,9 @@
                 v-model="maintenanceMode"
                 type="checkbox"
                 id="maintenance"
-                class="w-5 h-5 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
+                class="w-5 h-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
               />
-              <label for="maintenance" class="text-sm font-medium text-gray-700 cursor-pointer">
+              <label for="maintenance" class="text-sm font-medium text-secondary-700 cursor-pointer">
                 🚧 Modo Manutenção (site offline)
               </label>
             </div>
@@ -178,54 +178,54 @@
         </div>
 
         <!-- LIMITES -->
-        <div class="bg-white rounded shadow-lg p-6">
+        <div class="bg-white rounded shadow-primary p-6">
           <div class="flex items-center gap-3 mb-6">
-            <div class="text-4xl"></div>
+            <div class="text-4xl">⚙️</div>
             <div>
-              <h2 class="text-2xl font-bold text-gray-900">Limites do Sistema</h2>
-              <p class="text-gray-600 text-sm">Restrições e quotas</p>
+              <h2 class="text-2xl font-bold text-primary-900">Limites do Sistema</h2>
+              <p class="text-secondary-600 text-sm">Restrições e quotas</p>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Máx. Projetos por Usuário</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Máx. Projetos por Usuário</label>
               <input
                 v-model.number="settings.limits.max_projects_per_user.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Máx. Propostas por Projeto</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Máx. Propostas por Projeto</label>
               <input
                 v-model.number="settings.limits.max_bids_per_project.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Máx. Imagens no Portfólio</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Máx. Imagens no Portfólio</label>
               <input
                 v-model.number="settings.limits.max_portfolio_images.value"
                 type="number"
                 min="1"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Tamanho Máx. Imagem (MB)</label>
+              <label class="block text-sm font-medium text-secondary-700 mb-2">Tamanho Máx. Imagem (MB)</label>
               <input
                 v-model.number="settings.limits.max_image_size_mb.value"
                 type="number"
                 min="1"
                 max="50"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+                class="w-full px-4 py-3 border-2 border-neutral-200 rounded focus:border-primary-300 transition-all"
               />
             </div>
           </div>
@@ -236,14 +236,14 @@
           <button
             @click="saveSettings"
             :disabled="saving"
-            class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            class="flex-1 bg-primary-500 text-white py-4 rounded font-bold text-lg shadow-primary hover:shadow-secondary transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {{ saving ? '⏳ Salvando...' : '💾 Salvar Todas as Configurações' }}
           </button>
         </div>
 
         <!-- Mensagem -->
-        <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+        <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-green-100 text-green-800 border-2 border-green-200' : 'bg-red-100 text-red-800 border-2 border-red-200'">
           {{ message }}
         </div>
       </template>

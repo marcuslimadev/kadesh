@@ -1,62 +1,62 @@
 ﻿<template>
-  <div class="min-h-screen bg-gray-50 py-6">
+  <div class="min-h-screen bg-neutral-50 py-6">
     <div class="max-w-6xl mx-auto px-4 space-y-6">
       <!-- Loading -->
       <div v-if="loading" class="text-center py-12">
         <div class="inline-block w-12 h-12 border-4 border-neutral-300 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-gray-600">Carregando perfil...</p>
+        <p class="mt-4 text-neutral-600">Carregando perfil...</p>
       </div>
 
       <!-- Não encontrado -->
       <div v-else-if="!profile" class="text-center py-12">
         <div class="text-6xl mb-4">😕</div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-2">Fornecedor não encontrado</h2>
-        <router-link to="/projects" class="text-neutral-900 hover:text-neutral-900">
+        <h2 class="text-2xl font-bold text-neutral-900 mb-2">Fornecedor não encontrado</h2>
+        <router-link to="/projects" class="btn btn-outline-primary">
           ← Voltar para projetos
         </router-link>
       </div>
 
       <template v-else>
         <!-- Header do Perfil -->
-        <div class="bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 rounded shadow p-8 text-white">
+        <div class="card card-elevated p-8 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
           <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
             <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center text-5xl flex-shrink-0">
               🔨
             </div>
-            
+
             <div class="flex-1">
               <h1 class="text-3xl md:text-4xl font-bold mb-2">
                 {{ profile.business_name || profile.name }}
               </h1>
-              <p v-if="profile.tagline" class="text-xl text-neutral-900 mb-4">{{ profile.tagline }}</p>
-              
+              <p v-if="profile.tagline" class="text-xl text-white mb-4">{{ profile.tagline }}</p>
+
               <div class="flex flex-wrap gap-4 text-sm">
                 <div class="flex items-center gap-2">
                   <span></span>
                   <span class="font-bold">{{ profile.average_rating || 0 }}</span>
-                  <span class="text-neutral-900">({{ profile.total_reviews || 0 }} avaliações)</span>
+                  <span class="text-white">({{ profile.total_reviews || 0 }} avaliações)</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <span></span>
                   <span class="font-bold">{{ profile.completed_projects || 0 }}</span>
-                  <span class="text-neutral-900">projetos concluídos</span>
+                  <span class="text-white">projetos concluídos</span>
                 </div>
                 <div v-if="profile.years_experience" class="flex items-center gap-2">
                   <span>📅</span>
                   <span class="font-bold">{{ profile.years_experience }}</span>
-                  <span class="text-neutral-900">anos de experiência</span>
+                  <span class="text-white">anos de experiência</span>
                 </div>
               </div>
             </div>
 
             <div class="flex flex-col gap-3">
-              <div v-if="profile.availability_status === 'available'" class="bg-neutral-800 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-if="profile.availability_status === 'available'" class="badge badge-success text-center">
                  Disponível
               </div>
-              <div v-else-if="profile.availability_status === 'busy'" class="bg-neutral-600 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-else-if="profile.availability_status === 'busy'" class="badge badge-warning text-center">
                 ⚠️ Ocupado
               </div>
-              <div v-else class="bg-neutral-600 px-4 py-2 rounded-lg font-bold text-center">
+              <div v-else class="badge badge-error text-center">
                  Indisponível
               </div>
             </div>
@@ -67,19 +67,19 @@
           <!-- Coluna Principal -->
           <div class="md:col-span-2 space-y-6">
             <!-- Sobre -->
-            <div v-if="profile.about" class="bg-white rounded shadow-lg p-6">
-              <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div v-if="profile.about" class="card card-elevated p-6">
+              <h2 class="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
                  Sobre
               </h2>
-              <p class="text-gray-700 whitespace-pre-line">{{ profile.about }}</p>
+              <p class="text-neutral-700 whitespace-pre-line">{{ profile.about }}</p>
             </div>
 
             <!-- Portfólio -->
-            <div v-if="portfolio && portfolio.length > 0" class="bg-white rounded shadow-lg p-6">
-              <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div v-if="portfolio && portfolio.length > 0" class="card card-elevated p-6">
+              <h2 class="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
                  Portfólio ({{ portfolio.length }})
               </h2>
-              
+
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div
                   v-for="item in portfolio"
@@ -87,7 +87,7 @@
                   class="relative group cursor-pointer"
                   @click="openImage(item)"
                 >
-                  <div v-if="item.is_featured" class="absolute top-2 left-2 z-10 bg-neutral-600 text-yellow-900 px-2 py-1 rounded-md text-xs font-bold">
+                  <div v-if="item.is_featured" class="absolute top-2 left-2 z-10 badge badge-secondary">
                     
                   </div>
                   <img
@@ -105,8 +105,8 @@
             </div>
 
             <!-- Avaliações -->
-            <div v-if="reviews && reviews.length > 0" class="bg-white rounded shadow-lg p-6">
-              <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div v-if="reviews && reviews.length > 0" class="card card-elevated p-6">
+              <h2 class="text-xl font-bold text-neutral-900 mb-4 flex items-center gap-2">
                  Avaliações ({{ reviews.length }})
               </h2>
 
@@ -114,21 +114,21 @@
                 <div
                   v-for="review in reviews"
                   :key="review.id"
-                  class="border-2 border-gray-100 rounded p-4"
+                  class="border-2 border-neutral-100 rounded p-4"
                 >
                   <div class="flex items-start justify-between mb-2">
                     <div>
-                      <p class="font-bold text-gray-900">{{ review.reviewer_name }}</p>
-                      <p class="text-sm text-gray-600">{{ review.project_title }}</p>
+                      <p class="font-bold text-neutral-900">{{ review.reviewer_name }}</p>
+                      <p class="text-sm text-neutral-600">{{ review.project_title }}</p>
                     </div>
                     <div class="text-yellow-500 text-xl">
                       {{ ''.repeat(review.rating) }}
                     </div>
                   </div>
 
-                  <p class="text-gray-700 mb-2">{{ review.comment }}</p>
+                  <p class="text-neutral-700 mb-2">{{ review.comment }}</p>
 
-                  <div v-if="review.quality_rating || review.communication_rating || review.deadline_rating" class="flex flex-wrap gap-3 text-sm text-gray-600 mb-2">
+                  <div v-if="review.quality_rating || review.communication_rating || review.deadline_rating" class="flex flex-wrap gap-3 text-sm text-neutral-600 mb-2">
                     <div v-if="review.quality_rating">
                        Qualidade: {{ review.quality_rating }}/5
                     </div>
@@ -141,12 +141,12 @@
                   </div>
 
                   <!-- Resposta do fornecedor -->
-                  <div v-if="review.provider_response" class="bg-purple-50 border-l-4 border-neutral-300 p-3 mt-3">
-                    <p class="font-medium text-neutral-900 text-sm mb-1">Resposta do fornecedor:</p>
-                    <p class="text-neutral-900 text-sm">{{ review.provider_response }}</p>
+                  <div v-if="review.provider_response" class="bg-primary-50 border-l-4 border-primary-300 p-3 mt-3">
+                    <p class="font-medium text-primary-900 text-sm mb-1">Resposta do fornecedor:</p>
+                    <p class="text-primary-900 text-sm">{{ review.provider_response }}</p>
                   </div>
 
-                  <p class="text-xs text-gray-500 mt-2">{{ formatDate(review.created_at) }}</p>
+                  <p class="text-xs text-neutral-500 mt-2">{{ formatDate(review.created_at) }}</p>
                 </div>
               </div>
             </div>
@@ -155,13 +155,13 @@
           <!-- Sidebar -->
           <div class="space-y-6">
             <!-- Especialidades -->
-            <div v-if="profile.specialties && profile.specialties.length > 0" class="bg-white rounded shadow-lg p-6">
-              <h3 class="font-bold text-gray-900 mb-3"> Especialidades</h3>
+            <div v-if="profile.specialties && profile.specialties.length > 0" class="card card-elevated p-6">
+              <h3 class="font-bold text-neutral-900 mb-3"> Especialidades</h3>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="(spec, index) in profile.specialties"
                   :key="index"
-                  class="bg-purple-100 text-neutral-900 px-3 py-1 rounded-full text-sm font-medium"
+                  class="badge badge-primary"
                 >
                   {{ spec }}
                 </span>
@@ -169,41 +169,41 @@
             </div>
 
             <!-- Serviços -->
-            <div v-if="profile.services_offered && profile.services_offered.length > 0" class="bg-white rounded shadow-lg p-6">
-              <h3 class="font-bold text-gray-900 mb-3"> Serviços Oferecidos</h3>
+            <div v-if="profile.services_offered && profile.services_offered.length > 0" class="card card-elevated p-6">
+              <h3 class="font-bold text-neutral-900 mb-3"> Serviços Oferecidos</h3>
               <div class="space-y-2">
                 <div
                   v-for="(service, index) in profile.services_offered"
                   :key="index"
-                  class="flex items-start gap-2 text-sm text-gray-700"
+                  class="flex items-start gap-2 text-sm text-neutral-700"
                 >
-                  <span class="text-neutral-900">✓</span>
+                  <span class="text-primary-500">✓</span>
                   <span>{{ service }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Contato -->
-            <div class="bg-white rounded shadow-lg p-6">
-              <h3 class="font-bold text-gray-900 mb-3">📍 Contato & Localização</h3>
+            <div class="card card-elevated p-6">
+              <h3 class="font-bold text-neutral-900 mb-3">📍 Contato & Localização</h3>
               <div class="space-y-3 text-sm">
                 <div v-if="profile.city || profile.state" class="flex items-center gap-2">
                   <span>📌</span>
-                  <span class="text-gray-700">{{ profile.city }}, {{ profile.state }}</span>
+                  <span class="text-neutral-700">{{ profile.city }}, {{ profile.state }}</span>
                 </div>
                 <div v-if="profile.phone" class="flex items-center gap-2">
                   <span>📞</span>
-                  <a :href="'tel:' + profile.phone" class="text-neutral-900 hover:text-neutral-900">{{ profile.phone }}</a>
+                  <a :href="'tel:' + profile.phone" class="text-primary-600 hover:text-primary-700">{{ profile.phone }}</a>
                 </div>
                 <div v-if="profile.whatsapp" class="flex items-center gap-2">
                   <span>💬</span>
-                  <a :href="'https://wa.me/' + profile.whatsapp.replace(/\D/g, '')" target="_blank" class="text-neutral-900 hover:text-neutral-900">
+                  <a :href="'https://wa.me/' + profile.whatsapp.replace(/\D/g, '')" target="_blank" class="text-primary-600 hover:text-primary-700">
                     WhatsApp
                   </a>
                 </div>
                 <div v-if="profile.website" class="flex items-center gap-2">
                   <span>🌐</span>
-                  <a :href="profile.website" target="_blank" class="text-neutral-900 hover:text-neutral-900 truncate">
+                  <a :href="profile.website" target="_blank" class="text-primary-600 hover:text-primary-700 truncate">
                     {{ profile.website }}
                   </a>
                 </div>

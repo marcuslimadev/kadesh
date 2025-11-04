@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+  <div class="min-h-screen bg-primary-50">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow">
+    <div class="bg-primary-500 text-white shadow-primary">
       <div class="max-w-7xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
@@ -19,51 +19,51 @@
     <div class="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
       <!-- Resumo Financeiro -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-white rounded shadow-lg p-6">
-          <div class="text-sm text-gray-600 font-bold mb-2"> Total Transacionado</div>
-          <div class="text-3xl font-semibold text-neutral-900">R$ {{ formatMoney(summary.total_amount) }}</div>
+        <div class="bg-white rounded shadow-primary p-6">
+          <div class="text-sm text-secondary-600 font-bold mb-2"> Total Transacionado</div>
+          <div class="text-3xl font-semibold text-primary-900">R$ {{ formatMoney(summary.total_amount) }}</div>
         </div>
-        <div class="bg-white rounded shadow-lg p-6">
-          <div class="text-sm text-gray-600 font-bold mb-2">💸 Taxa Plataforma (10%)</div>
-          <div class="text-3xl font-semibold text-neutral-900">R$ {{ formatMoney(summary.platform_fee) }}</div>
+        <div class="bg-white rounded shadow-primary p-6">
+          <div class="text-sm text-secondary-600 font-bold mb-2">💸 Taxa Plataforma (10%)</div>
+          <div class="text-3xl font-semibold text-primary-900">R$ {{ formatMoney(summary.platform_fee) }}</div>
         </div>
-        <div class="bg-white rounded shadow-lg p-6">
-          <div class="text-sm text-gray-600 font-bold mb-2"> Transações</div>
-          <div class="text-3xl font-semibold text-neutral-900">{{ payments.length }}</div>
+        <div class="bg-white rounded shadow-primary p-6">
+          <div class="text-sm text-secondary-600 font-bold mb-2"> Transações</div>
+          <div class="text-3xl font-semibold text-primary-900">{{ payments.length }}</div>
         </div>
-        <div class="bg-white rounded shadow-lg p-6">
-          <div class="text-sm text-gray-600 font-bold mb-2"> Completas</div>
-          <div class="text-3xl font-semibold text-teal-600">{{ summary.completed_count }}</div>
+        <div class="bg-white rounded shadow-primary p-6">
+          <div class="text-sm text-secondary-600 font-bold mb-2"> Completas</div>
+          <div class="text-3xl font-semibold text-green-600">{{ summary.completed_count }}</div>
         </div>
       </div>
 
       <!-- Filtros -->
-      <div class="bg-white rounded shadow-lg p-6">
+      <div class="bg-white rounded shadow-primary p-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">📅 Data Inicial</label>
+            <label class="block text-sm font-bold text-secondary-700 mb-2">📅 Data Inicial</label>
             <input
               v-model="filters.start_date"
               @change="loadPayments"
               type="date"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-neutral-200 rounded focus:border-primary-300 focus:outline-none"
             />
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">📅 Data Final</label>
+            <label class="block text-sm font-bold text-secondary-700 mb-2">📅 Data Final</label>
             <input
               v-model="filters.end_date"
               @change="loadPayments"
               type="date"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-neutral-200 rounded focus:border-primary-300 focus:outline-none"
             />
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2"> Status</label>
+            <label class="block text-sm font-bold text-secondary-700 mb-2"> Status</label>
             <select
               v-model="filters.status"
               @change="loadPayments"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-neutral-200 rounded focus:border-primary-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="pending">Pendente</option>
@@ -75,7 +75,7 @@
           <div class="flex items-end">
             <button
               @click="exportData"
-              class="w-full bg-neutral-800 hover:bg-neutral-800 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
+              class="w-full bg-secondary-500 hover:bg-secondary-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
             >
               📥 Exportar CSV
             </button>
@@ -85,15 +85,15 @@
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
-        <div class="w-16 h-16 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-        <p class="mt-4 text-gray-600 font-bold">Carregando transações...</p>
+        <div class="w-16 h-16 border-8 border-primary-200 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
+        <p class="mt-4 text-secondary-600 font-bold">Carregando transações...</p>
       </div>
 
       <!-- Lista de Transações -->
-      <div v-else class="bg-white rounded shadow-lg overflow-hidden">
+      <div v-else class="bg-white rounded shadow-primary overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full">
-            <thead class="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+            <thead class="bg-primary-500 text-white">
               <tr>
                 <th class="px-6 py-4 text-left text-sm font-bold">ID</th>
                 <th class="px-6 py-4 text-left text-sm font-bold">Data</th>
@@ -105,27 +105,27 @@
                 <th class="px-6 py-4 text-left text-sm font-bold">Método</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
+            <tbody class="divide-y divide-neutral-200">
               <tr
                 v-for="payment in payments"
                 :key="payment.id"
-                class="hover:bg-purple-50 transition-colors"
+                class="hover:bg-primary-50 transition-colors"
               >
-                <td class="px-6 py-4 text-sm font-mono text-gray-600">#{{ payment.id }}</td>
-                <td class="px-6 py-4 text-sm text-gray-900">{{ formatDateTime(payment.created_at) }}</td>
+                <td class="px-6 py-4 text-sm font-mono text-secondary-600">#{{ payment.id }}</td>
+                <td class="px-6 py-4 text-sm text-primary-900">{{ formatDateTime(payment.created_at) }}</td>
                 <td class="px-6 py-4 text-sm">
-                  <router-link :to="`/projects/${payment.project_id}`" class="text-neutral-900 hover:text-neutral-900 font-semibold">
+                  <router-link :to="`/projects/${payment.project_id}`" class="text-primary-600 hover:text-primary-700 font-semibold">
                     {{ payment.project_title || `Projeto #${payment.project_id}` }}
                   </router-link>
                 </td>
                 <td class="px-6 py-4 text-sm">
-                  <div class="font-semibold text-gray-900">{{ payment.user_name }}</div>
-                  <div class="text-gray-500 text-xs">{{ payment.user_email }}</div>
+                  <div class="font-semibold text-primary-900">{{ payment.user_name }}</div>
+                  <div class="text-secondary-500 text-xs">{{ payment.user_email }}</div>
                 </td>
-                <td class="px-6 py-4 text-sm font-bold text-neutral-900">
+                <td class="px-6 py-4 text-sm font-bold text-primary-900">
                   R$ {{ formatMoney(payment.amount) }}
                 </td>
-                <td class="px-6 py-4 text-sm font-bold text-neutral-900">
+                <td class="px-6 py-4 text-sm font-bold text-primary-900">
                   R$ {{ formatMoney(payment.amount * 0.10) }}
                 </td>
                 <td class="px-6 py-4 text-sm">
@@ -133,7 +133,7 @@
                     {{ getStatusLabel(payment.status) }}
                   </span>
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-600">
+                <td class="px-6 py-4 text-sm text-secondary-600">
                   {{ payment.payment_method || 'Mercado Pago' }}
                 </td>
               </tr>
@@ -144,7 +144,7 @@
         <!-- Empty State -->
         <div v-if="payments.length === 0" class="text-center py-20">
           <div class="text-6xl mb-4">💳</div>
-          <p class="text-xl text-gray-600 font-bold">Nenhuma transação encontrada</p>
+          <p class="text-xl text-secondary-600 font-bold">Nenhuma transação encontrada</p>
         </div>
       </div>
     </div>

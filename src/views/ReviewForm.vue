@@ -1,21 +1,21 @@
 ﻿<template>
   <div class="max-w-3xl mx-auto p-4 md:p-6">
-    <div class="bg-neutral-600 p-6 rounded text-white shadow mb-6">
+    <div class="card card-elevated p-6 bg-gradient-to-r from-primary-600 to-secondary-600 text-white mb-6">
       <h1 class="text-2xl md:text-3xl font-bold mb-2"> Avaliar Fornecedor</h1>
       <p class="opacity-90">Compartilhe sua experiência com {{ providerName }}</p>
     </div>
 
-    <div class="bg-white rounded shadow-lg p-6 space-y-6">
+    <div class="card card-elevated p-6 space-y-6">
       <!-- Avaliação Geral -->
       <div>
-        <label class="block text-lg font-bold text-gray-900 mb-3">Avaliação Geral *</label>
+        <label class="block text-lg font-bold text-neutral-900 mb-3">Avaliação Geral *</label>
         <div class="flex gap-2">
           <button
             v-for="star in 5"
             :key="star"
             @click="form.rating = star"
             class="text-5xl transition-all hover:opacity-90"
-            :class="star <= form.rating ? 'text-yellow-400' : 'text-gray-300'"
+            :class="star <= form.rating ? 'text-yellow-400' : 'text-neutral-300'"
           >
             
           </button>
@@ -25,10 +25,10 @@
       <!-- Avaliações Detalhadas -->
       <div class="grid md:grid-cols-3 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"> Qualidade do Trabalho</label>
+          <label class="label"> Qualidade do Trabalho</label>
           <select
             v-model.number="form.quality_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300"
+            class="select select-lg"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Ruim</option>
@@ -40,10 +40,10 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">💬 Comunicação</label>
+          <label class="label">💬 Comunicação</label>
           <select
             v-model.number="form.communication_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300"
+            class="select select-lg"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Ruim</option>
@@ -55,10 +55,10 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2"> Cumprimento de Prazo</label>
+          <label class="label"> Cumprimento de Prazo</label>
           <select
             v-model.number="form.deadline_rating"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300"
+            class="select select-lg"
           >
             <option value="">Selecione...</option>
             <option value="1">1 - Muito Atrasado</option>
@@ -72,24 +72,24 @@
 
       <!-- Comentário -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Seu Comentário</label>
+        <label class="label">Seu Comentário</label>
         <textarea
           v-model="form.comment"
           rows="5"
           placeholder="Conte sobre sua experiência, o que foi bom, o que poderia melhorar..."
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300"
+          class="textarea"
         ></textarea>
       </div>
 
       <!-- Contratar novamente -->
-      <div class="flex items-center gap-3 bg-purple-50 p-4 rounded">
+      <div class="flex items-center gap-3 bg-primary-50 p-4 rounded">
         <input
           v-model="form.would_hire_again"
           type="checkbox"
           id="hire-again"
-          class="w-6 h-6 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
+          class="checkbox"
         />
-        <label for="hire-again" class="text-sm font-medium text-gray-900 cursor-pointer">
+        <label for="hire-again" class="text-sm font-medium text-neutral-900 cursor-pointer">
            Sim, eu contrataria este fornecedor novamente
         </label>
       </div>
@@ -98,20 +98,20 @@
       <div class="flex gap-4">
         <button
           @click="$router.go(-1)"
-          class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded font-bold hover:bg-gray-50"
+          class="btn btn-outline-primary px-6"
         >
           Cancelar
         </button>
         <button
           @click="submitReview"
           :disabled="!form.rating || loading"
-          class="flex-1 bg-neutral-600 text-white py-3 rounded font-bold shadow-lg hover:shadow transition-all disabled:opacity-50"
+          class="btn btn-primary flex-1"
         >
           {{ loading ? '⏳ Enviando...' : ' Enviar Avaliação' }}
         </button>
       </div>
 
-      <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+      <div v-if="message" class="alert" :class="messageType === 'success' ? 'alert-success' : 'alert-error'">
         {{ message }}
       </div>
     </div>

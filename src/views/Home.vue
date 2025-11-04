@@ -1,55 +1,75 @@
 ﻿<template>
-  <div class="bg-light">
+  <div class="min-h-screen bg-neutral-50">
     <!-- Hero Section -->
-    <section class="hero-clear">
-      <div class="container py-5 py-lg-6">
-        <div class="text-center">
+    <section class="relative overflow-hidden bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-20 lg:py-32">
+      <!-- Background Pattern -->
+      <div class="absolute inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(59, 130, 246, 0.3) 1px, transparent 0); background-size: 20px 20px;"></div>
+      </div>
+
+      <div class="container-responsive relative">
+        <div class="text-center max-w-4xl mx-auto">
           <!-- Logo/Badge -->
-          <div class="d-inline-flex align-items-center gap-3 px-4 py-2 mb-4 border border-light-subtle bg-transparent">
-            <span class="fs-5 fw-semibold text-uppercase">KADESH</span>
+          <div class="inline-flex items-center gap-3 px-6 py-3 mb-8 border border-primary-200 bg-white/80 backdrop-blur-sm rounded-full shadow-primary">
+            <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-sm">K</span>
+            </div>
+            <span class="font-bold text-lg text-primary-700">KADESH</span>
           </div>
 
-          <h1 class="hero-title">
-            Ganhe contratos com lances reversos
+          <h1 class="text-5xl lg:text-7xl font-bold text-neutral-900 mb-6 leading-tight">
+            Ganhe contratos com
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+              lances reversos
+            </span>
           </h1>
-          <p class="hero-subtitle">
+
+          <p class="text-xl lg:text-2xl text-neutral-600 mb-10 max-w-2xl mx-auto leading-relaxed">
             Menor preço + reputação. Sistema de leilão profissional para construção civil e serviços.
           </p>
-          
-          <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
-            <button @click="scrollToProjects" class="btn btn-primary btn-lg hero-btn">
-              Ver leilões ativos
+
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <button @click="scrollToProjects" class="btn-primary btn-lg px-8 py-4 text-lg">
+              <span class="flex items-center gap-2">
+                🔍 Ver leilões ativos
+              </span>
             </button>
-            <router-link to="/register" class="btn btn-outline-primary btn-lg hero-btn">
-              Participar agora
+            <router-link to="/register" class="btn-outline-primary btn-lg px-8 py-4 text-lg">
+              <span class="flex items-center gap-2">
+                🚀 Participar agora
+              </span>
             </router-link>
           </div>
 
           <!-- Estatísticas rápidas -->
-          <div class="row g-3 justify-content-center" style="max-width: 48rem; margin: 0 auto;">
-            <div class="col-6 col-lg-3">
-              <div class="stat-card text-center">
-                <div class="h3 fw-bold text-dark mb-0"><span class="stat-icon">+</span>{{ stats.totalProjects }}+</div>
-                <div class="text-dark small fw-medium">Projetos ativos</div>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div class="card card-hover group p-6 text-center">
+              <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">📊</div>
+              <div class="text-3xl font-bold text-primary-600 mb-1">
+                <span class="text-primary-500">+</span>{{ stats.totalProjects }}<span class="text-primary-500">+</span>
               </div>
+              <div class="text-neutral-600 font-medium">Projetos ativos</div>
             </div>
-            <div class="col-6 col-lg-3">
-              <div class="stat-card text-center">
-                <div class="h3 fw-bold text-dark mb-0"><span class="stat-icon">+</span>{{ stats.totalProviders }}+</div>
-                <div class="text-dark small fw-medium">Fornecedores</div>
+
+            <div class="card card-hover group p-6 text-center">
+              <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">👥</div>
+              <div class="text-3xl font-bold text-secondary-600 mb-1">
+                <span class="text-secondary-500">+</span>{{ stats.totalProviders }}<span class="text-secondary-500">+</span>
               </div>
+              <div class="text-neutral-600 font-medium">Fornecedores</div>
             </div>
-            <div class="col-6 col-lg-3">
-              <div class="stat-card text-center">
-                <div class="h3 fw-bold text-dark mb-0">35%</div>
-                <div class="text-dark small fw-medium">Economia média</div>
-              </div>
+
+            <div class="card card-hover group p-6 text-center">
+              <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">💰</div>
+              <div class="text-3xl font-bold text-success-600 mb-1">35%</div>
+              <div class="text-neutral-600 font-medium">Economia média</div>
             </div>
-            <div class="col-6 col-lg-3">
-              <div class="stat-card text-center">
-                <div class="h3 fw-bold text-dark mb-0">24h</div>
-                <div class="text-dark small fw-medium">Tempo médio</div>
-              </div>
+
+            <div class="card card-hover group p-6 text-center">
+              <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">⚡</div>
+              <div class="text-3xl font-bold text-warning-600 mb-1">24h</div>
+              <div class="text-neutral-600 font-medium">Tempo médio</div>
             </div>
           </div>
         </div>
@@ -57,263 +77,325 @@
     </section>
 
     <!-- Leilões Ativos - PÚBLICO (sem login) -->
-    <section ref="projectsSection" class="projects-section">
-      <div class="container">
+    <section ref="projectsSection" class="py-20 bg-white">
+      <div class="container-responsive">
         <!-- Barra de categorias -->
-        <div class="mb-2">
-          <div class="d-flex flex-wrap gap-2 justify-content-center mb-3">
-            <span v-for="cat in categories" :key="cat" class="badge rounded-pill text-bg-light px-3 py-2">{{ cat }}</span>
-          </div>
+        <div class="flex flex-wrap justify-center gap-3 mb-8">
+          <button
+            v-for="cat in categories"
+            :key="cat"
+            @click="selectedCategory = cat"
+            :class="[
+              'badge px-4 py-2 transition-all duration-200 hover:scale-105',
+              selectedCategory === cat ? 'badge-primary' : 'badge-neutral hover:bg-neutral-200'
+            ]"
+          >
+            {{ cat }}
+          </button>
         </div>
-        <div class="text-center mb-4">
-          <h2 class="h1 fw-semibold mb-2">
-             Leilões Ativos
+
+        <div class="text-center mb-12">
+          <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
+            Leilões Ativos
           </h2>
-          <p class="fs-5 text-dark mb-3">
+          <p class="text-xl text-neutral-600 max-w-2xl mx-auto">
             Padrão: 70% preço + 30% reputação
           </p>
-          
-          <!-- Filtros avançados -->
-          <div class="bg-white border p-4 mb-4 mx-auto" style="max-width: 56rem;">
-            <div class="row g-3">
-              <!-- Filtro por categoria -->
-              <div class="col-md-3">
-                <label class="form-label small fw-semibold">Categoria</label>
-                <select v-model="selectedCategory" class="form-select">
-                  <option v-for="category in categories" :key="category" :value="category">
-                    {{ category }}
-                  </option>
-                </select>
-              </div>
+        </div>
 
-              <!-- Filtro por orçamento -->
-              <div class="col-md-3">
-                <label class="form-label small fw-semibold">Orçamento</label>
-                <select v-model="budgetFilter" class="form-select">
-                  <option value="">Todos os valores</option>
-                  <option value="0-1000">Até R$ 1.000</option>
-                  <option value="1000-5000">R$ 1.000 - R$ 5.000</option>
-                  <option value="5000-10000">R$ 5.000 - R$ 10.000</option>
-                  <option value="10000-">Acima de R$ 10.000</option>
-                </select>
-              </div>
-
-              <!-- Filtro por localização -->
-              <div class="col-md-3">
-                <label class="form-label small fw-semibold">Localização</label>
-                <select v-model="locationFilter" class="form-select">
-                  <option value="">Todas as cidades</option>
-                  <option value="SP">São Paulo - SP</option>
-                  <option value="RJ">Rio de Janeiro - RJ</option>
-                  <option value="BH">Belo Horizonte - MG</option>
-                  <option value="DF">Brasília - DF</option>
-                  <option value="RS">Porto Alegre - RS</option>
-                </select>
-              </div>
-
-              <!-- Filtro por urgência -->
-              <div class="col-md-3">
-                <label class="form-label small fw-semibold">Urgência</label>
-                <select v-model="urgencyFilter" class="form-select">
-                  <option value="">Todos os prazos</option>
-                  <option value="urgent">Urgente (< 24h)</option>
-                  <option value="soon">Breve (< 3 dias)</option>
-                  <option value="normal">Normal (> 3 dias)</option>
-                </select>
-              </div>
+        <!-- Filtros avançados -->
+        <div class="card card-elevated p-8 mb-12 max-w-6xl mx-auto">
+          <div class="grid grid-responsive-cols-4 gap-6 mb-6">
+            <!-- Filtro por categoria -->
+            <div>
+              <label class="label">🏷️ Categoria</label>
+              <select v-model="selectedCategory" class="select">
+                <option v-for="category in categories" :key="category" :value="category">
+                  {{ category }}
+                </option>
+              </select>
             </div>
 
-            <!-- Busca por texto -->
-            <div class="mt-3">
-              <input v-model="searchText" type="text" placeholder="Buscar por título, descrição ou habilidades" class="form-control">
+            <!-- Filtro por orçamento -->
+            <div>
+              <label class="label">💰 Orçamento</label>
+              <select v-model="budgetFilter" class="select">
+                <option value="">Todos os valores</option>
+                <option value="0-1000">Até R$ 1.000</option>
+                <option value="1000-5000">R$ 1.000 - R$ 5.000</option>
+                <option value="5000-10000">R$ 5.000 - R$ 10.000</option>
+                <option value="10000-">Acima de R$ 10.000</option>
+              </select>
             </div>
 
-            <!-- Contador de resultados e status de auto-refresh -->
-            <div class="mt-3 d-flex flex-column flex-sm-row align-items-center justify-content-between">
-              <p class="small text-dark mb-2 mb-sm-0">
-                 Mostrando <strong>{{ filteredProjects.length }}</strong> de <strong>{{ projects.length }}</strong> leilões ativos
-              </p>
-              
-              <div class="d-flex align-items-center gap-3">
-                <!-- Ordenação -->
-                <div class="d-flex align-items-center gap-2">
-                  <label class="small text-muted">Ordenar por</label>
-                  <select class="form-select form-select-sm" style="min-width: 180px;">
-                    <option>Placar (maior)</option>
-                    <option>Menor preço</option>
-                    <option>Maior reputação</option>
-                    <option>Menor tempo restante</option>
-                  </select>
-                </div>
-                <!-- Auto refresh toggle -->
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" v-model="autoRefresh" @change="autoRefresh ? startAutoRefresh() : stopAutoRefresh()" id="autoRefreshChk">
-                  <label class="form-check-label" for="autoRefreshChk">
-                    Atualização automática
-                  </label>
-                </div>
-                
-                <!-- Manual refresh button -->
-                <button @click="fetchProjects()" :disabled="loading" class="btn btn-dark btn-sm">
-                  <span v-if="loading">Atualizando…</span>
-                  <span v-else>Atualizar</span>
-                </button>
-                
-                <!-- Last refresh time -->
-                <span class="text-muted small">
-                  Atualizado {{ getLastRefreshTime() }} atrás
-                </span>
+            <!-- Filtro por localização -->
+            <div>
+              <label class="label">📍 Localização</label>
+              <select v-model="locationFilter" class="select">
+                <option value="">Todas as cidades</option>
+                <option value="SP">São Paulo - SP</option>
+                <option value="RJ">Rio de Janeiro - RJ</option>
+                <option value="BH">Belo Horizonte - MG</option>
+                <option value="DF">Brasília - DF</option>
+                <option value="RS">Porto Alegre - RS</option>
+              </select>
+            </div>
+
+            <!-- Filtro por urgência -->
+            <div>
+              <label class="label">⏰ Urgência</label>
+              <select v-model="urgencyFilter" class="select">
+                <option value="">Todos os prazos</option>
+                <option value="urgent">Urgente (&lt; 24h)</option>
+                <option value="soon">Breve (&lt; 3 dias)</option>
+                <option value="normal">Normal (&gt; 3 dias)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Busca por texto -->
+          <div class="mb-6">
+            <input
+              v-model="searchText"
+              type="text"
+              placeholder="🔍 Buscar por título, descrição ou habilidades"
+              class="input input-lg w-full"
+            />
+          </div>
+
+          <!-- Contador de resultados e controles -->
+          <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+            <p class="text-neutral-700 font-medium">
+              Mostrando <strong class="text-primary-600">{{ filteredProjects.length }}</strong> de <strong class="text-primary-600">{{ projects.length }}</strong> leilões ativos
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4">
+              <!-- Ordenação -->
+              <div class="flex items-center gap-2">
+                <label class="text-sm text-neutral-600 font-medium">Ordenar por:</label>
+                <select class="select text-sm min-w-48">
+                  <option>Placar (maior)</option>
+                  <option>Menor preço</option>
+                  <option>Maior reputação</option>
+                  <option>Menor tempo restante</option>
+                </select>
               </div>
+
+              <!-- Auto refresh toggle -->
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  v-model="autoRefresh"
+                  @change="autoRefresh ? startAutoRefresh() : stopAutoRefresh()"
+                  class="checkbox"
+                />
+                <span class="text-sm text-neutral-600 font-medium">Atualização automática</span>
+              </label>
+
+              <!-- Manual refresh button -->
+              <button
+                @click="fetchProjects()"
+                :disabled="loading"
+                class="btn-secondary btn-sm"
+              >
+                <span v-if="loading" class="loading-spinner mr-2"></span>
+                <span v-if="loading">Atualizando…</span>
+                <span v-else>🔄 Atualizar</span>
+              </button>
+
+              <!-- Last refresh time -->
+              <span class="text-sm text-neutral-500">
+                Atualizado {{ getLastRefreshTime() }} atrás
+              </span>
             </div>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="text-center py-4">
-          <div class="spinner-border text-dark" role="status"></div>
-          <p class="mt-3 text-muted">Carregando leilões...</p>
+        <div v-if="loading" class="text-center py-20">
+          <div class="loading-spinner w-12 h-12 mx-auto mb-4"></div>
+          <p class="text-xl font-semibold text-neutral-600">Carregando leilões...</p>
         </div>
 
         <!-- Grid de Projetos -->
-        <div v-else class="row g-3 g-lg-4">
-          <div v-for="project in filteredProjects" :key="project.id" class="col-md-6 col-lg-4">
-            <div class="card h-100 border card-hover">
-              <!-- Imagem do projeto -->
-              <div class="position-relative" style="height: 12rem; background: #f8f9fa; overflow: hidden;">
-                <img v-if="project.image" :src="project.image" :alt="project.title" class="w-100 h-100" style="object-fit: cover;" />
-                <div v-else class="w-100 h-100 d-flex align-items-center justify-content-center text-uppercase small fw-semibold text-dark" style="background: #e9ecef;">
-                  Sem imagem
-                </div>
-                <!-- Badge categoria -->
-                <div class="position-absolute top-0 end-0 m-2">
-                  <span class="badge bg-dark">{{ project.category || 'Obra' }}</span>
+        <div v-else class="grid grid-responsive-cols-3 gap-8">
+          <div
+            v-for="project in filteredProjects"
+            :key="project.id"
+            class="card card-hover group"
+          >
+            <!-- Imagem do projeto -->
+            <div class="relative h-48 bg-neutral-100 overflow-hidden rounded-t-xl">
+              <img
+                v-if="project.image"
+                :src="project.image"
+                :alt="project.title"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <div class="text-center text-neutral-400">
+                  <div class="text-4xl mb-2">🏗️</div>
+                  <div class="text-sm font-medium uppercase">Sem imagem</div>
                 </div>
               </div>
+              <!-- Badge categoria -->
+              <div class="absolute top-3 right-3">
+                <span class="badge badge-neutral">{{ project.category || 'Obra' }}</span>
+              </div>
+            </div>
 
-              <!-- Conteúdo -->
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="badge text-bg-primary">LANCE REVERSO</span>
-                  <span class="badge text-bg-light"><i class="bi bi-star-fill text-warning me-1"></i>{{ project.provider_rating?.toFixed ? project.provider_rating.toFixed(1) : project.provider_rating || '4.5' }}</span>
-                </div>
-                <h3 class="h5 fw-semibold mb-2 line-clamp-2">{{ project.title }}</h3>
-                <p class="small text-dark mb-3 line-clamp-2">
-                  {{ project.description }}
-                </p>
-                
-                <!-- Métricas principais -->
-                <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border">
+            <!-- Conteúdo -->
+            <div class="card-body">
+              <div class="flex justify-between items-start mb-3">
+                <span class="badge badge-primary">LANCE REVERSO</span>
+                <span class="badge badge-neutral flex items-center gap-1">
+                  ⭐ {{ project.provider_rating?.toFixed ? project.provider_rating.toFixed(1) : project.provider_rating || '4.5' }}
+                </span>
+              </div>
+
+              <h3 class="text-xl font-bold text-neutral-900 mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                {{ project.title }}
+              </h3>
+
+              <p class="text-neutral-600 mb-4 line-clamp-2">
+                {{ project.description }}
+              </p>
+
+              <!-- Métricas principais -->
+              <div class="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-4">
+                <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <span class="small text-muted text-uppercase fw-semibold d-block mb-1">Menor lance</span>
-                    <div class="h6 mb-0">
+                    <div class="text-xs text-neutral-500 uppercase font-semibold mb-1">Menor lance</div>
+                    <div class="text-lg font-bold text-success-600">
                       R$ {{ formatCurrency(project.lowest_bid) }}
                     </div>
                   </div>
-                  <div class="text-end">
-                    <span class="small text-muted text-uppercase fw-semibold d-block mb-1">Tempo restante</span>
-                    <CountdownTimer :end-date="project.bidding_ends_at" size="medium" @expired="() => onTimerExpired(project)" @urgent="() => onTimerUrgent(project)" />
+                  <div class="text-right">
+                    <div class="text-xs text-neutral-500 uppercase font-semibold mb-1">Tempo restante</div>
+                    <CountdownTimer
+                      :endTime="project.bidding_ends_at"
+                      size="small"
+                      @expired="() => onTimerExpired(project)"
+                      @urgent="() => onTimerUrgent(project)"
+                    />
                   </div>
                 </div>
-                
-                <!-- Placar dinâmico -->
-                <div class="mb-3">
-                  <div class="small text-muted mb-1">Placar (70% preço + 30% reputação)</div>
-                  <ScoreProgress :bid-amount="project.lowest_bid" :max-budget="project.max_budget" :provider-rating="project.provider_rating" :price-weight="70" :reputation-weight="30" @score-change="(scoreData) => onScoreChange(project, scoreData)" />
-                </div>
-                
-                <!-- Informações extras -->
-                <div class="d-flex justify-content-between align-items-center small text-dark mb-3 fw-semibold">
-                  <span>{{ project.location || 'São Paulo - SP' }}</span>
-                  <span class="badge text-bg-light text-uppercase">{{ project.bids_count || 0 }} lances</span>
-                </div>
-                
-                <!-- Botão de ação -->
-                <button @click="handleBidClick(project)" class="btn btn-primary w-100 text-uppercase fw-semibold">
-                  Dar meu lance
-                </button>
               </div>
+
+              <!-- Placar dinâmico -->
+              <div class="mb-4">
+                <div class="text-sm text-neutral-600 mb-2">Placar (70% preço + 30% reputação)</div>
+                <ScoreProgress
+                  :currentBid="project.lowest_bid"
+                  :maxBudget="project.max_budget"
+                  :providerRating="project.provider_rating"
+                  :priceWeight="70"
+                  :reputationWeight="30"
+                  @scoreChange="(scoreData) => onScoreChange(project, scoreData)"
+                />
+              </div>
+
+              <!-- Informações extras -->
+              <div class="flex justify-between items-center text-sm text-neutral-600 mb-4">
+                <span class="flex items-center gap-1">
+                  📍 {{ project.location || 'São Paulo - SP' }}
+                </span>
+                <span class="badge badge-neutral">
+                  {{ project.bids_count || 0 }} lances
+                </span>
+              </div>
+
+              <!-- Botão de ação -->
+              <button
+                @click="handleBidClick(project)"
+                class="btn-primary w-full group-hover:shadow-lg transition-shadow"
+              >
+                🚀 Dar meu lance
+              </button>
             </div>
           </div>
         </div>
 
         <!-- Empty State -->
-        <div v-if="!loading && filteredProjects.length === 0" class="text-center py-4">
-          <div class="bg-white border p-4 mx-auto" style="max-width: 28rem;">
-            <h3 class="h3 fw-semibold mb-2">Nenhum leilão encontrado</h3>
-            <p class="text-muted mb-3">
+        <div v-if="!loading && filteredProjects.length === 0" class="text-center py-16">
+          <div class="card card-elevated p-8 max-w-lg mx-auto">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-2xl font-bold text-neutral-900 mb-3">Nenhum leilão encontrado</h3>
+            <p class="text-neutral-600 mb-6">
               Ajuste os filtros ou limpe a pesquisa para visualizar novos resultados disponíveis.
             </p>
-            
+
             <!-- Clear filters button -->
-            <button @click="clearAllFilters" class="btn btn-dark btn-sm text-uppercase">
-              Limpar filtros
+            <button @click="clearAllFilters" class="btn-secondary mb-4">
+              🧹 Limpar filtros
             </button>
-            
+
             <!-- Current filter info -->
-            <div v-if="hasActiveFilters" class="mt-3 small text-dark">
-              <p class="fw-medium mb-2">Filtros ativos:</p>
-              <div class="d-flex flex-wrap gap-2 justify-content-center">
-                <span v-if="selectedCategory !== 'Todos'" class="badge text-bg-light text-uppercase">{{ selectedCategory }}</span>
-                <span v-if="budgetFilter" class="badge text-bg-light text-uppercase">{{ getBudgetLabel(budgetFilter) }}</span>
-                <span v-if="locationFilter" class="badge text-bg-light text-uppercase">{{ getLocationLabel(locationFilter) }}</span>
-                <span v-if="urgencyFilter" class="badge text-bg-light text-uppercase">{{ getUrgencyLabel(urgencyFilter) }}</span>
-                <span v-if="searchText" class="badge text-bg-light text-uppercase">"{{ searchText }}"</span>
+            <div v-if="hasActiveFilters" class="text-left">
+              <p class="font-medium text-neutral-700 mb-3">Filtros ativos:</p>
+              <div class="flex flex-wrap gap-2 justify-center">
+                <span v-if="selectedCategory !== 'Todos'" class="badge badge-primary">{{ selectedCategory }}</span>
+                <span v-if="budgetFilter" class="badge badge-primary">{{ getBudgetLabel(budgetFilter) }}</span>
+                <span v-if="locationFilter" class="badge badge-primary">{{ getLocationLabel(locationFilter) }}</span>
+                <span v-if="urgencyFilter" class="badge badge-primary">{{ getUrgencyLabel(urgencyFilter) }}</span>
+                <span v-if="searchText" class="badge badge-primary">"{{ searchText }}"</span>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Call to Action -->
-        <div class="text-center mt-4">
-          <router-link to="/projects" class="btn btn-link fw-semibold">
-            Ver todos os leilões ›
+        <div class="text-center mt-12">
+          <router-link to="/projects" class="btn-ghost text-lg group">
+            <span class="group-hover:underline">Ver todos os leilões</span>
+            <span class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
           </router-link>
         </div>
       </div>
     </section>
 
     <!-- Como Funciona -->
-    <section class="como-funciona-section">
-      <div class="container">
-        <div class="text-center mb-4">
-          <h2 class="h1 fw-semibold mb-2">
-             Como Funciona
+    <section class="py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
+      <div class="container-responsive">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
+            Como Funciona
           </h2>
-          <p class="fs-5 text-dark">
+          <p class="text-xl text-neutral-600 max-w-2xl mx-auto">
             Sistema de leilão reverso que garante os melhores preços e qualidade
           </p>
         </div>
 
-        <div class="row g-4">
+        <div class="grid grid-responsive-cols-3 gap-8">
           <!-- Passo 1 -->
-          <div class="col-md-4 text-center">
-            <div class="d-flex align-items-center justify-content-center bg-dark text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
-              <span class="text-uppercase small fw-semibold">Etapa 1</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-sm font-semibold uppercase">Etapa 1</span>
             </div>
-            <h3 class="h4 fw-semibold mb-2">1. Encontre serviços</h3>
-            <p class="text-dark mb-0">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-4">1. Encontre serviços</h3>
+            <p class="text-neutral-600 leading-relaxed">
               Use filtros por categoria, localização e prazo. Veja reputação e histórico dos fornecedores.
             </p>
           </div>
 
           <!-- Passo 2 -->
-          <div class="col-md-4 text-center">
-            <div class="d-flex align-items-center justify-content-center bg-dark text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
-              <span class="text-uppercase small fw-semibold">Etapa 2</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-sm font-semibold uppercase">Etapa 2</span>
             </div>
-            <h3 class="h4 fw-semibold mb-2">2. Envie sua proposta</h3>
-            <p class="text-dark mb-0">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-4">2. Envie sua proposta</h3>
+            <p class="text-neutral-600 leading-relaxed">
               Lances reversos: ganha o menor preço ponderado por credibilidade. Placar em tempo real.
             </p>
           </div>
 
           <!-- Passo 3 -->
-          <div class="col-md-4 text-center">
-            <div class="d-flex align-items-center justify-content-center bg-secondary text-white mx-auto mb-3" style="width: 5rem; height: 5rem;">
-              <span class="text-uppercase small fw-semibold">Etapa 3</span>
+          <div class="text-center group">
+            <div class="w-20 h-20 bg-secondary-600 text-white rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <span class="text-sm font-semibold uppercase">Etapa 3</span>
             </div>
-            <h3 class="h4 fw-semibold mb-2">3. Execute com segurança</h3>
-            <p class="text-dark mb-0">
+            <h3 class="text-2xl font-bold text-neutral-900 mb-4">3. Execute com segurança</h3>
+            <p class="text-neutral-600 leading-relaxed">
               Escrow, milestones e liberação por aceite garantem segurança mútua para ambas as partes.
             </p>
           </div>
@@ -322,16 +404,17 @@
     </section>
 
     <!-- CTA Final -->
-    <section class="cta-section">
-      <div class="container text-center">
-        <h2 class="h1 fw-semibold mb-3">
-           Pronto para começar seu projeto?
+    <section class="py-20 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
+      <div class="container-responsive text-center">
+        <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+          Pronto para começar seu projeto?
         </h2>
-        <p class="fs-5 text-dark mb-4">
+        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
           Junte-se a milhares de empresas que já economizam com nosso sistema de leilão reverso.
         </p>
-        <router-link to="/register" class="btn btn-light btn-lg text-dark">
-          Criar conta gratuita
+        <router-link to="/register" class="btn-ghost btn-lg group">
+          <span class="group-hover:scale-105 transition-transform inline-block">Criar conta gratuita</span>
+          <span class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
         </router-link>
       </div>
     </section>
@@ -664,68 +747,6 @@ function stopAutoRefresh() {
   }
 }
 </script>
-
-<style scoped>
-.hero-clear {
-  background: #fff;
-  border-bottom: 1px solid #ececec;
-}
-.hero-title {
-  font-size: 2.8rem;
-  font-weight: 700;
-  color: #232323;
-}
-.hero-subtitle {
-  font-size: 1.18rem;
-  color: #757575;
-  margin-bottom: 2.8rem;
-}
-.hero-btn {
-  min-width: 180px;
-}
-.stat-card {
-  background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 4px 28px 0 rgba(33, 37, 41, 0.09);
-  padding: 1.4rem 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 108px;
-  transition: box-shadow .19s;
-}
-.stat-card:hover {
-  box-shadow: 0 8px 32px 0 rgba(0,123,255,.15);
-}
-.stat-icon {
-  font-size: 2.35rem;
-  color: #0275ff;
-  margin-bottom: .5rem;
-}
-.projects-section, .como-funciona-section, .cta-section {
-  background: #fff;
-  border-radius: 2.2rem;
-  box-shadow: 0 2px 24px 0 rgba(33,37,41,.07);
-  padding: 2.7rem 0 2.4rem 0;
-  margin-bottom: 2.3rem;
-}
-.card-hover {
-  transition: box-shadow 0.2s, border-color 0.15s;
-}
-.card-hover:hover {
-  box-shadow: 0 0.65rem 2rem rgba(33, 37, 41, 0.13);
-  border-color: #0d6efd!important;
-}
-.section-divider {
-  height: 2px;
-  background: linear-gradient(90deg, #0d6efd 0%, #6ab0ff 100%);
-  opacity: .08;
-  margin: 2.6rem auto 2.1rem auto;
-  border-radius: 33px;
-  width: 92%;
-}
-</style>
 
 
 

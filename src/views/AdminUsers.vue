@@ -1,7 +1,7 @@
 ﻿<template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+  <div class="min-h-screen bg-primary-50">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white shadow">
+    <div class="bg-primary-500 text-white shadow-primary">
       <div class="max-w-7xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
@@ -18,24 +18,24 @@
 
     <div class="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
       <!-- Filtros e Busca -->
-      <div class="bg-white rounded shadow-lg p-6">
+      <div class="bg-white rounded shadow-primary p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">🔍 Buscar</label>
+            <label class="block text-sm font-bold text-secondary-700 mb-2">🔍 Buscar</label>
             <input
               v-model="filters.search"
               @input="loadUsers"
               type="text"
               placeholder="Nome ou email..."
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-neutral-200 rounded focus:border-primary-300 focus:outline-none"
             />
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2"> Tipo de Usuário</label>
+            <label class="block text-sm font-bold text-secondary-700 mb-2"> Tipo de Usuário</label>
             <select
               v-model="filters.type"
               @change="loadUsers"
-              class="w-full px-4 py-2 border-2 border-gray-300 rounded focus:border-neutral-300 focus:outline-none"
+              class="w-full px-4 py-2 border-2 border-neutral-200 rounded focus:border-primary-300 focus:outline-none"
             >
               <option value="">Todos</option>
               <option value="contractor">Contratantes</option>
@@ -45,16 +45,16 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2"> Estatísticas</label>
-            <div class="text-2xl font-semibold text-neutral-900">{{ users.length }} usuário(s)</div>
+            <label class="block text-sm font-bold text-secondary-700 mb-2"> Estatísticas</label>
+            <div class="text-2xl font-semibold text-primary-900">{{ users.length }} usuário(s)</div>
           </div>
         </div>
       </div>
 
       <!-- Loading -->
       <div v-if="loading" class="text-center py-20">
-        <div class="w-16 h-16 border-8 border-neutral-300 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-        <p class="mt-4 text-gray-600 font-bold">Carregando usuários...</p>
+        <div class="w-16 h-16 border-8 border-primary-200 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
+        <p class="mt-4 text-secondary-600 font-bold">Carregando usuários...</p>
       </div>
 
       <!-- Lista de Usuários -->
@@ -62,26 +62,26 @@
         <div
           v-for="user in users"
           :key="user.id"
-          class="bg-white rounded shadow-lg p-6 hover:shadow transition-shadow"
+          class="bg-white rounded shadow-primary p-6 hover:shadow-secondary transition-shadow"
         >
           <div class="flex flex-col md:flex-row justify-between gap-4">
             <!-- Info do Usuário -->
             <div class="flex-1">
               <div class="flex items-start gap-4">
-                <div class="w-16 h-16 rounded-full bg-neutral-900 flex items-center justify-center text-white text-2xl font-semibold">
+                <div class="w-16 h-16 rounded-full bg-primary-500 flex items-center justify-center text-white text-2xl font-semibold">
                   {{ user.name.charAt(0).toUpperCase() }}
                 </div>
                 <div class="flex-1">
-                  <h3 class="text-xl font-bold text-gray-900">{{ user.name }}</h3>
-                  <p class="text-gray-600">{{ user.email }}</p>
+                  <h3 class="text-xl font-bold text-primary-900">{{ user.name }}</h3>
+                  <p class="text-secondary-600">{{ user.email }}</p>
                   <div class="flex flex-wrap gap-2 mt-2">
                     <span :class="getUserTypeBadge(user.user_type)" class="px-3 py-1 rounded-full text-xs font-bold">
                       {{ getUserTypeLabel(user.user_type) }}
                     </span>
-                    <span v-if="user.email_verified_at" class="bg-neutral-800 text-neutral-900 px-3 py-1 rounded-full text-xs font-bold">
+                    <span v-if="user.email_verified_at" class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">
                       ✓ Verificado
                     </span>
-                    <span v-else class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-xs font-bold">
+                    <span v-else class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-bold">
                       ⚠️ Não verificado
                     </span>
                   </div>
@@ -89,18 +89,18 @@
               </div>
 
               <!-- Estatísticas -->
-              <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
+              <div class="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-neutral-200">
                 <div class="text-center">
-                  <div class="text-2xl font-semibold text-neutral-900">{{ user.projects_count || 0 }}</div>
-                  <div class="text-xs text-gray-600 font-semibold">Projetos</div>
+                  <div class="text-2xl font-semibold text-primary-900">{{ user.projects_count || 0 }}</div>
+                  <div class="text-xs text-secondary-600 font-semibold">Projetos</div>
                 </div>
                 <div class="text-center">
-                  <div class="text-2xl font-semibold text-neutral-900">{{ user.bids_count || 0 }}</div>
-                  <div class="text-xs text-gray-600 font-semibold">Lances</div>
+                  <div class="text-2xl font-semibold text-primary-900">{{ user.bids_count || 0 }}</div>
+                  <div class="text-xs text-secondary-600 font-semibold">Lances</div>
                 </div>
                 <div class="text-center">
                   <div class="text-2xl font-semibold text-yellow-600">{{ (user.average_rating || 0).toFixed(1) }} </div>
-                  <div class="text-xs text-gray-600 font-semibold">Avaliação</div>
+                  <div class="text-xs text-secondary-600 font-semibold">Avaliação</div>
                 </div>
               </div>
             </div>
@@ -109,29 +109,29 @@
             <div class="flex flex-col gap-2 min-w-[200px]">
               <button
                 @click="resetPassword(user.id)"
-                class="bg-neutral-700 hover:bg-neutral-700 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-secondary-500 hover:bg-secondary-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🔑 Resetar Senha
               </button>
               <button
                 @click="toggleStatus(user.id)"
                 :class="user.email_verified_at 
-                  ? 'bg-neutral-600 hover:bg-neutral-600' 
-                  : 'bg-neutral-800 hover:bg-neutral-800'"
+                  ? 'bg-red-500 hover:bg-red-600' 
+                  : 'bg-green-500 hover:bg-green-600'"
                 class="text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
-                {{ user.email_verified_at ? '🚫 Desativar' : ' Ativar' }}
+                {{ user.email_verified_at ? '🚫 Desativar' : '✅ Ativar' }}
               </button>
               <button
                 @click="viewUser(user.id)"
-                class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 👁️ Ver Detalhes
               </button>
               <button
                 v-if="user.user_type !== 'admin'"
                 @click="deleteUser(user.id)"
-                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
+                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded font-bold transition-colors flex items-center justify-center gap-2"
               >
                 🗑️ Remover
               </button>
@@ -142,27 +142,27 @@
         <!-- Empty State -->
         <div v-if="users.length === 0" class="text-center py-20">
           <div class="text-6xl mb-4">👥</div>
-          <p class="text-xl text-gray-600 font-bold">Nenhum usuário encontrado</p>
+          <p class="text-xl text-secondary-600 font-bold">Nenhum usuário encontrado</p>
         </div>
       </div>
     </div>
 
     <!-- Modal de Senha Resetada -->
     <div v-if="resetPasswordModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-lg p-8 max-w-md w-full shadow">
+      <div class="bg-white rounded-lg p-8 max-w-md w-full shadow-primary">
         <div class="text-center">
-          <div class="w-20 h-20 bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-4xl"></span>
+          <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-4xl">✅</span>
           </div>
-          <h3 class="text-2xl font-semibold text-gray-900 mb-2">Senha Resetada!</h3>
-          <p class="text-gray-600 mb-4">A senha temporária do usuário é:</p>
-          <div class="bg-gray-100 p-4 rounded mb-6">
-            <code class="text-2xl font-mono font-bold text-neutral-900">{{ tempPassword }}</code>
+          <h3 class="text-2xl font-semibold text-primary-900 mb-2">Senha Resetada!</h3>
+          <p class="text-secondary-600 mb-4">A senha temporária do usuário é:</p>
+          <div class="bg-neutral-100 p-4 rounded mb-6">
+            <code class="text-2xl font-mono font-bold text-primary-900">{{ tempPassword }}</code>
           </div>
-          <p class="text-sm text-gray-500 mb-6">⚠️ Copie esta senha e envie para o usuário. Ela não será exibida novamente.</p>
+          <p class="text-sm text-secondary-500 mb-6">⚠️ Copie esta senha e envie para o usuário. Ela não será exibida novamente.</p>
           <button
             @click="resetPasswordModal = false"
-            class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded font-bold w-full"
+            class="bg-primary-500 hover:bg-primary-600 text-white px-8 py-3 rounded font-bold w-full"
           >
             Entendi
           </button>

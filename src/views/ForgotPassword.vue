@@ -1,45 +1,69 @@
 ﻿<template>
-  <div class="min-vh-100 bg-light d-flex align-items-center py-4">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-5">
-          <div class="card shadow-sm border-0">
-            <div class="card-body p-4 p-md-5">
-              <div class="text-center mb-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-warning-subtle rounded-circle mb-3" style="width:56px;height:56px;">
-                  <i class="bi bi-unlock fs-4 text-warning"></i>
+  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 flex items-center py-8">
+    <div class="container-responsive">
+      <div class="max-w-md mx-auto">
+        <div class="card card-elevated">
+          <div class="card-body p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+              <div class="w-16 h-16 bg-warning-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span class="text-3xl">🔓</span>
+              </div>
+              <h1 class="text-3xl font-bold text-neutral-900 mb-2">Recuperar senha</h1>
+              <p class="text-neutral-600">Digite seu email para receber instruções</p>
+            </div>
+
+            <!-- Form State -->
+            <div v-if="!success">
+              <form @submit.prevent="submit" class="space-y-6">
+                <div>
+                  <label class="label">Email cadastrado</label>
+                  <input
+                    v-model="email"
+                    type="email"
+                    class="input input-lg"
+                    placeholder="seu@email.com"
+                    required
+                  />
                 </div>
-                <h2 class="h3 fw-semibold mb-1">Recuperar senha</h2>
-                <p class="text-muted mb-0">Digite seu email para receber instruções</p>
-              </div>
 
-              <div v-if="!success">
-                <form @submit.prevent="submit">
-                  <div class="mb-3">
-                    <label class="form-label">Email cadastrado</label>
-                    <input v-model="email" type="email" class="form-control form-control-lg" placeholder="seu@email.com" required />
-                  </div>
-                  <button :disabled="loading" class="btn btn-primary btn-lg w-100">
-                    <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    <span>{{ loading ? 'Enviando...' : 'Enviar link de recuperação' }}</span>
-                  </button>
-                  <div v-if="error" class="alert alert-danger mt-3" role="alert">{{ error }}</div>
-                </form>
-              </div>
+                <button :disabled="loading" class="btn-primary btn-lg w-full group">
+                  <span v-if="loading" class="loading-spinner mr-2"></span>
+                  <span>{{ loading ? 'Enviando...' : 'Enviar link de recuperação' }}</span>
+                  <span v-if="!loading" class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
+                </button>
 
-              <div v-else class="text-center py-2">
-                <div class="d-inline-flex align-items-center justify-content-center bg-success-subtle rounded-circle mb-3" style="width:64px;height:64px;">
-                  <i class="bi bi-check2 fs-3 text-success"></i>
+                <div v-if="error" class="alert alert-danger">
+                  {{ error }}
                 </div>
-                <h3 class="h4 fw-semibold mb-2">Email enviado!</h3>
-                <p class="text-muted mb-4">Verifique sua caixa de entrada em <strong>{{ email }}</strong></p>
-                <router-link to="/login" class="btn btn-primary">Voltar para login</router-link>
-              </div>
+              </form>
+            </div>
 
-              <div class="text-center mt-4">
-                <router-link to="/login" class="small me-2">Já tem conta? Faça login</router-link>
-                <span class="text-muted small">•</span>
-                <router-link to="/register" class="small ms-2">Criar conta</router-link>
+            <!-- Success State -->
+            <div v-else class="text-center">
+              <div class="w-20 h-20 bg-success-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="text-4xl">✅</span>
+              </div>
+              <h2 class="text-2xl font-bold text-neutral-900 mb-4">Email enviado!</h2>
+              <p class="text-neutral-600 mb-6">
+                Verifique sua caixa de entrada em <strong class="text-neutral-900">{{ email }}</strong>
+              </p>
+              <router-link to="/login" class="btn-primary btn-lg group">
+                <span>Voltar para login</span>
+                <span class="ml-2 group-hover:translate-x-1 transition-transform inline-block">→</span>
+              </router-link>
+            </div>
+
+            <!-- Footer Links -->
+            <div class="text-center mt-8 space-y-2">
+              <div class="flex items-center justify-center gap-4 text-sm">
+                <router-link to="/login" class="text-neutral-600 hover:text-neutral-800">
+                  Já tem conta? Faça login
+                </router-link>
+                <span class="text-neutral-400">•</span>
+                <router-link to="/register" class="text-neutral-600 hover:text-neutral-800">
+                  Criar conta
+                </router-link>
               </div>
             </div>
           </div>

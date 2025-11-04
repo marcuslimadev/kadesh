@@ -1,17 +1,17 @@
 ﻿<template>
   <div class="countdown-timer" :class="urgencyClass">
-    <div v-if="isExpired" class="expired-state">
-      <span class="font-bold text-neutral-500 text-sm bg-neutral-100 px-3 py-1 rounded-full">
-        ENCERRADO
+    <div v-if="isExpired" class="text-center">
+      <span class="badge badge-neutral text-sm">
+        ⏰ ENCERRADO
       </span>
     </div>
-    
-    <div v-else class="time-display">
+
+    <div v-else class="text-center">
       <!-- Tempo principal -->
-      <div class="main-time" :class="mainTimeClass">
+      <div class="main-time font-bold transition-all duration-300" :class="mainTimeClass">
         {{ formattedTime }}
       </div>
-      
+
       <!-- Detalhes (opcional) -->
       <div v-if="showDetails && !isUrgent" class="time-details text-xs text-neutral-500 mt-1">
         <span v-if="days > 0">{{ days }}d </span>
@@ -19,9 +19,9 @@
         <span v-if="minutes > 0">{{ minutes }}m </span>
         <span>{{ seconds }}s</span>
       </div>
-      
+
       <!-- Label -->
-      <div v-if="label" class="time-label text-xs text-neutral-500 mt-1">
+      <div v-if="label" class="time-label text-xs text-neutral-500 mt-1 font-medium">
         {{ label }}
       </div>
     </div>
@@ -176,30 +176,6 @@ defineExpose({
 <style scoped>
 .countdown-timer {
   display: inline-block;
-}
-
-.countdown-timer.normal {
-  color: rgb(56 161 105); /* success-600 */
-}
-
-.countdown-timer.urgent {
-  color: rgb(237 137 54); /* warning-600 */
-}
-
-.countdown-timer.critical {
-  color: rgb(229 62 62); /* danger-600 */
-}
-
-.countdown-timer.expired {
-  color: rgb(113 128 150); /* neutral-500 */
-}
-
-.time-display {
-  text-align: center;
-}
-
-.expired-state {
-  text-align: center;
 }
 
 /* Animação para estado crítico */

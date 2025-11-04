@@ -1,32 +1,32 @@
 ﻿<template>
   <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-    <div class="bg-neutral-900 p-6 rounded text-white shadow">
+    <div class="card card-elevated p-6 bg-gradient-to-r from-primary-600 to-secondary-600 text-white">
       <h1 class="text-2xl md:text-3xl font-bold mb-2"> Meu Portfólio</h1>
       <p class="opacity-90">Mostre seus melhores trabalhos e conquiste clientes!</p>
     </div>
 
     <!-- UPLOAD DE IMAGEM -->
-    <div class="bg-white rounded shadow-lg p-6">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">➕ Adicionar Foto</h2>
-      
+    <div class="card card-elevated p-6">
+      <h2 class="text-xl font-bold text-neutral-900 mb-4">➕ Adicionar Foto</h2>
+
       <div class="space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Selecionar Imagem</label>
+          <label class="label">Selecionar Imagem</label>
           <input
             type="file"
             ref="fileInput"
             @change="handleFileSelect"
             accept="image/jpeg,image/png,image/jpg,image/webp"
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+            class="input input-lg"
           />
-          <p class="text-sm text-gray-500 mt-1">JPG, PNG ou WebP - Máximo 5MB</p>
+          <p class="text-sm text-neutral-600 mt-1">JPG, PNG ou WebP - Máximo 5MB</p>
         </div>
 
-        <div v-if="previewUrl" class="relative w-full h-64 rounded overflow-hidden border-2 border-gray-200">
+        <div v-if="previewUrl" class="relative w-full h-64 rounded overflow-hidden border-2 border-neutral-200">
           <img :src="previewUrl" alt="Preview" class="w-full h-full object-cover" />
           <button
             @click="clearPreview"
-            class="absolute top-2 right-2 bg-neutral-600 text-white w-8 h-8 rounded-full hover:bg-neutral-600 transition-all"
+            class="absolute top-2 right-2 bg-neutral-600 text-white w-8 h-8 rounded-full hover:bg-neutral-700 transition-all"
           >
             ✕
           </button>
@@ -34,33 +34,33 @@
 
         <div class="grid md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Título</label>
+            <label class="label">Título</label>
             <input
               v-model="uploadForm.title"
               type="text"
               placeholder="Ex: Reforma Completa - Sala de Estar"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+              class="input input-lg"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Projeto</label>
+            <label class="label">Tipo de Projeto</label>
             <input
               v-model="uploadForm.project_type"
               type="text"
               placeholder="Ex: Residencial, Comercial"
-              class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+              class="input input-lg"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+          <label class="label">Descrição</label>
           <textarea
             v-model="uploadForm.description"
             rows="3"
             placeholder="Descreva o trabalho realizado..."
-            class="w-full px-4 py-3 border-2 border-gray-200 rounded focus:border-neutral-300 transition-all"
+            class="textarea"
           ></textarea>
         </div>
 
@@ -69,9 +69,9 @@
             v-model="uploadForm.is_featured"
             type="checkbox"
             id="featured"
-            class="w-5 h-5 text-neutral-900 border-gray-300 rounded focus:ring-purple-500"
+            class="checkbox"
           />
-          <label for="featured" class="text-sm font-medium text-gray-700 cursor-pointer">
+          <label for="featured" class="text-sm font-medium text-neutral-900 cursor-pointer">
              Destacar esta imagem (aparece primeiro)
           </label>
         </div>
@@ -79,7 +79,7 @@
         <button
           @click="uploadImage"
           :disabled="!selectedFile || uploading"
-          class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-4 rounded font-bold text-lg shadow-lg hover:shadow hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          class="btn btn-primary w-full"
         >
           {{ uploading ? '⏳ Enviando...' : '📤 Enviar Imagem' }}
         </button>
@@ -87,12 +87,12 @@
     </div>
 
     <!-- GALERIA -->
-    <div class="bg-white rounded shadow-lg p-6">
+    <div class="card card-elevated p-6">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold text-gray-800">🖼️ Minhas Fotos ({{ portfolio.length }})</h2>
+        <h2 class="text-xl font-bold text-neutral-900">🖼️ Minhas Fotos ({{ portfolio.length }})</h2>
         <button
           @click="loadPortfolio"
-          class="text-neutral-900 hover:text-neutral-900 font-medium"
+          class="btn btn-outline-primary"
         >
           🔄 Atualizar
         </button>
@@ -100,28 +100,28 @@
 
       <div v-if="loading" class="text-center py-12">
         <div class="inline-block w-12 h-12 border-4 border-neutral-300 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-gray-600">Carregando portfólio...</p>
+        <p class="mt-4 text-neutral-600">Carregando portfólio...</p>
       </div>
 
       <div v-else-if="portfolio.length === 0" class="text-center py-12">
         <div class="text-6xl mb-4"></div>
-        <p class="text-gray-600 text-lg">Nenhuma foto ainda</p>
-        <p class="text-gray-500 text-sm">Adicione fotos dos seus melhores trabalhos!</p>
+        <p class="text-neutral-600 text-lg">Nenhuma foto ainda</p>
+        <p class="text-neutral-500 text-sm">Adicione fotos dos seus melhores trabalhos!</p>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="item in portfolio"
           :key="item.id"
-          class="group relative bg-white rounded overflow-hidden shadow-md hover:shadow transition-all border-2 border-gray-100"
+          class="group relative card card-elevated hover:shadow-primary transition-all border-2 border-neutral-100"
         >
           <!-- Badge Destaque -->
-          <div v-if="item.is_featured" class="absolute top-3 left-3 z-10 bg-neutral-600 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+          <div v-if="item.is_featured" class="absolute top-3 left-3 z-10 bg-secondary-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
              Destaque
           </div>
 
           <!-- Imagem -->
-          <div class="relative w-full h-64 overflow-hidden bg-gray-100">
+          <div class="relative w-full h-64 overflow-hidden bg-neutral-100">
             <img
               :src="getImageUrl(item.file_path)"
               :alt="item.title"
@@ -132,9 +132,9 @@
 
           <!-- Informações -->
           <div class="p-4 space-y-2">
-            <h3 class="font-bold text-gray-800 truncate">{{ item.title || 'Sem título' }}</h3>
-            <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2">{{ item.description }}</p>
-            <div v-if="item.project_type" class="inline-block bg-purple-100 text-neutral-900 px-2 py-1 rounded-md text-xs font-medium">
+            <h3 class="font-bold text-neutral-900 truncate">{{ item.title || 'Sem título' }}</h3>
+            <p v-if="item.description" class="text-sm text-neutral-600 line-clamp-2">{{ item.description }}</p>
+            <div v-if="item.project_type" class="inline-block badge badge-primary">
               {{ item.project_type }}
             </div>
           </div>
@@ -142,7 +142,7 @@
           <!-- Botão Deletar -->
           <button
             @click="deleteImage(item.id)"
-            class="absolute top-3 right-3 bg-neutral-600 text-white w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-neutral-600 flex items-center justify-center"
+            class="absolute top-3 right-3 bg-neutral-600 text-white w-10 h-10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-neutral-700 flex items-center justify-center"
           >
             🗑️
           </button>
@@ -151,7 +151,7 @@
     </div>
 
     <!-- MENSAGENS -->
-    <div v-if="message" class="p-4 rounded" :class="messageType === 'success' ? 'bg-neutral-800 text-neutral-900' : 'bg-neutral-600 text-red-800'">
+    <div v-if="message" class="alert" :class="messageType === 'success' ? 'alert-success' : 'alert-error'">
       {{ message }}
     </div>
   </div>
