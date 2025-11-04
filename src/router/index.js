@@ -16,10 +16,14 @@ import AdminSettings from '../views/AdminSettings.vue';
 import AdminUsers from '../views/AdminUsers.vue';
 import AdminProjects from '../views/AdminProjects.vue';
 import AdminPayments from '../views/AdminPayments.vue';
+import Dashboard from '../views/Dashboard.vue';
+import ContractorDashboard from '../views/ContractorDashboard.vue';
 import api from '../services/api';
 
 const routes = [
   { path: '/', component: Home },
+  { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
+  { path: '/contractor/dashboard', component: ContractorDashboard, meta: { requiresAuth: true } },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/forgot-password', component: ForgotPassword },
