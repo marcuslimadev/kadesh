@@ -11,7 +11,12 @@
           <label for="password" class="block text-sm font-medium text-gray-700">Senha</label>
           <input type="password" id="password" v-model="password" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
         </div>
-        <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+
+        <div v-if="error" class="p-4 text-sm text-red-700 bg-red-100 rounded-lg">
+          {{ error }}
+        </div>
+
+        <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
           Entrar
         </button>
       </form>
@@ -22,22 +27,25 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api'
 
 const email = ref('')
 const password = ref('')
+const error = ref(null)
 const router = useRouter()
 
-function handleLogin() {
-  // Mock login logic, assuming registration has been done
-  const storedUser = JSON.parse(localStorage.getItem('user'))
-
-  if (storedUser && storedUser.email === email.value) {
-    localStorage.setItem('isLoggedIn', 'true')
-    localStorage.setItem('userName', storedUser.name)
-    localStorage.setItem('userType', storedUser.userType)
+async function handleLogin() {
+  error.value = null
+  try {
+    await api.post('/api/login', { email: email.value, password: password.value })
+    // A sessão é criada pelo backend, redirecionar para o dashboard
     router.push('/dashboard')
-  } else {
-    alert('Invalid credentials')
+  } catch (err) {
+    if (err.response && err.response.data) {
+      error.value = err.response.data.message || 'Credenciais inválidas.'
+    } else {
+      error.value = 'Ocorreu um erro. Tente novamente.'
+    }
   }
 }
 </script>

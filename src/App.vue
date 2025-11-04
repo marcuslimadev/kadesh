@@ -243,44 +243,50 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import api from './services/api'
 
-// Reactive state
+// Global reactive state
+const store = reactive({
+  user: null,
+})
+
+// Local component state
 const showUserMenu = ref(false)
 const showMobileMenu = ref(false)
 const showBackToTop = ref(false)
+const router = useRouter()
 
-// Computed properties
-const isLoggedIn = computed(() => {
-  return localStorage.getItem('isLoggedIn') === 'true'
-})
-
-const userName = computed(() => {
-  return localStorage.getItem('userName') || 'Usuário'
-})
-
-const userType = computed(() => {
-  return localStorage.getItem('userType') || ''
-})
-
+// Computed properties from store
+const isLoggedIn = computed(() => !!store.user)
+const userName = computed(() => store.user?.name || 'Usuário')
+const userType = computed(() => store.user?.user_type || '')
 const userInitials = computed(() => {
   const name = userName.value
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : ''
 })
-
 const userTypeLabel = computed(() => {
   const types = {
     contractor: 'Contratante',
     provider: 'Fornecedor',
+    admin: 'Admin',
     both: 'Ambos'
   }
   return types[userType.value] || 'Usuário'
 })
-
 const currentYear = computed(() => new Date().getFullYear())
 
 // Methods
+async function checkAuth() {
+  try {
+    const { data } = await api.get('/api/user')
+    store.user = data.user
+  } catch (error) {
+    store.user = null
+  }
+}
+
 function toggleUserMenu() {
   showUserMenu.value = !showUserMenu.value
 }
@@ -293,18 +299,15 @@ function closeMobileMenu() {
   showMobileMenu.value = false
 }
 
-function handleLogout() {
-  // Clear user data
-  localStorage.removeItem('isLoggedIn')
-  localStorage.removeItem('userName')
-  localStorage.removeItem('userType')
-
-  // Close menus
-  showUserMenu.value = false
-  showMobileMenu.value = false
-
-  // Redirect to home
-  window.location.href = '/'
+async function handleLogout() {
+  try {
+    await api.post('/api/logout')
+  } finally {
+    store.user = null
+    showUserMenu.value = false
+    showMobileMenu.value = false
+    router.push('/')
+  }
 }
 
 function scrollToTop() {
@@ -316,7 +319,6 @@ function handleScroll() {
 }
 
 function handleClickOutside(event) {
-  // Close user menu when clicking outside
   if (!event.target.closest('.nav-item')) {
     showUserMenu.value = false
   }
@@ -324,6 +326,7 @@ function handleClickOutside(event) {
 
 // Lifecycle
 onMounted(() => {
+  checkAuth()
   window.addEventListener('scroll', handleScroll)
   document.addEventListener('click', handleClickOutside)
 })

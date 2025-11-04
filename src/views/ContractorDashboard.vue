@@ -6,8 +6,9 @@
         Nova Proposta
       </router-link>
     </div>
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <!-- Mock data for proposals -->
+    <div v-if="loading" class="text-center">Carregando...</div>
+    <div v-else-if="error" class="text-center text-red-600">{{ error }}</div>
+    <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="proposal in proposals" :key="proposal.id" class="p-4 bg-white rounded-lg shadow-md">
         <h2 class="text-lg font-bold">{{ proposal.title }}</h2>
         <p class="text-gray-600">{{ proposal.description }}</p>
@@ -20,11 +21,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import api from '../services/api'
 
-const proposals = ref([
-  { id: 1, title: 'Reforma de Cozinha', description: 'Reforma completa da cozinha, incluindo troca de azulejos e instalação de novos armários.', status: 'Aberto' },
-  { id: 2, title: 'Pintura de Apartamento', description: 'Pintura de um apartamento de 2 quartos.', status: 'Em andamento' },
-  { id: 3, title: 'Instalação de Ar Condicionado', description: 'Instalação de um ar condicionado split no quarto principal.', status: 'Concluído' },
-])
+const proposals = ref([])
+const loading = ref(true)
+const error = ref(null)
+
+async function fetchProposals() {
+  try {
+    const response = await api.get('/api/projects')
+    // O endpoint GET /api/projects retorna todos os projetos, não apenas do usuário.
+    // O ideal seria um endpoint /api/my-projects, mas vamos filtrar no frontend por enquanto.
+    const userResponse = await api.get('/api/user');
+    if (userResponse.data.user) {
+        const userId = userResponse.data.user.id;
+        proposals.value = response.data.filter(p => p.contractor_id === userId);
+    }
+  } catch (err) {
+    error.value = 'Falha ao carregar as propostas.'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(fetchProposals)
 </script>

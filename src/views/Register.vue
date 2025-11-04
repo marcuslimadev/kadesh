@@ -3,7 +3,6 @@
     <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-lg shadow-md">
       <h2 class="text-2xl font-bold text-center text-gray-900">Criar uma conta</h2>
       <form @submit.prevent="handleRegister" class="space-y-6">
-        <!-- Form fields from before -->
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700">Nome completo</label>
@@ -18,21 +17,16 @@
             <input type="password" id="password" v-model="form.password" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
           </div>
           <div>
-            <label for="document" class="block text-sm font-medium text-gray-700">CPF/CNPJ</label>
-            <input type="text" id="document" v-model="form.document" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            <label for="userType" class="block text-sm font-medium text-gray-700">Eu sou um</label>
+            <select id="userType" v-model="form.type" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+              <option value="contractor">Contratante</option>
+              <option value="provider">Contratado</option>
+            </select>
           </div>
         </div>
 
-        <!-- LGPD Consents -->
-        <div class="space-y-4">
-          <div class="flex items-start">
-            <input id="terms" v-model="form.terms" type="checkbox" required class="w-4 h-4 mt-1 text-indigo-600 border-gray-300 rounded">
-            <label for="terms" class="ml-2 text-sm text-gray-700">Eu li e aceito os <a href="#" class="text-indigo-600 hover:underline">Termos de Uso</a>.</label>
-          </div>
-          <div class="flex items-start">
-            <input id="privacy" v-model="form.privacy" type="checkbox" required class="w-4 h-4 mt-1 text-indigo-600 border-gray-300 rounded">
-            <label for="privacy" class="ml-2 text-sm text-gray-700">Eu li e aceito a <a href="#" class="text-indigo-600 hover:underline">Política de Privacidade</a>.</label>
-          </div>
+        <div v-if="error" class="p-4 text-sm text-red-700 bg-red-100 rounded-lg">
+          {{ error }}
         </div>
 
         <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
@@ -44,27 +38,31 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '../services/api'
 
 const router = useRouter()
 const form = reactive({
   name: '',
   email: '',
   password: '',
-  document: '',
-  terms: false,
-  privacy: false,
+  type: 'contractor',
 })
+const error = ref(null)
 
-function handleRegister() {
-  if (!form.terms || !form.privacy) {
-    alert('Você deve aceitar os termos e a política de privacidade.')
-    return
+async function handleRegister() {
+  error.value = null
+  try {
+    await api.post('/api/register', form)
+    // A sessão é criada pelo backend, então podemos redirecionar
+    router.push('/dashboard')
+  } catch (err) {
+    if (err.response && err.response.data.errors) {
+      error.value = Object.values(err.response.data.errors).flat().join(' ')
+    } else {
+      error.value = 'Ocorreu um erro. Tente novamente.'
+    }
   }
-
-  // Mock registration
-  console.log('User registered:', form)
-  router.push('/dashboard')
 }
 </script>
