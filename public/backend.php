@@ -1040,21 +1040,44 @@ function handleFundMilestone($milestoneId) {
     $stmt->execute([$milestoneId]);
     $milestone = $stmt->fetch();
 
-    // 1. Create a PENDING transaction (this would redirect to a payment gateway)
-    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'deposit', ?, 'pending')");
-    $stmt->execute([$user['id'], $milestone['project_id'], -$milestone['amount']]);
-    $transactionId = $db->lastInsertId();
+    $accessToken = getMercadoPagoAccessToken();
 
-    // 2. SIMULATE payment success (in a real app, a webhook would do this)
-    // For now, we immediately complete it
-    $stmt = $db->prepare("UPDATE transactions SET status = 'completed', gateway_id = 'simulated_' || ? WHERE id = ?");
-    $stmt->execute([$transactionId, $transactionId]);
+    $preferenceData = [
+        'items' => [
+            [
+                'title' => "Financiamento do marco: {$milestone['description']}",
+                'quantity' => 1,
+                'unit_price' => (float)$milestone['amount'],
+                'currency_id' => 'BRL',
+            ]
+        ],
+        'back_urls' => [
+            'success' => 'http://localhost:5173/payment/success',
+            'failure' => 'http://localhost:5173/payment/failure',
+        ],
+        'auto_return' => 'approved',
+        'external_reference' => $milestoneId,
+    ];
 
-    // 3. Update milestone status
-    $stmt = $db->prepare("UPDATE milestones SET status = 'funded' WHERE id = ?");
-    $stmt->execute([$milestoneId]);
+    $ch = curl_init('https://api.mercadopago.com/checkout/preferences');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $accessToken,
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($preferenceData));
+    $response = curl_exec($ch);
+    curl_close($ch);
 
-    echo json_encode(['message' => 'Milestone funded', 'payment_status' => 'completed']);
+    $preference = json_decode($response, true);
+
+    if (isset($preference['init_point'])) {
+        echo json_encode(['checkout_url' => $preference['init_point']]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Falha ao criar preferência de pagamento.']);
+    }
 }
 
 function handleReleaseMilestone($milestoneId) {
@@ -1300,6 +1323,16 @@ function handleGetNotifications() {
 }
 
 
+// ==================== MERCADO PAGO HELPERS ====================
+
+function getMercadoPagoAccessToken() {
+    $db = getDB();
+    // This assumes you have a setting with the key 'mp_access_token_test' or 'mp_access_token_prod'
+    $stmt = $db->query("SELECT setting_value FROM system_settings WHERE setting_key = 'mp_access_token_test'");
+    return $stmt->fetchColumn();
+}
+
+
 // ==================== STUB FUNCTIONS (Provider System) ====================
 // TODO: Implementar sistema completo de fornecedores
 
@@ -1328,22 +1361,59 @@ function handleDeletePortfolio($id) {
     echo json_encode(['error' => 'Delete portfolio not implemented yet']);
 }
 
-// ==================== STUB FUNCTIONS (Payment System) ====================
-// TODO: Implementar sistema de pagamentos Mercado Pago
+// ==================== PAYMENT SYSTEM HANDLERS ====================
 
 function handleCreatePayment($projectId) {
+    // This can be used for direct payments if needed, for now milestones are used.
     http_response_code(501);
-    echo json_encode(['error' => 'Payment creation not implemented yet']);
+    echo json_encode(['error' => 'Direct payment not implemented yet']);
 }
 
 function handleCompleteProject($projectId) {
+    // This would be called by the contractor to mark a project as finished.
+    // Logic to notify the client and finalize the project would go here.
     http_response_code(501);
     echo json_encode(['error' => 'Complete project not implemented yet']);
 }
 
 function handleMercadoPagoWebhook() {
-    http_response_code(501);
-    echo json_encode(['error' => 'Mercado Pago webhook not implemented yet']);
+    $body = file_get_contents('php://input');
+    $notification = json_decode($body, true);
+
+    if (isset($notification['type']) && $notification['type'] === 'payment') {
+        $paymentId = $notification['data']['id'];
+        $accessToken = getMercadoPagoAccessToken();
+
+        $ch = curl_init("https://api.mercadopago.com/v1/payments/{$paymentId}");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $payment = json_decode($response, true);
+
+        if ($payment && $payment['status'] === 'approved') {
+            $milestoneId = $payment['external_reference'];
+
+            $db = getDB();
+            $db->beginTransaction();
+            try {
+                // Update milestone status
+                $stmt = $db->prepare("UPDATE milestones SET status = 'funded' WHERE id = ?");
+                $stmt->execute([$milestoneId]);
+
+                // You might want to create a transaction record here as well
+
+                $db->commit();
+            } catch (Exception $e) {
+                $db->rollBack();
+                error_log("Webhook Error: Failed to update database for payment ID {$paymentId}");
+            }
+        }
+    }
+
+    http_response_code(200);
+    echo json_encode(['status' => 'ok']);
 }
 
 // ==================== STUB FUNCTIONS (Review System) ====================

@@ -33,6 +33,8 @@ const routes = [
   { path: '/project/:id/review', component: ReviewForm, meta: { requiresAuth: true } },
   { path: '/provider/:id/profile', component: ProviderProfile, meta: { requiresAuth: true } },
   { path: '/wallet', component: Wallet, meta: { requiresAuth: true } },
+  { path: '/payment/success', component: PaymentSuccess, meta: { requiresAuth: true } },
+  { path: '/payment/failure', component: PaymentFailure, meta: { requiresAuth: true } },
   { path: '/audit-log', component: AuditLog, meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
