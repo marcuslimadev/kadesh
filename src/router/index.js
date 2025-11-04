@@ -18,12 +18,20 @@ import AdminProjects from '../views/AdminProjects.vue';
 import AdminPayments from '../views/AdminPayments.vue';
 import Dashboard from '../views/Dashboard.vue';
 import ContractorDashboard from '../views/ContractorDashboard.vue';
+import ProviderDashboard from '../views/ProviderDashboard.vue';
+import ProjectBid from '../views/ProjectBid.vue';
 import api from '../services/api';
 
 const routes = [
   { path: '/', component: Home },
   { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } },
   { path: '/contractor/dashboard', component: ContractorDashboard, meta: { requiresAuth: true } },
+  { path: '/provider/dashboard', component: ProviderDashboard, meta: { requiresAuth: true } },
+  { path: '/projects/:id', component: ProjectBid, meta: { requiresAuth: true } },
+  { path: '/project/:id/tracking', component: ProjectTracking, meta: { requiresAuth: true } },
+  { path: '/project/:id/dispute', component: Dispute, meta: { requiresAuth: true } },
+  { path: '/wallet', component: Wallet, meta: { requiresAuth: true } },
+  { path: '/audit-log', component: AuditLog, meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/forgot-password', component: ForgotPassword },
