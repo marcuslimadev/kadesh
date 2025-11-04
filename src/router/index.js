@@ -30,6 +30,8 @@ const routes = [
   { path: '/projects/:id', component: ProjectBid, meta: { requiresAuth: true } },
   { path: '/project/:id/tracking', component: ProjectTracking, meta: { requiresAuth: true } },
   { path: '/project/:id/dispute', component: Dispute, meta: { requiresAuth: true } },
+  { path: '/project/:id/review', component: ReviewForm, meta: { requiresAuth: true } },
+  { path: '/provider/:id/profile', component: ProviderProfile, meta: { requiresAuth: true } },
   { path: '/wallet', component: Wallet, meta: { requiresAuth: true } },
   { path: '/audit-log', component: AuditLog, meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/login', component: Login },

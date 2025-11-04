@@ -303,6 +303,28 @@ try {
         exit;
     }
 
+    // REVIEW ROUTES
+    if ($path === '/api/reviews' && $method === 'POST') {
+        handleCreateReview();
+        exit;
+    }
+
+    if (preg_match('#^/api/users/(\d+)/reviews$#', $path, $matches) && $method === 'GET') {
+        handleGetUserReviews($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/users/(\d+)$#', $path, $matches) && $method === 'GET') {
+        handleGetUserPublicProfile($matches[1]);
+        exit;
+    }
+
+    // NOTIFICATION ROUTES
+    if ($path === '/api/notifications' && $method === 'GET') {
+        handleGetNotifications();
+        exit;
+    }
+
     // WALLET ROUTES
     if ($path === '/api/wallet/balance' && $method === 'GET') {
         handleGetWalletBalance();
@@ -894,6 +916,14 @@ function handleCreateBid() {
 
     logProjectEvent($input['project_id'], 'bid_placed', "Lance de R$ {$input['amount']} feito por {$user['name']}.");
     
+    // Notify project owner
+    $stmt = $db->prepare('SELECT contractor_id FROM projects WHERE id = ?');
+    $stmt->execute([$input['project_id']]);
+    $projectOwner = $stmt->fetch();
+    if ($projectOwner) {
+        createNotification($projectOwner['contractor_id'], "Novo lance de R$ {$input['amount']} no seu projeto.", "/projects/{$input['project_id']}");
+    }
+
     echo json_encode(['id' => $bidId, 'message' => 'Bid created']);
 }
 
@@ -976,10 +1006,18 @@ function handleDashboardStats() {
 function handleCreateMilestone($projectId) {
     $input = json_decode(file_get_contents('php://input'), true);
     $user = getCurrentUser();
-
-    // TODO: Validate project ownership
-
     $db = getDB();
+
+    $stmt = $db->prepare('SELECT contractor_id FROM projects WHERE id = ?');
+    $stmt->execute([$projectId]);
+    $project = $stmt->fetch();
+
+    if (!$project || $project['contractor_id'] != $user['id']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Acesso negado.']);
+        return;
+    }
+
     $stmt = $db->prepare('INSERT INTO milestones (project_id, description, amount) VALUES (?, ?, ?)');
     $stmt->execute([$projectId, $input['description'], $input['amount']]);
 
@@ -998,54 +1036,76 @@ function handleFundMilestone($milestoneId) {
     $user = getCurrentUser();
     $db = getDB();
 
-    // In a real scenario, this would involve a payment gateway. Here we simulate it.
-    // 1. Get milestone details
     $stmt = $db->prepare('SELECT * FROM milestones WHERE id = ?');
     $stmt->execute([$milestoneId]);
     $milestone = $stmt->fetch();
 
-    // 2. Debit from user's wallet (or charge a card)
-    $stmt = $db->prepare('UPDATE users SET wallet_balance = wallet_balance - ? WHERE id = ?');
-    $stmt->execute([$milestone['amount'], $user['id']]);
-
-    // 3. Create a transaction record
-    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'deposit', ?, 'completed')");
+    // 1. Create a PENDING transaction (this would redirect to a payment gateway)
+    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'deposit', ?, 'pending')");
     $stmt->execute([$user['id'], $milestone['project_id'], -$milestone['amount']]);
+    $transactionId = $db->lastInsertId();
 
-    // 4. Update milestone status
+    // 2. SIMULATE payment success (in a real app, a webhook would do this)
+    // For now, we immediately complete it
+    $stmt = $db->prepare("UPDATE transactions SET status = 'completed', gateway_id = 'simulated_' || ? WHERE id = ?");
+    $stmt->execute([$transactionId, $transactionId]);
+
+    // 3. Update milestone status
     $stmt = $db->prepare("UPDATE milestones SET status = 'funded' WHERE id = ?");
     $stmt->execute([$milestoneId]);
 
-    echo json_encode(['message' => 'Milestone funded']);
+    echo json_encode(['message' => 'Milestone funded', 'payment_status' => 'completed']);
 }
 
 function handleReleaseMilestone($milestoneId) {
     $user = getCurrentUser(); // This should be the contractor
     $db = getDB();
 
-    // 1. Get milestone details
     $stmt = $db->prepare('SELECT * FROM milestones WHERE id = ?');
     $stmt->execute([$milestoneId]);
     $milestone = $stmt->fetch();
 
-    // TODO: Validate project ownership for the user releasing the funds
+    $stmt = $db->prepare('SELECT contractor_id FROM projects WHERE id = ?');
+    $stmt->execute([$milestone['project_id']]);
+    $project = $stmt->fetch();
 
-    // 2. Find the provider (winner of the bid)
-    $stmt = $db->prepare('SELECT u.id FROM users u JOIN bids b ON u.id = b.user_id JOIN projects p ON b.id = p.winner_bid_id WHERE p.id = ?');
+    if (!$project || $project['contractor_id'] != $user['id']) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Acesso negado.']);
+        return;
+    }
+
+    $stmt = $db->prepare('SELECT u.id as provider_id FROM users u JOIN bids b ON u.id = b.user_id JOIN projects p ON b.id = p.winner_bid_id WHERE p.id = ?');
     $stmt->execute([$milestone['project_id']]);
     $provider = $stmt->fetch();
 
-    // 3. Credit the provider's wallet
-    $stmt = $db->prepare('UPDATE users SET wallet_balance = wallet_balance + ? WHERE id = ?');
-    $stmt->execute([$milestone['amount'], $provider['id']]);
+    // Use a transaction to ensure atomicity
+    $db->beginTransaction();
+    try {
+        // 1. Credit provider's wallet
+        $stmt = $db->prepare('UPDATE users SET wallet_balance = wallet_balance + ? WHERE id = ?');
+        $stmt->execute([$milestone['amount'], $provider['provider_id']]);
 
-    // 4. Create transaction records
-    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'milestone_release', ?, 'completed')");
-    $stmt->execute([$provider['id'], $milestone['project_id'], $milestone['amount']]);
+        // 2. Create transaction record for the provider (credit)
+        $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'milestone_release', ?, 'completed')");
+        $stmt->execute([$provider['provider_id'], $milestone['project_id'], $milestone['amount']]);
 
-    // 5. Update milestone status
-    $stmt = $db->prepare("UPDATE milestones SET status = 'released', release_date = NOW() WHERE id = ?");
-    $stmt->execute([$milestoneId]);
+        // 3. (Optional) Create a transaction record for the contractor (debit from escrow, not wallet)
+        // This is more for accounting and not directly affecting wallet_balance
+        $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'escrow_debit', ?, 'completed')");
+        $stmt->execute([$user['id'], $milestone['project_id'], -$milestone['amount']]);
+
+        // 4. Update milestone status
+        $stmt = $db->prepare("UPDATE milestones SET status = 'released', release_date = NOW() WHERE id = ?");
+        $stmt->execute([$milestoneId]);
+
+        $db->commit();
+    } catch (Exception $e) {
+        $db->rollBack();
+        http_response_code(500);
+        echo json_encode(['error' => 'Falha na transação.']);
+        return;
+    }
 
     logProjectEvent($milestone['project_id'], 'milestone_released', "Marco '{$milestone['description']}' liberado.");
 
@@ -1168,6 +1228,75 @@ function handleKycUpload() {
         http_response_code(500);
         echo json_encode(['error' => 'Falha ao salvar o arquivo.']);
     }
+}
+
+
+// ==================== REVIEW HANDLERS ====================
+
+function handleCreateReview() {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $reviewer = getCurrentUser();
+    $db = getDB();
+
+    // 1. Insert the review
+    $stmt = $db->prepare('INSERT INTO reviews (project_id, reviewer_user_id, reviewed_user_id, rating, comment) VALUES (?, ?, ?, ?, ?)');
+    $stmt->execute([$input['project_id'], $reviewer['id'], $input['reviewed_user_id'], $input['rating'], $input['comment']]);
+    $reviewId = $db->lastInsertId();
+
+    // 2. Recalculate and update the reviewed user's rating
+    $stmt = $db->prepare('SELECT AVG(rating) as avg_rating, COUNT(*) as total_ratings FROM reviews WHERE reviewed_user_id = ?');
+    $stmt->execute([$input['reviewed_user_id']]);
+    $stats = $stmt->fetch();
+
+    $stmt = $db->prepare('UPDATE users SET rating = ?, total_ratings = ? WHERE id = ?');
+    $stmt->execute([$stats['avg_rating'], $stats['total_ratings'], $input['reviewed_user_id']]);
+
+    echo json_encode(['id' => $reviewId, 'message' => 'Review created']);
+}
+
+function handleGetUserReviews($userId) {
+    $db = getDB();
+    $stmt = $db->prepare('SELECT r.*, u.name as reviewer_name FROM reviews r JOIN users u ON r.reviewer_user_id = u.id WHERE r.reviewed_user_id = ? ORDER BY r.created_at DESC');
+    $stmt->execute([$userId]);
+
+    echo json_encode($stmt->fetchAll());
+}
+
+
+// ==================== USER PROFILE HANDLER ====================
+
+function handleGetUserPublicProfile($userId) {
+    $db = getDB();
+    $stmt = $db->prepare('SELECT id, name, user_type, bio, skills, rating, total_ratings, created_at FROM users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch();
+
+    if (!$user) {
+        http_response_code(404);
+        echo json_encode(['error' => 'User not found']);
+        return;
+    }
+
+    echo json_encode($user);
+}
+
+
+// ==================== NOTIFICATION HANDLERS ====================
+
+function createNotification($userId, $message, $link = null) {
+    $db = getDB();
+    $stmt = $db->prepare('INSERT INTO notifications (user_id, message, link) VALUES (?, ?, ?)');
+    $stmt->execute([$userId, $message, $link]);
+}
+
+function handleGetNotifications() {
+    $user = getCurrentUser();
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC');
+    $stmt->execute([$user['id']]);
+
+    echo json_encode($stmt->fetchAll());
 }
 
 
