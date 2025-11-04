@@ -253,6 +253,66 @@ try {
         handleConfirmWinner($matches[1]);
         exit;
     }
+
+    // MILESTONE ROUTES
+    if (preg_match('#^/api/projects/(\d+)/milestones$#', $path, $matches) && $method === 'POST') {
+        handleCreateMilestone($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/projects/(\d+)/milestones$#', $path, $matches) && $method === 'GET') {
+        handleGetMilestones($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/milestones/(\d+)/fund$#', $path, $matches) && $method === 'POST') {
+        handleFundMilestone($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/milestones/(\d+)/release$#', $path, $matches) && $method === 'POST') {
+        handleReleaseMilestone($matches[1]);
+        exit;
+    }
+
+    // DISPUTE ROUTES
+    if (preg_match('#^/api/projects/(\d+)/disputes$#', $path, $matches) && $method === 'POST') {
+        handleOpenDispute($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/disputes/(\d+)$#', $path, $matches) && $method === 'GET') {
+        handleGetDispute($matches[1]);
+        exit;
+    }
+
+    if (preg_match('#^/api/disputes/(\d+)/messages$#', $path, $matches) && $method === 'POST') {
+        handlePostDisputeMessage($matches[1]);
+        exit;
+    }
+
+    // TIMELINE ROUTE
+    if (preg_match('#^/api/projects/(\d+)/timeline$#', $path, $matches) && $method === 'GET') {
+        handleGetProjectTimeline($matches[1]);
+        exit;
+    }
+
+    // KYC UPLOAD ROUTE
+    if ($path === '/api/kyc-upload' && $method === 'POST') {
+        handleKycUpload();
+        exit;
+    }
+
+    // WALLET ROUTES
+    if ($path === '/api/wallet/balance' && $method === 'GET') {
+        handleGetWalletBalance();
+        exit;
+    }
+
+    if ($path === '/api/wallet/transactions' && $method === 'GET') {
+        handleGetWalletTransactions();
+        exit;
+    }
     
     if ($path === '/api/dashboard/stats' && $method === 'GET') {
         handleDashboardStats();
@@ -651,6 +711,12 @@ function handleGetProjects() {
     }
 }
 
+function logProjectEvent($projectId, $eventType, $description) {
+    $db = getDB();
+    $stmt = $db->prepare('INSERT INTO project_events (project_id, event_type, description) VALUES (?, ?, ?)');
+    $stmt->execute([$projectId, $eventType, $description]);
+}
+
 function handleCreateProject() {
     $input = json_decode(file_get_contents('php://input'), true);
     $user = getCurrentUser();
@@ -689,6 +755,8 @@ function handleCreateProject() {
         
         $projectId = $db->lastInsertId();
         
+        logProjectEvent($projectId, 'project_created', "Projeto criado por {$user['name']}.");
+
         // Return created project
         $stmt = $db->prepare('SELECT * FROM projects WHERE id = ?');
         $stmt->execute([$projectId]);
@@ -822,8 +890,11 @@ function handleCreateBid() {
         $input['proposal'] ?? '',
         'pending'
     ]);
+    $bidId = $db->lastInsertId();
+
+    logProjectEvent($input['project_id'], 'bid_placed', "Lance de R$ {$input['amount']} feito por {$user['name']}.");
     
-    echo json_encode(['id' => $db->lastInsertId(), 'message' => 'Bid created']);
+    echo json_encode(['id' => $bidId, 'message' => 'Bid created']);
 }
 
 function handleConfirmWinner($projectId) {
@@ -899,6 +970,206 @@ function handleDashboardStats() {
         ]);
     }
 }
+
+// ==================== MILESTONE & ESCROW HANDLERS ====================
+
+function handleCreateMilestone($projectId) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $user = getCurrentUser();
+
+    // TODO: Validate project ownership
+
+    $db = getDB();
+    $stmt = $db->prepare('INSERT INTO milestones (project_id, description, amount) VALUES (?, ?, ?)');
+    $stmt->execute([$projectId, $input['description'], $input['amount']]);
+
+    echo json_encode(['id' => $db->lastInsertId(), 'message' => 'Milestone created']);
+}
+
+function handleGetMilestones($projectId) {
+    $db = getDB();
+    $stmt = $db->prepare('SELECT * FROM milestones WHERE project_id = ? ORDER BY created_at ASC');
+    $stmt->execute([$projectId]);
+
+    echo json_encode($stmt->fetchAll());
+}
+
+function handleFundMilestone($milestoneId) {
+    $user = getCurrentUser();
+    $db = getDB();
+
+    // In a real scenario, this would involve a payment gateway. Here we simulate it.
+    // 1. Get milestone details
+    $stmt = $db->prepare('SELECT * FROM milestones WHERE id = ?');
+    $stmt->execute([$milestoneId]);
+    $milestone = $stmt->fetch();
+
+    // 2. Debit from user's wallet (or charge a card)
+    $stmt = $db->prepare('UPDATE users SET wallet_balance = wallet_balance - ? WHERE id = ?');
+    $stmt->execute([$milestone['amount'], $user['id']]);
+
+    // 3. Create a transaction record
+    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'deposit', ?, 'completed')");
+    $stmt->execute([$user['id'], $milestone['project_id'], -$milestone['amount']]);
+
+    // 4. Update milestone status
+    $stmt = $db->prepare("UPDATE milestones SET status = 'funded' WHERE id = ?");
+    $stmt->execute([$milestoneId]);
+
+    echo json_encode(['message' => 'Milestone funded']);
+}
+
+function handleReleaseMilestone($milestoneId) {
+    $user = getCurrentUser(); // This should be the contractor
+    $db = getDB();
+
+    // 1. Get milestone details
+    $stmt = $db->prepare('SELECT * FROM milestones WHERE id = ?');
+    $stmt->execute([$milestoneId]);
+    $milestone = $stmt->fetch();
+
+    // TODO: Validate project ownership for the user releasing the funds
+
+    // 2. Find the provider (winner of the bid)
+    $stmt = $db->prepare('SELECT u.id FROM users u JOIN bids b ON u.id = b.user_id JOIN projects p ON b.id = p.winner_bid_id WHERE p.id = ?');
+    $stmt->execute([$milestone['project_id']]);
+    $provider = $stmt->fetch();
+
+    // 3. Credit the provider's wallet
+    $stmt = $db->prepare('UPDATE users SET wallet_balance = wallet_balance + ? WHERE id = ?');
+    $stmt->execute([$milestone['amount'], $provider['id']]);
+
+    // 4. Create transaction records
+    $stmt = $db->prepare("INSERT INTO transactions (user_id, project_id, type, amount, status) VALUES (?, ?, 'milestone_release', ?, 'completed')");
+    $stmt->execute([$provider['id'], $milestone['project_id'], $milestone['amount']]);
+
+    // 5. Update milestone status
+    $stmt = $db->prepare("UPDATE milestones SET status = 'released', release_date = NOW() WHERE id = ?");
+    $stmt->execute([$milestoneId]);
+
+    logProjectEvent($milestone['project_id'], 'milestone_released', "Marco '{$milestone['description']}' liberado.");
+
+    echo json_encode(['message' => 'Milestone released']);
+}
+
+// ==================== TIMELINE HANDLER ====================
+
+function handleGetProjectTimeline($projectId) {
+    $db = getDB();
+    $stmt = $db->prepare('SELECT * FROM project_events WHERE project_id = ? ORDER BY created_at ASC');
+    $stmt->execute([$projectId]);
+
+    echo json_encode($stmt->fetchAll());
+}
+
+// ==================== WALLET HANDLERS ====================
+
+function handleGetWalletBalance() {
+    $user = getCurrentUser();
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT wallet_balance FROM users WHERE id = ?');
+    $stmt->execute([$user['id']]);
+    $balance = $stmt->fetchColumn();
+
+    echo json_encode(['balance' => (float)$balance]);
+}
+
+function handleGetWalletTransactions() {
+    $user = getCurrentUser();
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC');
+    $stmt->execute([$user['id']]);
+
+    echo json_encode($stmt->fetchAll());
+}
+
+
+// ==================== DISPUTE HANDLERS ====================
+
+function handleOpenDispute($projectId) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $user = getCurrentUser();
+    $db = getDB();
+
+    // 1. Create the dispute
+    $stmt = $db->prepare('INSERT INTO disputes (project_id, opened_by_user_id, reason) VALUES (?, ?, ?)');
+    $stmt->execute([$projectId, $user['id'], $input['reason']]);
+    $disputeId = $db->lastInsertId();
+
+    // 2. Freeze milestones
+    $stmt = $db->prepare("UPDATE milestones SET status = 'disputed' WHERE project_id = ? AND status = 'funded'");
+    $stmt->execute([$projectId]);
+
+    echo json_encode(['id' => $disputeId, 'message' => 'Dispute opened']);
+}
+
+function handleGetDispute($disputeId) {
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT * FROM disputes WHERE id = ?');
+    $stmt->execute([$disputeId]);
+    $dispute = $stmt->fetch();
+
+    $stmt = $db->prepare('SELECT dm.*, u.name as user_name FROM dispute_messages dm JOIN users u ON dm.user_id = u.id WHERE dispute_id = ? ORDER BY created_at ASC');
+    $stmt->execute([$disputeId]);
+    $messages = $stmt->fetchAll();
+
+    echo json_encode(['dispute' => $dispute, 'messages' => $messages]);
+}
+
+function handlePostDisputeMessage($disputeId) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $user = getCurrentUser();
+    $db = getDB();
+
+    $stmt = $db->prepare('INSERT INTO dispute_messages (dispute_id, user_id, message) VALUES (?, ?, ?)');
+    $stmt->execute([$disputeId, $user['id'], $input['message']]);
+
+    echo json_encode(['id' => $db->lastInsertId(), 'message' => 'Message posted']);
+}
+
+
+// ==================== KYC UPLOAD HANDLER ====================
+
+function handleKycUpload() {
+    $user = getCurrentUser();
+    if (!isset($_FILES['document'])) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Nenhum arquivo enviado.']);
+        return;
+    }
+
+    $file = $_FILES['document'];
+
+    // Security Validations
+    $allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!in_array($file['type'], $allowedTypes)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Tipo de arquivo inválido. Apenas JPG, PNG e PDF são permitidos.']);
+        return;
+    }
+
+    $maxSize = 5 * 1024 * 1024; // 5 MB
+    if ($file['size'] > $maxSize) {
+        http_response_code(400);
+        echo json_encode(['error' => 'O arquivo excede o tamanho máximo de 5MB.']);
+        return;
+    }
+
+    $uploadDir = __DIR__ . '/uploads/';
+    $fileName = uniqid() . '-' . basename($file['name']);
+    $targetPath = $uploadDir . $fileName;
+
+    if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+        echo json_encode(['message' => 'Upload bem-sucedido', 'path' => '/uploads/' . $fileName]);
+    } else {
+        http_response_code(500);
+        echo json_encode(['error' => 'Falha ao salvar o arquivo.']);
+    }
+}
+
 
 // ==================== STUB FUNCTIONS (Provider System) ====================
 // TODO: Implementar sistema completo de fornecedores

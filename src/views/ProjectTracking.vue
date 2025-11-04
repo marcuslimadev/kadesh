@@ -1,28 +1,43 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4">Acompanhamento do Projeto</h1>
-    <div class="p-8 bg-white rounded-lg shadow-md">
-      <h2 class="text-xl font-bold mb-4">Timeline de Eventos</h2>
-      <div class="space-y-6">
-        <div v-for="event in timeline" :key="event.id" class="flex items-start">
-          <div class="flex items-center justify-center w-8 h-8 rounded-full" :class="event.color">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" v-html="event.icon"></svg>
-          </div>
-          <div class="ml-4">
-            <div class="font-bold">{{ event.title }}</div>
-            <div class="text-sm text-gray-600">{{ event.date }}</div>
+  <div class="container mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Main Content: Milestones -->
+    <div class="md:col-span-2">
+      <h1 class="text-2xl font-bold mb-4">Acompanhamento do Projeto</h1>
+      <div class="p-8 bg-white rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-4">Marcos (Milestones)</h2>
+        <div v-if="loading.milestones">Carregando...</div>
+        <div v-else class="space-y-4">
+          <div v-for="milestone in milestones" :key="milestone.id" class="p-4 border border-gray-200 rounded-md">
+            <!-- Milestone details -->
           </div>
         </div>
-      </div>
 
-      <!-- Milestones Section -->
-      <div class="mt-8">
-        <h2 class="text-xl font-bold mb-4">Marcos (Milestones)</h2>
-        <div class="space-y-4">
-          <div v-for="milestone in milestones" :key="milestone.id" class="p-4 border border-gray-200 rounded-md">
-            <div class="flex justify-between items-center">
-              <div class="font-bold">{{ milestone.title }}</div>
-              <div :class="milestone.status === 'Pago' ? 'text-green-600' : 'text-yellow-600'">{{ milestone.status }}</div>
+        <!-- Add Milestone Form -->
+        <div class="mt-8">
+          <h2 class="text-xl font-bold mb-4">Adicionar Novo Marco</h2>
+          <form @submit.prevent="addMilestone" class="flex gap-4">
+            <input type="text" v-model="newMilestone.description" placeholder="Descrição" required class="flex-grow px-3 py-2 border rounded-md">
+            <input type="number" v-model.number="newMilestone.amount" placeholder="Valor" required class="w-32 px-3 py-2 border rounded-md">
+            <button type="submit" class="px-4 py-2 text-white bg-indigo-600 rounded-md">Adicionar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar: Timeline -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">Timeline de Eventos</h2>
+      <div class="p-8 bg-white rounded-lg shadow-md">
+        <div v-if="loading.timeline">Carregando...</div>
+        <div v-else class="space-y-6">
+          <div v-for="event in timeline" :key="event.id" class="flex items-start">
+            <div class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
+              <!-- Icon placeholder -->
+            </div>
+            <div class="ml-4">
+              <div class="font-bold">{{ event.event_type }}</div>
+              <p class="text-sm text-gray-600">{{ event.description }}</p>
+              <div class="text-xs text-gray-400">{{ new Date(event.created_at).toLocaleString() }}</div>
             </div>
           </div>
         </div>
@@ -32,17 +47,47 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import api from '../services/api'
 
-const timeline = ref([
-  { id: 1, title: 'Proposta Criada', date: '2023-10-01', color: 'bg-blue-500', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />' },
-  { id: 2, title: 'Leilão Iniciado', date: '2023-10-01', color: 'bg-yellow-500', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />' },
-  { id: 3, title: 'Vencedor Escolhido', date: '2023-10-05', color: 'bg-green-500', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />' },
-  { id: 4, title: 'Pagamento em Escrow', date: '2023-10-06', color: 'bg-indigo-500', icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />' },
-])
+const route = useRoute()
+const milestones = ref([])
+const timeline = ref([])
+const loading = reactive({ milestones: true, timeline: true })
 
-const milestones = ref([
-  { id: 1, title: 'Marco 1: Fundação', status: 'Pago' },
-  { id: 2, title: 'Marco 2: Estrutura', status: 'Pendente' },
-])
+const newMilestone = reactive({ description: '', amount: 0 })
+
+async function fetchMilestones() {
+  loading.milestones = true
+  try {
+    const response = await api.get(`/api/projects/${route.params.id}/milestones`)
+    milestones.value = response.data
+  } finally {
+    loading.milestones = false
+  }
+}
+
+async function fetchTimeline() {
+  loading.timeline = true
+  try {
+    const response = await api.get(`/api/projects/${route.params.id}/timeline`)
+    timeline.value = response.data
+  } finally {
+    loading.timeline = false
+  }
+}
+
+onMounted(() => {
+  fetchMilestones()
+  fetchTimeline()
+})
+
+async function addMilestone() {
+  await api.post(`/api/projects/${route.params.id}/milestones`, newMilestone)
+  fetchMilestones()
+  fetchTimeline() // Refresh timeline as well
+  newMilestone.description = ''
+  newMilestone.amount = 0
+}
 </script>
