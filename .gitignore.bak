@@ -1,0 +1,115 @@
+# Ambiente# Ambiente*.log
+
+.env
+
+.env.*.env.DS_Store
+
+!.env.example
+
+.env.backup.env.*.env
+
+.env.production
+
+!.env.cpanel.env.backup
+
+# Node.js
+
+node_modules/.env.production
+
+npm-debug.log
+
+yarn-error.log# Node.js.phpactor.json
+
+package-lock.json
+
+node_modules/.phpunit.result.cache
+
+# Logs
+
+*.logfrontend/node_modules//.fleet
+
+error.log
+
+npm-debug.log/.idea
+
+# OS
+
+.DS_Storeyarn-error.log/.nova
+
+Thumbs.db
+
+/.phpunit.cache
+
+# IDEs
+
+.vscode/# Build/.vscode
+
+.idea/
+
+*.sublime-*frontend/dist//.zed
+
+.phpactor.json
+
+.phpunit.result.cache/auth.json
+
+/.fleet
+
+/.nova# Logs/node_modules
+
+/.phpunit.cache
+
+/.zed*.log/public/build
+
+
+
+# PHPerror.log/public/hot
+
+/auth.json
+
+/vendor/public/storage
+
+
+
+# Laravel# OS/storage/*.key
+
+/public/hot
+
+/public/storage.DS_Store/storage/pail
+
+/storage/*.key
+
+/storage/pailThumbs.db/vendor
+
+Homestead.json
+
+Homestead.yamlHomestead.json
+
+
+
+# Build - COMENTADO PARA INCLUIR NO GIT (cPanel precisa dos arquivos compilados)# IDEHomestead.yaml
+
+# /public/build
+
+.vscode/Thumbs.db
+
+# Arquivos temporários de desenvolvimento
+
+*.php.bak.idea/
+
+*.sql.bak*.sublime-*
+
+check-admin.php.phpactor.json
+
+create-admin.php
+
+setup-*.php# Temporários
+
+update-*.php*.tmp
+
+test-*.php*.temp
+
+*.cache
+.phpunit.cache
+
+# Sessões PHP
+/tmp/sess_*
