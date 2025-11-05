@@ -1,0 +1,42 @@
+<div class="container">
+    <h2 id="project-title"></h2>
+    <p id="project-description"></p>
+    <p><strong>Budget:</strong> <span id="project-budget"></span></p>
+
+    <div id="project-management-area">
+        <!-- Project management actions for owner/winner -->
+    </div>
+
+    <hr>
+    <h3>Milestones</h3>
+    <div id="milestone-list">
+        <!-- Milestones will be loaded here -->
+    </div>
+
+    <div id="create-milestone-area">
+        <!-- Form to create milestones -->
+    </div>
+
+
+    <hr>
+    <h3>Bids</h3>
+    <div id="bid-list">
+        <!-- Bids will be loaded here -->
+    </div>
+
+    <div id="bid-form-area">
+      <hr>
+      <h3>Place a Bid</h3>
+      <form id="bid-form">
+          <div class="mb-3">
+              <label for="bid-amount" class="form-label">Amount</label>
+              <input type="number" class="form-control" id="bid-amount" required>
+          </div>
+          <div class="mb-3">
+              <label for="bid-proposal" class="form-label">Proposal</label>
+              <textarea class="form-control" id="bid-proposal" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Bid</button>
+      </form>
+    </div>
+</div>
