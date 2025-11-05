@@ -1,67 +1,130 @@
-# Ambiente# Ambiente*.log
+# Ambiente# Ambiente# Ambiente*.log
 
 .env
 
-.env.*.env.DS_Store
+.env.*.env
 
 !.env.example
 
-.env.backup.env.*.env
+.env.backup.env.*.env.DS_Store
 
 .env.production
 
-!.env.cpanel.env.backup
+!.env.cpanel!.env.example
 
-# Node.js
 
-node_modules/.env.production
 
-npm-debug.log
+# Node.js.env.backup.env.*.env
 
-yarn-error.log# Node.js.phpactor.json
+node_modules/
 
-package-lock.json
+npm-debug.log.env.production
 
-node_modules/.phpunit.result.cache
+yarn-error.log
 
-# Logs
+package-lock.json!.env.cpanel.env.backup
 
-*.logfrontend/node_modules//.fleet
 
-error.log
 
-npm-debug.log/.idea
+# Logs# Node.js
 
-# OS
+*.log
 
-.DS_Storeyarn-error.log/.nova
+error.lognode_modules/.env.production
 
-Thumbs.db
 
-/.phpunit.cache
 
-# IDEs
+# OSnpm-debug.log
 
-.vscode/# Build/.vscode
+.DS_Store
 
-.idea/
+Thumbs.dbyarn-error.log# Node.js.phpactor.json
 
-*.sublime-*frontend/dist//.zed
 
-.phpactor.json
 
-.phpunit.result.cache/auth.json
+# IDEspackage-lock.json
+
+.vscode/
+
+.idea/node_modules/.phpunit.result.cache
+
+*.sublime-*
+
+.phpactor.json# Logs
 
 /.fleet
 
-/.nova# Logs/node_modules
+/.nova*.logfrontend/node_modules//.fleet
+
+/.zed
+
+error.log
+
+# PHP
+
+.phpunit.result.cachenpm-debug.log/.idea
 
 /.phpunit.cache
 
-/.zed*.log/public/build
+/auth.json# OS
+
+/vendor
+
+.DS_Storeyarn-error.log/.nova
+
+# Laravel
+
+/storage/*.keyThumbs.db
+
+/storage/pail
+
+/public/hot/.phpunit.cache
+
+/public/storage
+
+Homestead.json# IDEs
+
+Homestead.yaml
+
+.vscode/# Build/.vscode
+
+# Build - COMENTADO PARA INCLUIR NO GIT (cPanel precisa dos arquivos compilados)
+
+# /public/build.idea/
 
 
 
+# Arquivos temporários de desenvolvimento*.sublime-*frontend/dist//.zed
+
+*.php.bak
+
+*.sql.bak.phpactor.json
+
+check-admin.php
+
+create-admin.php.phpunit.result.cache/auth.json
+
+setup-*.php
+
+update-*.php/.fleet
+
+test-*.php
+
+/.nova# Logs/node_modules
+
+# Temporários
+
+*.tmp/.phpunit.cache
+
+*.temp
+
+*.cache/.zed*.log/public/build
+
+
+
+# Sessões PHP
+
+/tmp/sess_*
 # PHPerror.log/public/hot
 
 /auth.json
