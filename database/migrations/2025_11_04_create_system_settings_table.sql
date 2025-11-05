@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS `system_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `system_settings` (`setting_key`, `setting_value`, `setting_category`) VALUES
-('mp_access_token_test', 'YOUR_TEST_ACCESS_TOKEN', 'payment')
+('mp_access_token_test', 'YOUR_TEST_ACCESS_TOKEN', 'payment'),
+('mp_webhook_secret_key_test', 'YOUR_TEST_WEBHOOK_SECRET', 'payment')
 ON DUPLICATE KEY UPDATE `setting_key` = `setting_key`;
