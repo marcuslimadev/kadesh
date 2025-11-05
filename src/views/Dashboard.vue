@@ -1,58 +1,41 @@
 <template>
   <div class="container mx-auto p-4">
-    <div v-if="user" class="p-8 bg-white rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold">Dashboard</h1>
-      <p class="mb-4">Bem-vindo, {{ user.name }}!</p>
+    <div v-if="user">
+      <h1 class="text-3xl font-bold mb-2">Bem-vindo, {{ user.name }}!</h1>
+      <p class="text-gray-600 mb-8">Escolha como você quer começar.</p>
 
-      <div class="space-y-4">
-        <div>
-          <label for="role" class="block text-sm font-medium text-gray-700">Seu perfil atual:</label>
-          <select id="role" v-model="selectedRole" class="w-full max-w-xs px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            <option value="contractor">Contratante</option>
-            <option value="provider">Contratado</option>
-          </select>
-        </div>
-        <button @click="switchRole" class="px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
-          Mudar Perfil
-        </button>
-      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Contractor Panel -->
+        <router-link to="/contractor/dashboard" class="block p-8 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 class="text-2xl font-bold">Sou Contratante</h2>
+          <p class="mt-2 text-gray-600">Crie e gerencie seus projetos, encontre os melhores profissionais.</p>
+        </router-link>
 
-      <div class="mt-6">
-        <router-link :to="dashboardLink" class="text-indigo-600 hover:underline">Ir para o painel de {{ selectedRole === 'contractor' ? 'Contratante' : 'Contratado' }}</router-link>
+        <!-- Provider Panel -->
+        <router-link to="/provider/dashboard" class="block p-8 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 class="text-2xl font-bold">Sou Fornecedor</h2>
+          <p class="mt-2 text-gray-600">Encontre projetos, envie suas propostas e gerencie seus trabalhos.</p>
+        </router-link>
       </div>
+    </div>
+    <div v-else class="text-center">
+      <p>Carregando...</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import api from '../services/api'
 
 const user = ref(null)
-const selectedRole = ref('')
-const router = useRouter()
 
-onMounted(() => {
-  const storedUser = localStorage.getItem('user')
-  if (storedUser) {
-    user.value = JSON.parse(storedUser)
-    selectedRole.value = user.value.userType
+onMounted(async () => {
+  try {
+    const { data } = await api.get('/api/user')
+    user.value = data
+  } catch {
+    // Handle error
   }
 })
-
-const dashboardLink = computed(() => {
-  return selectedRole.value === 'contractor' ? '/contractor/dashboard' : '/provider/dashboard'
-})
-
-function switchRole() {
-  if (user.value) {
-    // Update user role in localStorage
-    user.value.userType = selectedRole.value
-    localStorage.setItem('user', JSON.stringify(user.value))
-    localStorage.setItem('userType', selectedRole.value)
-
-    // Navigate to the corresponding dashboard
-    router.push(dashboardLink.value)
-  }
-}
 </script>

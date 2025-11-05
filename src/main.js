@@ -3,7 +3,8 @@ import App from './App.vue';
 import api from './services/api';
 import router from './router';
 
-// Importar Tailwind CSS
+// Importar Design System e Tailwind
+import './design-system.css';
 import './styles.css';
 
 const app = createApp(App);
