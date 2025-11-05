@@ -20,6 +20,12 @@ import Dashboard from '../views/Dashboard.vue';
 import ContractorDashboard from '../views/ContractorDashboard.vue';
 import ProviderDashboard from '../views/ProviderDashboard.vue';
 import ProjectBid from '../views/ProjectBid.vue';
+import ProjectTracking from '../views/ProjectTracking.vue';
+import Dispute from '../views/Dispute.vue';
+import Wallet from '../views/Wallet.vue';
+import PaymentSuccess from '../views/PaymentSuccess.vue';
+import PaymentFailure from '../views/PaymentFailure.vue';
+import AuditLog from '../views/AuditLog.vue';
 import api from '../services/api';
 
 const routes = [
