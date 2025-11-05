@@ -41,7 +41,7 @@
         </div>
         <div v-else class="mt-4 border-t pt-4">
           <router-link to="/dashboard" class="block py-2 text-gray-700" @click="closeMobileMenu">Dashboard</router-link>
-          <button @click="handleLogout" class="block w-full text-left mt-2 py-2 text-red-600" @click="closeMobileMenu">Sair</button>
+          <button @click="handleLogoutAndClose" class="block w-full text-left mt-2 py-2 text-red-600">Sair</button>
         </div>
       </div>
     </div>
@@ -84,5 +84,10 @@ async function handleLogout() {
   await api.post('/api/logout')
   store.value.user = null
   router.push('/')
+}
+
+function handleLogoutAndClose() {
+  handleLogout()
+  closeMobileMenu()
 }
 </script>
