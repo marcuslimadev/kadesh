@@ -1,3 +1,4 @@
 <?php
-// Redirecionar tudo para public/index.php
-require __DIR__ . '/public/index.php';
+// Redirecionar para o frontend jQuery/Bulma
+header('Location: /kadesh/public/jquery-frontend/index.html');
+exit;
