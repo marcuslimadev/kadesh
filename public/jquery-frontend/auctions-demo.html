@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Leilões - Kadesh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/kadesh/assets/images/favicon.png">
+    
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            padding-top: 52px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .auction-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        @media screen and (min-width: 1024px) {
+            .auction-cards-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .auction-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar is-fixed-top is-white" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="/kadesh/assets/images/logo-kaddesh.svg" alt="Kadesh" height="40">
+                <span class="ml-2 has-text-weight-bold is-size-5">Kadesh</span>
+            </a>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="#create-project">
+                            <span class="icon"><i class="fas fa-plus"></i></span>
+                            <span>Criar Projeto</span>
+                        </a>
+                        <a class="button is-light" href="#dashboard">
+                            <span class="icon"><i class="fas fa-user"></i></span>
+                            <span>Minha Conta</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero is-medium">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-white">
+                    Leilões Reversos de Serviços
+                </h1>
+                <p class="subtitle is-4 has-text-white-bis">
+                    Menor preço + melhor reputação = contrato garantido
+                </p>
+                <div class="buttons is-centered mt-5">
+                    <button class="button is-white is-medium">
+                        <span class="icon"><i class="fas fa-search"></i></span>
+                        <span>Buscar Projetos</span>
+                    </button>
+                    <button class="button is-light is-medium" onclick="scrollToAuctions()">
+                        <span class="icon"><i class="fas fa-gavel"></i></span>
+                        <span>Ver Leilões</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Bar -->
+    <div id="categories-bar-container"></div>
+
+    <!-- Main Content -->
+    <section class="section" id="auctions-section">
+        <div class="container">
+            <!-- Controles -->
+            <div class="level mb-5">
+                <div class="level-left">
+                    <div class="level-item">
+                        <div>
+                            <h2 class="title is-3 mb-1">Leilões Ativos</h2>
+                            <p class="subtitle is-6 has-text-grey">
+                                Padrão: <strong>70% preço</strong> + <strong>30% reputação</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="level-right">
+                    <div class="level-item">
+                        <div class="field has-addons">
+                            <p class="control">
+                                <span class="select">
+                                    <select id="sort-select">
+                                        <option value="score">Maior Placar</option>
+                                        <option value="price">Menor Preço</option>
+                                        <option value="rating">Maior Reputação</option>
+                                        <option value="time">Menos Tempo</option>
+                                    </select>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="auction-cards-grid" id="auction-cards-grid">
+                <!-- Cards serão inseridos aqui via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Bid Modal Container -->
+    <div id="bid-modal-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/kadesh/jquery-frontend/assets/js/countdown-bulma.js"></script>
+    <script src="/kadesh/jquery-frontend/assets/js/score-calculator-bulma.js"></script>
+    <script src="/kadesh/jquery-frontend/assets/js/auction-sorter-bulma.js"></script>
+    <script src="/kadesh/jquery-frontend/assets/js/auction-cards-bulma.js"></script>
+    <script src="/kadesh/jquery-frontend/assets/js/bid-modal-bulma.js"></script>
+    
+    <script>
+        // Carregar componentes
+        $(document).ready(function() {
+            // Carregar barra de categorias
+            $('#categories-bar-container').load('/kadesh/jquery-frontend/components/categories-bar-bulma.html');
+            
+            // Carregar modal de lance
+            $('#bid-modal-container').load('/kadesh/jquery-frontend/components/bid-modal-bulma.html', function() {
+                // Inicializar modal após carregar
+                window.bidModal = new BidModal('#bid-modal');
+            });
+            
+            // Inicializar cards de leilão
+            setTimeout(function() {
+                window.auctionCards = new AuctionCards('#auction-cards-grid', {
+                    autoLoad: true,
+                    autoRefresh: 30000,
+                    sortSelectId: '#sort-select'
+                });
+            }, 500);
+        });
+        
+        // Helper para scroll suave
+        function scrollToAuctions() {
+            document.getElementById('auctions-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+        
+        // Navbar burger toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

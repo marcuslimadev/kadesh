@@ -1,0 +1,205 @@
+<!-- Barra de Categorias de Serviços -->
+<div class="categories-bar">
+  <div class="container">
+    <div class="categories-scroll">
+      <a href="#" class="category-item" data-category="obras">
+        <span class="icon has-text-danger">
+          <i class="fas fa-helmet-safety fa-2x"></i>
+        </span>
+        <span class="category-label">Obras & Reformas</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="pintura">
+        <span class="icon has-text-info">
+          <i class="fas fa-brush fa-2x"></i>
+        </span>
+        <span class="category-label">Pintura</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="eletrica">
+        <span class="icon has-text-warning">
+          <i class="fas fa-bolt fa-2x"></i>
+        </span>
+        <span class="category-label">Elétrica</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="hidraulica">
+        <span class="icon has-text-link">
+          <i class="fas fa-droplet fa-2x"></i>
+        </span>
+        <span class="category-label">Hidráulica</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="impermeabilizacao">
+        <span class="icon has-text-primary">
+          <i class="fas fa-water fa-2x"></i>
+        </span>
+        <span class="category-label">Impermeabilização</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="hvac">
+        <span class="icon has-text-info-dark">
+          <i class="fas fa-snowflake fa-2x"></i>
+        </span>
+        <span class="category-label">HVAC</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="drywall">
+        <span class="icon has-text-grey">
+          <i class="fas fa-house-chimney-crack fa-2x"></i>
+        </span>
+        <span class="category-label">Drywall</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="solar">
+        <span class="icon has-text-warning-dark">
+          <i class="fas fa-solar-panel fa-2x"></i>
+        </span>
+        <span class="category-label">Energia Solar</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="alvenaria">
+        <span class="icon has-text-danger-dark">
+          <i class="fas fa-trowel-bricks fa-2x"></i>
+        </span>
+        <span class="category-label">Alvenaria</span>
+      </a>
+      
+      <a href="#" class="category-item" data-category="telhado">
+        <span class="icon has-text-success-dark">
+          <i class="fas fa-tents fa-2x"></i>
+        </span>
+        <span class="category-label">Telhados</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+.categories-bar {
+  background: white;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 1rem 0;
+  position: sticky;
+  top: 52px;
+  z-index: 20;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.categories-scroll {
+  display: flex;
+  gap: 2rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}
+
+.categories-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.categories-scroll::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.categories-scroll::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 3px;
+}
+
+.categories-scroll::-webkit-scrollbar-thumb:hover {
+  background: #b0b0b0;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  color: #4a4a4a;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.category-item:hover {
+  background: #f5f5f9;
+  transform: translateY(-2px);
+}
+
+.category-item.is-active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.category-item.is-active .icon {
+  color: white !important;
+}
+
+.category-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media screen and (max-width: 768px) {
+  .categories-bar {
+    padding: 0.75rem 0;
+  }
+  
+  .categories-scroll {
+    gap: 1rem;
+  }
+  
+  .category-item {
+    min-width: 80px;
+    padding: 0.5rem;
+  }
+  
+  .category-item .icon {
+    font-size: 1.5rem !important;
+  }
+  
+  .category-label {
+    font-size: 0.75rem;
+  }
+}
+</style>
+
+<script>
+// Funcionalidade da barra de categorias
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryItems = document.querySelectorAll('.category-item');
+  
+  categoryItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Remove active de todos
+      categoryItems.forEach(i => i.classList.remove('is-active'));
+      
+      // Adiciona active no clicado
+      this.classList.add('is-active');
+      
+      // Filtrar leilões por categoria
+      const category = this.dataset.category;
+      
+      if (window.auctionCards) {
+        window.auctionCards.load({ category });
+      }
+      
+      // Disparar evento
+      const event = new CustomEvent('category-changed', {
+        detail: { category }
+      });
+      document.dispatchEvent(event);
+    });
+  });
+});
+</script>
