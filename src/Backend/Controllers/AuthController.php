@@ -5,7 +5,15 @@ use App\Backend\Models\User;
 
 class AuthController {
     public function register() {
-        $input = json_decode(file_get_contents('php://input'), true);
+        global $_POST_JSON;
+        $input = $_POST_JSON;
+
+        // Validar dados de entrada
+        if (!$input || !isset($input['name']) || !isset($input['email']) || !isset($input['password'])) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Dados incompletos. Nome, email e senha são obrigatórios.']);
+            return;
+        }
 
         if (User::findByEmail($input['email'])) {
             http_response_code(422);
@@ -13,7 +21,8 @@ class AuthController {
             return;
         }
 
-        $userId = User::create($input['name'], $input['email'], $input['password'], $input['type'] ?? 'client');
+        $userType = $input['user_type'] ?? $input['type'] ?? 'client';
+        $userId = User::create($input['name'], $input['email'], $input['password'], $userType);
         $_SESSION['user_id'] = $userId;
 
         // Buscar usuário criado e retornar
@@ -25,7 +34,16 @@ class AuthController {
     }
 
     public function login() {
-        $input = json_decode(file_get_contents('php://input'), true);
+        global $_POST_JSON;
+        $input = $_POST_JSON;
+
+        // Validar dados de entrada
+        if (!$input || !isset($input['email']) || !isset($input['password'])) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Email e senha são obrigatórios.']);
+            return;
+        }
+
         $user = User::findByEmail($input['email']);
 
         if (!$user || !password_verify($input['password'], $user['password'])) {

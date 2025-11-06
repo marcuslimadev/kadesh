@@ -210,7 +210,8 @@ function handleLogin() {
     $.ajax({
         url: `${API_URL}/login`,
         method: 'POST',
-        data: { email, password, remember },
+        contentType: 'application/json',
+        data: JSON.stringify({ email, password, remember }),
         xhrFields: { withCredentials: true }
     }).done(function(response) {
         if (response.user) {
@@ -252,7 +253,8 @@ function handleRegister() {
     $.ajax({
         url: `${API_URL}/register`,
         method: 'POST',
-        data: { name, email, password, password_confirmation, user_type },
+        contentType: 'application/json',
+        data: JSON.stringify({ name, email, password, password_confirmation, user_type }),
         xhrFields: { withCredentials: true }
     }).done(function(response) {
         if (response.user) {

@@ -140,18 +140,22 @@ if (!empty($path) && $path[0] !== '/') {
     $path = '/' . $path;
 }
 
+// ==================== LER INPUT UMA VEZ ====================
+// php://input só pode ser lido uma vez, então fazemos isso globalmente
+$rawInput = file_get_contents('php://input');
+$_POST_JSON = json_decode($rawInput, true);
+
 // DEBUG: Mostrar path calculado se query string contém debug=1
 if (isset($_GET['debug']) && $_GET['debug'] === '1') {
     header('Content-Type: application/json');
     echo json_encode([
         'REQUEST_URI' => $requestUri,
         'SCRIPT_NAME' => $scriptName,
-        'BASE_PATH' => $basePath,
         'CALCULATED_PATH' => $path,
         'METHOD' => $method,
         'GET' => $_GET,
-        'POST_RAW' => file_get_contents('php://input'),
-        'POST_PARSED' => json_decode(file_get_contents('php://input'), true)
+        'POST_RAW' => $rawInput,
+        'POST_PARSED' => $_POST_JSON
     ], JSON_PRETTY_PRINT);
     exit;
 }
@@ -231,12 +235,6 @@ try {
             'admin_id' => $_SESSION['admin_id'] ?? null,
             'user_id' => $_SESSION['user_id'] ?? null
         ], JSON_PRETTY_PRINT);
-        exit;
-    }
-    
-    // ✅ USER INFO ENDPOINT (Verifica se há usuário/admin logado - NÃO REQUER AUTH)
-    if ($path === '/api/user' && $method === 'GET') {
-        handleGetUser();
         exit;
     }
     

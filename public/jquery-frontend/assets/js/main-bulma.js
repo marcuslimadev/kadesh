@@ -558,13 +558,12 @@ function logout() {
 
 // ==================== PÁGINAS ADICIONAIS (STUBS) ====================
 
-function loadLoginPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Login - Em desenvolvimento</h1></div></section>');
-}
+// As páginas de autenticação são implementadas em `auth-bulma.js`.
+// Removemos os stubs daqui para que as implementações reais (carregadas antes)
+// sejam utilizadas. As chamadas a `loadLoginPage()` e `loadRegisterPage()` na
+// função `loadPage()` continuarão funcionando com as versões definidas em
+// `auth-bulma.js`.
 
-function loadRegisterPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Registro - Em desenvolvimento</h1></div></section>');
-}
 
 function loadProjectsPage() {
     $('#app').html('<section class="section"><div class="container"><h1 class="title">Projetos - Em desenvolvimento</h1></div></section>');
