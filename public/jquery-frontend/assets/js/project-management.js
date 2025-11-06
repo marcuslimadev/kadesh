@@ -1,11 +1,9 @@
-// Kadesh Frontend - Project Management Logic
-
-const API_URL = '/api';
+// Kadesh Frontend - Lógica de Gerenciamento de Projetos
 
 /**
- * Creates a new milestone for a project.
- * @param {number} projectId - The ID of the project.
- * @param {object} milestoneData - The data for the new milestone.
+ * Cria um novo marco para um projeto.
+ * @param {number} projectId - ID do projeto.
+ * @param {object} milestoneData - Dados do novo marco.
  */
 function createMilestone(projectId, milestoneData) {
     return $.ajax({
@@ -18,8 +16,8 @@ function createMilestone(projectId, milestoneData) {
 }
 
 /**
- * Fetches the milestones for a project.
- * @param {number} projectId - The ID of the project.
+ * Busca os marcos de um projeto.
+ * @param {number} projectId - ID do projeto.
  */
 function getMilestones(projectId) {
     return $.ajax({
@@ -30,8 +28,8 @@ function getMilestones(projectId) {
 }
 
 /**
- * Releases the funds for a milestone.
- * @param {number} milestoneId - The ID of the milestone.
+ * Libera os fundos de um marco.
+ * @param {number} milestoneId - ID do marco.
  */
 function releaseMilestone(milestoneId) {
     return $.ajax({

@@ -1,9 +1,7 @@
-// Kadesh Frontend - Project and Bidding Logic
-
-const API_URL = '/api'; // Assuming the API is served from the same origin
+// Kadesh Frontend - Lógica de Projetos e Propostas
 
 /**
- * Fetches a list of all projects.
+ * Busca a lista de todos os projetos.
  */
 function getProjects() {
     return $.ajax({
@@ -14,8 +12,8 @@ function getProjects() {
 }
 
 /**
- * Fetches the details for a single project.
- * @param {number} projectId - The ID of the project.
+ * Busca os detalhes de um projeto específico.
+ * @param {number} projectId - ID do projeto.
  */
 function getProjectDetails(projectId) {
     return $.ajax({
@@ -26,8 +24,8 @@ function getProjectDetails(projectId) {
 }
 
 /**
- * Creates a new project.
- * @param {object} projectData - The data for the new project.
+ * Cria um novo projeto.
+ * @param {object} projectData - Dados do novo projeto.
  */
 function createProject(projectData) {
     return $.ajax({
@@ -40,8 +38,8 @@ function createProject(projectData) {
 }
 
 /**
- * Fetches the bids for a single project.
- * @param {number} projectId - The ID of the project.
+ * Busca as propostas de um projeto.
+ * @param {number} projectId - ID do projeto.
  */
 function getProjectBids(projectId) {
     return $.ajax({
@@ -52,8 +50,8 @@ function getProjectBids(projectId) {
 }
 
 /**
- * Creates a new bid on a project.
- * @param {object} bidData - The data for the new bid.
+ * Cria uma nova proposta em um projeto.
+ * @param {object} bidData - Dados da nova proposta.
  */
 function createBid(bidData) {
     return $.ajax({

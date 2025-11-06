@@ -1,42 +1,53 @@
 <div class="container">
-    <h2 id="project-title"></h2>
-    <p id="project-description"></p>
-    <p><strong>Budget:</strong> <span id="project-budget"></span></p>
+    <div class="row">
+        <div class="col-12">
+            <h2 id="project-title"></h2>
+            <p id="project-description" class="text-muted"></p>
+            <p><strong>Orçamento:</strong> <span id="project-budget"></span></p>
+        </div>
+    </div>
 
     <div id="project-management-area">
-        <!-- Project management actions for owner/winner -->
+        <!-- Ações de gerenciamento para o proprietário/vencedor -->
     </div>
 
     <hr>
-    <h3>Milestones</h3>
-    <div id="milestone-list">
-        <!-- Milestones will be loaded here -->
+    <div class="row">
+        <div class="col-12">
+            <h3>Marcos do Projeto</h3>
+            <div id="milestone-list" class="mb-3">
+                <!-- Os marcos serão carregados aqui -->
+            </div>
+        </div>
     </div>
 
     <div id="create-milestone-area">
-        <!-- Form to create milestones -->
+        <!-- Formulário para criar marcos -->
     </div>
 
-
     <hr>
-    <h3>Bids</h3>
-    <div id="bid-list">
-        <!-- Bids will be loaded here -->
+    <div class="row">
+        <div class="col-12">
+            <h3>Propostas Recebidas</h3>
+            <div id="bid-list" class="mb-3">
+                <!-- As propostas serão carregadas aqui -->
+            </div>
+        </div>
     </div>
 
     <div id="bid-form-area">
       <hr>
-      <h3>Place a Bid</h3>
+      <h3>Enviar Proposta</h3>
       <form id="bid-form">
           <div class="mb-3">
-              <label for="bid-amount" class="form-label">Amount</label>
-              <input type="number" class="form-control" id="bid-amount" required>
+              <label for="bid-amount" class="form-label">Valor da Proposta (R$)</label>
+              <input type="number" class="form-control" id="bid-amount" placeholder="3000" min="0" step="0.01" required>
           </div>
           <div class="mb-3">
-              <label for="bid-proposal" class="form-label">Proposal</label>
-              <textarea class="form-control" id="bid-proposal" rows="3" required></textarea>
+              <label for="bid-proposal" class="form-label">Descrição da Proposta</label>
+              <textarea class="form-control" id="bid-proposal" rows="4" placeholder="Descreva sua experiência e como você planeja executar este projeto..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Submit Bid</button>
+          <button type="submit" class="btn btn-primary">Enviar Proposta</button>
       </form>
     </div>
 </div>

@@ -59,93 +59,25 @@ header('Content-Type: application/json; charset=utf-8');
 function getDB() {
     static $pdo = null;
     if ($pdo === null) {
-        $dbPath = __DIR__ . '/../database/kadesh.sqlite';
-        $dbExists = file_exists($dbPath);
+        // Configurações MySQL
+        $host = 'localhost';
+        $dbname = 'kadesh';
+        $username = 'root';
+        $password = '';
+        $charset = 'utf8mb4';
+
+        $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ];
 
         try {
-            $pdo = new PDO('sqlite:' . $dbPath);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $pdo->exec('PRAGMA foreign_keys = ON;');
-
-            if (!$dbExists) {
-                // Database is new, create schema
-                // --- users table ---
-                $pdo->exec("
-                    CREATE TABLE users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL,
-                        email TEXT NOT NULL UNIQUE,
-                        email_verified_at DATETIME DEFAULT NULL,
-                        password TEXT NOT NULL,
-                        remember_token TEXT DEFAULT NULL,
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        user_type TEXT NOT NULL CHECK(user_type IN ('contractor', 'provider', 'both', 'admin')),
-                        bio TEXT DEFAULT NULL,
-                        skills TEXT DEFAULT NULL, -- Storing JSON as TEXT
-                        rating REAL DEFAULT 0.00,
-                        total_ratings INTEGER DEFAULT 0,
-                        wallet_balance REAL DEFAULT 0.00,
-                        is_active INTEGER DEFAULT 1
-                    )
-                ");
-
-                // --- projects table ---
-                $pdo->exec("
-                    CREATE TABLE projects (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        contractor_id INTEGER NOT NULL,
-                        title TEXT NOT NULL,
-                        description TEXT NOT NULL,
-                        max_budget REAL,
-                        status TEXT DEFAULT 'open',
-                        winner_bid_id INTEGER DEFAULT NULL,
-                        bidding_ends_at DATETIME,
-                        project_deadline DATETIME,
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (contractor_id) REFERENCES users (id) ON DELETE CASCADE
-                    )
-                ");
-
-                // --- bids table ---
-                $pdo->exec("
-                    CREATE TABLE bids (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        project_id INTEGER NOT NULL,
-                        user_id INTEGER NOT NULL,
-                        amount REAL NOT NULL,
-                        proposal TEXT,
-                        status TEXT DEFAULT 'pending',
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE,
-                        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-                    )
-                ");
-
-                // --- milestones table ---
-                $pdo->exec("
-                    CREATE TABLE milestones (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        project_id INTEGER NOT NULL,
-                        description TEXT NOT NULL,
-                        amount REAL NOT NULL,
-                        status TEXT NOT NULL DEFAULT 'pending', -- pending, funded, released, disputed
-                        release_date DATETIME DEFAULT NULL,
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                        FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
-                    )
-                ");
-
-                // Insert initial data (e.g., an admin user)
-                $adminEmail = 'admin@kadesh.com';
-                $adminName = 'Admin User';
-                $adminPassword = password_hash('password', PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, user_type) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$adminName, $adminEmail, $adminPassword, 'admin']);
-            }
+            $pdo = new PDO($dsn, $username, $password, $options);
+            
+            // Nota: As tabelas serão criadas via migrations SQL separadas
+            // Não precisamos mais criar tabelas automaticamente aqui
         } catch (PDOException $e) {
             http_response_code(500);
             echo json_encode(['message' => 'Database connection failed', 'error' => $e->getMessage()]);
@@ -183,15 +115,22 @@ function getCurrentUser() {
 // ==================== ROUTER ====================
 $requestUri = $_SERVER['REQUEST_URI'];
 $scriptName = $_SERVER['SCRIPT_NAME'];
-$basePath = str_replace('backend.php', '', $scriptName);
-$path = str_replace($basePath, '', parse_url($requestUri, PHP_URL_PATH));
+
+// Extrair o path da URL
+$path = parse_url($requestUri, PHP_URL_PATH);
+
+// Remover o prefixo /kadesh se existir (para funcionar tanto em localhost/kadesh quanto em subdomínio)
+$path = preg_replace('#^/kadesh#', '', $path);
+
+// Remover /public se existir
+$path = preg_replace('#^/public#', '', $path);
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 // DEBUG: Mostrar informações de roteamento
 error_log("=== BACKEND ROUTER DEBUG ===");
 error_log("REQUEST_URI: " . $requestUri);
 error_log("SCRIPT_NAME: " . $scriptName);
-error_log("BASE_PATH: " . $basePath);
 error_log("PARSED PATH: " . $path);
 error_log("METHOD: " . $method);
 error_log("===========================");
@@ -671,40 +610,7 @@ function handleLogin() {
 }
 
 
-function handleForgotPassword() {
-    $input = json_decode(file_get_contents('php://input'), true);
-    $email = $input['email'] ?? '';
 
-    if (empty($email)) {
-        http_response_code(422);
-        echo json_encode(['message' => 'Email é obrigatório', 'errors' => ['email' => ['Email obrigatório']]]);
-        return;
-    }
-    
-    $db = getDB();
-    $stmt = $db->prepare('SELECT id, name FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-    
-    if (!$user || !password_verify($password, $user['password'])) {
-        http_response_code(422);
-        echo json_encode(['message' => 'As credenciais fornecidas estão incorretas.', 'errors' => ['email' => ['Credenciais inválidas']]]);
-        return;
-    }
-    
-    // Criar sessão de USUÁRIO
-    $_SESSION['user_id'] = $user['id'];
-    
-    echo json_encode([
-        'user_type' => 'user',
-        'user' => [
-            'id' => $user['id'],
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'type' => $user['user_type']
-        ]
-    ]);
-}
 
 function handleForgotPassword() {
     $input = json_decode(file_get_contents('php://input'), true);
@@ -1516,11 +1422,7 @@ function validateMercadoPagoSignature($signature, $payload, $secret) {
 
 // ==================== STUB FUNCTIONS (Review System) ====================
 // TODO: Implementar sistema de avaliações
-
-function handleCreateReview() {
-    http_response_code(501);
-    echo json_encode(['error' => 'Create review not implemented yet']);
-}
+// handleCreateReview já implementada anteriormente no arquivo
 
 function handleUploadReviewPhotos($reviewId) {
     http_response_code(501);

@@ -1,10 +1,8 @@
-// Kadesh Frontend - Payment Logic
-
-const API_URL = '/api';
+// Kadesh Frontend - Lógica de Pagamentos
 
 /**
- * Initiates the funding process for a milestone.
- * @param {number} milestoneId - The ID of the milestone to fund.
+ * Inicia o processo de financiamento de um marco.
+ * @param {number} milestoneId - ID do marco a ser financiado.
  */
 function fundMilestone(milestoneId) {
     return $.ajax({

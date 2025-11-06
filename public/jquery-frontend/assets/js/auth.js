@@ -1,13 +1,11 @@
-// Kadesh Frontend - Authentication Logic
-
-const API_URL = '/api'; // Assuming the API is served from the same origin
+// Kadesh Frontend - Lógica de Autenticação
 
 /**
- * Handles user registration.
- * @param {string} name - The user's name.
- * @param {string} email - The user's email.
- * @param {string} password - The user's password.
- * @param {string} type - The user's type ('contractor', 'provider', 'both').
+ * Realiza o registro de um novo usuário.
+ * @param {string} name - Nome do usuário.
+ * @param {string} email - Email do usuário.
+ * @param {string} password - Senha do usuário.
+ * @param {string} type - Tipo do usuário ('contractor', 'provider', 'both').
  */
 function registerUser(name, email, password, type) {
     return $.ajax({
@@ -20,9 +18,9 @@ function registerUser(name, email, password, type) {
 }
 
 /**
- * Handles user login.
- * @param {string} email - The user's email.
- * @param {string} password - The user's password.
+ * Realiza o login do usuário.
+ * @param {string} email - Email do usuário.
+ * @param {string} password - Senha do usuário.
  */
 function loginUser(email, password) {
     return $.ajax({
@@ -35,7 +33,7 @@ function loginUser(email, password) {
 }
 
 /**
- * Handles user logout.
+ * Realiza o logout do usuário.
  */
 function logoutUser() {
     return $.ajax({
@@ -45,8 +43,8 @@ function logoutUser() {
 }
 
 /**
- * Checks if a user is currently logged in.
- * Stores user data in sessionStorage.
+ * Verifica se um usuário está logado.
+ * Armazena os dados do usuário no sessionStorage.
  */
 function checkUserStatus() {
     return $.ajax({
@@ -57,16 +55,16 @@ function checkUserStatus() {
 }
 
 /**
- * Saves user data to sessionStorage.
- * @param {object} userData - The user data object from the API.
+ * Salva os dados do usuário no sessionStorage.
+ * @param {object} userData - Objeto com os dados do usuário da API.
  */
 function saveUserSession(userData) {
     sessionStorage.setItem('kadesh_user', JSON.stringify(userData));
 }
 
 /**
- * Retrieves user data from sessionStorage.
- * @returns {object|null} The user data object or null if not logged in.
+ * Recupera os dados do usuário do sessionStorage.
+ * @returns {object|null} Objeto com os dados do usuário ou null se não estiver logado.
  */
 function getUserSession() {
     const user = sessionStorage.getItem('kadesh_user');
@@ -74,7 +72,7 @@ function getUserSession() {
 }
 
 /**
- * Clears the user session from sessionStorage.
+ * Limpa a sessão do usuário do sessionStorage.
  */
 function clearUserSession() {
     sessionStorage.removeItem('kadesh_user');

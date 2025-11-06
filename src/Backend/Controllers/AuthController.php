@@ -13,10 +13,15 @@ class AuthController {
             return;
         }
 
-        $userId = User::create($input['name'], $input['email'], $input['password'], $input['type']);
+        $userId = User::create($input['name'], $input['email'], $input['password'], $input['type'] ?? 'client');
         $_SESSION['user_id'] = $userId;
 
-        echo json_encode(['message' => 'Registro bem-sucedido.']);
+        // Buscar usuário criado e retornar
+        $user = User::findById($userId);
+        echo json_encode([
+            'message' => 'Registro bem-sucedido.',
+            'user' => $user
+        ]);
     }
 
     public function login() {
@@ -30,7 +35,14 @@ class AuthController {
         }
 
         $_SESSION['user_id'] = $user['id'];
-        echo json_encode(['message' => 'Login bem-sucedido.']);
+        
+        // Remover senha antes de retornar
+        unset($user['password']);
+        
+        echo json_encode([
+            'message' => 'Login bem-sucedido.',
+            'user' => $user
+        ]);
     }
 
     public function logout() {
@@ -40,10 +52,12 @@ class AuthController {
 
     public function currentUser() {
         if (!isset($_SESSION['user_id'])) {
-            http_response_code(401);
-            echo json_encode(['error' => 'Não autenticado.']);
+            // Retornar user: null em vez de erro para permitir que o frontend carregue
+            echo json_encode(['user' => null]);
             return;
         }
-        echo json_encode(User::findById($_SESSION['user_id']));
+        
+        $user = User::findById($_SESSION['user_id']);
+        echo json_encode(['user' => $user]);
     }
 }

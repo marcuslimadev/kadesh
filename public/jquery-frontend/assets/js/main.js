@@ -1,44 +1,44 @@
-// Kadesh Frontend - Main Logic & Routing
+// Kadesh Frontend - Lógica Principal e Roteamento
 
 $(document).ready(function() {
-    // Initial setup
+    // Configuração inicial
     handleRouting();
     updateNav();
 
-    // Listen to hash changes for routing
+    // Escutar mudanças de hash para roteamento
     $(window).on('hashchange', handleRouting);
 
-    // ================== EVENT HANDLERS ==================
+    // ================== MANIPULADORES DE EVENTOS ==================
 
-    // User Registration
+    // Registro de Usuário
     $(document).on('submit', '#register-form', handleRegistration);
 
-    // User Login
+    // Login de Usuário
     $(document).on('submit', '#login-form', handleLogin);
 
-    // Admin Login
+    // Login de Administrador
     $(document).on('submit', '#admin-login-form', handleAdminLogin);
 
-    // User Logout
+    // Logout de Usuário
     $(document).on('click', '#logout-link', handleLogout);
 
-    // Create Project Form
+    // Formulário de Criar Projeto
     $(document).on('submit', '#create-project-form', handleCreateProject);
 
-    // Bid Form
+    // Formulário de Proposta
     $(document).on('submit', '#bid-form', handleCreateBid);
 
-    // Create Milestone Form
+    // Formulário de Criar Marco
     $(document).on('submit', '#create-milestone-form', handleCreateMilestone);
 
-    // Fund Milestone Button
+    // Botão de Financiar Marco
     $(document).on('click', '.fund-milestone-btn', handleFundMilestone);
 
-    // Release Milestone Button
+    // Botão de Liberar Marco
     $(document).on('click', '.release-milestone-btn', handleReleaseMilestone);
 });
 
-// ================== ROUTING ==================
+// ================== ROTEAMENTO ==================
 
 function handleRouting() {
     const hash = window.location.hash.replace('#', '');
@@ -55,10 +55,10 @@ function handleRouting() {
 function loadPublicContent(page, param) {
     $('#content').load(`${page}.html`, function(response, status) {
         if (status === "error") {
-            $('#content').html('<h2>Page Not Found</h2>');
+            $('#content').html('<h2>Página Não Encontrada</h2>');
             return;
         }
-        // Load page-specific data
+        // Carregar dados específicos da página
         switch (page) {
             case 'home':
                 loadProjects();
@@ -74,13 +74,13 @@ function loadPublicContent(page, param) {
 }
 
 function loadAdminContent(page, param) {
-    // Check if admin is logged in, otherwise redirect to admin login
+    // Verificar se o admin está logado, caso contrário redirecionar para login
     if (!sessionStorage.getItem('kadesh_admin') && page !== 'admin-login') {
         window.location.hash = 'admin-login';
         return;
     }
 
-    // Load the main admin layout if not already loaded
+    // Carregar o layout principal do admin se ainda não foi carregado
     if ($('#admin-sidebar').length === 0) {
         $('#content').load('admin.html', function() {
             loadAdminSection(page, param);
@@ -93,7 +93,7 @@ function loadAdminContent(page, param) {
 function loadAdminSection(page, param) {
     const section = page.split('/')[1] || 'dashboard';
     $('#admin-main-content').load(`admin-${section}.html`, function() {
-        // Load section-specific data
+        // Carregar dados específicos da seção
         switch (section) {
             case 'dashboard':
                 loadAdminDashboard();
@@ -109,7 +109,7 @@ function loadAdminSection(page, param) {
 }
 
 
-// ================== EVENT HANDLER FUNCTIONS ==================
+// ================== FUNÇÕES DE MANIPULAÇÃO DE EVENTOS ==================
 
 function handleRegistration(e) {
     e.preventDefault();
@@ -124,7 +124,7 @@ function handleRegistration(e) {
             updateNav();
             window.location.hash = 'dashboard';
         })
-        .fail(err => alert('Registration failed: ' + err.responseJSON.message));
+        .fail(err => alert('Falha no registro: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleLogin(e) {
@@ -138,7 +138,7 @@ function handleLogin(e) {
             updateNav();
             window.location.hash = 'dashboard';
         })
-        .fail(err => alert('Login failed: ' + err.responseJSON.message));
+        .fail(err => alert('Falha no login: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleAdminLogin(e) {
@@ -151,7 +151,7 @@ function handleAdminLogin(e) {
             sessionStorage.setItem('kadesh_admin', JSON.stringify(response.admin));
             window.location.hash = 'admin/dashboard';
         })
-        .fail(err => alert('Admin login failed: ' + err.responseJSON.message));
+        .fail(err => alert('Falha no login do administrador: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 
@@ -174,10 +174,10 @@ function handleCreateProject(e) {
     };
     createProject(projectData)
         .done(project => {
-            alert('Project created!');
+            alert('Projeto criado com sucesso!');
             window.location.hash = `project-details/${project.id}`;
         })
-        .fail(err => alert('Failed to create project: ' + err.responseJSON.message));
+        .fail(err => alert('Falha ao criar projeto: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleCreateBid(e) {
@@ -189,10 +189,10 @@ function handleCreateBid(e) {
         proposal: $('#bid-proposal').val()
     })
     .done(() => {
-        alert('Bid placed!');
+        alert('Proposta enviada com sucesso!');
         loadProjectDetails(projectId);
     })
-    .fail(err => alert('Failed to place bid: ' + err.responseJSON.message));
+    .fail(err => alert('Falha ao enviar proposta: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleCreateMilestone(e) {
@@ -203,10 +203,10 @@ function handleCreateMilestone(e) {
         amount: $('#milestone-amount').val()
     })
     .done(() => {
-        alert('Milestone created!');
+        alert('Marco criado com sucesso!');
         loadProjectDetails(projectId);
     })
-    .fail(err => alert('Failed to create milestone: ' + err.responseJSON.message));
+    .fail(err => alert('Falha ao criar marco: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleFundMilestone() {
@@ -217,7 +217,7 @@ function handleFundMilestone() {
                 window.location.href = response.checkout_url;
             }
         })
-        .fail(err => alert('Failed to fund milestone: ' + err.responseJSON.message));
+        .fail(err => alert('Falha ao financiar marco: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 function handleReleaseMilestone() {
@@ -225,20 +225,20 @@ function handleReleaseMilestone() {
     const projectId = window.location.hash.split('/')[1];
     releaseMilestone(milestoneId)
         .done(() => {
-            alert('Milestone released!');
+            alert('Marco liberado com sucesso!');
             loadProjectDetails(projectId);
         })
-        .fail(err => alert('Failed to release milestone: ' + err.responseJSON.message));
+        .fail(err => alert('Falha ao liberar marco: ' + (err.responseJSON?.message || 'Erro desconhecido')));
 }
 
 
-// ================== DATA LOADING FUNCTIONS ==================
+// ================== FUNÇÕES DE CARREGAMENTO DE DADOS ==================
 
 function loadProjects() {
     getProjects().done(projects => {
         const list = $('#project-list').empty();
         if (!projects || projects.length === 0) {
-            list.html('<p>No projects found.</p>');
+            list.html('<p>Nenhum projeto encontrado.</p>');
             return;
         }
         projects.forEach(p => {
@@ -248,8 +248,8 @@ function loadProjects() {
                         <div class="card-body">
                             <h5 class="card-title">${p.title}</h5>
                             <p class="card-text">${p.description.substring(0, 100)}...</p>
-                            <p class="card-text"><strong>Budget:</strong> R$ ${p.max_budget}</p>
-                            <a href="#project-details/${p.id}" class="btn btn-primary">View</a>
+                            <p class="card-text"><strong>Orçamento:</strong> R$ ${p.max_budget}</p>
+                            <a href="#project-details/${p.id}" class="btn btn-primary">Ver Detalhes</a>
                         </div>
                     </div>
                 </div>
@@ -268,11 +268,11 @@ function loadProjectDetails(projectId) {
 
         if (user && user.id === project.contractor_id) {
             $('#create-milestone-area').html(`
-                <hr><h3>Create Milestone</h3>
+                <hr><h3>Criar Marco</h3>
                 <form id="create-milestone-form">
-                    <input type="text" id="milestone-description" placeholder="Description" required>
-                    <input type="number" id="milestone-amount" placeholder="Amount" required>
-                    <button type="submit">Create</button>
+                    <input type="text" id="milestone-description" placeholder="Descrição" required>
+                    <input type="number" id="milestone-amount" placeholder="Valor" required>
+                    <button type="submit">Criar</button>
                 </form>
             `);
         }
@@ -283,17 +283,17 @@ function loadProjectDetails(projectId) {
         milestones.forEach(m => {
             let actions = '';
             if (user && m.status === 'pending') {
-                actions = `<button class="fund-milestone-btn" data-id="${m.id}">Fund</button>`;
+                actions = `<button class="fund-milestone-btn btn btn-sm btn-success" data-id="${m.id}">Financiar</button>`;
             } else if (user && m.status === 'funded') {
-                actions = `<button class="release-milestone-btn" data-id="${m.id}">Release</button>`;
+                actions = `<button class="release-milestone-btn btn btn-sm btn-primary" data-id="${m.id}">Liberar</button>`;
             }
-            list.append(`<div>${m.description} - R$ ${m.amount} (${m.status}) ${actions}</div>`);
+            list.append(`<div class="mb-2">${m.description} - R$ ${m.amount} (${m.status}) ${actions}</div>`);
         });
     });
 
     getProjectBids(projectId).done(bids => {
         const list = $('#bid-list').empty();
-        bids.forEach(b => list.append(`<div>${b.proposal} - R$ ${b.amount} by ${b.user_name}</div>`));
+        bids.forEach(b => list.append(`<div class="mb-2">${b.proposal} - R$ ${b.amount} por ${b.user_name}</div>`));
     });
 }
 
@@ -304,8 +304,8 @@ function loadDashboard() {
         return;
     }
     $('#dashboard-content').html(`
-        <h3>Welcome, ${user.name}!</h3>
-        <a href="#create-project" class="btn btn-primary">New Project</a>
+        <h3>Bem-vindo, ${user.name}!</h3>
+        <a href="#create-project" class="btn btn-primary">Novo Projeto</a>
     `);
 }
 
@@ -326,7 +326,7 @@ function loadAdminUsers() {
                 <td>${u.name}</td>
                 <td>${u.email}</td>
                 <td>${u.user_type}</td>
-                <td><button>View</button></td>
+                <td><button class="btn btn-sm btn-info">Ver</button></td>
             </tr>
         `));
     });
@@ -341,26 +341,26 @@ function loadAdminProjects() {
                 <td>${p.title}</td>
                 <td>${p.contractor_name}</td>
                 <td>${p.status}</td>
-                <td><button>View</button></td>
+                <td><button class="btn btn-sm btn-info">Ver</button></td>
             </tr>
         `));
     });
 }
 
-// ================== HELPERS ==================
+// ================== AUXILIARES ==================
 
 function updateNav() {
     const user = getUserSession();
     const nav = $('#navbarNav .navbar-nav.ms-auto').empty();
     if (user) {
         nav.append(`
-            <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" id="logout-link">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="#dashboard">Painel</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" id="logout-link">Sair</a></li>
         `);
     } else {
         nav.append(`
-            <li class="nav-item"><a class="nav-link" href="#login">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="#register">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="#login">Entrar</a></li>
+            <li class="nav-item"><a class="nav-link" href="#register">Cadastrar</a></li>
         `);
     }
 }

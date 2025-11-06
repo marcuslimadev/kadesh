@@ -1,15 +1,13 @@
-// Kadesh Frontend - Admin Panel Logic
-
-const API_URL = '/api/admin'; // Assuming the admin API is served from /api/admin
+// Kadesh Frontend - Lógica do Painel Administrativo
 
 /**
- * Handles admin login.
- * @param {string} email - The admin's email.
- * @param {string} password - The admin's password.
+ * Realiza o login do administrador.
+ * @param {string} email - Email do administrador.
+ * @param {string} password - Senha do administrador.
  */
 function loginAdmin(email, password) {
     return $.ajax({
-        url: `${API_URL}/login`,
+        url: `${API_URL}/admin/login`,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ email, password }),
@@ -18,33 +16,33 @@ function loginAdmin(email, password) {
 }
 
 /**
- * Fetches the dashboard statistics for the admin panel.
+ * Busca as estatísticas do painel administrativo.
  */
 function getAdminStats() {
     return $.ajax({
-        url: `${API_URL}/stats`,
+        url: `${API_URL}/admin/stats`,
         method: 'GET',
         dataType: 'json'
     });
 }
 
 /**
- * Fetches a list of all users.
+ * Busca a lista de todos os usuários.
  */
 function getAdminUsers() {
     return $.ajax({
-        url: `${API_URL}/users`,
+        url: `${API_URL}/admin/users`,
         method: 'GET',
         dataType: 'json'
     });
 }
 
 /**
- * Fetches a list of all projects.
+ * Busca a lista de todos os projetos.
  */
 function getAdminProjects() {
     return $.ajax({
-        url: `${API_URL}/projects`,
+        url: `${API_URL}/admin/projects`,
         method: 'GET',
         dataType: 'json'
     });

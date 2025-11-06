@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Debug - Kadesh</title>
+</head>
+<body>
+    <h1>Teste de Debug</h1>
+    <div id="output"></div>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        console.log('jQuery carregado:', typeof jQuery);
+        console.log('$ carregado:', typeof $);
+        
+        $(document).ready(function() {
+            console.log('DOM Ready!');
+            $('#output').html('<p>jQuery funcionando!</p>');
+            
+            // Testar API
+            console.log('Testando API...');
+            $.ajax({
+                url: '/kadesh/api/health',
+                method: 'GET',
+                success: function(data) {
+                    console.log('API Response:', data);
+                    $('#output').append('<p>API OK: ' + JSON.stringify(data) + '</p>');
+                },
+                error: function(xhr, status, error) {
+                    console.error('API Error:', status, error);
+                    $('#output').append('<p style="color: red">API Error: ' + error + '</p>');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

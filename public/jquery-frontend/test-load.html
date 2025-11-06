@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - Kadesh</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Teste de Carregamento</h1>
+            <div id="log" class="content"></div>
+            <div id="app"></div>
+        </div>
+    </section>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+        function log(msg, type = 'info') {
+            const colors = { info: 'has-text-info', success: 'has-text-success', error: 'has-text-danger' };
+            $('#log').append(`<p class="${colors[type]}">${msg}</p>`);
+            console.log(msg);
+        }
+        
+        log('✅ jQuery carregado: ' + (typeof jQuery), 'success');
+    </script>
+    
+    <!-- Configuração -->
+    <script src="assets/js/config.js"></script>
+    <script>log('Config carregado. API_URL: ' + (typeof API_URL !== 'undefined' ? API_URL : 'NÃO DEFINIDA'), API_URL ? 'success' : 'error');</script>
+    
+    <!-- Auth -->
+    <script src="assets/js/auth-bulma.js"></script>
+    <script>log('✅ auth-bulma.js carregado', 'success');</script>
+    
+    <!-- Projects -->
+    <script src="assets/js/projects-bulma.js"></script>
+    <script>log('✅ projects-bulma.js carregado', 'success');</script>
+    
+    <!-- Auctions -->
+    <script src="assets/js/auctions-bulma.js"></script>
+    <script>log('✅ auctions-bulma.js carregado', 'success');</script>
+    
+    <!-- Wallet -->
+    <script src="assets/js/wallet-bulma.js"></script>
+    <script>log('✅ wallet-bulma.js carregado', 'success');</script>
+    
+    <!-- Reputation -->
+    <script src="assets/js/reputation-bulma.js"></script>
+    <script>log('✅ reputation-bulma.js carregado', 'success');</script>
+    
+    <!-- Notifications -->
+    <script src="assets/js/notifications-bulma.js"></script>
+    <script>log('✅ notifications-bulma.js carregado', 'success');</script>
+    
+    <!-- Main -->
+    <script src="assets/js/main-bulma.js"></script>
+    <script>log('✅ main-bulma.js carregado', 'success');</script>
+    
+    <script>
+        $(document).ready(function() {
+            log('🚀 DOM Ready!', 'success');
+            log('AppState: ' + (typeof AppState !== 'undefined' ? 'DEFINIDO' : 'NÃO DEFINIDO'), AppState ? 'success' : 'error');
+            
+            if (typeof loadPage === 'function') {
+                log('✅ Função loadPage disponível', 'success');
+            } else {
+                log('❌ Função loadPage NÃO disponível', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
