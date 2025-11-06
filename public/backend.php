@@ -59,38 +59,102 @@ header('Content-Type: application/json; charset=utf-8');
 function getDB() {
     static $pdo = null;
     if ($pdo === null) {
-        // Detectar ambiente (local ou produção)
-        $isLocal = ($_SERVER['HTTP_HOST'] ?? '') === 'localhost' || 
-                   strpos($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1') === 0;
-        
-        if ($isLocal) {
-            // Configuração local XAMPP
-            $pdo = new PDO(
-                'mysql:host=127.0.0.1;dbname=kadesh;charset=utf8mb4',
-                'root',
-                '',
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
-        } else {
-            // Configuração produção cPanel
-            $pdo = new PDO(
-                'mysql:host=127.0.0.1;dbname=mmbsites_kadesh;charset=utf8mb4',
-                'mmbsites_kadesh',
-                'kadesh@2025',
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
+        $dbPath = __DIR__ . '/../database/kadesh.sqlite';
+        $dbExists = file_exists($dbPath);
+
+        try {
+            $pdo = new PDO('sqlite:' . $dbPath);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $pdo->exec('PRAGMA foreign_keys = ON;');
+
+            if (!$dbExists) {
+                // Database is new, create schema
+                // --- users table ---
+                $pdo->exec("
+                    CREATE TABLE users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL UNIQUE,
+                        email_verified_at DATETIME DEFAULT NULL,
+                        password TEXT NOT NULL,
+                        remember_token TEXT DEFAULT NULL,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        user_type TEXT NOT NULL CHECK(user_type IN ('contractor', 'provider', 'both', 'admin')),
+                        bio TEXT DEFAULT NULL,
+                        skills TEXT DEFAULT NULL, -- Storing JSON as TEXT
+                        rating REAL DEFAULT 0.00,
+                        total_ratings INTEGER DEFAULT 0,
+                        wallet_balance REAL DEFAULT 0.00,
+                        is_active INTEGER DEFAULT 1
+                    )
+                ");
+
+                // --- projects table ---
+                $pdo->exec("
+                    CREATE TABLE projects (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        contractor_id INTEGER NOT NULL,
+                        title TEXT NOT NULL,
+                        description TEXT NOT NULL,
+                        max_budget REAL,
+                        status TEXT DEFAULT 'open',
+                        winner_bid_id INTEGER DEFAULT NULL,
+                        bidding_ends_at DATETIME,
+                        project_deadline DATETIME,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (contractor_id) REFERENCES users (id) ON DELETE CASCADE
+                    )
+                ");
+
+                // --- bids table ---
+                $pdo->exec("
+                    CREATE TABLE bids (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        project_id INTEGER NOT NULL,
+                        user_id INTEGER NOT NULL,
+                        amount REAL NOT NULL,
+                        proposal TEXT,
+                        status TEXT DEFAULT 'pending',
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE,
+                        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+                    )
+                ");
+
+                // --- milestones table ---
+                $pdo->exec("
+                    CREATE TABLE milestones (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        project_id INTEGER NOT NULL,
+                        description TEXT NOT NULL,
+                        amount REAL NOT NULL,
+                        status TEXT NOT NULL DEFAULT 'pending', -- pending, funded, released, disputed
+                        release_date DATETIME DEFAULT NULL,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
+                    )
+                ");
+
+                // Insert initial data (e.g., an admin user)
+                $adminEmail = 'admin@kadesh.com';
+                $adminName = 'Admin User';
+                $adminPassword = password_hash('password', PASSWORD_DEFAULT);
+                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, user_type) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$adminName, $adminEmail, $adminPassword, 'admin']);
+            }
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'Database connection failed', 'error' => $e->getMessage()]);
+            exit;
         }
     }
     return $pdo;
 }
+
 
 // ==================== AUTH HELPERS ====================
 function requireAuth() {
@@ -536,7 +600,7 @@ function handleRegister() {
     
     // Create user (remover profession/hourly_rate que não existem na tabela)
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $db->prepare('INSERT INTO users (name, email, password, user_type, bio, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())');
+    $stmt = $db->prepare('INSERT INTO users (name, email, password, user_type, bio, created_at, updated_at) VALUES (?, ?, ?, ?, ?, datetime("now"), datetime("now"))');
     $stmt->execute([$name, $email, $hashedPassword, $user_type, $bio]);
     
     $userId = $db->lastInsertId();
@@ -561,69 +625,64 @@ function handleLogin() {
     
     $db = getDB();
     
-    // 1️⃣ PRIMEIRO: Tentar login como ADMIN na tabela admin_users
-    $stmt = $db->prepare('SELECT * FROM admin_users WHERE email = ? AND is_active = TRUE');
-    $stmt->execute([$email]);
-    $admin = $stmt->fetch();
-    
-    if ($admin && password_verify($password, $admin['password'])) {
-        // Atualizar último login do admin
-        $stmt = $db->prepare('UPDATE admin_users SET last_login_at = NOW(), last_login_ip = ? WHERE id = ?');
-        $stmt->execute([$_SERVER['REMOTE_ADDR'] ?? null, $admin['id']]);
-        
-        // Criar sessão de ADMIN
-        $_SESSION['is_admin'] = true;
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_name'] = $admin['name'];
-        $_SESSION['admin_email'] = $admin['email'];
-        $_SESSION['is_super_admin'] = (bool)$admin['is_super_admin'];
-        $_SESSION['admin_permissions'] = $admin['permissions'] ? json_decode($admin['permissions'], true) : [];
-        
-        // Retornar dados do admin
-        echo json_encode([
-            'user_type' => 'admin',
-            'admin' => [
-                'id' => $admin['id'],
-                'name' => $admin['name'],
-                'email' => $admin['email'],
-                'is_super_admin' => (bool)$admin['is_super_admin'],
-                'permissions' => $admin['permissions'] ? json_decode($admin['permissions'], true) : []
-            ]
-        ]);
-        return;
-    }
-    
-    // 2️⃣ SEGUNDO: Tentar login como ADMIN na tabela users (user_type='admin')
-    $stmt = $db->prepare('SELECT * FROM users WHERE email = ? AND user_type = ?');
-    $stmt->execute([$email, 'admin']);
-    $adminUser = $stmt->fetch();
-    
-    if ($adminUser && password_verify($password, $adminUser['password'])) {
-        // Criar sessão de ADMIN (da tabela users)
-        $_SESSION['is_admin'] = true;
-        $_SESSION['admin_id'] = $adminUser['id'];
-        $_SESSION['admin_name'] = $adminUser['name'];
-        $_SESSION['admin_email'] = $adminUser['email'];
-        $_SESSION['is_super_admin'] = true; // Admin da tabela users é super admin por padrão
-        $_SESSION['admin_permissions'] = [];
-        $_SESSION['user_id'] = $adminUser['id']; // Também setar user_id para compatibilidade
-        
-        // Retornar dados do admin
-        echo json_encode([
-            'user_type' => 'admin',
-            'admin' => [
-                'id' => $adminUser['id'],
-                'name' => $adminUser['name'],
-                'email' => $adminUser['email'],
-                'is_super_admin' => true,
-                'permissions' => []
-            ]
-        ]);
-        return;
-    }
-    
-    // 3️⃣ DEPOIS: Tentar login como USUÁRIO COMUM
+    // Unified login: Check the users table
     $stmt = $db->prepare('SELECT * FROM users WHERE email = ?');
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        // Check if the user is an admin
+        if ($user['user_type'] === 'admin') {
+            $_SESSION['is_admin'] = true;
+            $_SESSION['admin_id'] = $user['id'];
+            $_SESSION['admin_name'] = $user['name'];
+            $_SESSION['admin_email'] = $user['email'];
+            $_SESSION['user_id'] = $user['id']; // Also set user_id for compatibility
+
+            echo json_encode([
+                'user_type' => 'admin',
+                'admin' => [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
+                ]
+            ]);
+            return;
+        }
+
+        // It's a regular user
+        $_SESSION['user_id'] = $user['id'];
+        
+        echo json_encode([
+            'user_type' => 'user',
+            'user' => [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'type' => $user['user_type']
+            ]
+        ]);
+        return;
+    }
+    
+    // If we reach here, the login failed
+    http_response_code(422);
+    echo json_encode(['message' => 'As credenciais fornecidas estão incorretas.', 'errors' => ['email' => ['Credenciais inválidas']]]);
+}
+
+
+function handleForgotPassword() {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $email = $input['email'] ?? '';
+
+    if (empty($email)) {
+        http_response_code(422);
+        echo json_encode(['message' => 'Email é obrigatório', 'errors' => ['email' => ['Email obrigatório']]]);
+        return;
+    }
+    
+    $db = getDB();
+    $stmt = $db->prepare('SELECT id, name FROM users WHERE email = ?');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
     
@@ -789,7 +848,7 @@ function handleCreateProject() {
                 bidding_ends_at, project_deadline, required_skills, 
                 attachments, status, created_at, updated_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime("now"), datetime("now"))
         ');
         
         $stmt->execute([
@@ -872,7 +931,7 @@ function handleUpdateProject($id) {
             bidding_ends_at = COALESCE(?, bidding_ends_at),
             project_deadline = COALESCE(?, project_deadline),
             required_skills = COALESCE(?, required_skills),
-            updated_at = NOW()
+            updated_at = datetime("now")
         WHERE id = ?
     ');
     
@@ -931,7 +990,7 @@ function handleCreateBid() {
     $db = getDB();
     $stmt = $db->prepare('
         INSERT INTO bids (project_id, user_id, amount, proposal, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, NOW(), NOW())
+        VALUES (?, ?, ?, ?, ?, datetime("now"), datetime("now"))
     ');
     
     $stmt->execute([
@@ -975,7 +1034,7 @@ function handleConfirmWinner($projectId) {
     }
     
     // Update project
-    $stmt = $db->prepare('UPDATE projects SET winner_bid_id = ?, status = ?, updated_at = NOW() WHERE id = ?');
+    $stmt = $db->prepare('UPDATE projects SET winner_bid_id = ?, status = ?, updated_at = datetime("now") WHERE id = ?');
     $stmt->execute([$bidId, 'in_progress', $projectId]);
     
     // Update bid
@@ -1148,7 +1207,7 @@ function handleReleaseMilestone($milestoneId) {
         $stmt->execute([$user['id'], $milestone['project_id'], -$milestone['amount']]);
 
         // 4. Update milestone status
-        $stmt = $db->prepare("UPDATE milestones SET status = 'released', release_date = NOW() WHERE id = ?");
+        $stmt = $db->prepare("UPDATE milestones SET status = 'released', release_date = datetime('now') WHERE id = ?");
         $stmt->execute([$milestoneId]);
 
         $db->commit();
@@ -1551,7 +1610,7 @@ function handleAdminStats() {
     $usersTotal = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
     $usersProviders = $pdo->query("SELECT COUNT(*) FROM users WHERE user_type IN ('provider', 'both')")->fetchColumn();
     $usersContractors = $pdo->query("SELECT COUNT(*) FROM users WHERE user_type IN ('contractor', 'both')")->fetchColumn();
-    $usersNewMonth = $pdo->query("SELECT COUNT(*) FROM users WHERE MONTH(created_at) = MONTH(CURRENT_DATE()) AND YEAR(created_at) = YEAR(CURRENT_DATE())")->fetchColumn();
+    $usersNewMonth = $pdo->query("SELECT COUNT(*) FROM users WHERE STRFTIME('%Y-%m', created_at) = STRFTIME('%Y-%m', 'now')")->fetchColumn();
     
     // Estatísticas de Projetos
     $projectsTotal = $pdo->query("SELECT COUNT(*) FROM projects")->fetchColumn();
@@ -1563,7 +1622,7 @@ function handleAdminStats() {
     $paymentsTotal = $pdo->query("SELECT COUNT(*) FROM transactions")->fetchColumn();
     $paymentsTotalAmount = $pdo->query("SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE status = 'completed'")->fetchColumn();
     $platformFee = $paymentsTotalAmount * 0.10; // 10% de taxa
-    $revenueThisMonth = $pdo->query("SELECT COALESCE(SUM(amount * 0.10), 0) FROM transactions WHERE status = 'completed' AND MONTH(created_at) = MONTH(CURRENT_DATE())")->fetchColumn();
+    $revenueThisMonth = $pdo->query("SELECT COALESCE(SUM(amount * 0.10), 0) FROM transactions WHERE status = 'completed' AND STRFTIME('%Y-%m', created_at) = STRFTIME('%Y-%m', 'now')")->fetchColumn();
     
     // Estatísticas de Avaliações
     $reviewsTotal = $pdo->query("SELECT COUNT(*) FROM reviews")->fetchColumn();
@@ -1573,7 +1632,7 @@ function handleAdminStats() {
     $activity = $pdo->query("
         SELECT DATE(created_at) as date, COUNT(*) as count 
         FROM projects 
-        WHERE created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+        WHERE created_at >= DATE('now', '-7 days')
         GROUP BY DATE(created_at)
         ORDER BY date ASC
     ")->fetchAll();
@@ -1751,7 +1810,7 @@ function handleAdminUpdateSettings() {
             
             $stmt = $pdo->prepare("
                 UPDATE system_settings 
-                SET setting_value = ?, updated_at = NOW() 
+                SET setting_value = ?, updated_at = datetime('now')
                 WHERE setting_key = ?
             ");
             $stmt->execute([$value, $key]);
@@ -1887,7 +1946,7 @@ function handleAdminDeleteUser($userId) {
     }
     
     // Soft delete (marcar como deletado sem remover do banco)
-    $stmt = $pdo->prepare("UPDATE users SET email = CONCAT('deleted_', id, '_', email), email_verified_at = NULL WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE users SET email = 'deleted_' || id || '_' || email, email_verified_at = NULL WHERE id = ?");
     $stmt->execute([$userId]);
     
     echo json_encode(['success' => true, 'message' => 'Usuário removido']);
@@ -1948,7 +2007,7 @@ function handleAdminCloseProject($projectId) {
     
     $pdo = getDB();
     
-    $stmt = $pdo->prepare("UPDATE projects SET status = 'cancelled', completed_at = NOW() WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE projects SET status = 'cancelled', completed_at = datetime('now') WHERE id = ?");
     $stmt->execute([$projectId]);
     
     if ($stmt->rowCount() === 0) {
