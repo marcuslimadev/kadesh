@@ -187,7 +187,7 @@ class BidModal {
         attachments: [] // TODO: Upload de arquivos
       };
       
-      const response = await fetch('/kadesh/api/bids', {
+      const response = await fetch('/kadesh/src/Backend/BidController.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

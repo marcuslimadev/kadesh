@@ -7,7 +7,7 @@ class AuctionCards {
   constructor(containerSelector, options = {}) {
     this.container = document.querySelector(containerSelector);
     this.options = {
-      apiEndpoint: options.apiEndpoint || '/kadesh/api/auctions/active',
+      apiEndpoint: options.apiEndpoint || '/kadesh/src/Backend/AuctionController.php',
       autoLoad: options.autoLoad !== false,
       autoRefresh: options.autoRefresh || 30000, // 30s
       ...options
