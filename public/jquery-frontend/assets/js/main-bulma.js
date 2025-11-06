@@ -565,33 +565,17 @@ function logout() {
 // `auth-bulma.js`.
 
 
-function loadProjectsPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Projetos - Em desenvolvimento</h1></div></section>');
-}
-
-function loadAuctionsPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Leilões - Em desenvolvimento</h1></div></section>');
-}
-
-function loadDashboardPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Dashboard - Em desenvolvimento</h1></div></section>');
-}
-
-function loadWalletPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Carteira - Em desenvolvimento</h1></div></section>');
-}
-
-function loadReputationPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Reputação - Em desenvolvimento</h1></div></section>');
-}
-
-function loadProfilePage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Perfil - Em desenvolvimento</h1></div></section>');
-}
-
-function loadMyProjectsPage() {
-    $('#app').html('<section class="section"><div class="container"><h1 class="title">Meus Projetos - Em desenvolvimento</h1></div></section>');
-}
+// ==================== PÁGINAS IMPLEMENTADAS EM MÓDULOS ====================
+// As seguintes páginas estão implementadas nos módulos -bulma.js:
+// - loadProjectsPage() → projects-bulma.js
+// - loadAuctionsPage() → auctions-bulma.js  
+// - loadDashboardPage() → auctions-bulma.js
+// - loadWalletPage() → wallet-bulma.js
+// - loadReputationPage() → reputation-bulma.js
+// - loadProfilePage() → reputation-bulma.js
+// - loadMyProjectsPage() → projects-bulma.js
+//
+// Esses módulos são carregados no index.html e definem as funções globalmente.
 
 function load404Page() {
     $('#app').html(`
