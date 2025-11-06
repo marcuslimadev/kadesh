@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requisitos Técnicos - Kadesh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/kadesh/assets/images/favicon.png">
+    
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            padding-top: 52px;
+            background: linear-gradient(to bottom, #f5f7fa 0%, #ffffff 100%);
+        }
+        
+        .section-card {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-card.is-primary {
+            border-color: #3273dc;
+        }
+        
+        .section-card.is-info {
+            border-color: #209cee;
+        }
+        
+        .section-card.is-success {
+            border-color: #48c774;
+        }
+        
+        .section-card.is-warning {
+            border-color: #ffdd57;
+        }
+        
+        .section-card.is-danger {
+            border-color: #f14668;
+        }
+        
+        .requirement-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .requirement-list li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+        
+        .requirement-list li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #48c774;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+        
+        .badge-required {
+            background: #f14668;
+            color: white;
+        }
+        
+        .badge-optional {
+            background: #ffdd57;
+            color: #363636;
+        }
+        
+        .badge-recommended {
+            background: #48c774;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar is-fixed-top is-white" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/kadesh/jquery-frontend/index.html">
+                <img src="/kadesh/assets/images/logo-kaddesh.svg" alt="Kadesh" height="40">
+                <span class="ml-2 has-text-weight-bold is-size-5">Kadesh</span>
+            </a>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="/kadesh/jquery-frontend/auctions-demo.html">
+                    <span class="icon"><i class="fas fa-gavel"></i></span>
+                    <span>Leilões</span>
+                </a>
+                <a class="navbar-item" href="/kadesh/jquery-frontend/escopo.html">
+                    <span class="icon"><i class="fas fa-diagram-project"></i></span>
+                    <span>Escopo</span>
+                </a>
+                <a class="navbar-item is-active" href="/kadesh/jquery-frontend/requisitos.html">
+                    <span class="icon"><i class="fas fa-id-card"></i></span>
+                    <span>Requisitos</span>
+                </a>
+            </div>
+            
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <a class="button is-primary" href="#dashboard">
+                        <span class="icon"><i class="fas fa-user"></i></span>
+                        <span>Minha Conta</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero is-medium" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1 has-text-white mb-3">
+                    <span class="icon is-large mr-2">
+                        <i class="fas fa-clipboard-list"></i>
+                    </span>
+                    Requisitos do Sistema
+                </h1>
+                <p class="subtitle is-4 has-text-white-bis">
+                    Documentação técnica e funcional para desenvolvedores
+                </p>
+                <div class="tags is-centered mt-4">
+                    <span class="tag is-light is-medium">Versão 1.0</span>
+                    <span class="tag is-light is-medium">Marcus - Dev</span>
+                    <span class="tag is-light is-medium">Interno</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <!-- Objetivo e Princípios -->
+            <div class="columns mb-5">
+                <div class="column">
+                    <div class="box section-card is-primary">
+                        <h3 class="title is-4">
+                            <span class="icon has-text-primary"><i class="fas fa-bullseye"></i></span>
+                            <span>Objetivo</span>
+                        </h3>
+                        <div class="content">
+                            <p>
+                                Criar um <strong>marketplace unificado</strong> com sistema de 
+                                <strong>leilão reverso</strong>, onde o mesmo usuário pode alternar 
+                                entre os papéis de Contratante e Contratado utilizando uma única conta.
+                            </p>
+                            <p class="has-text-grey is-size-7 mb-0">
+                                O sistema prioriza transparência nos lances, justiça na seleção 
+                                (ponderando preço e reputação) e segurança em todas as transações.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="box section-card is-info">
+                        <h3 class="title is-4">
+                            <span class="icon has-text-info"><i class="fas fa-shield-halved"></i></span>
+                            <span>Princípios</span>
+                        </h3>
+                        <div class="content">
+                            <ul class="requirement-list">
+                                <li><strong>Transparência:</strong> Lances e placar em tempo real</li>
+                                <li><strong>Justiça:</strong> Menor preço ponderado por reputação</li>
+                                <li><strong>Segurança:</strong> KYC obrigatório, escrow e LGPD</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Perfis e Papéis -->
+            <div class="box section-card is-success mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-success"><i class="fas fa-people-arrows"></i></span>
+                    <span>Perfis & Papéis</span>
+                </h3>
+                <div class="content">
+                    <ul class="requirement-list">
+                        <li>Conta única com alternância entre <strong>Contratante</strong> e <strong>Contratado</strong></li>
+                        <li>KYC obrigatório para pessoa física ou jurídica</li>
+                        <li>Reputação inicial baseada em questionário de experiência</li>
+                        <li>Perfil público mostrando especialidades, certificações e portfólio</li>
+                        <li>Sistema de badges por conquistas e níveis</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Campos de Cadastro -->
+            <div class="box section-card is-warning mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-warning-dark"><i class="fas fa-id-card-clip"></i></span>
+                    <span>Campos de Cadastro</span>
+                </h3>
+                <div class="columns is-multiline">
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Dados Básicos</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Nome completo / Razão social</li>
+                                <li>CPF / CNPJ <span class="tech-badge badge-required">Obrigatório</span></li>
+                                <li>Email e telefone verificados</li>
+                                <li>Data de nascimento / Fundação</li>
+                                <li>Endereço completo</li>
+                                <li>Raio de atendimento (km)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Dados Profissionais</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Papel padrão (Contratante/Contratado)</li>
+                                <li>Especialidades/Categorias de serviço</li>
+                                <li>Certificações (CREA, CAU, NR10, NR12, etc.)</li>
+                                <li>Portfólio (fotos, vídeos, projetos anteriores)</li>
+                                <li>Equipe e infraestrutura</li>
+                                <li>Seguro e garantias oferecidas</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Dados Financeiros</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Conta bancária para recebimentos</li>
+                                <li>Chave PIX <span class="tech-badge badge-recommended">Recomendado</span></li>
+                                <li>Carteira digital do sistema</li>
+                                <li>Histórico de transações</li>
+                                <li>Nota fiscal eletrônica</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Conformidade</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Documentos anexados (RG, CNH, Comprovantes)</li>
+                                <li>Consentimentos LGPD <span class="tech-badge badge-required">Obrigatório</span></li>
+                                <li>Questionário de reputação inicial</li>
+                                <li>Score base calculado (0-5 estrelas)</li>
+                                <li>Logs de aceite e auditoria</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Criação de Demanda -->
+            <div class="box section-card is-danger mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-danger"><i class="fas fa-clipboard-list"></i></span>
+                    <span>Criação de Demanda (Projeto)</span>
+                </h3>
+                <div class="columns">
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Campos Obrigatórios</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Título descritivo (5-100 caracteres)</li>
+                                <li>Categoria de serviço</li>
+                                <li>Escopo detalhado do projeto</li>
+                                <li>Anexos (plantas, fotos, especificações)</li>
+                                <li>Localização: presencial/remoto/híbrido</li>
+                                <li>Endereço completo (se presencial)</li>
+                                <li>Prazo esperado de conclusão</li>
+                                <li>Janela de início (data início - data fim)</li>
+                                <li>Orçamento-faixa (mínimo e máximo)</li>
+                                <li>Pesos do leilão (% preço vs % reputação)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Regras de Negócio</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Validação contra valores irreais (min/max)</li>
+                                <li>Decremento mínimo entre lances (R$ 50 ou 1%)</li>
+                                <li>Timer de encerramento configurável (24h-30 dias)</li>
+                                <li>Soft close opcional (+2min após último lance)</li>
+                                <li>Vencedor: maior score ponderado</li>
+                                <li>Empate: primeiro a dar o lance</li>
+                                <li>SLAs personalizáveis por milestone</li>
+                                <li>Garantia mínima obrigatória</li>
+                                <li>Requisitos de certificação (se aplicável)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema de Lances -->
+            <div class="box section-card is-primary mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-primary"><i class="fas fa-gavel"></i></span>
+                    <span>Sistema de Lances (Leilão Reverso)</span>
+                </h3>
+                <div class="content">
+                    <h4 class="subtitle is-5">Cálculo do Score</h4>
+                    <div class="notification is-info is-light">
+                        <p class="has-text-centered is-family-monospace is-size-5">
+                            <strong>Score = (70% × Índice_Preço) + (30% × Índice_Reputação)</strong>
+                        </p>
+                        <p class="has-text-centered is-size-7 mt-2">
+                            Índice_Preço = 1 - (Preço_Lance - Preço_Mínimo) / (Preço_Máximo - Preço_Mínimo)<br>
+                            Índice_Reputação = Rating / 5
+                        </p>
+                    </div>
+                    
+                    <h4 class="subtitle is-5 mt-4">Características</h4>
+                    <ul class="requirement-list">
+                        <li>Placar ao vivo atualizado a cada lance</li>
+                        <li>Ranking visual com top 10 propostas</li>
+                        <li>Pesos customizáveis pelo contratante (30/70, 50/50, etc.)</li>
+                        <li>Histórico completo de lances com timestamps</li>
+                        <li>Notificações push quando for superado</li>
+                        <li>Countdown visual com cores por urgência</li>
+                        <li>Proteção contra spam (1 lance a cada 5 minutos)</li>
+                        <li>Lance mínimo = Lance atual - R$ 50</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Carteira & Escrow -->
+            <div class="box section-card is-success mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-success"><i class="fas fa-wallet"></i></span>
+                    <span>Carteira & Sistema Escrow</span>
+                </h3>
+                <div class="columns">
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Funcionalidades</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Depósito inicial: 60-70% para valores altos</li>
+                                <li>Liberação progressiva por milestones</li>
+                                <li>Evidências obrigatórias (fotos, docs, relatórios)</li>
+                                <li>Saques via PIX/TED (processamento em 1-2 dias)</li>
+                                <li>Webhooks do gateway de pagamento</li>
+                                <li>Extrato completo com filtros</li>
+                                <li>Saldo bloqueado vs disponível</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="column is-half">
+                        <h4 class="subtitle is-5">Disputas</h4>
+                        <div class="content">
+                            <ul class="requirement-list is-size-7">
+                                <li>Sistema de mediação interno</li>
+                                <li>Prazo para resposta: 3 dias úteis</li>
+                                <li>Upload de evidências por ambas as partes</li>
+                                <li>Decisão por equipe de mediação</li>
+                                <li>Chargebacks controlados e monitorados</li>
+                                <li>Penalidades por má-fé</li>
+                                <li>Notas fiscais anexadas nos marcos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LGPD & Segurança -->
+            <div class="box section-card is-warning mb-5">
+                <h3 class="title is-4">
+                    <span class="icon has-text-warning-dark"><i class="fas fa-lock"></i></span>
+                    <span>LGPD & Segurança</span>
+                </h3>
+                <div class="columns is-multiline">
+                    <div class="column is-one-third">
+                        <h5 class="subtitle is-6">Consentimentos</h5>
+                        <ul class="requirement-list is-size-7">
+                            <li>Termos de uso claros</li>
+                            <li>Política de privacidade</li>
+                            <li>Cookies e tracking</li>
+                            <li>Marketing (opcional)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="column is-one-third">
+                        <h5 class="subtitle is-6">Direitos do Usuário</h5>
+                        <ul class="requirement-list is-size-7">
+                            <li>Acesso aos dados</li>
+                            <li>Retificação</li>
+                            <li>Portabilidade</li>
+                            <li>Direito ao esquecimento</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="column is-one-third">
+                        <h5 class="subtitle is-6">Segurança Técnica</h5>
+                        <ul class="requirement-list is-size-7">
+                            <li>Criptografia AES-256</li>
+                            <li>HTTPS obrigatório</li>
+                            <li>Logs imutáveis</li>
+                            <li>Segregação de dados</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Critérios de Aceite -->
+            <div class="box section-card is-danger">
+                <h3 class="title is-4">
+                    <span class="icon has-text-danger"><i class="fas fa-square-check"></i></span>
+                    <span>Critérios de Aceite</span>
+                </h3>
+                <div class="content">
+                    <div class="columns is-multiline">
+                        <div class="column is-half">
+                            <h5 class="subtitle is-6">✅ Funcionalidades Core</h5>
+                            <ul class="requirement-list is-size-7">
+                                <li>Cadastro completo com KYC funcional</li>
+                                <li>Validação de documentos e aprovação</li>
+                                <li>Alternância de papéis sem logout</li>
+                                <li>Criação de demanda com todos os campos</li>
+                                <li>Regra ética de orçamento-faixa</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="column is-half">
+                            <h5 class="subtitle is-6">✅ Sistema de Leilão</h5>
+                            <ul class="requirement-list is-size-7">
+                                <li>Placar ponderado em tempo real</li>
+                                <li>Timer com soft close operacional</li>
+                                <li>Lances válidos e ordenados</li>
+                                <li>Notificações funcionando</li>
+                                <li>Histórico completo de lances</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="column is-half">
+                            <h5 class="subtitle is-6">✅ Escrow & Pagamentos</h5>
+                            <ul class="requirement-list is-size-7">
+                                <li>Depósito em escrow operacional</li>
+                                <li>Milestones com evidências</li>
+                                <li>Liberação após aceite do contratante</li>
+                                <li>Saques via PIX/TED</li>
+                                <li>Webhooks do gateway</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="column is-half">
+                            <h5 class="subtitle is-6">✅ Conformidade</h5>
+                            <ul class="requirement-list is-size-7">
+                                <li>Todos os consentimentos LGPD</li>
+                                <li>Criptografia end-to-end</li>
+                                <li>Logs imutáveis para auditoria</li>
+                                <li>Backups automáticos diários</li>
+                                <li>Plano de continuidade de negócios</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack -->
+            <div class="notification is-info is-light mt-6">
+                <h4 class="title is-5">
+                    <span class="icon"><i class="fas fa-code"></i></span>
+                    <span>Stack Tecnológica</span>
+                </h4>
+                <div class="tags">
+                    <span class="tag is-medium is-info">PHP 8.2+</span>
+                    <span class="tag is-medium is-info">MySQL 8.0</span>
+                    <span class="tag is-medium is-primary">Bulma CSS 0.9.4</span>
+                    <span class="tag is-medium is-warning">jQuery 3.7</span>
+                    <span class="tag is-medium is-success">Mercado Pago API</span>
+                    <span class="tag is-medium is-danger">WebSocket (futuro)</span>
+                    <span class="tag is-medium is-link">Chart.js</span>
+                    <span class="tag is-medium">Font Awesome 6</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Kadesh</strong> - Documentação Técnica v1.0<br>
+                <small class="has-text-grey">© 2025 Uso Interno - Marcus (Desenvolvedor)</small>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
