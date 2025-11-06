@@ -188,12 +188,49 @@ try {
 
     // PROJECT ROUTES (New Architecture)
     $projectController = new ProjectController();
+    
+    // Public routes
     if ($path === '/api/projects' && $method === 'GET') {
         $projectController->index();
         exit;
     }
     if (preg_match('#^/api/projects/(\d+)$#', $path, $matches) && $method === 'GET') {
         $projectController->show($matches[1]);
+        exit;
+    }
+    
+    // Protected routes - My projects
+    if ($path === '/api/projects/my' && $method === 'GET') {
+        requireAuth();
+        $projectController->myProjects();
+        exit;
+    }
+    
+    // Protected routes - Create project
+    if ($path === '/api/projects' && $method === 'POST') {
+        requireAuth();
+        $projectController->create();
+        exit;
+    }
+    
+    // Protected routes - Update project
+    if (preg_match('#^/api/projects/(\d+)$#', $path, $matches) && $method === 'PUT') {
+        requireAuth();
+        $projectController->update($matches[1]);
+        exit;
+    }
+    
+    // Protected routes - Delete project
+    if (preg_match('#^/api/projects/(\d+)$#', $path, $matches) && $method === 'DELETE') {
+        requireAuth();
+        $projectController->delete($matches[1]);
+        exit;
+    }
+    
+    // Protected routes - Close project
+    if (preg_match('#^/api/projects/(\d+)/close$#', $path, $matches) && $method === 'POST') {
+        requireAuth();
+        $projectController->close($matches[1]);
         exit;
     }
 
