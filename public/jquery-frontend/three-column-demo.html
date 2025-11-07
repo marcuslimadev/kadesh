@@ -11,6 +11,9 @@
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     
+    <!-- Kadesh Theme -->
+    <link rel="stylesheet" href="/kadesh/public/jquery-frontend/assets/css/kadesh-theme.css">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -20,7 +23,6 @@
     <style>
         body {
             padding-top: 52px;
-            background: #f5f7fa;
         }
         
         /* Three Column Layout */
@@ -70,37 +72,6 @@
             grid-column: 3;
         }
         
-        /* Category Filter Item */
-        .category-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 0.5rem;
-        }
-        
-        .category-item:hover {
-            background: #f5f7fa;
-            transform: translateX(5px);
-        }
-        
-        .category-item.is-active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .category-item .icon {
-            margin-right: 0.75rem;
-        }
-        
-        .category-item .count {
-            margin-left: auto;
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-        
         /* Price Range Slider */
         .price-range {
             padding: 1rem;
@@ -112,42 +83,11 @@
             margin-top: 1rem;
         }
         
-        /* Featured Card */
-        .featured-card {
-            border-left: 4px solid #48c774;
-            transition: all 0.3s ease;
-        }
-        
-        .featured-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-        
-        .featured-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #48c774;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
         /* Stats Widget */
         .stats-widget {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 8px;
-            color: white;
         }
         
         .stat-value {
@@ -190,12 +130,7 @@
                 max-height: none;
             }
         }
-        
-        /* Ad Banner */
-        .ad-banner {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 2rem;
+    </style>
             border-radius: 8px;
             text-align: center;
             position: relative;
@@ -249,7 +184,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar is-fixed-top is-white" role="navigation">
+    <nav class="navbar is-fixed-top is-kadesh" role="navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/kadesh/jquery-frontend/index.html">
                 <img src="/kadesh/assets/images/logo-kaddesh.svg" alt="Kadesh" height="40">
@@ -275,7 +210,7 @@
             
             <div class="navbar-end">
                 <div class="navbar-item">
-                    <a class="button is-primary" href="#create-project">
+                    <a class="button is-kadesh-primary" href="#create-project">
                         <span class="icon"><i class="fas fa-plus"></i></span>
                         <span>Criar Projeto</span>
                     </a>

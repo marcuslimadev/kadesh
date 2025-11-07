@@ -11,16 +11,15 @@
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     
+    <!-- Kadesh Theme -->
+    <link rel="stylesheet" href="/kadesh/public/jquery-frontend/assets/css/kadesh-theme.css">
+    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body {
             padding-top: 52px;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
         .auction-cards-grid {
@@ -45,7 +44,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar is-fixed-top is-white" role="navigation">
+    <nav class="navbar is-fixed-top is-kadesh" role="navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img src="/kadesh/assets/images/logo-kaddesh.svg" alt="Kadesh" height="40">
@@ -57,7 +56,7 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary" href="#create-project">
+                        <a class="button is-kadesh-primary" href="#create-project">
                             <span class="icon"><i class="fas fa-plus"></i></span>
                             <span>Criar Projeto</span>
                         </a>
@@ -72,7 +71,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero is-medium">
+    <section class="hero is-medium is-kadesh">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <h1 class="title is-1 has-text-white">
@@ -86,7 +85,7 @@
                         <span class="icon"><i class="fas fa-search"></i></span>
                         <span>Buscar Projetos</span>
                     </button>
-                    <button class="button is-light is-medium" onclick="scrollToAuctions()">
+                    <button class="button is-kadesh-secondary is-medium" onclick="scrollToAuctions()">
                         <span class="icon"><i class="fas fa-gavel"></i></span>
                         <span>Ver Leilões</span>
                     </button>
