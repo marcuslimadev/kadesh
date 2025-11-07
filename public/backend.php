@@ -198,6 +198,17 @@ try {
         $projectController->show($matches[1]);
         exit;
     }
+
+    // AUCTIONS (Public) - Leilões ativos e detalhe do leilão
+    if ($path === '/api/auctions/active' && $method === 'GET') {
+        handleGetActiveAuctions();
+        exit;
+    }
+
+    if (preg_match('#^/api/auctions/(\d+)$#', $path, $matches) && $method === 'GET') {
+        handleGetAuction($matches[1]);
+        exit;
+    }
     
     // Protected routes - My projects
     if ($path === '/api/projects/my' && $method === 'GET') {
@@ -954,6 +965,70 @@ function handleCreateBid() {
     }
 
     echo json_encode(['id' => $bidId, 'message' => 'Bid created']);
+}
+
+// ==================== AUCTIONS HANDLERS ====================
+
+function handleGetActiveAuctions() {
+    $db = getDB();
+
+    $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
+
+    $sql = "
+        SELECT p.*, u.name as contractor_name, u.rating as contractor_rating,
+               COALESCE((SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id), 0) as bids_count,
+               (SELECT MIN(amount) FROM bids b WHERE b.project_id = p.id) as lowest_bid
+        FROM projects p
+        LEFT JOIN users u ON p.contractor_id = u.id
+        WHERE p.status IN ('open', 'bidding') AND (p.bidding_ends_at IS NULL OR p.bidding_ends_at > NOW())
+        ORDER BY p.bidding_ends_at ASC
+        LIMIT ?
+    ";
+
+    try {
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$limit]);
+        $auctions = $stmt->fetchAll();
+
+        // Ensure bidding_ends_at is ISO-format
+        foreach ($auctions as &$a) {
+            if (!empty($a['bidding_ends_at'])) {
+                $a['bidding_ends_at'] = date('c', strtotime($a['bidding_ends_at']));
+            }
+        }
+
+        echo json_encode(['auctions' => $auctions, 'weights' => ['price' => 0.7, 'reputation' => 0.3]]);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['message' => 'Erro ao buscar leilões', 'error' => $e->getMessage()]);
+    }
+}
+
+function handleGetAuction($id) {
+    $db = getDB();
+
+    $stmt = $db->prepare('SELECT p.*, u.name as contractor_name, u.rating as contractor_rating FROM projects p LEFT JOIN users u ON p.contractor_id = u.id WHERE p.id = ?');
+    $stmt->execute([$id]);
+    $project = $stmt->fetch();
+
+    if (!$project) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Auction not found']);
+        return;
+    }
+
+    // Attach bids
+    $stmt = $db->prepare('SELECT b.*, u.name as user_name FROM bids b LEFT JOIN users u ON b.user_id = u.id WHERE b.project_id = ? ORDER BY b.amount ASC, b.created_at ASC');
+    $stmt->execute([$id]);
+    $bids = $stmt->fetchAll();
+
+    if (!empty($project['bidding_ends_at'])) {
+        $project['bidding_ends_at'] = date('c', strtotime($project['bidding_ends_at']));
+    }
+
+    $project['bids'] = $bids;
+
+    echo json_encode($project);
 }
 
 function handleConfirmWinner($projectId) {

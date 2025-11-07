@@ -628,8 +628,11 @@
     
     <script>
         $(document).ready(function() {
-            // Load bid modal component
-            $('#bidModalContainer').load('/kadesh/jquery-frontend/components/bid-modal-bulma.html');
+            // Load bid modal component and initialize when ready
+            $('#bidModalContainer').load('/kadesh/jquery-frontend/components/bid-modal-bulma.html', function() {
+                // modal markup uses id="bid-modal"
+                window.bidModal = new BidModal('#bid-modal');
+            });
             
             // Initialize responsive layout
             const responsiveLayout = new ResponsiveLayout({
@@ -652,10 +655,8 @@
             
             // Initialize auction cards
             const auctionCards = new AuctionCards('#auctionCardsContainer');
+            window.auctionCards = auctionCards; // expose globally so modal can trigger reloads
             auctionCards.load();
-            
-            // Initialize bid modal
-            const bidModal = new BidModal('#bidModal');
             
             // Listen to filter changes
             filters.on('filter-changed', (currentFilters) => {

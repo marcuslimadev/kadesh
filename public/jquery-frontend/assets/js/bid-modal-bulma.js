@@ -181,13 +181,12 @@ class BidModal {
     try {
       const formData = {
         project_id: this.currentProjectId,
-        bid_amount: parseFloat(this.bidAmountInput.value),
-        availability_days: parseInt(this.availabilityInput.value),
-        message: this.messageInput?.value || '',
-        attachments: [] // TODO: Upload de arquivos
+        amount: parseFloat(this.bidAmountInput.value),
+        proposal: this.messageInput?.value || '',
+        availability_days: parseInt(this.availabilityInput.value)
       };
-      
-      const response = await fetch('/kadesh/src/Backend/BidController.php', {
+
+      const response = await fetch('/kadesh/api/bids', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
