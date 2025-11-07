@@ -144,20 +144,20 @@
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/countdown-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/score-calculator-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/auction-sorter-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/auction-cards-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/bid-modal-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/countdown-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/score-calculator-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/auction-sorter-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/auction-cards-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/bid-modal-bulma.js"></script>
     
     <script>
         // Carregar componentes
         $(document).ready(function() {
             // Carregar barra de categorias
-            $('#categories-bar-container').load('/kadesh/jquery-frontend/components/categories-bar-bulma.html');
+            $('#categories-bar-container').load('/kadesh/public/jquery-frontend/components/categories-bar-bulma.html');
             
             // Carregar modal de lance
-            $('#bid-modal-container').load('/kadesh/jquery-frontend/components/bid-modal-bulma.html', function() {
+            $('#bid-modal-container').load('/kadesh/public/jquery-frontend/components/bid-modal-bulma.html', function() {
                 // Inicializar modal após carregar
                 window.bidModal = new BidModal('#bid-modal');
             });

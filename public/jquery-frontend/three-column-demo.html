@@ -618,18 +618,18 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     
     <!-- JavaScript Modules -->
-    <script src="/kadesh/jquery-frontend/assets/js/countdown-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/score-calculator-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/auction-sorter-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/auction-cards-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/bid-modal-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/three-column-filters-bulma.js"></script>
-    <script src="/kadesh/jquery-frontend/assets/js/responsive-layout-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/countdown-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/score-calculator-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/auction-sorter-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/auction-cards-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/bid-modal-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/three-column-filters-bulma.js"></script>
+    <script src="/kadesh/public/jquery-frontend/assets/js/responsive-layout-bulma.js"></script>
     
     <script>
         $(document).ready(function() {
             // Load bid modal component and initialize when ready
-            $('#bidModalContainer').load('/kadesh/jquery-frontend/components/bid-modal-bulma.html', function() {
+            $('#bidModalContainer').load('/kadesh/public/jquery-frontend/components/bid-modal-bulma.html', function() {
                 // modal markup uses id="bid-modal"
                 window.bidModal = new BidModal('#bid-modal');
             });
