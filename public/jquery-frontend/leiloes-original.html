@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leilões - Seja você um Kaddesh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/kadesh/public/assets/images/favicon.png">
+    
+    <!-- Google Fonts - Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Kadesh Original Theme -->
+    <link rel="stylesheet" href="/kadesh/public/jquery-frontend/assets/css/kadesh-original-theme.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="kadesh-navbar">
+        <div class="container">
+            <a href="/kadesh/public/jquery-frontend/leiloes-original.html" class="kadesh-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+                <img src="/kadesh/public/assets/images/logo-kaddesh.svg" alt="Kaddesh" style="height: 40px;" onerror="this.onerror=null; this.src='/kadesh/public/assets/images/logo-kaddesh.png';">
+            </a>
+            
+            <ul class="kadesh-nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#quem-somos">Quem Somos</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#leiloes" style="color: var(--kadesh-navy); font-weight: 600;">Leilões</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="#entrar" style="color: var(--kadesh-navy); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem;">Entrar</a>
+                <a href="#publicar" class="kadesh-btn kadesh-btn-primary">
+                    Publicar uma tarefa +
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="kadesh-hero">
+        <div class="kadesh-container">
+            <div class="kadesh-hero-content">
+                <div class="kadesh-hero-text">
+                    <h1>Seja você um Kaddesh</h1>
+                    <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: white;">Melhores profissionais ou talentos</h2>
+                    <p>Em busca de oportunidades, nossa plataforma de leilões de serviços profissionais é o seu destino certo. Com recursos de segurança robustos e uma comunidade de confiança, estamos aqui para impulsionar o seu sucesso. Cadastre-se hoje e descubra o poder de encontrar ou oferecer serviços profissionais de forma segura e eficaz.</p>
+                    
+                    <div class="kadesh-search-bar">
+                        <input type="text" placeholder="Pesquise com palavra-chave" id="searchInput">
+                        <select id="categorySelect">
+                            <option value="">Selecionar tipo de lista</option>
+                            <option value="realistic">Design Realístico</option>
+                            <option value="digital-marketing">Marketing Digital</option>
+                            <option value="email-marketing">Email Marketing</option>
+                            <option value="obras">Obras e Reformas</option>
+                            <option value="pintura">Pintura</option>
+                            <option value="eletrica">Elétrica</option>
+                            <option value="hidraulica">Hidráulica</option>
+                            <option value="solar">Energia Solar</option>
+                        </select>
+                        <button type="button" id="searchBtn">
+                            <i class="fas fa-search"></i>
+                            Procure agora
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="kadesh-hero-image">
+                    <picture>
+                        <source srcset="/kadesh/public/assets/images/hero-handshake.avif?v=2" type="image/avif">
+                        <img src="/kadesh/public/assets/images/hero-handshake.jpg?v=2" alt="Profissionais Kaddesh" onerror="this.onerror=null; this.src='/kadesh/public/assets/images/hero-business.jpg?v=2'">
+                    </picture>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vamos começar rapidamente hoje -->
+    <section class="kadesh-section" style="text-align: center; padding: 2rem 0;">
+        <div class="kadesh-container">
+            <h3 style="font-size: 1.5rem; color: var(--kadesh-text-gray); margin-bottom: 3rem;">Vamos começar rapidamente hoje</h3>
+        </div>
+    </section>
+
+    <!-- Categorias Populares -->
+    <section class="kadesh-section bg-light">
+        <div class="kadesh-container">
+            <div class="kadesh-section-title">
+                <h2>Vamos explorar categorias populares</h2>
+                <p>Encontre os melhores profissionais para o seu projeto em nossa plataforma segura de leilões de serviços. Com uma comunidade de talentos qualificados e um sistema de pagamento protegido, você pode contratar com confiança e garantir resultados excepcionais para seus projetos. Cadastre-se hoje e dê o próximo passo para o sucesso</p>
+            </div>
+            
+            <div class="kadesh-grid kadesh-grid-4" style="margin-top: 2rem;">
+                <div class="kadesh-category-card" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/kadesh/public/assets/images/category-design.jpg?v=2'); background-size: cover; background-position: center; padding: 2rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--kadesh-shadow-md); cursor: pointer; transition: all var(--transition-base); color: white;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <i class="fas fa-palette fa-3x" style="color: white; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem; color: white;">Design Realístico</h4>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Profissionais criativos</p>
+                </div>
+                
+                <div class="kadesh-category-card" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/kadesh/public/assets/images/category-marketing.jpg?v=2'); background-size: cover; background-position: center; padding: 2rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--kadesh-shadow-md); cursor: pointer; transition: all var(--transition-base); color: white;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <i class="fas fa-bullhorn fa-3x" style="color: white; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem; color: white;">Marketing Digital</h4>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Especialistas em marketing</p>
+                </div>
+                
+                <div class="kadesh-category-card" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/kadesh/public/assets/images/category-email.jpg?v=2'); background-size: cover; background-position: center; padding: 2rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--kadesh-shadow-md); cursor: pointer; transition: all var(--transition-base); color: white;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <i class="fas fa-envelope fa-3x" style="color: white; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem; color: white;">Email Marketing</h4>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Campanhas efetivas</p>
+                </div>
+                
+                <div class="kadesh-category-card" style="background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/kadesh/public/assets/images/category-obras.jpg?v=2'); background-size: cover; background-position: center; padding: 2rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--kadesh-shadow-md); cursor: pointer; transition: all var(--transition-base); color: white;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <i class="fas fa-hard-hat fa-3x" style="color: white; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem; color: white;">Obras e Reformas</h4>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Profissionais da construção</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como Funciona / CTA -->
+    <section class="kadesh-section" style="background: linear-gradient(135deg, var(--kadesh-navy) 0%, var(--kadesh-blue-dark) 100%); color: white;">
+        <div class="kadesh-container">
+            <div class="kadesh-section-title" style="text-align: center;">
+                <h2 style="color: white;">Como Funciona</h2>
+                <p style="color: rgba(255,255,255,0.9); max-width: 800px; margin: 0 auto;">Conectamos profissionais qualificados com clientes que precisam de seus serviços</p>
+            </div>
+            
+            <div class="kadesh-grid kadesh-grid-3" style="margin-top: 3rem;">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="width: 80px; height: 80px; background: var(--kadesh-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 4px 12px rgba(244, 208, 63, 0.3);">
+                        <i class="fas fa-user-plus fa-2x" style="color: var(--kadesh-navy);"></i>
+                    </div>
+                    <h4 style="color: white; margin-bottom: 1rem;">1. Cadastre-se</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Crie seu perfil profissional gratuitamente e destaque suas habilidades</p>
+                </div>
+                
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="width: 80px; height: 80px; background: var(--kadesh-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 4px 12px rgba(244, 208, 63, 0.3);">
+                        <i class="fas fa-search fa-2x" style="color: var(--kadesh-navy);"></i>
+                    </div>
+                    <h4 style="color: white; margin-bottom: 1rem;">2. Encontre Projetos</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Navegue por centenas de leilões ativos e escolha aqueles que combinam com você</p>
+                </div>
+                
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="width: 80px; height: 80px; background: var(--kadesh-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 4px 12px rgba(244, 208, 63, 0.3);">
+                        <i class="fas fa-handshake fa-2x" style="color: var(--kadesh-navy);"></i>
+                    </div>
+                    <h4 style="color: white; margin-bottom: 1rem;">3. Feche Negócios</h4>
+                    <p style="color: rgba(255,255,255,0.8);">Envie propostas competitivas e seja contratado de forma segura</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#cadastro" class="kadesh-btn" style="background: var(--kadesh-yellow); color: var(--kadesh-navy); font-weight: 700; padding: 1rem 2.5rem; font-size: 1.125rem;">
+                    Começar Agora - É Grátis!
+                    <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leilões Ativos -->
+    <section class="kadesh-section">
+        <div class="kadesh-container">
+            <div class="kadesh-section-title">
+                <h2>Aplique os projetos mais bem avaliados</h2>
+                <p>Participe dos projetos disponíveis e faça sua proposta</p>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loadingState" style="text-align: center; display: none;">
+                <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--kadesh-blue-medium);"></i>
+                <p style="margin-top: 1rem; color: var(--kadesh-text-gray);">Carregando leilões...</p>
+            </div>
+            
+            <!-- Cards Container -->
+            <div id="auctionsGrid" class="kadesh-grid kadesh-grid-3">
+                <!-- Cards will be loaded here by JavaScript -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" style="text-align: center; display: none; padding: 3rem;">
+                <i class="fas fa-inbox fa-4x" style="color: var(--kadesh-border-color);"></i>
+                <p style="margin-top: 1rem; color: var(--kadesh-text-gray);">Nenhum leilão encontrado</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossos últimos artigos de notícias -->
+    <section class="kadesh-section bg-light">
+        <div class="kadesh-container">
+            <div class="kadesh-section-title">
+                <h2>Nossos últimos artigos de notícias</h2>
+                <p>Fique por dentro das últimas novidades e oportunidades</p>
+            </div>
+            
+            <div class="kadesh-grid kadesh-grid-3" style="margin-top: 2rem;">
+                <!-- Artigo 1 -->
+                <article style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--kadesh-shadow-md); transition: all var(--transition-base);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <img src="https://secure.gravatar.com/avatar/14513634bd3e97f3d69d8e877a310972a30429c2e14ed1127a750d198d3baa5b?s=50&d=mm&r=g" alt="Admin" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--kadesh-text-gray);">admin</div>
+                                <div style="font-size: 0.75rem; color: var(--kadesh-text-light);">nov 08</div>
+                            </div>
+                        </div>
+                        <span class="kadesh-badge kadesh-badge-blue" style="margin-bottom: 0.75rem;">Leilão</span>
+                        <h4 style="margin: 0.75rem 0; line-height: 1.4;">Aades no AM prorroga inscrição de seleção com salário de R$ 2,2 mil</h4>
+                        <p style="color: var(--kadesh-text-gray); font-size: 0.9rem;">Confira as oportunidades disponíveis para profissionais qualificados...</p>
+                        <a href="#" style="color: var(--kadesh-orange); font-weight: 600; font-size: 0.9rem;">Leia mais →</a>
+                    </div>
+                </article>
+                
+                <!-- Artigo 2 -->
+                <article style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--kadesh-shadow-md); transition: all var(--transition-base);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <img src="https://secure.gravatar.com/avatar/14513634bd3e97f3d69d8e877a310972a30429c2e14ed1127a750d198d3baa5b?s=50&d=mm&r=g" alt="Admin" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--kadesh-text-gray);">admin</div>
+                                <div style="font-size: 0.75rem; color: var(--kadesh-text-light);">nov 08</div>
+                            </div>
+                        </div>
+                        <span class="kadesh-badge kadesh-badge-blue" style="margin-bottom: 0.75rem;">Leilão</span>
+                        <h4 style="margin: 0.75rem 0; line-height: 1.4;">Associação Reabilitar abre processo seletivo para enfermeiros</h4>
+                        <p style="color: var(--kadesh-text-gray); font-size: 0.9rem;">Novas vagas para profissionais da saúde em diferentes regiões...</p>
+                        <a href="#" style="color: var(--kadesh-orange); font-weight: 600; font-size: 0.9rem;">Leia mais →</a>
+                    </div>
+                </article>
+                
+                <!-- Artigo 3 -->
+                <article style="background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--kadesh-shadow-md); transition: all var(--transition-base);" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--kadesh-shadow-md)'">
+                    <div style="padding: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                            <img src="https://secure.gravatar.com/avatar/14513634bd3e97f3d69d8e877a310972a30429c2e14ed1127a750d198d3baa5b?s=50&d=mm&r=g" alt="Admin" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <div>
+                                <div style="font-size: 0.85rem; color: var(--kadesh-text-gray);">admin</div>
+                                <div style="font-size: 0.75rem; color: var(--kadesh-text-light);">nov 08</div>
+                            </div>
+                        </div>
+                        <span class="kadesh-badge kadesh-badge-blue" style="margin-bottom: 0.75rem;">Leilão</span>
+                        <h4 style="margin: 0.75rem 0; line-height: 1.4;">Câmara de Confresa (MT) abre concurso público com salário de até R$ 4,8 mil</h4>
+                        <p style="color: var(--kadesh-text-gray); font-size: 0.9rem;">Oportunidades no setor público com excelentes remunerações...</p>
+                        <a href="#" style="color: var(--kadesh-orange); font-weight: 600; font-size: 0.9rem;">Leia mais →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Palavras Chaves / CTA -->
+    <section class="kadesh-section" style="background: var(--kadesh-navy); color: white; text-align: center;">
+        <div class="kadesh-container">
+            <h2 style="color: white; margin-bottom: 2rem;">Palavras Chaves</h2>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#talento" class="kadesh-btn kadesh-btn-primary kadesh-btn-lg">
+                    Estou procurando um talento
+                </a>
+                <a href="#trabalho" class="kadesh-btn" style="background: white; color: var(--kadesh-navy); font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem 2rem; font-size: 1.125rem; border-radius: var(--radius-md); transition: all var(--transition-base);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--kadesh-shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                    Estou procurando um trabalho
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Estatísticas -->
+    <section class="kadesh-section bg-light">
+        <div class="kadesh-container">
+            <div class="kadesh-section-title">
+                <h2>Números que Impressionam</h2>
+                <p>Veja o impacto da nossa plataforma</p>
+            </div>
+            
+            <div class="kadesh-grid kadesh-grid-4">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--kadesh-blue-dark);">
+                        <span id="statsActive">124</span>
+                    </div>
+                    <p style="color: var(--kadesh-text-gray); margin-top: 0.5rem;">Projetos Ativos</p>
+                </div>
+                
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--kadesh-orange);">
+                        <span id="statsProviders">580</span>
+                    </div>
+                    <p style="color: var(--kadesh-text-gray); margin-top: 0.5rem;">Profissionais</p>
+                </div>
+                
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--kadesh-green);">
+                        R$ <span id="statsValue">2.5M</span>
+                    </div>
+                    <p style="color: var(--kadesh-text-gray); margin-top: 0.5rem;">Em Projetos</p>
+                </div>
+                
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--kadesh-blue-medium);">
+                        <span id="statsRating">4.8</span> ⭐
+                    </div>
+                    <p style="color: var(--kadesh-text-gray); margin-top: 0.5rem;">Avaliação Média</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="kadesh-footer">
+        <div class="kadesh-container">
+            <!-- Newsletter -->
+            <div style="background: white; border-radius: var(--radius-lg); padding: 2.5rem; margin-bottom: 3rem; box-shadow: var(--kadesh-shadow-md); text-align: center;">
+                <h3 style="margin-bottom: 1rem; color: var(--kadesh-navy);">Inscreva-se no nosso boletim</h3>
+                <p style="color: var(--kadesh-text-gray); margin-bottom: 1.5rem;">Inscreva-se agora para fazer parte desta incrível comunidade!</p>
+                <div style="display: flex; gap: 1rem; max-width: 500px; margin: 0 auto;">
+                    <input 
+                        type="email" 
+                        placeholder="Seu e-mail" 
+                        style="flex: 1; padding: 0.875rem 1.25rem; border: 1px solid var(--kadesh-border-color); border-radius: var(--radius-md); font-size: 1rem;"
+                    >
+                    <button class="kadesh-btn kadesh-btn-primary">
+                        Cadastre-se agora
+                    </button>
+                </div>
+                <p style="color: var(--kadesh-text-gray); font-size: 0.875rem; margin-top: 1rem;">Não fique desatualizado, mantenha-se atualizado com nossa newsletter mensal.</p>
+            </div>
+            
+            <!-- Footer Principal -->
+            <div style="margin-bottom: 2rem;">
+                <p style="max-width: 600px; color: var(--kadesh-text-gray); line-height: 1.6;">Na Kaddesh Soluções Profissionais, estamos comprometidos em tornar a busca e a execução de serviços mais eficientes e gratificantes para todos os envolvidos.</p>
+            </div>
+            
+            <div class="kadesh-footer-grid">
+                <!-- Links Úteis -->
+                <div class="kadesh-footer-column">
+                    <h4>Links Úteis</h4>
+                    <ul>
+                        <li><a href="#inicio">Início</a></li>
+                        <li><a href="#quem-somos">Quem somos</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#leiloes">Leilões</a></li>
+                        <li><a href="#contato">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Políticas -->
+                <div class="kadesh-footer-column">
+                    <h4>Informações</h4>
+                    <ul>
+                        <li><a href="#privacidade">Políticas de privacidade</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#termos">Termos de uso</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Minha Conta -->
+                <div class="kadesh-footer-column">
+                    <h4>Minha Conta</h4>
+                    <p style="color: var(--kadesh-text-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-phone"></i> +55 31 99188-7791
+                    </p>
+                    <p style="color: var(--kadesh-text-gray); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                        <i class="fas fa-phone"></i> +55 31 99188-7791
+                    </p>
+                    <p style="color: var(--kadesh-text-gray); font-size: 0.9rem;">
+                        <i class="fas fa-map-marker-alt"></i> Belo Horizonte, MG
+                    </p>
+                </div>
+                
+                <!-- Social / App -->
+                <div class="kadesh-footer-column">
+                    <h4>Baixe o App</h4>
+                    <p style="color: var(--kadesh-text-gray); font-size: 0.9rem; margin-bottom: 1rem;">
+                        <i class="fas fa-mobile-alt"></i> Disponível para Android e iOS
+                    </p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" style="color: var(--kadesh-text-gray); font-size: 1.5rem; transition: color var(--transition-base);" onmouseover="this.style.color='var(--kadesh-orange)'" onmouseout="this.style.color='var(--kadesh-text-gray)'">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" style="color: var(--kadesh-text-gray); font-size: 1.5rem; transition: color var(--transition-base);" onmouseover="this.style.color='var(--kadesh-orange)'" onmouseout="this.style.color='var(--kadesh-text-gray)'">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" style="color: var(--kadesh-text-gray); font-size: 1.5rem; transition: color var(--transition-base);" onmouseover="this.style.color='var(--kadesh-orange)'" onmouseout="this.style.color='var(--kadesh-text-gray)'">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="kadesh-footer-bottom">
+                <p>© 2025 Kaddesh Soluções. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bid Modal -->
+    <div id="bidModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: var(--radius-lg); max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: var(--kadesh-shadow-xl);">
+            <div style="padding: 2rem; border-bottom: 1px solid var(--kadesh-border-color); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0;">Enviar Proposta</h3>
+                <button id="closeModal" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--kadesh-text-gray);">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div style="padding: 2rem;">
+                <div id="modalProjectDetails" style="background: var(--kadesh-bg-light); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                    <!-- Project details will be loaded here -->
+                </div>
+                
+                <form id="bidForm">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--kadesh-text-dark);">
+                            Valor da Proposta (R$) *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="bidAmount" 
+                            required 
+                            step="0.01"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--kadesh-border-color); border-radius: var(--radius-md); font-size: 1rem;"
+                            placeholder="Ex: 5000.00"
+                        >
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--kadesh-text-dark);">
+                            Prazo de Entrega (dias) *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="deliveryTime" 
+                            required 
+                            min="1"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--kadesh-border-color); border-radius: var(--radius-md); font-size: 1rem;"
+                            placeholder="Ex: 30"
+                        >
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--kadesh-text-dark);">
+                            Mensagem / Proposta Técnica *
+                        </label>
+                        <textarea 
+                            id="bidMessage" 
+                            required 
+                            rows="5"
+                            style="width: 100%; padding: 0.75rem; border: 1px solid var(--kadesh-border-color); border-radius: var(--radius-md); font-size: 1rem; resize: vertical;"
+                            placeholder="Descreva sua proposta, experiência e como pretende executar o projeto..."
+                        ></textarea>
+                    </div>
+                    
+                    <div id="bidError" style="display: none; background: #fee; color: #c33; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; border-left: 4px solid #c33;">
+                        <!-- Error messages will appear here -->
+                    </div>
+                    
+                    <div id="bidSuccess" style="display: none; background: #efe; color: #383; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; border-left: 4px solid #383;">
+                        <!-- Success messages will appear here -->
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" id="cancelBid" class="kadesh-btn kadesh-btn-secondary" style="flex: 1;">
+                            Cancelar
+                        </button>
+                        <button type="submit" id="submitBid" class="kadesh-btn kadesh-btn-primary" style="flex: 2;">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Proposta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Main Script -->
+    <script>
+        $(document).ready(function() {
+            let currentProjectId = null;
+            
+            // API Configuration
+            const API_BASE = '/kadesh/public/backend.php';
+            
+            // Load auctions
+            function loadAuctions(category = '') {
+                $('#loadingState').show();
+                $('#auctionsGrid').hide();
+                $('#emptyState').hide();
+                
+                let url = `${API_BASE}/api/auctions/active`;
+                if (category) {
+                    url += `?category=${encodeURIComponent(category)}`;
+                }
+                
+                $.get(url)
+                    .done(function(response) {
+                        $('#loadingState').hide();
+                        
+                        if (response.success && response.data && response.data.length > 0) {
+                            renderAuctions(response.data);
+                            $('#auctionsGrid').show();
+                        } else {
+                            $('#emptyState').show();
+                        }
+                    })
+                    .fail(function(xhr) {
+                        $('#loadingState').hide();
+                        $('#emptyState').show();
+                        console.error('Failed to load auctions:', xhr);
+                    });
+            }
+            
+            // Render auction cards
+            function renderAuctions(auctions) {
+                const container = $('#auctionsGrid');
+                container.empty();
+                
+                auctions.forEach(auction => {
+                    const card = createAuctionCard(auction);
+                    container.append(card);
+                });
+                
+                // Initialize countdowns
+                updateCountdowns();
+                setInterval(updateCountdowns, 1000);
+            }
+            
+            // Create auction card HTML
+            function createAuctionCard(auction) {
+                const priceRange = auction.bid_count > 0 
+                    ? `R$ ${formatNumber(auction.lowest_bid)} - R$ ${formatNumber(auction.highest_bid)}`
+                    : `R$ ${formatNumber(auction.budget_min)} - R$ ${formatNumber(auction.budget_max)}`;
+                
+                const location = auction.location || 'Localização não especificada';
+                const timeLeft = calculateTimeLeft(auction.deadline);
+                
+                // Random project image (1-4)
+                const imageNum = (auction.id % 4) + 1;
+                const projectImage = `/kadesh/public/assets/images/project-${imageNum}.jpg?v=2`;
+                
+                return `
+                    <div class="kadesh-project-card" data-project-id="${auction.id}">
+                        <img src="${projectImage}" alt="${auction.title}" class="kadesh-project-card-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22400%22 height=%22200%22/%3E%3Ctext fill=%22%239ca3af%22 font-family=%22Arial%22 font-size=%2218%22 text-anchor=%22middle%22 x=%22200%22 y=%22100%22%3E${auction.title}%3C/text%3E%3C/svg%3E'">
+                        
+                        <div class="kadesh-project-card-content">
+                            <h3 class="kadesh-project-card-title">${auction.title}</h3>
+                            
+                            <div class="kadesh-project-card-meta">
+                                <span>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${location}
+                                </span>
+                                <span class="countdown" data-deadline="${auction.deadline}">
+                                    <i class="fas fa-clock"></i>
+                                    ${timeLeft}
+                                </span>
+                            </div>
+                            
+                            <div class="kadesh-project-card-price">
+                                ${priceRange}
+                            </div>
+                            
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                                <span class="kadesh-badge kadesh-badge-blue">
+                                    <i class="fas fa-gavel"></i>
+                                    ${auction.bid_count || 0} propostas
+                                </span>
+                                ${auction.category ? `<span class="kadesh-badge kadesh-badge-orange">${auction.category}</span>` : ''}
+                            </div>
+                            
+                            <button class="kadesh-btn kadesh-btn-primary kadesh-btn-full btn-open-bid" data-project-id="${auction.id}">
+                                <i class="fas fa-paper-plane"></i>
+                                Inscreva-Se Agora
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Format number with thousand separators
+            function formatNumber(num) {
+                return parseFloat(num).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+            
+            // Calculate time left
+            function calculateTimeLeft(deadline) {
+                const now = new Date();
+                const end = new Date(deadline);
+                const diff = end - now;
+                
+                if (diff <= 0) return 'Encerrado';
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                
+                if (days > 0) return `${days}d ${hours}h`;
+                if (hours > 0) return `${hours}h ${minutes}m`;
+                return `${minutes}m`;
+            }
+            
+            // Update all countdowns
+            function updateCountdowns() {
+                $('.countdown').each(function() {
+                    const deadline = $(this).data('deadline');
+                    const timeLeft = calculateTimeLeft(deadline);
+                    $(this).html(`<i class="fas fa-clock"></i> ${timeLeft}`);
+                });
+            }
+            
+            // Open bid modal
+            $(document).on('click', '.btn-open-bid', function() {
+                currentProjectId = $(this).data('project-id');
+                loadProjectDetails(currentProjectId);
+                $('#bidModal').css('display', 'flex');
+            });
+            
+            // Close bid modal
+            $('#closeModal, #cancelBid').on('click', function() {
+                $('#bidModal').hide();
+                resetBidForm();
+            });
+            
+            // Load project details
+            function loadProjectDetails(projectId) {
+                $.get(`${API_BASE}/api/auctions/${projectId}`)
+                    .done(function(response) {
+                        if (response.success && response.data) {
+                            const project = response.data;
+                            $('#modalProjectDetails').html(`
+                                <h4 style="margin-bottom: 0.5rem;">${project.title}</h4>
+                                <p style="color: var(--kadesh-text-gray); font-size: 0.9rem; margin: 0;">
+                                    <i class="fas fa-map-marker-alt"></i> ${project.location || 'Não especificada'}
+                                    <span style="margin-left: 1rem;">
+                                        <i class="fas fa-dollar-sign"></i> Orçamento: R$ ${formatNumber(project.budget_min)} - R$ ${formatNumber(project.budget_max)}
+                                    </span>
+                                </p>
+                            `);
+                        }
+                    })
+                    .fail(function(xhr) {
+                        console.error('Failed to load project details:', xhr);
+                    });
+            }
+            
+            // Submit bid
+            $('#bidForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const bidData = {
+                    project_id: currentProjectId,
+                    amount: parseFloat($('#bidAmount').val()),
+                    delivery_time: parseInt($('#deliveryTime').val()),
+                    message: $('#bidMessage').val().trim()
+                };
+                
+                // Hide previous messages
+                $('#bidError, #bidSuccess').hide();
+                
+                // Disable submit button
+                $('#submitBid').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Enviando...');
+                
+                $.ajax({
+                    url: `${API_BASE}/api/bids`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(bidData)
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        $('#bidSuccess').html(`
+                            <i class="fas fa-check-circle"></i>
+                            <strong>Proposta enviada com sucesso!</strong>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Sua proposta foi registrada e o contratante será notificado.</p>
+                        `).show();
+                        
+                        setTimeout(() => {
+                            $('#bidModal').hide();
+                            resetBidForm();
+                            loadAuctions(); // Reload to update bid count
+                        }, 2000);
+                    } else {
+                        showError(response.error || 'Erro ao enviar proposta');
+                    }
+                })
+                .fail(function(xhr) {
+                    let errorMsg = 'Erro ao enviar proposta. Tente novamente.';
+                    
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg = xhr.responseJSON.error;
+                    } else if (xhr.status === 401) {
+                        errorMsg = 'Você precisa estar logado como prestador de serviços para enviar propostas.';
+                    }
+                    
+                    showError(errorMsg);
+                })
+                .always(function() {
+                    $('#submitBid').prop('disabled', false).html('<i class="fas fa-paper-plane"></i> Enviar Proposta');
+                });
+            });
+            
+            // Show error message
+            function showError(message) {
+                $('#bidError').html(`
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Erro!</strong>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">${message}</p>
+                `).show();
+            }
+            
+            // Reset bid form
+            function resetBidForm() {
+                $('#bidForm')[0].reset();
+                $('#bidError, #bidSuccess').hide();
+                currentProjectId = null;
+            }
+            
+            // Search functionality
+            $('#searchBtn').on('click', function() {
+                const category = $('#categorySelect').val();
+                loadAuctions(category);
+            });
+            
+            $('#categorySelect').on('change', function() {
+                loadAuctions($(this).val());
+            });
+            
+            // Initialize
+            loadAuctions();
+        });
+    </script>
+</body>
+</html>
