@@ -324,6 +324,11 @@ try {
         exit;
     }
     
+    if (preg_match('#^/api/projects/(\d+)/accept-bid$#', $path, $matches) && $method === 'POST') {
+        handleAcceptBid($matches[1]);
+        exit;
+    }
+    
     if (preg_match('#^/api/projects/(\d+)/confirm-winner$#', $path, $matches) && $method === 'POST') {
         handleConfirmWinner($matches[1]);
         exit;
@@ -922,49 +927,274 @@ function handleDeleteProject($id) {
 }
 
 function handleGetProjectBids($projectId) {
+    requireAuth();
+    
+    $user = getCurrentUser();
     $db = getDB();
+    
+    // Verificar se projeto existe
+    $stmt = $db->prepare('SELECT contractor_id FROM projects WHERE id = ?');
+    $stmt->execute([$projectId]);
+    $project = $stmt->fetch();
+    
+    if (!$project) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Projeto não encontrado']);
+        return;
+    }
+    
+    // Apenas o dono do projeto pode ver as propostas
+    if ($project['contractor_id'] != $user['id']) {
+        http_response_code(403);
+        echo json_encode(['message' => 'Você não tem permissão para ver estas propostas']);
+        return;
+    }
+    
+    // Buscar propostas com dados dos prestadores
     $stmt = $db->prepare('
-        SELECT b.*, u.name as user_name, u.email as user_email
+        SELECT 
+            b.*,
+            u.name as provider_name,
+            u.email as provider_email,
+            u.rating as provider_rating,
+            u.total_ratings as provider_total_ratings,
+            u.phone as provider_phone
         FROM bids b
-        LEFT JOIN users u ON b.user_id = u.id
+        LEFT JOIN users u ON b.provider_id = u.id
         WHERE b.project_id = ?
-        ORDER BY b.created_at DESC
+        ORDER BY b.amount ASC, b.created_at ASC
     ');
     $stmt->execute([$projectId]);
+    $bids = $stmt->fetchAll();
     
-    echo json_encode($stmt->fetchAll());
+    // Formatar dados
+    foreach ($bids as &$bid) {
+        $bid['id'] = (int)$bid['id'];
+        $bid['amount'] = (float)$bid['amount'];
+        $bid['delivery_time_days'] = (int)($bid['delivery_time_days'] ?? 0);
+        $bid['provider_rating'] = $bid['provider_rating'] ? (float)$bid['provider_rating'] : 0;
+        
+        if (!empty($bid['created_at'])) {
+            $bid['created_at'] = date('c', strtotime($bid['created_at']));
+        }
+    }
+    
+    echo json_encode([
+        'bids' => $bids,
+        'total' => count($bids)
+    ]);
+}
+
+function handleAcceptBid($projectId) {
+    requireAuth();
+    
+    $user = getCurrentUser();
+    $db = getDB();
+    
+    // Verificar se usuário é o dono do projeto
+    $stmt = $db->prepare('SELECT contractor_id, status FROM projects WHERE id = ?');
+    $stmt->execute([$projectId]);
+    $project = $stmt->fetch();
+    
+    if (!$project) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Projeto não encontrado']);
+        return;
+    }
+    
+    if ($project['contractor_id'] != $user['id']) {
+        http_response_code(403);
+        echo json_encode(['message' => 'Você não tem permissão para aceitar propostas neste projeto']);
+        return;
+    }
+    
+    if ($project['status'] !== 'open') {
+        http_response_code(400);
+        echo json_encode(['message' => 'Este projeto não está mais aceitando propostas']);
+        return;
+    }
+    
+    // Obter bid_id do corpo da requisição
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (empty($input['bid_id'])) {
+        http_response_code(400);
+        echo json_encode(['message' => 'ID da proposta é obrigatório']);
+        return;
+    }
+    
+    $bidId = $input['bid_id'];
+    
+    // Verificar se a proposta existe e pertence ao projeto
+    $stmt = $db->prepare('SELECT id, provider_id, amount FROM bids WHERE id = ? AND project_id = ?');
+    $stmt->execute([$bidId, $projectId]);
+    $bid = $stmt->fetch();
+    
+    if (!$bid) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Proposta não encontrada']);
+        return;
+    }
+    
+    try {
+        $db->beginTransaction();
+        
+        // Atualizar projeto: status, winner_id, winner_bid_id, final_price
+        $stmt = $db->prepare('
+            UPDATE projects 
+            SET status = ?, 
+                winner_id = ?, 
+                winner_bid_id = ?,
+                final_price = ?,
+                started_at = NOW(),
+                updated_at = NOW()
+            WHERE id = ?
+        ');
+        $stmt->execute(['in_progress', $bid['provider_id'], $bidId, $bid['amount'], $projectId]);
+        
+        // Atualizar proposta aceita
+        $stmt = $db->prepare('UPDATE bids SET status = ?, updated_at = NOW() WHERE id = ?');
+        $stmt->execute(['accepted', $bidId]);
+        
+        // Rejeitar todas as outras propostas
+        $stmt = $db->prepare('
+            UPDATE bids 
+            SET status = ?, updated_at = NOW() 
+            WHERE project_id = ? AND id != ?
+        ');
+        $stmt->execute(['rejected', $projectId, $bidId]);
+        
+        $db->commit();
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Proposta aceita com sucesso',
+            'project_id' => (int)$projectId,
+            'bid_id' => (int)$bidId,
+            'provider_id' => (int)$bid['provider_id']
+        ]);
+        
+    } catch (PDOException $e) {
+        $db->rollBack();
+        http_response_code(500);
+        echo json_encode(['message' => 'Erro ao aceitar proposta', 'error' => $e->getMessage()]);
+    }
 }
 
 function handleCreateBid() {
-    $input = json_decode(file_get_contents('php://input'), true);
+    requireAuth();
+    
     $user = getCurrentUser();
     
-    $db = getDB();
-    $stmt = $db->prepare('
-        INSERT INTO bids (project_id, user_id, amount, proposal, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, datetime("now"), datetime("now"))
-    ');
-    
-    $stmt->execute([
-        $input['project_id'] ?? 0,
-        $user['id'],
-        $input['amount'] ?? 0,
-        $input['proposal'] ?? '',
-        'pending'
-    ]);
-    $bidId = $db->lastInsertId();
-    
-    logProjectEvent($input['project_id'], 'bid_placed', "Lance de R$ {$input['amount']} feito por {$user['name']}.");
-
-    // Notify project owner
-    $stmt = $db->prepare('SELECT contractor_id FROM projects WHERE id = ?');
-    $stmt->execute([$input['project_id']]);
-    $projectOwner = $stmt->fetch();
-    if ($projectOwner) {
-        createNotification($projectOwner['contractor_id'], "Novo lance de R$ {$input['amount']} no seu projeto.", "/projects/{$input['project_id']}");
+    // Validar que usuário é prestador
+    if ($user['user_type'] !== 'provider') {
+        http_response_code(403);
+        echo json_encode(['message' => 'Apenas prestadores podem fazer propostas']);
+        return;
     }
-
-    echo json_encode(['id' => $bidId, 'message' => 'Bid created']);
+    
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // Validações
+    if (empty($input['project_id'])) {
+        http_response_code(400);
+        echo json_encode(['message' => 'ID do projeto é obrigatório']);
+        return;
+    }
+    
+    if (empty($input['amount']) || $input['amount'] <= 0) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Valor da proposta deve ser maior que zero']);
+        return;
+    }
+    
+    if (empty($input['delivery_time_days']) || $input['delivery_time_days'] <= 0) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Prazo de entrega é obrigatório']);
+        return;
+    }
+    
+    if (empty($input['proposal'])) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Descrição da proposta é obrigatória']);
+        return;
+    }
+    
+    $db = getDB();
+    
+    // Verificar se projeto existe e está aberto
+    $stmt = $db->prepare('SELECT id, contractor_id, status, bidding_ends_at FROM projects WHERE id = ?');
+    $stmt->execute([$input['project_id']]);
+    $project = $stmt->fetch();
+    
+    if (!$project) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Projeto não encontrado']);
+        return;
+    }
+    
+    if ($project['status'] !== 'open') {
+        http_response_code(400);
+        echo json_encode(['message' => 'Projeto não está aceitando propostas']);
+        return;
+    }
+    
+    // Verificar se prazo ainda está válido
+    if ($project['bidding_ends_at'] && strtotime($project['bidding_ends_at']) < time()) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Prazo para propostas encerrado']);
+        return;
+    }
+    
+    // Verificar se prestador já fez proposta neste projeto
+    $stmt = $db->prepare('SELECT id FROM bids WHERE project_id = ? AND provider_id = ?');
+    $stmt->execute([$input['project_id'], $user['id']]);
+    if ($stmt->fetch()) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Você já fez uma proposta para este projeto']);
+        return;
+    }
+    
+    try {
+        $stmt = $db->prepare('
+            INSERT INTO bids (
+                project_id, provider_id, amount, proposal, 
+                delivery_time_days, status, created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, NOW())
+        ');
+        
+        $stmt->execute([
+            $input['project_id'],
+            $user['id'],
+            $input['amount'],
+            $input['proposal'],
+            $input['delivery_time_days'],
+            'pending'
+        ]);
+        
+        $bidId = $db->lastInsertId();
+        
+        // Buscar proposta criada com dados completos
+        $stmt = $db->prepare('
+            SELECT b.*, u.name as provider_name 
+            FROM bids b 
+            LEFT JOIN users u ON b.provider_id = u.id 
+            WHERE b.id = ?
+        ');
+        $stmt->execute([$bidId]);
+        $bid = $stmt->fetch();
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Proposta enviada com sucesso',
+            'bid' => $bid
+        ]);
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['message' => 'Erro ao criar proposta', 'error' => $e->getMessage()]);
+    }
 }
 
 // ==================== AUCTIONS HANDLERS ====================
@@ -973,15 +1203,29 @@ function handleGetActiveAuctions() {
     $db = getDB();
 
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 100;
+    $category = $_GET['category'] ?? null;
 
     $sql = "
-        SELECT p.*, u.name as contractor_name, u.rating as contractor_rating,
-               COALESCE((SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id), 0) as bids_count,
-               (SELECT MIN(amount) FROM bids b WHERE b.project_id = p.id) as lowest_bid
+        SELECT 
+            p.id,
+            p.title,
+            p.description,
+            p.max_budget,
+            p.status,
+            p.bidding_ends_at,
+            p.created_at,
+            p.required_skills,
+            p.is_featured,
+            u.name as contractor_name,
+            u.rating as contractor_rating,
+            u.total_ratings,
+            COALESCE((SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id), 0) as bids_count,
+            (SELECT MIN(amount) FROM bids b WHERE b.project_id = p.id) as lowest_bid
         FROM projects p
         LEFT JOIN users u ON p.contractor_id = u.id
-        WHERE p.status IN ('open', 'bidding') AND (p.bidding_ends_at IS NULL OR p.bidding_ends_at > NOW())
-        ORDER BY p.bidding_ends_at ASC
+        WHERE p.status = 'open' 
+            AND p.bidding_ends_at > NOW()
+        ORDER BY p.is_featured DESC, p.bidding_ends_at ASC
         LIMIT ?
     ";
 
@@ -990,14 +1234,31 @@ function handleGetActiveAuctions() {
         $stmt->execute([$limit]);
         $auctions = $stmt->fetchAll();
 
-        // Ensure bidding_ends_at is ISO-format
-        foreach ($auctions as &$a) {
-            if (!empty($a['bidding_ends_at'])) {
-                $a['bidding_ends_at'] = date('c', strtotime($a['bidding_ends_at']));
+        // Formatar dados para o frontend
+        foreach ($auctions as &$auction) {
+            // Converter data para ISO 8601
+            if (!empty($auction['bidding_ends_at'])) {
+                $auction['bidding_ends_at'] = date('c', strtotime($auction['bidding_ends_at']));
             }
+            if (!empty($auction['created_at'])) {
+                $auction['created_at'] = date('c', strtotime($auction['created_at']));
+            }
+
+            // Garantir tipos corretos
+            $auction['id'] = (int)$auction['id'];
+            $auction['max_budget'] = (float)($auction['max_budget'] ?? 0);
+            $auction['lowest_bid'] = $auction['lowest_bid'] ? (float)$auction['lowest_bid'] : null;
+            $auction['bids_count'] = (int)$auction['bids_count'];
+            $auction['contractor_rating'] = $auction['contractor_rating'] ? (float)$auction['contractor_rating'] : 0;
+            $auction['total_ratings'] = (int)($auction['total_ratings'] ?? 0);
+            $auction['is_featured'] = (bool)$auction['is_featured'];
         }
 
-        echo json_encode(['auctions' => $auctions, 'weights' => ['price' => 0.7, 'reputation' => 0.3]]);
+        echo json_encode([
+            'auctions' => $auctions, 
+            'weights' => ['price' => 0.7, 'reputation' => 0.3],
+            'total' => count($auctions)
+        ]);
     } catch (PDOException $e) {
         http_response_code(500);
         echo json_encode(['message' => 'Erro ao buscar leilões', 'error' => $e->getMessage()]);
@@ -1007,28 +1268,73 @@ function handleGetActiveAuctions() {
 function handleGetAuction($id) {
     $db = getDB();
 
-    $stmt = $db->prepare('SELECT p.*, u.name as contractor_name, u.rating as contractor_rating FROM projects p LEFT JOIN users u ON p.contractor_id = u.id WHERE p.id = ?');
+    // Buscar projeto com dados do contratante
+    $stmt = $db->prepare('
+        SELECT 
+            p.*,
+            u.name as contractor_name, 
+            u.rating as contractor_rating,
+            u.total_ratings,
+            u.email as contractor_email,
+            u.phone as contractor_phone
+        FROM projects p 
+        LEFT JOIN users u ON p.contractor_id = u.id 
+        WHERE p.id = ?
+    ');
     $stmt->execute([$id]);
     $project = $stmt->fetch();
 
     if (!$project) {
         http_response_code(404);
-        echo json_encode(['message' => 'Auction not found']);
+        echo json_encode(['message' => 'Leilão não encontrado']);
         return;
     }
 
-    // Attach bids
-    $stmt = $db->prepare('SELECT b.*, u.name as user_name FROM bids b LEFT JOIN users u ON b.user_id = u.id WHERE b.project_id = ? ORDER BY b.amount ASC, b.created_at ASC');
+    // Buscar propostas com dados dos prestadores
+    $stmt = $db->prepare('
+        SELECT 
+            b.*,
+            u.name as provider_name,
+            u.rating as provider_rating,
+            u.total_ratings as provider_total_ratings,
+            u.email as provider_email
+        FROM bids b 
+        LEFT JOIN users u ON b.provider_id = u.id 
+        WHERE b.project_id = ? 
+        ORDER BY b.amount ASC, b.created_at ASC
+    ');
     $stmt->execute([$id]);
     $bids = $stmt->fetchAll();
 
+    // Formatar datas para ISO 8601
     if (!empty($project['bidding_ends_at'])) {
         $project['bidding_ends_at'] = date('c', strtotime($project['bidding_ends_at']));
     }
+    if (!empty($project['created_at'])) {
+        $project['created_at'] = date('c', strtotime($project['created_at']));
+    }
 
+    // Formatar dados das propostas
+    foreach ($bids as &$bid) {
+        $bid['id'] = (int)$bid['id'];
+        $bid['amount'] = (float)$bid['amount'];
+        $bid['delivery_time_days'] = (int)($bid['delivery_time_days'] ?? 0);
+        $bid['provider_rating'] = $bid['provider_rating'] ? (float)$bid['provider_rating'] : 0;
+        
+        if (!empty($bid['created_at'])) {
+            $bid['created_at'] = date('c', strtotime($bid['created_at']));
+        }
+    }
+
+    // Garantir tipos corretos no projeto
+    $project['id'] = (int)$project['id'];
+    $project['max_budget'] = (float)($project['max_budget'] ?? 0);
+    $project['contractor_rating'] = $project['contractor_rating'] ? (float)$project['contractor_rating'] : 0;
     $project['bids'] = $bids;
+    $project['bids_count'] = count($bids);
+    $project['lowest_bid'] = !empty($bids) ? (float)$bids[0]['amount'] : null;
 
-    echo json_encode($project);
+    echo json_encode(['project' => $project]);
 }
 
 function handleConfirmWinner($projectId) {

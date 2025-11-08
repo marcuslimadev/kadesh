@@ -183,7 +183,7 @@ class BidModal {
         project_id: this.currentProjectId,
         amount: parseFloat(this.bidAmountInput.value),
         proposal: this.messageInput?.value || '',
-        availability_days: parseInt(this.availabilityInput.value)
+        delivery_time_days: parseInt(this.availabilityInput.value)
       };
 
       const response = await fetch('/kadesh/api/bids', {
@@ -191,6 +191,7 @@ class BidModal {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include', // Importante para enviar cookies de sessão
         body: JSON.stringify(formData)
       });
       

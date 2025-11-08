@@ -1,0 +1,35 @@
+{
+  "name": "kadesh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project=\"Mobile Chrome\" --project=\"Mobile Safari\"",
+    "test:report": "playwright show-report",
+    "test:codegen": "playwright codegen http://localhost/kadesh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcuslimadev/kadesh.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcuslimadev/kadesh/issues"
+  },
+  "homepage": "https://github.com/marcuslimadev/kadesh#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}

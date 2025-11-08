@@ -176,3 +176,4 @@ test-*.php*.temp
 
 # Sessões PHP
 /tmp/sess_*
+/antigo sistema
