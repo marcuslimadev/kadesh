@@ -1,21 +1,259 @@
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2>Entrar</h2>
-            <form id="login-form">
-                <div class="mb-3">
-                    <label for="login-email" class="form-label">Endereço de email</label>
-                    <input type="email" class="form-control" id="login-email" placeholder="seu@email.com" required>
-                </div>
-                <div class="mb-3">
-                    <label for="login-password" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="login-password" placeholder="Digite sua senha" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
-                <div class="mt-3 text-center">
-                    <p>Não tem uma conta? <a href="#register">Cadastre-se aqui</a></p>
-                </div>
-            </form>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - Kadesh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/kadesh/public/assets/images/favicon.png">
+    
+    <!-- Google Fonts - Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Kadesh Original Theme -->
+    <link rel="stylesheet" href="/kadesh/public/jquery-frontend/assets/css/kadesh-original-theme.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="kadesh-navbar">
+        <div class="container">
+            <a href="/kadesh/public/jquery-frontend/leiloes-original.html" class="kadesh-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+                <img src="/kadesh/public/assets/images/logo-kaddesh.svg" alt="Kaddesh" style="height: 40px;" onerror="this.onerror=null; this.src='/kadesh/public/assets/images/logo-kaddesh.png';">
+            </a>
+            
+            <ul class="kadesh-nav-links">
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#inicio">Início</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#quem-somos">Quem Somos</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#servicos">Serviços</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#leiloes">Leilões</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#contato">Contato</a></li>
+            </ul>
+            
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <a href="/kadesh/public/jquery-frontend/login.html" style="color: var(--kadesh-navy); font-weight: 600; text-decoration: none; padding: 0.5rem 1rem;">Entrar</a>
+                <a href="/kadesh/public/jquery-frontend/register.html" class="kadesh-btn kadesh-btn-primary">
+                    Cadastre-se
+                </a>
+            </div>
         </div>
-    </div>
-</div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="kadesh-section" style="min-height: calc(100vh - 80px); display: flex; align-items: center; background: linear-gradient(135deg, var(--kadesh-navy) 0%, #1a2a3a 100%);">
+        <div class="kadesh-container">
+            <div style="max-width: 500px; margin: 0 auto; background: white; padding: 3rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h1 style="color: var(--kadesh-navy); font-size: 2rem; margin-bottom: 0.5rem;">Bem-vindo de volta!</h1>
+                    <p style="color: var(--kadesh-text-gray);">Entre com suas credenciais para continuar</p>
+                </div>
+
+                <div id="loginError" style="display: none; background: #fee; border: 1px solid #fcc; color: #c33; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="loginErrorMessage"></span>
+                </div>
+
+                <form id="loginForm">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label for="email" style="display: block; margin-bottom: 0.5rem; color: var(--kadesh-navy); font-weight: 500;">
+                            <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
+                            E-mail
+                        </label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="seu@email.com" 
+                            required
+                            style="width: 100%; padding: 0.875rem 1rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                            onfocus="this.style.borderColor='var(--kadesh-yellow)'"
+                            onblur="this.style.borderColor='#e0e0e0'"
+                        >
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label for="password" style="display: block; margin-bottom: 0.5rem; color: var(--kadesh-navy); font-weight: 500;">
+                            <i class="fas fa-lock" style="margin-right: 0.5rem;"></i>
+                            Senha
+                        </label>
+                        <div style="position: relative;">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                placeholder="••••••••" 
+                                required
+                                style="width: 100%; padding: 0.875rem 1rem; padding-right: 3rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s;"
+                                onfocus="this.style.borderColor='var(--kadesh-yellow)'"
+                                onblur="this.style.borderColor='#e0e0e0'"
+                            >
+                            <button 
+                                type="button" 
+                                id="togglePassword"
+                                style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--kadesh-text-gray); cursor: pointer; padding: 0.5rem;"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; color: var(--kadesh-text-gray);">
+                            <input type="checkbox" id="remember" name="remember" style="width: 18px; height: 18px; cursor: pointer;">
+                            Lembrar de mim
+                        </label>
+                        <a href="#recuperar-senha" style="color: var(--kadesh-yellow); text-decoration: none; font-weight: 500;">
+                            Esqueceu a senha?
+                        </a>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="loginBtn"
+                        class="kadesh-btn kadesh-btn-primary" 
+                        style="width: 100%; padding: 1rem; font-size: 1.125rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"
+                    >
+                        <i class="fas fa-sign-in-alt"></i>
+                        Entrar
+                    </button>
+                </form>
+
+                <div style="margin-top: 2rem; text-align: center; padding-top: 2rem; border-top: 1px solid #e0e0e0;">
+                    <p style="color: var(--kadesh-text-gray); margin-bottom: 1rem;">
+                        Ainda não tem uma conta?
+                    </p>
+                    <a href="/kadesh/public/jquery-frontend/register.html" class="kadesh-btn" style="background: white; border: 2px solid var(--kadesh-navy); color: var(--kadesh-navy); padding: 0.75rem 2rem; font-weight: 600;">
+                        Criar conta gratuita
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="kadesh-footer">
+        <div class="kadesh-container">
+            <div class="kadesh-footer-content">
+                <div class="kadesh-footer-column">
+                    <h4>Sobre o Kaddesh</h4>
+                    <p>Conectando profissionais qualificados com projetos desafiadores através de um sistema de leilões seguro e transparente.</p>
+                </div>
+                
+                <div class="kadesh-footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html">Início</a></li>
+                        <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#leiloes">Leilões</a></li>
+                        <li><a href="/kadesh/public/jquery-frontend/register.html">Cadastre-se</a></li>
+                    </ul>
+                </div>
+                
+                <div class="kadesh-footer-column">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#ajuda">Central de Ajuda</a></li>
+                        <li><a href="#termos">Termos de Uso</a></li>
+                        <li><a href="#privacidade">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+                
+                <div class="kadesh-footer-column">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contato@kaddesh.com.br</li>
+                        <li><i class="fas fa-phone"></i> (11) 1234-5678</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>&copy; 2025 Kaddesh. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const API_BASE = '/kadesh/public/backend.php';
+            
+            // Toggle password visibility
+            $('#togglePassword').click(function() {
+                const passwordInput = $('#password');
+                const icon = $(this).find('i');
+                
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+            
+            // Handle login form submission
+            $('#loginForm').submit(function(e) {
+                e.preventDefault();
+                
+                const email = $('#email').val();
+                const password = $('#password').val();
+                const remember = $('#remember').is(':checked');
+                
+                // Hide previous errors
+                $('#loginError').hide();
+                
+                // Disable submit button
+                const loginBtn = $('#loginBtn');
+                loginBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Entrando...');
+                
+                // Send login request
+                $.ajax({
+                    url: `${API_BASE}/api/login`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        email: email,
+                        password: password,
+                        remember: remember
+                    }),
+                    success: function(response) {
+                        // Login successful
+                        console.log('Login successful:', response);
+                        
+                        // Redirect to dashboard
+                        window.location.href = '/kadesh/public/jquery-frontend/dashboard.html';
+                    },
+                    error: function(xhr, status, error) {
+                        // Login failed
+                        console.error('Login error:', xhr, status, error);
+                        let errorMessage = 'Erro ao fazer login. Tente novamente.';
+                        
+                        if (xhr.responseJSON) {
+                            errorMessage = xhr.responseJSON.message || xhr.responseJSON.error || errorMessage;
+                        } else if (xhr.status === 401) {
+                            errorMessage = 'E-mail ou senha incorretos.';
+                        } else if (xhr.status === 422) {
+                            errorMessage = 'Credenciais inválidas.';
+                        } else if (xhr.status === 0) {
+                            errorMessage = 'Erro de conexão. Verifique se o servidor está rodando.';
+                        }
+                        
+                        $('#loginErrorMessage').text(errorMessage);
+                        $('#loginError').show();
+                        
+                        // Re-enable submit button
+                        loginBtn.prop('disabled', false).html('<i class="fas fa-sign-in-alt"></i> Entrar');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

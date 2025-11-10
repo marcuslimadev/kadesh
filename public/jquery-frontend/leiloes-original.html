@@ -36,8 +36,8 @@
             </ul>
             
             <div style="display: flex; gap: 1rem; align-items: center;">
-                <a href="#entrar" style="color: var(--kadesh-navy); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem;">Entrar</a>
-                <a href="#publicar" class="kadesh-btn kadesh-btn-primary">
+                <a href="/kadesh/public/jquery-frontend/login.html" style="color: var(--kadesh-navy); font-weight: 500; text-decoration: none; padding: 0.5rem 1rem;">Entrar</a>
+                <a href="/kadesh/public/jquery-frontend/create-project.html" class="kadesh-btn kadesh-btn-primary">
                     Publicar uma tarefa +
                 </a>
             </div>
@@ -489,7 +489,7 @@
         $(document).ready(function() {
             let currentProjectId = null;
             
-            // API Configuration
+            // API Configuration - Same-origin, sem necessidade de CORS
             const API_BASE = '/kadesh/public/backend.php';
             
             // Load auctions
@@ -507,8 +507,9 @@
                     .done(function(response) {
                         $('#loadingState').hide();
                         
-                        if (response.success && response.data && response.data.length > 0) {
-                            renderAuctions(response.data);
+                        // Backend retorna { auctions: [], total: N }
+                        if (response.auctions && response.auctions.length > 0) {
+                            renderAuctions(response.auctions);
                             $('#auctionsGrid').show();
                         } else {
                             $('#emptyState').show();

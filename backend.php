@@ -41,12 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Autoload and new architecture
-require_once __DIR__ . '/../src/Backend/Core/Model.php';
-require_once __DIR__ . '/../src/Backend/Models/User.php';
-require_once __DIR__ . '/../src/Backend/Models/Project.php';
-require_once __DIR__ . '/../src/Backend/Core/Logger.php';
-require_once __DIR__ . '/../src/Backend/Controllers/AuthController.php';
-require_once __DIR__ . '/../src/Backend/Controllers/ProjectController.php';
+require_once __DIR__ . '/src/Backend/Core/Model.php';
+require_once __DIR__ . '/src/Backend/Models/User.php';
+require_once __DIR__ . '/src/Backend/Models/Project.php';
+require_once __DIR__ . '/src/Backend/Core/Logger.php';
+require_once __DIR__ . '/src/Backend/Controllers/AuthController.php';
+require_once __DIR__ . '/src/Backend/Controllers/ProjectController.php';
 
 use App\Backend\Controllers\AuthController;
 use App\Backend\Controllers\ProjectController;
@@ -124,9 +124,6 @@ $path = preg_replace('#^/kadesh#', '', $path);
 
 // Remover /public se existir
 $path = preg_replace('#^/public#', '', $path);
-
-// Remover /backend.php se existir (quando acessado como backend.php/api/...)
-$path = preg_replace('#^/backend\.php#', '', $path);
 
 $method = $_SERVER['REQUEST_METHOD'];
 

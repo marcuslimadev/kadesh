@@ -1,4 +1,4 @@
 <?php
-// Redirecionar para o frontend jQuery/Bulma
-header('Location: /kadesh/public/jquery-frontend/index.html');
+// Redirecionar para a página principal de leilões
+header('Location: /kadesh/public/jquery-frontend/leiloes-original.html');
 exit;

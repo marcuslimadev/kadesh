@@ -1,6 +1,311 @@
-<div class="container">
-    <h2>Painel de Controle</h2>
-    <div id="dashboard-content">
-        <!-- O conteúdo do painel será carregado aqui -->
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Kadesh</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/kadesh/public/assets/images/favicon.png">
+    
+    <!-- Google Fonts - Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Kadesh Original Theme -->
+    <link rel="stylesheet" href="/kadesh/public/jquery-frontend/assets/css/kadesh-original-theme.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="kadesh-navbar">
+        <div class="container">
+            <a href="/kadesh/public/jquery-frontend/leiloes-original.html" class="kadesh-logo" style="display: flex; align-items: center; gap: 0.5rem;">
+                <img src="/kadesh/public/assets/images/logo-kaddesh.svg" alt="Kaddesh" style="height: 40px;" onerror="this.onerror=null; this.src='/kadesh/public/assets/images/logo-kaddesh.png';">
+            </a>
+            
+            <ul class="kadesh-nav-links">
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html">Início</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/dashboard.html" style="color: var(--kadesh-navy); font-weight: 600;">Dashboard</a></li>
+                <li><a href="/kadesh/public/jquery-frontend/leiloes-original.html#leiloes">Leilões</a></li>
+            </ul>
+            
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span id="userName" style="color: var(--kadesh-navy); font-weight: 500;"></span>
+                <button id="logoutBtn" class="kadesh-btn" style="background: transparent; border: 2px solid var(--kadesh-navy); color: var(--kadesh-navy);">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <section class="kadesh-section" style="min-height: calc(100vh - 80px); background: #f8f9fa;">
+        <div class="kadesh-container">
+            <!-- Welcome Header -->
+            <div style="background: linear-gradient(135deg, var(--kadesh-navy) 0%, #1a2a3a 100%); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; color: white;">
+                <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Painel de Controle
+                </h1>
+                <p id="welcomeMessage" style="opacity: 0.9;">Bem-vindo de volta!</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="kadesh-grid kadesh-grid-4" style="margin-bottom: 2rem;">
+                <div class="kadesh-card" style="text-align: center; padding: 2rem;">
+                    <div style="width: 60px; height: 60px; background: var(--kadesh-yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-project-diagram" style="font-size: 1.5rem; color: white;"></i>
+                    </div>
+                    <h3 id="myProjectsCount" style="font-size: 2rem; color: var(--kadesh-navy); margin-bottom: 0.5rem;">0</h3>
+                    <p style="color: var(--kadesh-text-gray);">Meus Projetos</p>
+                </div>
+
+                <div class="kadesh-card" style="text-align: center; padding: 2rem;">
+                    <div style="width: 60px; height: 60px; background: #28a745; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-gavel" style="font-size: 1.5rem; color: white;"></i>
+                    </div>
+                    <h3 id="activeBidsCount" style="font-size: 2rem; color: var(--kadesh-navy); margin-bottom: 0.5rem;">0</h3>
+                    <p style="color: var(--kadesh-text-gray);">Lances Ativos</p>
+                </div>
+
+                <div class="kadesh-card" style="text-align: center; padding: 2rem;">
+                    <div style="width: 60px; height: 60px; background: #17a2b8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-trophy" style="font-size: 1.5rem; color: white;"></i>
+                    </div>
+                    <h3 id="wonProjectsCount" style="font-size: 2rem; color: var(--kadesh-navy); margin-bottom: 0.5rem;">0</h3>
+                    <p style="color: var(--kadesh-text-gray);">Projetos Ganhos</p>
+                </div>
+
+                <div class="kadesh-card" style="text-align: center; padding: 2rem;">
+                    <div style="width: 60px; height: 60px; background: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                        <i class="fas fa-star" style="font-size: 1.5rem; color: white;"></i>
+                    </div>
+                    <h3 id="userRating" style="font-size: 2rem; color: var(--kadesh-navy); margin-bottom: 0.5rem;">0.0</h3>
+                    <p style="color: var(--kadesh-text-gray);">Avaliação</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="margin-bottom: 2rem;">
+                <h2 style="font-size: 1.5rem; color: var(--kadesh-navy); margin-bottom: 1rem;">Ações Rápidas</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <a href="/kadesh/public/jquery-frontend/create-project.html" class="kadesh-card" style="text-decoration: none; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="width: 50px; height: 50px; background: var(--kadesh-yellow); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-plus" style="font-size: 1.25rem; color: white;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--kadesh-navy); margin-bottom: 0.25rem;">Criar Projeto</h4>
+                            <p style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Publique um novo projeto</p>
+                        </div>
+                    </a>
+
+                    <a href="/kadesh/public/jquery-frontend/leiloes-original.html#leiloes" class="kadesh-card" style="text-decoration: none; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="width: 50px; height: 50px; background: #28a745; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-search" style="font-size: 1.25rem; color: white;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--kadesh-navy); margin-bottom: 0.25rem;">Buscar Leilões</h4>
+                            <p style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Encontre oportunidades</p>
+                        </div>
+                    </a>
+
+                    <a href="#perfil" class="kadesh-card" style="text-decoration: none; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                        <div style="width: 50px; height: 50px; background: #17a2b8; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-edit" style="font-size: 1.25rem; color: white;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--kadesh-navy); margin-bottom: 0.25rem;">Editar Perfil</h4>
+                            <p style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Atualize suas informações</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- My Projects -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="font-size: 1.5rem; color: var(--kadesh-navy);">Meus Projetos</h2>
+                    <a href="/kadesh/public/jquery-frontend/create-project.html" class="kadesh-btn kadesh-btn-primary">
+                        <i class="fas fa-plus"></i> Novo Projeto
+                    </a>
+                </div>
+
+                <div id="loadingProjects" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--kadesh-yellow);"></i>
+                    <p style="margin-top: 1rem; color: var(--kadesh-text-gray);">Carregando projetos...</p>
+                </div>
+
+                <div id="projectsList" style="display: none;"></div>
+
+                <div id="emptyProjects" style="display: none; text-align: center; padding: 3rem; background: white; border-radius: 12px;">
+                    <i class="fas fa-folder-open" style="font-size: 4rem; color: #e0e0e0; margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--kadesh-navy); margin-bottom: 0.5rem;">Nenhum projeto ainda</h3>
+                    <p style="color: var(--kadesh-text-gray); margin-bottom: 2rem;">Comece criando seu primeiro projeto!</p>
+                    <a href="/kadesh/public/jquery-frontend/create-project.html" class="kadesh-btn kadesh-btn-primary">
+                        <i class="fas fa-plus"></i> Criar Primeiro Projeto
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="kadesh-footer">
+        <div class="kadesh-container">
+            <div style="text-align: center; padding: 2rem 0;">
+                <p>&copy; 2025 Kaddesh. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            const API_BASE = '/kadesh/public/backend.php';
+            
+            // Check if user is logged in
+            function checkAuth() {
+                $.ajax({
+                    url: `${API_BASE}/api/user`,
+                    method: 'GET',
+                    success: function(response) {
+                        // API retorna {user: {...}} ou {user: null}
+                        const user = response.user || response;
+                        
+                        if (user && user.name) {
+                            $('#userName').text(user.name);
+                            $('#welcomeMessage').text(`Bem-vindo de volta, ${user.name}!`);
+                            
+                            // Update rating if available
+                            if (user.rating) {
+                                $('#userRating').text(parseFloat(user.rating).toFixed(1));
+                            }
+                            
+                            // Load dashboard data
+                            loadMyProjects();
+                        } else {
+                            // No user logged in
+                            window.location.href = '/kadesh/public/jquery-frontend/login.html';
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Auth check failed:', xhr);
+                        // Not logged in, redirect to login
+                        window.location.href = '/kadesh/public/jquery-frontend/login.html';
+                    }
+                });
+            }
+            
+            // Load user's projects
+            function loadMyProjects() {
+                $.ajax({
+                    url: `${API_BASE}/api/projects/my`,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#loadingProjects').hide();
+                        
+                        if (response.projects && response.projects.length > 0) {
+                            $('#myProjectsCount').text(response.projects.length);
+                            renderProjects(response.projects);
+                            $('#projectsList').show();
+                        } else {
+                            $('#emptyProjects').show();
+                        }
+                    },
+                    error: function(xhr) {
+                        $('#loadingProjects').hide();
+                        console.error('Failed to load projects:', xhr);
+                        $('#emptyProjects').show();
+                    }
+                });
+            }
+            
+            // Render projects list
+            function renderProjects(projects) {
+                const container = $('#projectsList');
+                container.empty();
+                
+                projects.forEach(project => {
+                    const statusBadge = getStatusBadge(project.status);
+                    const card = $(`
+                        <div class="kadesh-card" style="margin-bottom: 1rem; padding: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                <div style="flex: 1;">
+                                    <h3 style="color: var(--kadesh-navy); margin-bottom: 0.5rem;">${project.title}</h3>
+                                    <p style="color: var(--kadesh-text-gray); margin-bottom: 1rem;">${project.description || 'Sem descrição'}</p>
+                                </div>
+                                <span class="kadesh-badge" style="background: ${statusBadge.color};">${statusBadge.text}</span>
+                            </div>
+                            
+                            <div style="display: flex; gap: 2rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                                <div>
+                                    <span style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Orçamento</span>
+                                    <p style="color: var(--kadesh-navy); font-weight: 600;">R$ ${parseFloat(project.max_budget || 0).toFixed(2)}</p>
+                                </div>
+                                <div>
+                                    <span style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Lances</span>
+                                    <p style="color: var(--kadesh-navy); font-weight: 600;">${project.bids_count || 0}</p>
+                                </div>
+                                <div>
+                                    <span style="color: var(--kadesh-text-gray); font-size: 0.875rem;">Criado em</span>
+                                    <p style="color: var(--kadesh-navy); font-weight: 600;">${formatDate(project.created_at)}</p>
+                                </div>
+                                <div style="margin-left: auto;">
+                                    <a href="/kadesh/public/jquery-frontend/project-details.html?id=${project.id}" class="kadesh-btn" style="background: transparent; border: 2px solid var(--kadesh-navy); color: var(--kadesh-navy);">
+                                        Ver Detalhes
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    
+                    container.append(card);
+                });
+            }
+            
+            // Get status badge
+            function getStatusBadge(status) {
+                const badges = {
+                    'open': { text: 'Aberto', color: '#28a745' },
+                    'in_progress': { text: 'Em Andamento', color: '#17a2b8' },
+                    'completed': { text: 'Concluído', color: '#6c757d' },
+                    'cancelled': { text: 'Cancelado', color: '#dc3545' }
+                };
+                
+                return badges[status] || { text: status, color: '#6c757d' };
+            }
+            
+            // Format date
+            function formatDate(dateString) {
+                if (!dateString) return '-';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR');
+            }
+            
+            // Logout
+            $('#logoutBtn').click(function() {
+                $.ajax({
+                    url: `${API_BASE}/api/logout`,
+                    method: 'POST',
+                    success: function() {
+                        window.location.href = '/kadesh/public/jquery-frontend/leiloes-original.html';
+                    },
+                    error: function() {
+                        // Redirect anyway
+                        window.location.href = '/kadesh/public/jquery-frontend/leiloes-original.html';
+                    }
+                });
+            });
+            
+            // Initialize
+            checkAuth();
+        });
+    </script>
+</body>
+</html>
