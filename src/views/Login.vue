@@ -1,30 +1,70 @@
 <template>
-  <div class="min-h-screen flex text-neutral-800">
-    <!-- Left Panel with Image -->
-    <div class="hidden md:block w-1/2 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop')">
-      <div class="bg-black bg-opacity-60 h-full flex flex-col justify-end items-start text-white p-12">
-        <h1 class="text-5xl font-bold">Construa o Futuro.</h1>
-        <p class="mt-4 text-xl">A plataforma definitiva para seus projetos e serviços.</p>
+  <div class="min-h-screen bg-gradient-to-br from-primary-900 to-primary-700 flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-8">
+        <h1 class="text-5xl font-bold text-accent-500 mb-2">⚡ KADESH</h1>
+        <p class="text-gray-300">Marketplace de Leilões Reversos</p>
       </div>
-    </div>
 
-    <!-- Right Panel with Form -->
-    <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
-      <div class="w-full max-w-sm">
-        <h2 class="text-4xl font-bold mb-8">Acesse sua conta</h2>
-        <form @submit.prevent="handleLogin" class="space-y-6">
+      <div class="card">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Entrar</h2>
+
+        <form @submit.prevent="handleLogin" class="space-y-4">
           <div>
-            <label for="email" class="block font-semibold">Email</label>
-            <input type="email" id="email" v-model="email" required class="input-field mt-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input
+              v-model="form.email"
+              type="email"
+              required
+              class="input"
+              placeholder="seu@email.com"
+            />
           </div>
+
           <div>
-            <label for="password" class="block font-semibold">Senha</label>
-            <input type="password" id="password" v-model="password" required class="input-field mt-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+            <input
+              v-model="form.password"
+              type="password"
+              required
+              class="input"
+              placeholder="••••••••"
+            />
           </div>
-          <div v-if="error" class="text-red-600 font-medium">{{ error }}</div>
-          <button type="submit" class="w-full btn-primary text-lg">Entrar</button>
+
+          <div class="flex items-center">
+            <input
+              v-model="form.rememberMe"
+              type="checkbox"
+              id="rememberMe"
+              class="w-4 h-4 text-accent-500 border-gray-300 rounded focus:ring-accent-500"
+            />
+            <label for="rememberMe" class="ml-2 text-sm text-gray-700">
+              Manter conectado por 7 dias
+            </label>
+          </div>
+
+          <div v-if="error" class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+            <p class="text-red-700 text-sm">{{ error }}</p>
+          </div>
+
+          <button
+            type="submit"
+            :disabled="loading"
+            class="w-full btn btn-primary py-3 text-lg"
+          >
+            {{ loading ? 'Entrando...' : 'Entrar' }}
+          </button>
         </form>
-        <p class="mt-8 text-center text-gray-600">Não tem uma conta? <router-link to="/register" class="font-semibold text-blue-600">Cadastre-se</router-link></p>
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Não tem conta?
+            <router-link to="/register" class="text-accent-600 hover:text-accent-700 font-semibold">
+              Registre-se
+            </router-link>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -33,20 +73,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import api from '../services/api'
+import { useAuth } from '@/composables/useAuth'
 
-const email = ref('')
-const password = ref('')
-const error = ref(null)
 const router = useRouter()
+const { login, loading, error } = useAuth()
 
-async function handleLogin() {
-  error.value = null
+const form = ref({
+  email: '',
+  password: '',
+  rememberMe: true // Marcado por padrão
+})
+
+const handleLogin = async () => {
   try {
-    await api.post('/api/login', { email: email.value, password: password.value })
-    window.location.href = router.resolve('/dashboard').href; // Use router to resolve correct base path
+    await login(form.value.email, form.value.password, form.value.rememberMe)
+    router.push('/auctions')
   } catch (err) {
-    error.value = err.response?.data?.message || 'Credenciais inválidas.'
+    // Error já está no composable
   }
 }
 </script>

@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+const API_BASE = 'http://localhost/kadesh/public/backend.php';
+
 /**
  * Testes E2E para API Backend
  */
@@ -7,7 +9,7 @@ import { test, expect } from '@playwright/test';
 test.describe('API Backend - Endpoints de Leilões', () => {
   
   test('GET /api/auctions/active deve retornar lista de leilões', async ({ request }) => {
-    const response = await request.get('/api/auctions/active');
+    const response = await request.get(`${API_BASE}/api/auctions/active`);
     
     expect(response.status()).toBe(200);
     
@@ -17,7 +19,7 @@ test.describe('API Backend - Endpoints de Leilões', () => {
   });
 
   test('GET /api/auctions/active deve retornar estrutura correta', async ({ request }) => {
-    const response = await request.get('/api/auctions/active');
+    const response = await request.get(`${API_BASE}/api/auctions/active`);
     const data = await response.json();
     
     expect(data).toHaveProperty('weights');
@@ -36,14 +38,14 @@ test.describe('API Backend - Endpoints de Leilões', () => {
 
   test('GET /api/auctions/:id deve retornar detalhes do leilão', async ({ request }) => {
     // Primeiro buscar um leilão ativo
-    const listResponse = await request.get('/api/auctions/active');
+    const listResponse = await request.get(`${API_BASE}/api/auctions/active`);
     const listData = await listResponse.json();
     
     if (listData.auctions.length > 0) {
       const auctionId = listData.auctions[0].id;
       
       // Buscar detalhes
-      const detailResponse = await request.get(`/api/auctions/${auctionId}`);
+      const detailResponse = await request.get(`${API_BASE}/api/auctions/${auctionId}`);
       expect(detailResponse.status()).toBe(200);
       
       const data = await detailResponse.json();
@@ -53,12 +55,12 @@ test.describe('API Backend - Endpoints de Leilões', () => {
   });
 
   test('GET /api/auctions/:id deve incluir lista de propostas', async ({ request }) => {
-    const listResponse = await request.get('/api/auctions/active');
+    const listResponse = await request.get(`${API_BASE}/api/auctions/active`);
     const listData = await listResponse.json();
     
     if (listData.auctions.length > 0) {
       const auctionId = listData.auctions[0].id;
-      const detailResponse = await request.get(`/api/auctions/${auctionId}`);
+      const detailResponse = await request.get(`${API_BASE}/api/auctions/${auctionId}`);
       const data = await detailResponse.json();
       
       expect(data).toHaveProperty('bids');
@@ -67,7 +69,7 @@ test.describe('API Backend - Endpoints de Leilões', () => {
   });
 
   test('GET /api/auctions/999999 deve retornar 404', async ({ request }) => {
-    const response = await request.get('/api/auctions/999999');
+    const response = await request.get(`${API_BASE}/api/auctions/999999`);
     expect(response.status()).toBe(404);
   });
 });
@@ -79,7 +81,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
   
   test.beforeAll(async ({ request }) => {
     // Tentar fazer login com usuário de teste
-    const loginResponse = await request.post('/api/auth/login', {
+    const loginResponse = await request.post(`${API_BASE}/api/auth/login`, {
       data: {
         email: 'test@kadesh.com',
         password: 'Test@123'
@@ -101,7 +103,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
     }
     
     // Buscar um projeto ativo
-    const projectsResponse = await request.get('/api/auctions/active');
+    const projectsResponse = await request.get(`${API_BASE}/api/auctions/active`);
     const projectsData = await projectsResponse.json();
     
     if (projectsData.auctions.length === 0) {
@@ -111,7 +113,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
     
     const projectId = projectsData.auctions[0].id;
     
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       headers: {
         'Cookie': authCookie
       },
@@ -128,7 +130,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
   });
 
   test('POST /api/bids deve falhar sem autenticação', async ({ request }) => {
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       data: {
         project_id: 1,
         amount: 5000.00,
@@ -147,7 +149,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
       return;
     }
     
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       headers: {
         'Cookie': authCookie
       },
@@ -164,7 +166,7 @@ test.describe('API Backend - Endpoints de Propostas', () => {
 test.describe('API Backend - Endpoints de Projetos', () => {
   
   test('GET /api/projects/my deve retornar projetos do usuário', async ({ request }) => {
-    const response = await request.get('/api/projects/my');
+    const response = await request.get(`${API_BASE}/api/projects/my`);
     
     // Pode retornar 200 (com lista) ou 401 (não autenticado)
     expect([200, 401]).toContain(response.status());
@@ -172,12 +174,12 @@ test.describe('API Backend - Endpoints de Projetos', () => {
 
   test('GET /api/projects/:id deve retornar detalhes do projeto', async ({ request }) => {
     // Buscar um projeto da lista de leilões
-    const auctionsResponse = await request.get('/api/auctions/active');
+    const auctionsResponse = await request.get(`${API_BASE}/api/auctions/active`);
     const auctionsData = await auctionsResponse.json();
     
     if (auctionsData.auctions.length > 0) {
       const projectId = auctionsData.auctions[0].id;
-      const response = await request.get(`/api/projects/${projectId}`);
+      const response = await request.get(`${API_BASE}/api/projects/${projectId}`);
       
       expect([200, 401]).toContain(response.status());
     }
@@ -187,7 +189,7 @@ test.describe('API Backend - Endpoints de Projetos', () => {
 test.describe('API Backend - Health Check', () => {
   
   test('GET /api/health deve retornar status OK', async ({ request }) => {
-    const response = await request.get('/api/health');
+    const response = await request.get(`${API_BASE}/api/health`);
     
     expect(response.status()).toBe(200);
     
@@ -198,7 +200,7 @@ test.describe('API Backend - Health Check', () => {
 
   test('Backend deve responder em menos de 1 segundo', async ({ request }) => {
     const startTime = Date.now();
-    await request.get('/api/health');
+    await request.get(`${API_BASE}/api/health`);
     const responseTime = Date.now() - startTime;
     
     expect(responseTime).toBeLessThan(1000);
@@ -208,17 +210,17 @@ test.describe('API Backend - Health Check', () => {
 test.describe('API Backend - Tratamento de Erros', () => {
   
   test('Rota inexistente deve retornar 404', async ({ request }) => {
-    const response = await request.get('/api/rota-inexistente-123');
+    const response = await request.get(`${API_BASE}/api/rota-inexistente-123`);
     expect(response.status()).toBe(404);
   });
 
   test('Método não permitido deve retornar 405', async ({ request }) => {
-    const response = await request.delete('/api/health');
+    const response = await request.delete(`${API_BASE}/api/health`);
     expect([404, 405]).toContain(response.status());
   });
 
   test('JSON inválido deve retornar erro apropriado', async ({ request }) => {
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       data: 'invalid json string',
       headers: {
         'Content-Type': 'application/json'
@@ -232,14 +234,14 @@ test.describe('API Backend - Tratamento de Erros', () => {
 test.describe('API Backend - CORS e Headers', () => {
   
   test('Deve incluir headers de segurança apropriados', async ({ request }) => {
-    const response = await request.get('/api/health');
+    const response = await request.get(`${API_BASE}/api/health`);
     const headers = response.headers();
     
     expect(headers['content-type']).toContain('application/json');
   });
 
   test('Deve aceitar Content-Type JSON', async ({ request }) => {
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -258,7 +260,7 @@ test.describe('API Backend - Performance e Carga', () => {
   
   test('Múltiplas requisições simultâneas devem funcionar', async ({ request }) => {
     const requests = Array(5).fill(null).map(() => 
-      request.get('/api/auctions/active')
+      request.get(`${API_BASE}/api/auctions/active`)
     );
     
     const responses = await Promise.all(requests);
@@ -269,10 +271,10 @@ test.describe('API Backend - Performance e Carga', () => {
   });
 
   test('Cache deve funcionar para requisições repetidas', async ({ request }) => {
-    const response1 = await request.get('/api/auctions/active');
+    const response1 = await request.get(`${API_BASE}/api/auctions/active`);
     const data1 = await response1.json();
     
-    const response2 = await request.get('/api/auctions/active');
+    const response2 = await request.get(`${API_BASE}/api/auctions/active`);
     const data2 = await response2.json();
     
     // Dados devem ser consistentes
@@ -283,7 +285,7 @@ test.describe('API Backend - Performance e Carga', () => {
 test.describe('API Backend - Validação de Dados', () => {
   
   test('Valores negativos devem ser rejeitados em propostas', async ({ request }) => {
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       data: {
         project_id: 1,
         amount: -1000, // Valor negativo
@@ -296,12 +298,12 @@ test.describe('API Backend - Validação de Dados', () => {
   });
 
   test('IDs inválidos devem ser rejeitados', async ({ request }) => {
-    const response = await request.get('/api/auctions/abc'); // ID não numérico
+    const response = await request.get(`${API_BASE}/api/auctions/abc`); // ID não numérico
     expect([400, 404]).toContain(response.status());
   });
 
   test('Strings vazias devem ser validadas', async ({ request }) => {
-    const response = await request.post('/api/bids', {
+    const response = await request.post(`${API_BASE}/api/bids`, {
       data: {
         project_id: 1,
         amount: 5000,

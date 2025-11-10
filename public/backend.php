@@ -14,12 +14,12 @@ $isProduction = !empty($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], '
 $cookiePath = '/';
 
 session_set_cookie_params([
-    'lifetime' => 0,              // Sessão expira ao fechar navegador
-    'path' => $cookiePath,        // Cookie path baseado no ambiente
-    'domain' => '',               // Vazio = usa domínio atual automaticamente
-    'secure' => $isProduction,    // true em HTTPS (produção), false em HTTP (local)
-    'httponly' => true,           // Previne acesso via JavaScript
-    'samesite' => 'Lax'           // Permite envio em navegação normal
+    'lifetime' => 604800,            // 7 dias em segundos
+    'path' => $cookiePath,           // Cookie path baseado no ambiente
+    'domain' => '',                  // Vazio = usa domínio atual automaticamente
+    'secure' => $isProduction,       // true em HTTPS (produção), false em HTTP (local)
+    'httponly' => true,              // Previne acesso via JavaScript
+    'samesite' => 'Lax'              // Permite envio em navegação normal
 ]);
 
 // Start session ANTES de qualquer output
@@ -47,9 +47,29 @@ require_once __DIR__ . '/../src/Backend/Models/Project.php';
 require_once __DIR__ . '/../src/Backend/Core/Logger.php';
 require_once __DIR__ . '/../src/Backend/Controllers/AuthController.php';
 require_once __DIR__ . '/../src/Backend/Controllers/ProjectController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/UserController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/AuctionController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/BidController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/WalletController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/EscrowController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/MilestoneController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/DisputeController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/NotificationController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/TimelineController.php';
+require_once __DIR__ . '/../src/Backend/Controllers/ReviewController.php';
 
 use App\Backend\Controllers\AuthController;
 use App\Backend\Controllers\ProjectController;
+use App\Backend\Controllers\UserController;
+use App\Backend\Controllers\AuctionController;
+use App\Backend\Controllers\BidController;
+use App\Backend\Controllers\WalletController;
+use App\Backend\Controllers\EscrowController;
+use App\Backend\Controllers\MilestoneController;
+use App\Backend\Controllers\DisputeController;
+use App\Backend\Controllers\NotificationController;
+use App\Backend\Controllers\TimelineController;
+use App\Backend\Controllers\ReviewController;
 use App\Backend\Core\Logger;
 
 // Headers de resposta
@@ -202,14 +222,163 @@ try {
         exit;
     }
 
-    // AUCTIONS (Public) - Leilões ativos e detalhe do leilão
-    if ($path === '/api/auctions/active' && $method === 'GET') {
-        handleGetActiveAuctions();
+    // ==================== NEW CONTROLLERS ====================
+    $db = getDB();
+    $userController = new UserController($db);
+    $auctionController = new AuctionController($db);
+    $bidController = new BidController($db);
+    $walletController = new WalletController($db);
+    $escrowController = new EscrowController($db);
+    $milestoneController = new MilestoneController($db);
+    $disputeController = new DisputeController($db);
+    $notificationController = new NotificationController($db);
+    $timelineController = new TimelineController($db);
+    $reviewController = new ReviewController($db);
+    
+    // USER ROUTES (KYC, Profile, Role)
+    if ($path === '/api/user/upload-document' && $method === 'POST') {
+        requireAuth();
+        $userController->uploadDocument();
         exit;
     }
-
+    if ($path === '/api/user/documents' && $method === 'GET') {
+        requireAuth();
+        $userController->getDocuments();
+        exit;
+    }
+    if ($path === '/api/user/profile' && $method === 'PUT') {
+        requireAuth();
+        $userController->updateProfile();
+        exit;
+    }
+    if ($path === '/api/user/switch-role' && $method === 'POST') {
+        requireAuth();
+        $userController->switchRole();
+        exit;
+    }
+    
+    // AUCTION ROUTES
+    if ($path === '/api/auctions' && $method === 'POST') {
+        requireAuth();
+        $auctionController->createAuction();
+        exit;
+    }
+    if ($path === '/api/auctions/active' && $method === 'GET') {
+        $auctionController->getActiveAuctions();
+        exit;
+    }
     if (preg_match('#^/api/auctions/(\d+)$#', $path, $matches) && $method === 'GET') {
-        handleGetAuction($matches[1]);
+        $auctionController->getAuctionDetail($matches[1]);
+        exit;
+    }
+    if (preg_match('#^/api/auctions/(\d+)/end$#', $path, $matches) && $method === 'POST') {
+        requireAuth();
+        $auctionController->endAuction($matches[1]);
+        exit;
+    }
+    
+    // BID ROUTES
+    if ($path === '/api/bids' && $method === 'POST') {
+        requireAuth();
+        $bidController->placeBid();
+        exit;
+    }
+    if ($path === '/api/bids/my' && $method === 'GET') {
+        requireAuth();
+        $bidController->getMyBids();
+        exit;
+    }
+    
+    // WALLET ROUTES
+    if ($path === '/api/wallet/balance' && $method === 'GET') {
+        requireAuth();
+        $walletController->getBalance();
+        exit;
+    }
+    if ($path === '/api/wallet/deposit' && $method === 'POST') {
+        requireAuth();
+        $walletController->deposit();
+        exit;
+    }
+    if ($path === '/api/wallet/statement' && $method === 'GET') {
+        requireAuth();
+        $walletController->getStatement();
+        exit;
+    }
+    
+    // ESCROW ROUTES
+    if ($path === '/api/escrow/create' && $method === 'POST') {
+        requireAuth();
+        $escrowController->createEscrowAccount();
+        exit;
+    }
+    if ($path === '/api/escrow/release-milestone' && $method === 'POST') {
+        requireAuth();
+        $escrowController->releaseMilestone();
+        exit;
+    }
+    
+    // MILESTONE ROUTES
+    if ($path === '/api/milestones' && $method === 'POST') {
+        requireAuth();
+        $milestoneController->createMilestones();
+        exit;
+    }
+    if ($path === '/api/milestones/submit-evidence' && $method === 'POST') {
+        requireAuth();
+        $milestoneController->submitEvidence();
+        exit;
+    }
+    if ($path === '/api/milestones' && $method === 'GET') {
+        requireAuth();
+        $milestoneController->getMilestones();
+        exit;
+    }
+    
+    // DISPUTE ROUTES
+    if ($path === '/api/disputes' && $method === 'POST') {
+        requireAuth();
+        $disputeController->openDispute();
+        exit;
+    }
+    if ($path === '/api/disputes/evidence' && $method === 'POST') {
+        requireAuth();
+        $disputeController->addEvidence();
+        exit;
+    }
+    if ($path === '/api/disputes/resolve' && $method === 'POST') {
+        requireAuth();
+        $disputeController->resolveDispute();
+        exit;
+    }
+    
+    // NOTIFICATION ROUTES
+    if ($path === '/api/notifications' && $method === 'GET') {
+        requireAuth();
+        $notificationController->getNotifications();
+        exit;
+    }
+    if ($path === '/api/notifications/mark-read' && $method === 'POST') {
+        requireAuth();
+        $notificationController->markAsRead();
+        exit;
+    }
+    
+    // TIMELINE ROUTES
+    if ($path === '/api/timeline' && $method === 'GET') {
+        requireAuth();
+        $timelineController->getProjectTimeline();
+        exit;
+    }
+    
+    // REVIEW ROUTES
+    if ($path === '/api/reviews' && $method === 'POST') {
+        requireAuth();
+        $reviewController->createReview();
+        exit;
+    }
+    if ($path === '/api/reviews' && $method === 'GET') {
+        $reviewController->getUserReviews();
         exit;
     }
     

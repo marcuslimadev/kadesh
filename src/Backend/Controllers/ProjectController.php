@@ -74,7 +74,7 @@ class ProjectController {
 
         // Dados do projeto
         $data = [
-            'user_id' => $_SESSION['user_id'],
+            'user_id' => $_SESSION['user_id'], // ProjectModel usa como contractor_id
             'title' => trim($input['title']),
             'description' => trim($input['description']),
             'max_budget' => floatval($input['max_budget']),

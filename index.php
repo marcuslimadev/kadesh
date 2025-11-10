@@ -1,4 +1,5 @@
 <?php
-// Redirecionar para a página principal de leilões
-header('Location: /kadesh/public/jquery-frontend/leiloes-original.html');
+// Durante desenvolvimento: Redirecionar para Vite dev server
+// Em produção: servir build do Vue
+header('Location: http://localhost:5173/kadesh/');
 exit;
