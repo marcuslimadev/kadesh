@@ -1,6 +1,9 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import { toast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
+
+// Toast instance (guarded for SSR/build time)
+const toast = typeof window !== 'undefined' ? useToast() : null
 
 // Create axios instance
 const api = axios.create({
@@ -56,43 +59,43 @@ api.interceptors.response.use(
           // Unauthorized - clear auth and redirect to login
           const authStore = useAuthStore()
           authStore.logout()
-          toast.error('Sessão expirada. Faça login novamente.')
+          toast?.error('Sessão expirada. Faça login novamente.')
           break
 
         case 403:
-          toast.error('Você não tem permissão para esta ação.')
+          toast?.error('Você não tem permissão para esta ação.')
           break
 
         case 404:
-          toast.error('Recurso não encontrado.')
+          toast?.error('Recurso não encontrado.')
           break
 
         case 422:
           // Validation errors
           if (data.errors && Array.isArray(data.errors)) {
-            data.errors.forEach(err => toast.error(err))
+            data.errors.forEach(err => toast?.error(err))
           } else if (data.error) {
-            toast.error(data.error)
+            toast?.error(data.error)
           }
           break
 
         case 429:
-          toast.error('Muitas requisições. Tente novamente em alguns minutos.')
+          toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
           break
 
         case 500:
-          toast.error('Erro interno do servidor. Tente novamente mais tarde.')
+          toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
           break
 
         default:
-          toast.error(data?.error || 'Ocorreu um erro inesperado.')
+          toast?.error(data?.error || 'Ocorreu um erro inesperado.')
       }
     } else if (error.code === 'ECONNABORTED') {
-      toast.error('Timeout: A requisição demorou muito para responder.')
+      toast?.error('Timeout: A requisição demorou muito para responder.')
     } else if (error.message === 'Network Error') {
-      toast.error('Erro de conexão. Verifique sua internet.')
+      toast?.error('Erro de conexão. Verifique sua internet.')
     } else {
-      toast.error('Ocorreu um erro inesperado.')
+      toast?.error('Ocorreu um erro inesperado.')
     }
 
     return Promise.reject(error)

@@ -1,7 +1,18 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import { toast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
+
+const getToast = () => {
+  if (typeof window === 'undefined') return null
+  return useToast()
+}
+
+const showToast = (type, message) => {
+  const toastInstance = getToast()
+  if (!toastInstance || !toastInstance[type]) return
+  toastInstance[type](message)
+}
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -40,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('kadesh_token', userToken)
       localStorage.setItem('kadesh_user', JSON.stringify(userData))
 
-      toast.success(`Bem-vindo, ${userData.name}!`)
+      showToast('success', `Bem-vindo, ${userData.name}!`)
       return { success: true, user: userData }
 
     } catch (error) {
@@ -67,7 +78,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('kadesh_token', userToken)
       localStorage.setItem('kadesh_user', JSON.stringify(newUser))
 
-      toast.success(`Conta criada com sucesso! Bem-vindo, ${newUser.name}!`)
+      showToast('success', `Conta criada com sucesso! Bem-vindo, ${newUser.name}!`)
       return { success: true, user: newUser }
 
     } catch (error) {
@@ -86,7 +97,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     localStorage.removeItem('kadesh_token')
     localStorage.removeItem('kadesh_user')
-    toast.info('Logout realizado com sucesso!')
+    showToast('info', 'Logout realizado com sucesso!')
   }
 
   const verifyToken = async () => {
@@ -115,7 +126,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.data.user
       localStorage.setItem('kadesh_user', JSON.stringify(response.data.user))
 
-      toast.success('Perfil atualizado com sucesso!')
+      showToast('success', 'Perfil atualizado com sucesso!')
       return { success: true, user: response.data.user }
 
     } catch (error) {
