@@ -4,7 +4,8 @@ import App from './App.vue'
 import router from './router'
 import Toast from 'vue-toastification'
 
-// Import toast CSS
+// Import global styles
+import './style.css'
 import 'vue-toastification/dist/index.css'
 
 // Create app
