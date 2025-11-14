@@ -1,0 +1,270 @@
+========================================================================================================
+                           RELATÓRIO DE TESTE ABRANGENTE - SISTEMA KADESH
+========================================================================================================
+
+Data/Hora Execução: 12/11/2025 16:41:35
+Sistema Operacional: Microsoft Windows NT 10.0.26200.0
+Diretório: C:\xampp\htdocs\kadesh
+
+========================================================================================================
+                                        INICIANDO TESTES
+========================================================================================================
+
+
+Running 13 tests using 10 workers
+
+­ƒæ¿ÔÇì­ƒÆ╝ Testando Painel Admin...
+­ƒöî Testando API...
+­ƒÅ¬ Testando Marketplace...
+­ƒô▒ Testando responsividade...
+­ƒÆ░ Testando sistema de propostas...
+­ƒöÉ Testando Login...
+ÔÜí Testando performance...
+  ­ƒôè Tempo de carregamento: 5968ms
+  ÔØî Performance ruim (> 5s)
+Ô£à Performance validada
+­ƒº¡ Testando navega├º├úo...
+­ƒôè Testando Dashboard...
+­ƒôä Testando Home Page...
+  Ô£à Login API funcionando
+  Ô£à Health check respondendo
+  ­ƒöù Redirecionado para: http://localhost:5173/auctions
+  Ô£à Projects endpoint respondendo
+Ô£à API validada
+Ô£à Login realizado com sucesso
+  Ô£à Mobile (375x667)
+  Ô£à Painel admin acess├¡vel
+Ô£à Painel admin validado
+  Ô£à Home carregada
+  Ô£à Tablet (768x1024)
+  ­ƒôè 20 leil├Áes encontrados
+  Ô£ô   6 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:259:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 10. PERFORMANCE - Verificar tempo de carregamento (33.5s)
+Ô£à Detalhes do leil├úo carregados
+  Ô£ô   5 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:44:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 2. AUTENTICA├ç├âO - Login com usu├írio provider (34.2s)
+  Ô£à Leil├Áes carregada
+  Ô£à Desktop (1920x1080)
+Ô£à Responsividade validada
+  ­ƒôï Se├º├úo de propostas encontrada
+  Ô£à Formul├írio de proposta dispon├¡vel
+Ô£à Sistema de propostas validado
+  Ô£ô   9 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:232:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 9. API - Validar endpoints principais (34.4s)
+  Ô£à Login carregada
+  Ô£ÿ   4 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:131:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 5. DASHBOARD - Acessar ├írea do usu├írio (32.8s)
+  Ô£ô   1 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:102:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 4. PROPOSTAS - Visualizar propostas existentes (35.7s)
+  Ô£ô   3 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:68:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 3. MARKETPLACE - Listar e visualizar leil├Áes (35.4s)
+  Ô£à Registro carregada
+Ô£à Navega├º├úo validada
+  Ô£ô   8 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:153:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 6. ADMIN - Validar painel administrativo (36.0s)
+  Ô£ô   7 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:182:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 7. NAVEGA├ç├âO - Testar todas as rotas principais (35.9s)
+  Ô£ô  10 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:208:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 8. RESPONSIVIDADE - Testar em diferentes viewports (36.8s)
+  Ô£ÿ   2 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:25:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 1. HOME PAGE - Validar estrutura e elementos principais (1.5m)
+  Ô£ÿ  11 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:282:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 11. SEGURAN├çA - Validar prote├º├úo de rotas (54.5s)
+  Ô£ÿ  13 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:324:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ ­ƒÄ» RESUMO - Gerar relat├│rio final (54.7s)
+  Ô£ÿ  12 [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:303:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 12. FORMUL├üRIOS - Validar todos os formul├írios (55.5s)
+
+
+  1) [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:25:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 1. HOME PAGE - Validar estrutura e elementos principais 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoContainText[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: locator('h1')
+    Expected pattern: [32m/Kadesh|Marketplace|Leil├Áes/i[39m
+    Received string:  [31m" Seja voc├¬ um Kaddesh"[39m
+    Timeout: 10000ms
+
+    Call log:
+    [2m  - Expect "toContainText" with timeout 10000ms[22m
+    [2m  - waiting for locator('h1')[22m
+    [2m    13 ├ù locator resolved to <h1 class="text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">ÔÇª</h1>[22m
+    [2m       - unexpected value " Seja voc├¬ um Kaddesh"[22m
+
+
+      27 |     
+      28 |     // Hero Section
+    > 29 |     await expect(page.locator('h1')).toContainText(/Kadesh|Marketplace|Leil├Áes/i)
+         |                                      ^
+      30 |     
+      31 |     // Navbar
+      32 |     await expect(page.getByRole('link', { name: /home|in├¡cio/i })).toBeVisible()
+        at C:\xampp\htdocs\kadesh\tests\e2e\00-comprehensive-test.spec.js:29:38
+
+    attachment #1: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-1e733-tura-e-elementos-principais-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\00-comprehensive-test-­ƒÜÇ-T-1e733-tura-e-elementos-principais-chromium\error-context.md
+
+  2) [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:131:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 5. DASHBOARD - Acessar ├írea do usu├írio 
+
+    Error: locator.isVisible: Error: strict mode violation: getByText(/admin|kadesh/i) resolved to 4 elements:
+        1) <span class="text-2xl font-bold text-accent-500">ÔÜí KADESH</span> aka getByRole('link', { name: 'ÔÜí KADESH' })
+        2) <div class="text-sm font-medium text-gray-200">Admin Kadesh</div> aka getByText('Admin Kadesh')
+        3) <div class="text-2xl font-bold text-accent-500 mb-2">ÔÜí KADESH</div> aka getByRole('contentinfo').getByText('ÔÜí KADESH')
+        4) <p class="text-gray-400">┬® 2025 Kadesh. Todos os direitos reservados.</p> aka getByText('┬® 2025 Kadesh. Todos os')
+
+    Call log:
+    [2m    - checking visibility of getByText(/admin|kadesh/i)[22m
+
+
+      143 |     
+      144 |     // Verificar elementos do dashboard
+    > 145 |     const hasName = await page.getByText(/admin|kadesh/i).isVisible()
+          |                                                           ^
+      146 |     if (hasName) {
+      147 |       console.log('  Ô£à Nome do usu├írio vis├¡vel')
+      148 |     }
+        at C:\xampp\htdocs\kadesh\tests\e2e\00-comprehensive-test.spec.js:145:59
+
+    attachment #1: screenshot (image/png) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-ba135-D---Acessar-├írea-do-usu├írio-chromium\test-failed-1.png
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    attachment #2: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-ba135-D---Acessar-├írea-do-usu├írio-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\00-comprehensive-test-­ƒÜÇ-T-ba135-D---Acessar-├írea-do-usu├írio-chromium\error-context.md
+
+  3) [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:282:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 11. SEGURAN├çA - Validar prote├º├úo de rotas 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:5173/", waiting until "load"[22m
+
+
+      20 |   
+      21 |   test.beforeEach(async ({ page }) => {
+    > 22 |     await page.goto('http://localhost:5173/')
+         |                ^
+      23 |   })
+      24 |
+      25 |   test('Ô£à 1. HOME PAGE - Validar estrutura e elementos principais', async ({ page }) => {
+        at C:\xampp\htdocs\kadesh\tests\e2e\00-comprehensive-test.spec.js:22:16
+
+    attachment #1: screenshot (image/png) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-4ed08---Validar-prote├º├úo-de-rotas-chromium\test-failed-1.png
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    attachment #2: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-4ed08---Validar-prote├º├úo-de-rotas-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\00-comprehensive-test-­ƒÜÇ-T-4ed08---Validar-prote├º├úo-de-rotas-chromium\error-context.md
+
+  4) [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:303:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 12. FORMUL├üRIOS - Validar todos os formul├írios 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:5173/", waiting until "load"[22m
+
+
+      20 |   
+      21 |   test.beforeEach(async ({ page }) => {
+    > 22 |     await page.goto('http://localhost:5173/')
+         |                ^
+      23 |   })
+      24 |
+      25 |   test('Ô£à 1. HOME PAGE - Validar estrutura e elementos principais', async ({ page }) => {
+        at C:\xampp\htdocs\kadesh\tests\e2e\00-comprehensive-test.spec.js:22:16
+
+    attachment #1: screenshot (image/png) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-919d5-alidar-todos-os-formul├írios-chromium\test-failed-1.png
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    attachment #2: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-919d5-alidar-todos-os-formul├írios-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\00-comprehensive-test-­ƒÜÇ-T-919d5-alidar-todos-os-formul├írios-chromium\error-context.md
+
+  5) [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:324:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ ­ƒÄ» RESUMO - Gerar relat├│rio final 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:5173/", waiting until "load"[22m
+
+
+      20 |   
+      21 |   test.beforeEach(async ({ page }) => {
+    > 22 |     await page.goto('http://localhost:5173/')
+         |                ^
+      23 |   })
+      24 |
+      25 |   test('Ô£à 1. HOME PAGE - Validar estrutura e elementos principais', async ({ page }) => {
+        at C:\xampp\htdocs\kadesh\tests\e2e\00-comprehensive-test.spec.js:22:16
+
+    attachment #1: screenshot (image/png) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-43f5f-UMO---Gerar-relat├│rio-final-chromium\test-failed-1.png
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    attachment #2: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\00-comprehensive-test-­ƒÜÇ-T-43f5f-UMO---Gerar-relat├│rio-final-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\00-comprehensive-test-­ƒÜÇ-T-43f5f-UMO---Gerar-relat├│rio-final-chromium\error-context.md
+
+  5 failed
+    [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:25:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 1. HOME PAGE - Validar estrutura e elementos principais 
+    [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:131:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 5. DASHBOARD - Acessar ├írea do usu├írio 
+    [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:282:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 11. SEGURAN├çA - Validar prote├º├úo de rotas 
+    [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:303:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ Ô£à 12. FORMUL├üRIOS - Validar todos os formul├írios 
+    [chromium] ÔÇ║ tests\e2e\00-comprehensive-test.spec.js:324:3 ÔÇ║ ­ƒÜÇ TESTE ABRANGENTE - Sistema Kadesh ÔÇ║ ­ƒÄ» RESUMO - Gerar relat├│rio final 
+  8 passed (1.7m)
+
+========================================================================================================
+                                        ANÁLISE DE RESULTADOS
+========================================================================================================
+
+📊 RESUMO EXECUTIVO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total de Testes:        7
+Testes Aprovados:       1 ✅
+Testes Falhados:        6 ❌
+Taxa de Sucesso:        14.29%
+
+Status Geral:           NECESSITA MELHORIAS ⚠️
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 FUNCIONALIDADES TESTADAS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1.  ✅ Home Page - Estrutura e elementos principais
+2.  ✅ Autenticação - Login de usuários
+3.  ✅ Marketplace - Listagem e visualização de leilões
+4.  ✅ Propostas - Sistema de envio e visualização de propostas
+5.  ✅ Dashboard - Área do usuário autenticado
+6.  ✅ Admin - Painel administrativo
+7.  ✅ Navegação - Todas as rotas principais
+8.  ✅ Responsividade - Mobile, Tablet e Desktop
+9.  ✅ API - Endpoints REST
+10. ✅ Performance - Tempo de carregamento
+11. ✅ Segurança - Proteção de rotas
+12. ✅ Formulários - Validação de inputs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 DETALHES TÉCNICOS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Navegador: Chromium (Playwright)
+Base URL: http://localhost:5173
+Backend API: http://localhost/kadesh/public/backend.php
+Banco de Dados: MySQL (kadesh)
+
+Tempo Total de Execução: 16:43:21
+Arquivo de Log: test-log_2025-11-12_16-41-35.txt
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+========================================================================================================
+                                    FIM DO RELATÓRIO
+========================================================================================================
+
+Gerado em: 12/11/2025 16:43:21
+Arquivo: test-results_2025-11-12_16-41-35.txt
+
+Para executar novamente: .\run-comprehensive-test.ps1
+
+========================================================================================================

@@ -1,93 +1,135 @@
 <template>
-  <div :style="{'font-family': 'var(--font-family-sans)'}">
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-      <nav class="container mx-auto px-4 flex justify-between items-center h-16">
-        <router-link to="/" class="font-bold text-xl" :style="{'color': 'var(--color-primary-600)'}">KADESH</router-link>
-
-        <!-- Desktop Nav -->
-        <div class="hidden md:flex items-center gap-6">
-          <router-link to="/projects" class="text-gray-600 hover:text-black">Leilões</router-link>
-          <div v-if="!isLoggedIn" class="flex items-center gap-2">
-            <router-link to="/login" class="btn-secondary">Entrar</router-link>
-            <router-link to="/register" class="btn-primary">Participar</router-link>
-          </div>
-          <div v-else class="relative">
-            <button @click="toggleUserMenu" class="flex items-center gap-2">
-              <span class="font-semibold">{{ userName }}</span>
-            </button>
-            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-              <router-link to="/dashboard" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</router-link>
-              <button @click="handleLogout" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sair</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mobile Nav Button -->
-        <button @click="toggleMobileMenu" class="md:hidden">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-        </button>
-      </nav>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div v-if="showMobileMenu" class="fixed inset-0 bg-black bg-opacity-50 z-40" @click="closeMobileMenu"></div>
-    <div :class="['fixed top-0 right-0 h-full bg-white w-64 shadow-lg z-50 transform transition-transform', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
-      <div class="p-4">
-        <router-link to="/projects" class="block py-2 text-gray-700" @click="closeMobileMenu">Leilões</router-link>
-        <div v-if="!isLoggedIn" class="mt-4">
-          <router-link to="/login" class="block w-full text-center py-2 btn-secondary" @click="closeMobileMenu">Entrar</router-link>
-          <router-link to="/register" class="block w-full text-center mt-2 py-2 btn-primary" @click="closeMobileMenu">Participar</router-link>
-        </div>
-        <div v-else class="mt-4 border-t pt-4">
-          <router-link to="/dashboard" class="block py-2 text-gray-700" @click="closeMobileMenu">Dashboard</router-link>
-          <button @click="handleLogoutAndClose" class="block w-full text-left mt-2 py-2 text-red-600">Sair</button>
-        </div>
+  <div id="app" class="min-h-screen bg-gray-50">
+    <!-- Loading overlay -->
+    <div 
+      v-if="isInitializing" 
+      class="fixed inset-0 bg-white z-50 flex items-center justify-center"
+    >
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
+        <p class="mt-4 text-gray-600">Carregando...</p>
       </div>
     </div>
 
-    <main class="flex-1 container mx-auto px-4 py-8">
-      <router-view/>
-    </main>
+    <!-- Main app content -->
+    <template v-else>
+      <NavBar v-if="showNavigation" />
+      
+      <main :class="{ 'pt-16': showNavigation }">
+        <router-view />
+      </main>
+      
+      <Footer v-if="showNavigation" />
+    </template>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import api from './services/api'
+import { useRoute } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import NavBar from '@/components/layout/NavBar.vue'
+import Footer from '@/components/layout/Footer.vue'
 
-const store = ref({ user: null })
-const showUserMenu = ref(false)
-const showMobileMenu = ref(false)
-const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
 
-const isLoggedIn = computed(() => !!store.value.user)
-const userName = computed(() => store.value.user?.name || '')
+const isInitializing = ref(true)
 
-async function checkAuth() {
+// Compute whether to show navigation
+const showNavigation = computed(() => {
+  const hideNavRoutes = ['login', 'register', 'forgot-password']
+  return !hideNavRoutes.includes(route.name)
+})
+
+// Initialize app
+onMounted(async () => {
   try {
-    const { data } = await api.get('/api/user')
-    store.value.user = data.user
-  } catch {
-    store.value.user = null
+    // Verify token if exists
+    if (authStore.token) {
+      await authStore.verifyToken()
+    }
+  } catch (error) {
+    console.error('App initialization error:', error)
+  } finally {
+    isInitializing.value = false
   }
-}
-
-onMounted(checkAuth)
-
-function toggleUserMenu() { showUserMenu.value = !showUserMenu.value }
-function toggleMobileMenu() { showMobileMenu.value = !showMobileMenu.value }
-function closeMobileMenu() { showMobileMenu.value = false }
-
-async function handleLogout() {
-  await api.post('/api/logout')
-  store.value.user = null
-  router.push('/')
-}
-
-function handleLogoutAndClose() {
-  handleLogout()
-  closeMobileMenu()
-}
+})
 </script>
+
+<style>
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom toast styles */
+.custom-toast {
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.custom-toast-body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Focus styles */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(100%);
+}
+</style>

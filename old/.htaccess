@@ -1,0 +1,14 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+
+# Test simple rewrite first
+RewriteEngine On
+RewriteBase /kadesh/
+
+# Redirecionar rotas de API para backend.php
+RewriteRule ^api/(.*)$ public/backend.php [L,QSA]
+
+# Redirecionar tudo mais para public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php [L,QSA]

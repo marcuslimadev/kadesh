@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Paths - Kadesh</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        button { margin: 5px; padding: 10px 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Teste de Paths - Kadesh Sistema</h1>
+    
+    <div class="test">
+        <h3>1. Teste API Health Check</h3>
+        <button onclick="testApi('/kadesh/api/health')">Testar /kadesh/api/health</button>
+        <button onclick="testApi('api/health')">Testar api/health (relativo)</button>
+        <div id="api-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>2. Teste Assets</h3>
+        <button onclick="testAsset('/kadesh/assets/logo-Dx30nS6F.png')">Testar Logo</button>
+        <button onclick="testAsset('/kadesh/assets/index-DpARuA9j.css')">Testar CSS</button>
+        <div id="asset-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>3. Teste Favicon</h3>
+        <button onclick="testAsset('/kadesh/favicon.svg')">Testar Favicon</button>
+        <div id="favicon-result"></div>
+    </div>
+
+    <div class="test">
+        <h3>4. Informações do Sistema</h3>
+        <p><strong>URL Base:</strong> <span id="base-url"></span></p>
+        <p><strong>Path Atual:</strong> <span id="current-path"></span></p>
+        <p><strong>Subpasta:</strong> /kadesh/</p>
+    </div>
+
+    <script>
+        // Mostrar informações
+        document.getElementById('base-url').textContent = window.location.origin;
+        document.getElementById('current-path').textContent = window.location.pathname;
+
+        async function testApi(endpoint) {
+            const resultDiv = document.getElementById('api-result');
+            resultDiv.innerHTML = `<p>Testando: ${endpoint}...</p>`;
+            
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="success">
+                        <strong>✅ Sucesso:</strong> ${endpoint}<br>
+                        <strong>Status:</strong> ${response.status}<br>
+                        <strong>Resposta:</strong> ${JSON.stringify(data)}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">
+                        <strong>❌ Erro:</strong> ${endpoint}<br>
+                        <strong>Status:</strong> ${response.status}<br>
+                        <strong>Resposta:</strong> ${JSON.stringify(data)}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">
+                    <strong>❌ Falha na Conexão:</strong> ${endpoint}<br>
+                    <strong>Erro:</strong> ${error.message}
+                </div>`;
+            }
+        }
+
+        function testAsset(url) {
+            const resultDiv = url.includes('favicon') ? 
+                document.getElementById('favicon-result') : 
+                document.getElementById('asset-result');
+            
+            resultDiv.innerHTML = `<p>Testando: ${url}...</p>`;
+            
+            const img = new Image();
+            img.onload = function() {
+                resultDiv.innerHTML = `<div class="success">
+                    <strong>✅ Asset carregou:</strong> ${url}<br>
+                    <strong>Dimensões:</strong> ${this.width}x${this.height}
+                </div>`;
+            };
+            img.onerror = function() {
+                resultDiv.innerHTML = `<div class="error">
+                    <strong>❌ Asset falhou:</strong> ${url}<br>
+                    <strong>Erro:</strong> Não foi possível carregar
+                </div>`;
+            };
+            img.src = url;
+        }
+    </script>
+</body>
+</html>

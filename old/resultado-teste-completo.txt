@@ -1,0 +1,81 @@
+
+Running 27 tests using 4 workers
+
+  Ô£ô   3 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:27:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 1.3 - Home: Deve buscar projetos por palavra-chave (48.1s)
+  Ô£ô   2 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:9:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 1.1 - Home: Deve carregar p├ígina inicial (56.1s)
+  Ô£ô   6 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:62:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.3 - Login: Deve fazer login com credenciais v├ílidas (3.6s)
+  Ô£ÿ   4 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:19:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 1.2 - Home: Deve exibir navbar com links (1.0m)
+  Ô£ÿ   1 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:44:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.1 - Login: Deve acessar p├ígina de login (58.8s)
+  Ô£ô   7 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:75:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.4 - Auth: Deve exibir nome do usu├írio logado (6.2s)
+  Ô£ô   5 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:52:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.2 - Login: Deve validar campos obrigat├│rios (11.1s)
+  Ô£ô   8 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:110:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 3.3 - Auctions: Deve filtrar por categoria (1.9s)
+  Ô£ô  11 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:95:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 3.1 - Auctions: Deve acessar marketplace (1.7s)
+  Ô£ô  12 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:140:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 4.1 - Project Detail: Deve exibir informa├º├Áes do projeto (2.8s)
+  Ô£ô   9 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:123:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 3.4 - Auctions: Deve acessar detalhes de um projeto (5.0s)
+  Ô£ô  10 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:102:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 3.2 - Auctions: Deve listar projetos dispon├¡veis (3.6s)
+  Ô£ô  14 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:157:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 4.3 - Project Detail: Deve exibir formul├írio de proposta (2.8s)
+  Ô£ô  15 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:165:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 4.4 - Project Detail: Deve validar campos da proposta (2.8s)
+  Ô£ô  16 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:180:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 5.1 - Dashboard: Deve acessar dashboard (2.9s)
+  Ô£ô  17 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:188:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 5.2 - Dashboard: Deve exibir estat├¡sticas (2.8s)
+  Ô£ô  20 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:221:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 7.1 - API: Health check deve retornar OK (83ms)
+  Ô£ô  21 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:226:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 7.2 - API: Deve listar projetos ativos (37ms)
+  Ô£ô  22 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:235:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 7.3 - API: Endpoints protegidos devem exigir autentica├º├úo (40ms)
+  Ô£ô  18 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:200:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 6.1 - Admin: Deve acessar painel administrativo (2.8s)
+  Ô£ô  19 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:208:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 6.2 - Admin: Deve exibir menu de navega├º├úo admin (2.8s)
+  Ô£ô  24 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:254:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 8.2 - Responsivo: Deve funcionar em tablet (1.0s)
+  Ô£ô  13 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:149:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 4.2 - Project Detail: Deve exibir prazo do leil├úo (8.5s)
+
+­ƒÄë TESTE COMPLETO FINALIZADO!
+
+  Ô£ô  23 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:247:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 8.1 - Responsivo: Deve funcionar em mobile (2.1s)
+  Ô£ô  27 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:291:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 10.1 - RESUMO: Sistema est├í funcional (390ms)
+  Ô£ô  25 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:261:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 8.3 - Responsivo: Deve funcionar em desktop (2.9s)
+  Ô£ô  26 [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:272:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 9.1 - Logout: Deve fazer logout com sucesso (3.6s)
+
+
+  1) [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:19:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 1.2 - Home: Deve exibir navbar com links 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:5173/", waiting until "load"[22m
+
+
+      18 |
+      19 |   test('1.2 - Home: Deve exibir navbar com links', async ({ page }) => {
+    > 20 |     await page.goto('/');
+         |                ^
+      21 |     
+      22 |     // Verificar se h├í links de navega├º├úo
+      23 |     const links = await page.locator('a, button[href], [role="link"]').count();
+        at C:\xampp\htdocs\kadesh\tests\e2e\complete-system.spec.js:20:16
+
+    attachment #1: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\complete-system-TESTE-COMP-9fef3-eve-exibir-navbar-com-links-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+  2) [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:44:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.1 - Login: Deve acessar p├ígina de login 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - navigating to "http://localhost:5173/login", waiting until "load"[22m
+
+
+      43 |   
+      44 |   test('2.1 - Login: Deve acessar p├ígina de login', async ({ page }) => {
+    > 45 |     await page.goto('/login');
+         |                ^
+      46 |     
+      47 |     // Verificar se est├í na p├ígina de login
+      48 |     const hasLoginForm = await page.locator('form, input[type="email"], input[type="password"]').count() > 0;
+        at C:\xampp\htdocs\kadesh\tests\e2e\complete-system.spec.js:45:16
+
+    attachment #1: video (video/webm) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    test-results\complete-system-TESTE-COMP-aca90-eve-acessar-p├ígina-de-login-chromium\video.webm
+    ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+
+    Error Context: test-results\complete-system-TESTE-COMP-aca90-eve-acessar-p├ígina-de-login-chromium\error-context.md
+
+  2 failed
+    [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:19:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 1.2 - Home: Deve exibir navbar com links 
+    [chromium] ÔÇ║ tests\e2e\complete-system.spec.js:44:3 ÔÇ║ TESTE COMPLETO DO SISTEMA KADESH ÔÇ║ 2.1 - Login: Deve acessar p├ígina de login 
+  25 passed (1.6m)

@@ -1,0 +1,203 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - navigation [ref=e5]:
+    - generic [ref=e7]:
+      - img "Kaddesh" [ref=e9]
+      - generic [ref=e10]:
+        - link "Início" [ref=e11] [cursor=pointer]:
+          - /url: /
+        - link "Leilões" [ref=e12] [cursor=pointer]:
+          - /url: /auctions
+        - link "Entrar" [ref=e13] [cursor=pointer]:
+          - /url: /login
+        - link "Cadastre-se" [ref=e14] [cursor=pointer]:
+          - /url: /register
+  - generic [ref=e15]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - heading "Seja você um Kaddesh" [level=1] [ref=e25]
+        - paragraph [ref=e26]: Melhores profissionais ou talentos
+        - paragraph [ref=e27]: Em busca de oportunidades, nossa plataforma de leilões de serviços profissionais é o seu destino certo. Com recursos de segurança robustos e uma comunidade de confiança, estamos aqui para impulsionar o seu sucesso.
+        - generic [ref=e29]:
+          - textbox "Pesquise com palavra-chave" [ref=e32]
+          - button "Procure agora" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: Procure agora
+      - img "Business people" [ref=e38]
+    - img [ref=e40]
+  - generic [ref=e45]:
+    - generic [ref=e46]:
+      - heading "Vamos começar rapidamente hoje" [level=3] [ref=e47]
+      - heading "Vamos explorar categorias populares" [level=2] [ref=e48]
+      - paragraph [ref=e49]: Encontre os melhores profissionais para o seu projeto em nossa plataforma segura de leilões de serviços.
+    - generic [ref=e50]:
+      - generic [ref=e52] [cursor=pointer]:
+        - img "Desenvolvimento Web" [ref=e53]
+        - generic [ref=e55]:
+          - heading "Desenvolvimento Web" [level=4] [ref=e56]
+          - paragraph [ref=e57]: Sites e aplicações modernas
+        - generic [ref=e58]: Popular
+      - generic [ref=e60] [cursor=pointer]:
+        - img "Marketing Digital" [ref=e61]
+        - generic [ref=e63]:
+          - heading "Marketing Digital" [level=4] [ref=e64]
+          - paragraph [ref=e65]: Estratégias de crescimento
+        - generic [ref=e66]: Trending
+      - generic [ref=e68] [cursor=pointer]:
+        - img "Design Gráfico" [ref=e69]
+        - generic [ref=e71]:
+          - heading "Design Gráfico" [level=4] [ref=e72]
+          - paragraph [ref=e73]: Identidade visual criativa
+      - generic [ref=e75] [cursor=pointer]:
+        - img "Programação" [ref=e76]
+        - generic [ref=e78]:
+          - heading "Programação" [level=4] [ref=e79]
+          - paragraph [ref=e80]: Soluções sob medida
+      - generic [ref=e82] [cursor=pointer]:
+        - img "Business" [ref=e83]
+        - generic [ref=e85]:
+          - heading "Business" [level=4] [ref=e86]
+          - paragraph [ref=e87]: Consultoria estratégica
+        - generic [ref=e88]: Hot
+  - generic [ref=e96]:
+    - generic [ref=e97]:
+      - heading "Leve seu trabalho em movimento" [level=3] [ref=e98]
+      - heading "Aproveite a experiência definitiva" [level=2] [ref=e99]
+      - paragraph [ref=e100]: Destaque suas habilidades e conquiste novas oportunidades em nossa plataforma de leilões de serviços profissionais.
+      - generic [ref=e103]:
+        - paragraph [ref=e104]: Notificações em Tempo Real
+        - paragraph [ref=e105]: Este aplicativo é compatível com dispositivos Android e iOS
+      - generic [ref=e106]:
+        - button "Download on the App Store" [ref=e107] [cursor=pointer]:
+          - generic [ref=e108]:
+            - generic [ref=e109]: Download on the
+            - generic [ref=e110]: App Store
+        - button "Get it on Google Play" [ref=e111] [cursor=pointer]:
+          - generic [ref=e112]:
+            - generic [ref=e113]: Get it on
+            - generic [ref=e114]: Google Play
+    - img "Mobile App" [ref=e118]
+  - generic [ref=e122]:
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - heading "Quer começar a trabalhar?" [level=3] [ref=e125]
+        - heading "Aplique os projetos mais bem avaliados" [level=2] [ref=e126]
+      - link "Todos os empregos" [ref=e127] [cursor=pointer]:
+        - /url: /auctions
+        - text: Todos os empregos
+    - generic [ref=e128]:
+      - generic [ref=e130]:
+        - generic [ref=e132]:
+          - img "Logo" [ref=e134]
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: ⚡ DESTAQUE
+              - generic [ref=e138]: Postado 2 dias atrás
+            - heading "Desenvolvimento de Site Institucional" [level=3] [ref=e139]
+            - paragraph [ref=e140]: Preciso de um site institucional moderno e responsivo para minha empresa. Deve ter 5 páginas principais, formulário de contato e integração com redes sociais.
+            - generic [ref=e141]:
+              - generic [ref=e142]: 2 dias restantes
+              - generic [ref=e143]: Remoto
+              - generic [ref=e144]: 1 freelancers
+        - generic [ref=e145]:
+          - generic [ref=e146]:
+            - generic [ref=e147]: Projeto preço fixo
+            - generic [ref=e148]: R$ 5000.00
+          - button "Inscreva-se agora" [ref=e149] [cursor=pointer]
+      - generic [ref=e151]:
+        - generic [ref=e153]:
+          - img "Logo" [ref=e155]
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - generic [ref=e158]: ⚡ DESTAQUE
+              - generic [ref=e159]: Postado 2 dias atrás
+            - heading "Logo e Identidade Visual" [level=3] [ref=e160]
+            - paragraph [ref=e161]: Criação de logo profissional e manual de identidade visual completo para startup de tecnologia. Preciso de pelo menos 3 conceitos iniciais.
+            - generic [ref=e162]:
+              - generic [ref=e163]: 1 horas restantes
+              - generic [ref=e164]: Remoto
+              - generic [ref=e165]: 1 freelancers
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - generic [ref=e168]: Projeto preço fixo
+            - generic [ref=e169]: R$ 2000.00
+          - button "Inscreva-se agora" [ref=e170] [cursor=pointer]
+      - generic [ref=e172]:
+        - generic [ref=e174]:
+          - img "Logo" [ref=e176]
+          - generic [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]: ⚡ DESTAQUE
+              - generic [ref=e180]: Postado 2 dias atrás
+            - heading "Campanha de Marketing Digital" [level=3] [ref=e181]
+            - paragraph [ref=e182]: Planejamento e execução de campanha de marketing digital nas redes sociais por 3 meses. Inclui criação de conteúdo, gestão de anúncios e relatórios.
+            - generic [ref=e183]:
+              - generic [ref=e184]: 4 dias restantes
+              - generic [ref=e185]: Remoto
+              - generic [ref=e186]: 0 freelancers
+        - generic [ref=e187]:
+          - generic [ref=e188]:
+            - generic [ref=e189]: Projeto preço fixo
+            - generic [ref=e190]: R$ 8000.00
+          - button "Inscreva-se agora" [ref=e191] [cursor=pointer]
+      - generic [ref=e193]:
+        - generic [ref=e195]:
+          - img "Logo" [ref=e197]
+          - generic [ref=e198]:
+            - generic [ref=e199]:
+              - generic [ref=e200]: ⚡ DESTAQUE
+              - generic [ref=e201]: Postado 2 dias atrás
+            - heading "Tradução de Documentos Técnicos" [level=3] [ref=e202]
+            - paragraph [ref=e203]: Tradução de inglês para português de aproximadamente 50 páginas de documentação técnica de software.
+            - generic [ref=e204]:
+              - generic [ref=e205]: Encerrado
+              - generic [ref=e206]: Remoto
+              - generic [ref=e207]: 0 freelancers
+        - generic [ref=e208]:
+          - generic [ref=e209]:
+            - generic [ref=e210]: Projeto preço fixo
+            - generic [ref=e211]: R$ 1500.00
+          - button "Inscreva-se agora" [ref=e212] [cursor=pointer]
+  - generic [ref=e214]:
+    - heading "Inscreva-se no nosso boletim" [level=3] [ref=e215]
+    - paragraph [ref=e216]: Inscreva-se agora para fazer parte desta incrível comunidade!
+    - generic [ref=e217]:
+      - textbox "Adicione seu e-mail" [ref=e219]
+      - button "Cadastre-se agora" [ref=e220] [cursor=pointer]: Cadastre-se agora
+    - paragraph [ref=e221]: Não fique desatualizado, mantenha-se atualizado com nossa newsletter mensal.
+  - contentinfo [ref=e222]:
+    - generic [ref=e223]:
+      - generic [ref=e224]:
+        - generic [ref=e225]:
+          - img "Kaddesh" [ref=e226]
+          - paragraph [ref=e227]: Na Kaddesh Soluções Profissionais, estamos comprometidos em tornar a busca e a execução de serviços mais eficientes.
+        - generic [ref=e228]:
+          - heading "Links úteis" [level=4] [ref=e229]
+          - list [ref=e230]:
+            - listitem [ref=e231]:
+              - link "Início" [ref=e232] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e233]:
+              - link "Leilões" [ref=e234] [cursor=pointer]:
+                - /url: /auctions
+            - listitem [ref=e235]:
+              - link "Entrar" [ref=e236] [cursor=pointer]:
+                - /url: /login
+        - generic [ref=e237]:
+          - heading "Suporte" [level=4] [ref=e238]
+          - list [ref=e239]:
+            - listitem [ref=e240]:
+              - link "Políticas de privacidade" [ref=e241] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e242]:
+              - link "FAQ" [ref=e243] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e244]:
+          - heading "Contato" [level=4] [ref=e245]
+          - list [ref=e246]:
+            - listitem [ref=e247]: +55 31 99188-7791
+            - listitem [ref=e248]: +55 31 99188-7791
+            - listitem [ref=e249]: Belo Horizonte, MG
+      - paragraph [ref=e251]: © 2025 Kaddesh. Todos os direitos reservados.
+```

@@ -1,0 +1,85 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - navigation [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - link "⚡ KADESH" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e10]: ⚡ KADESH
+        - generic [ref=e11]:
+          - link "Dashboard" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Leilões" [ref=e13] [cursor=pointer]:
+            - /url: /auctions
+          - link "Carteira" [ref=e14] [cursor=pointer]:
+            - /url: /wallet
+      - generic [ref=e16]:
+        - button "🔔" [ref=e18] [cursor=pointer]
+        - generic [ref=e19]:
+          - generic [ref=e20]: Admin Kadesh
+          - generic [ref=e21]: 7 dias restantes
+        - button "Sair" [ref=e22] [cursor=pointer]
+  - main [ref=e23]:
+    - heading "💰 Minha Carteira" [level=1] [ref=e24]
+    - generic [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e28]:
+          - generic [ref=e29]: Saldo Total
+          - generic [ref=e30]: R$ 0.00
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - generic [ref=e33]: Disponível
+              - generic [ref=e34]: R$ 0.00
+            - generic [ref=e35]:
+              - generic [ref=e36]: Em Escrow
+              - generic [ref=e37]: R$ 0.00
+          - generic [ref=e38]:
+            - generic [ref=e39]: Total Recebido
+            - generic [ref=e40]: R$ 0.00
+        - generic [ref=e41]:
+          - heading "💵 Depositar" [level=3] [ref=e42]
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: Valor (R$)
+              - spinbutton [ref=e46]
+            - generic [ref=e47]:
+              - generic [ref=e48]: Método de Pagamento
+              - combobox [ref=e49]:
+                - option "PIX (Instantâneo)" [selected]
+                - option "Cartão de Crédito"
+                - option "Boleto Bancário"
+            - button "✅ Depositar" [ref=e50] [cursor=pointer]
+        - generic [ref=e51]:
+          - heading "🏦 Solicitar Saque" [level=3] [ref=e52]
+          - generic [ref=e53]:
+            - generic [ref=e54]:
+              - generic [ref=e55]: Valor (R$)
+              - spinbutton [ref=e56]
+              - paragraph [ref=e57]: "Disponível: R$ 0.00"
+            - generic [ref=e58]:
+              - generic [ref=e59]: Método de Recebimento
+              - combobox [ref=e60]:
+                - option "PIX" [selected]
+                - option "Transferência Bancária"
+            - button "💸 Solicitar Saque" [disabled] [ref=e61]
+        - generic [ref=e62]:
+          - heading "ℹ️ Informações" [level=4] [ref=e63]
+          - list [ref=e64]:
+            - listitem [ref=e65]: "• Depósitos via PIX: instantâneo"
+            - listitem [ref=e66]: • Saques processados em até 2 dias úteis
+            - listitem [ref=e67]: • Saldo em escrow bloqueado até conclusão
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - heading "📊 Extrato de Transações" [level=2] [ref=e71]
+          - generic [ref=e72]:
+            - button "Todas" [ref=e73] [cursor=pointer]
+            - button "Depósitos" [ref=e74] [cursor=pointer]
+            - button "Escrow" [ref=e75] [cursor=pointer]
+            - button "Recebidos" [ref=e76] [cursor=pointer]
+            - button "Reembolsos" [ref=e77] [cursor=pointer]
+        - generic [ref=e78]:
+          - generic [ref=e79]: 📭
+          - paragraph [ref=e80]: Nenhuma transação encontrada
+```

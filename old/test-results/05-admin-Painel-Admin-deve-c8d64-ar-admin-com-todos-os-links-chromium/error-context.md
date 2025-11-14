@@ -1,0 +1,79 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - navigation [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - img "Kadesh Admin" [ref=e9]
+        - generic [ref=e10]: ADMIN
+      - generic [ref=e11]:
+        - link "Dashboard" [ref=e12] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - text: Dashboard
+        - link "Usuários" [ref=e13] [cursor=pointer]:
+          - /url: /admin/users
+          - text: Usuários
+        - link "Projetos" [ref=e14] [cursor=pointer]:
+          - /url: /admin/projects
+          - text: Projetos
+        - link "Pagamentos" [ref=e15] [cursor=pointer]:
+          - /url: /admin/payments
+          - text: Pagamentos
+        - link "Disputas" [ref=e16] [cursor=pointer]:
+          - /url: /admin/disputes
+          - text: Disputas
+        - link "Configurações" [ref=e17] [cursor=pointer]:
+          - /url: /admin/settings
+          - text: Configurações
+      - generic [ref=e18]:
+        - link "Voltar ao Site" [ref=e19] [cursor=pointer]:
+          - /url: /dashboard
+          - text: Voltar ao Site
+        - button "Sair" [ref=e20] [cursor=pointer]: Sair
+  - generic [ref=e21]:
+    - generic [ref=e22]:
+      - heading "Dashboard Administrativo" [level=1] [ref=e23]
+      - paragraph [ref=e24]: Visão geral do sistema Kadesh
+    - generic [ref=e25]:
+      - generic [ref=e28]:
+        - paragraph [ref=e29]: Total Usuários
+        - paragraph [ref=e30]: "0"
+        - paragraph [ref=e31]: +0 este mês
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: Projetos Ativos
+        - paragraph [ref=e36]: "0"
+        - paragraph [ref=e37]: 0 total
+      - generic [ref=e40]:
+        - paragraph [ref=e41]: Lances Hoje
+        - paragraph [ref=e42]: "0"
+        - paragraph [ref=e43]: 0 total
+      - generic [ref=e46]:
+        - paragraph [ref=e47]: Receita Total
+        - paragraph [ref=e48]: R$ 0,00
+        - paragraph [ref=e49]: Taxa 10% dos projetos
+    - generic [ref=e50]:
+      - generic [ref=e51]:
+        - heading "Últimos Usuários Cadastrados" [level=3] [ref=e52]: Últimos Usuários Cadastrados
+        - link "Ver todos usuários →" [ref=e53] [cursor=pointer]:
+          - /url: /admin/users
+      - generic [ref=e54]:
+        - heading "Últimos Projetos Criados" [level=3] [ref=e55]: Últimos Projetos Criados
+        - link "Ver todos projetos →" [ref=e56] [cursor=pointer]:
+          - /url: /admin/projects
+    - generic [ref=e57]:
+      - heading "Ações Rápidas" [level=3] [ref=e58]
+      - generic [ref=e59]:
+        - link "Gerenciar Usuários" [ref=e60] [cursor=pointer]:
+          - /url: /admin/users
+          - generic [ref=e61]: Gerenciar Usuários
+        - link "Gerenciar Projetos" [ref=e62] [cursor=pointer]:
+          - /url: /admin/projects
+          - generic [ref=e63]: Gerenciar Projetos
+        - link "Pagamentos" [ref=e64] [cursor=pointer]:
+          - /url: /admin/payments
+          - generic [ref=e65]: Pagamentos
+        - link "Configurações" [ref=e66] [cursor=pointer]:
+          - /url: /admin/settings
+          - generic [ref=e67]: Configurações
+```
