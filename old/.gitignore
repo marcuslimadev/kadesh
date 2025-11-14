@@ -1,0 +1,179 @@
+# Ambiente# Ambiente# Ambiente*.log
+
+.env
+
+.env.*.env
+
+!.env.example
+
+.env.backup.env.*.env.DS_Store
+
+.env.production
+
+!.env.cpanel!.env.example
+
+
+
+# Node.js.env.backup.env.*.env
+
+node_modules/
+
+npm-debug.log.env.production
+
+yarn-error.log
+
+package-lock.json!.env.cpanel.env.backup
+
+
+
+# Logs# Node.js
+
+*.log
+
+error.lognode_modules/.env.production
+
+
+
+# OSnpm-debug.log
+
+.DS_Store
+
+Thumbs.dbyarn-error.log# Node.js.phpactor.json
+
+
+
+# IDEspackage-lock.json
+
+.vscode/
+
+.idea/node_modules/.phpunit.result.cache
+
+*.sublime-*
+
+.phpactor.json# Logs
+
+/.fleet
+
+/.nova*.logfrontend/node_modules//.fleet
+
+/.zed
+
+error.log
+
+# PHP
+
+.phpunit.result.cachenpm-debug.log/.idea
+
+/.phpunit.cache
+
+/auth.json# OS
+
+/vendor
+
+.DS_Storeyarn-error.log/.nova
+
+# Laravel
+
+/storage/*.keyThumbs.db
+
+/storage/pail
+
+/public/hot/.phpunit.cache
+
+/public/storage
+
+Homestead.json# IDEs
+
+Homestead.yaml
+
+.vscode/# Build/.vscode
+
+# Build - COMENTADO PARA INCLUIR NO GIT (cPanel precisa dos arquivos compilados)
+
+# /public/build.idea/
+
+
+
+# Arquivos temporários de desenvolvimento*.sublime-*frontend/dist//.zed
+
+*.php.bak
+
+*.sql.bak.phpactor.json
+
+check-admin.php
+
+create-admin.php.phpunit.result.cache/auth.json
+
+setup-*.php
+
+update-*.php/.fleet
+
+test-*.php
+
+/.nova# Logs/node_modules
+
+# Temporários
+
+*.tmp/.phpunit.cache
+
+*.temp
+
+*.cache/.zed*.log/public/build
+
+
+
+# Sessões PHP
+
+/tmp/sess_*
+# PHPerror.log/public/hot
+
+/auth.json
+
+/vendor/public/storage
+
+
+
+# Laravel# OS/storage/*.key
+
+/public/hot
+
+/public/storage.DS_Store/storage/pail
+
+/storage/*.key
+
+/storage/pailThumbs.db/vendor
+
+Homestead.json
+
+Homestead.yamlHomestead.json
+
+
+
+# Build - COMENTADO PARA INCLUIR NO GIT (cPanel precisa dos arquivos compilados)# IDEHomestead.yaml
+
+# /public/build
+
+.vscode/Thumbs.db
+
+# Arquivos temporários de desenvolvimento
+
+*.php.bak.idea/
+
+*.sql.bak*.sublime-*
+
+check-admin.php.phpactor.json
+
+create-admin.php
+
+setup-*.php# Temporários
+
+update-*.php*.tmp
+
+test-*.php*.temp
+
+*.cache
+.phpunit.cache
+
+# Sessões PHP
+/tmp/sess_*
+/antigo sistema

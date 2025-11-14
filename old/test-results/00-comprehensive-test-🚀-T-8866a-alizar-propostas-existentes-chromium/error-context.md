@@ -1,0 +1,137 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - navigation [ref=e5]:
+    - generic [ref=e7]:
+      - img "Kaddesh" [ref=e9]
+      - generic [ref=e10]:
+        - link "Início" [ref=e11] [cursor=pointer]:
+          - /url: /
+        - link "Leilões" [ref=e12] [cursor=pointer]:
+          - /url: /auctions
+        - link "Entrar" [ref=e13] [cursor=pointer]:
+          - /url: /login
+        - link "Cadastre-se" [ref=e14] [cursor=pointer]:
+          - /url: /register
+  - generic [ref=e15]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - heading "Seja você um Kaddesh" [level=1] [ref=e25]
+        - paragraph [ref=e26]: Melhores profissionais ou talentos
+        - paragraph [ref=e27]: Em busca de oportunidades, nossa plataforma de leilões de serviços profissionais é o seu destino certo. Com recursos de segurança robustos e uma comunidade de confiança, estamos aqui para impulsionar o seu sucesso.
+        - generic [ref=e29]:
+          - textbox "Pesquise com palavra-chave" [ref=e32]
+          - button "Procure agora" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: Procure agora
+      - generic:
+        - generic:
+          - img "Business people"
+    - img [ref=e37]
+  - generic [ref=e42]:
+    - generic [ref=e43]:
+      - heading "Vamos começar rapidamente hoje" [level=3] [ref=e44]
+      - heading "Vamos explorar categorias populares" [level=2] [ref=e45]
+      - paragraph [ref=e46]: Encontre os melhores profissionais para o seu projeto em nossa plataforma segura de leilões de serviços.
+    - generic [ref=e47]:
+      - generic [ref=e49] [cursor=pointer]:
+        - img "Desenvolvimento Web" [ref=e50]
+        - generic [ref=e52]:
+          - heading "Desenvolvimento Web" [level=4] [ref=e53]
+          - paragraph [ref=e54]: Sites e aplicações modernas
+        - generic [ref=e55]: Popular
+      - generic [ref=e57] [cursor=pointer]:
+        - img "Marketing Digital" [ref=e58]
+        - generic [ref=e60]:
+          - heading "Marketing Digital" [level=4] [ref=e61]
+          - paragraph [ref=e62]: Estratégias de crescimento
+        - generic [ref=e63]: Trending
+      - generic [ref=e65] [cursor=pointer]:
+        - img "Design Gráfico" [ref=e66]
+        - generic [ref=e68]:
+          - heading "Design Gráfico" [level=4] [ref=e69]
+          - paragraph [ref=e70]: Identidade visual criativa
+      - generic [ref=e72] [cursor=pointer]:
+        - img "Programação" [ref=e73]
+        - generic [ref=e75]:
+          - heading "Programação" [level=4] [ref=e76]
+          - paragraph [ref=e77]: Soluções sob medida
+      - generic [ref=e79] [cursor=pointer]:
+        - img "Business" [ref=e80]
+        - generic [ref=e82]:
+          - heading "Business" [level=4] [ref=e83]
+          - paragraph [ref=e84]: Consultoria estratégica
+        - generic [ref=e85]: Hot
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - heading "Leve seu trabalho em movimento" [level=3] [ref=e95]
+      - heading "Aproveite a experiência definitiva" [level=2] [ref=e96]
+      - paragraph [ref=e97]: Destaque suas habilidades e conquiste novas oportunidades em nossa plataforma de leilões de serviços profissionais.
+      - generic [ref=e100]:
+        - paragraph [ref=e101]: Notificações em Tempo Real
+        - paragraph [ref=e102]: Este aplicativo é compatível com dispositivos Android e iOS
+      - generic [ref=e103]:
+        - button "Download on the App Store" [ref=e104] [cursor=pointer]:
+          - generic [ref=e105]:
+            - generic [ref=e106]: Download on the
+            - generic [ref=e107]: App Store
+        - button "Get it on Google Play" [ref=e108] [cursor=pointer]:
+          - generic [ref=e109]:
+            - generic [ref=e110]: Get it on
+            - generic [ref=e111]: Google Play
+    - generic:
+      - generic:
+        - img "Mobile App"
+  - generic [ref=e115]:
+    - generic [ref=e116]:
+      - generic [ref=e117]:
+        - heading "Quer começar a trabalhar?" [level=3] [ref=e118]
+        - heading "Aplique os projetos mais bem avaliados" [level=2] [ref=e119]
+      - link "Todos os empregos" [ref=e120] [cursor=pointer]:
+        - /url: /auctions
+        - text: Todos os empregos
+    - generic [ref=e122]:
+      - generic [ref=e123]: 🎯
+      - generic [ref=e124]: Carregando projetos...
+  - generic [ref=e126]:
+    - heading "Inscreva-se no nosso boletim" [level=3] [ref=e127]
+    - paragraph [ref=e128]: Inscreva-se agora para fazer parte desta incrível comunidade!
+    - generic [ref=e129]:
+      - textbox "Adicione seu e-mail" [ref=e131]
+      - button "Cadastre-se agora" [ref=e132] [cursor=pointer]: Cadastre-se agora
+    - paragraph [ref=e133]: Não fique desatualizado, mantenha-se atualizado com nossa newsletter mensal.
+  - contentinfo [ref=e134]:
+    - generic [ref=e135]:
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - img "Kaddesh" [ref=e138]
+          - paragraph [ref=e139]: Na Kaddesh Soluções Profissionais, estamos comprometidos em tornar a busca e a execução de serviços mais eficientes.
+        - generic [ref=e140]:
+          - heading "Links úteis" [level=4] [ref=e141]
+          - list [ref=e142]:
+            - listitem [ref=e143]:
+              - link "Início" [ref=e144] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e145]:
+              - link "Leilões" [ref=e146] [cursor=pointer]:
+                - /url: /auctions
+            - listitem [ref=e147]:
+              - link "Entrar" [ref=e148] [cursor=pointer]:
+                - /url: /login
+        - generic [ref=e149]:
+          - heading "Suporte" [level=4] [ref=e150]
+          - list [ref=e151]:
+            - listitem [ref=e152]:
+              - link "Políticas de privacidade" [ref=e153] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e154]:
+              - link "FAQ" [ref=e155] [cursor=pointer]:
+                - /url: "#"
+        - generic [ref=e156]:
+          - heading "Contato" [level=4] [ref=e157]
+          - list [ref=e158]:
+            - listitem [ref=e159]: +55 31 99188-7791
+            - listitem [ref=e160]: +55 31 99188-7791
+            - listitem [ref=e161]: Belo Horizonte, MG
+      - paragraph [ref=e163]: © 2025 Kaddesh. Todos os direitos reservados.
+```

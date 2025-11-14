@@ -1,92 +1,41 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia'
 import App from './App.vue'
-import './style.css'
+import router from './router'
+import Toast from 'vue-toastification'
 
-// Import views
-import Home from './views/Home.vue'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
-import Dashboard from './views/Dashboard.vue'
-import AuctionsMarketplace from './views/AuctionsMarketplace.vue'
-import AuctionDetail from './views/AuctionDetail.vue'
-import MyBids from './views/MyBids.vue'
-import Wallet from './views/Wallet.vue'
-import CreateProject from './views/CreateProject.vue'
-import ProviderProfile from './views/ProviderProfile.vue'
-import Notifications from './views/Notifications.vue'
-import ProjectDetail from './views/ProjectDetail.vue'
-import MyProjects from './views/MyProjects.vue'
+// Import toast CSS
+import 'vue-toastification/dist/index.css'
 
-// Admin views
-import AdminDashboard from './views/admin/AdminDashboard.vue'
-import AdminUsers from './views/admin/AdminUsers.vue'
-import AdminProjects from './views/admin/AdminProjects.vue'
-import AdminPayments from './views/admin/AdminPayments.vue'
-import AdminSettings from './views/admin/AdminSettings.vue'
-import AdminDisputes from './views/admin/AdminDisputes.vue'
-
-const routes = [
-  { path: '/', name: 'Home', component: Home },
-  { path: '/login', name: 'Login', component: Login },
-  { path: '/register', name: 'Register', component: Register },
-  { path: '/dashboard', name: 'Dashboard', component: Dashboard, meta: { requiresAuth: true } },
-  { path: '/auctions', name: 'AuctionsMarketplace', component: AuctionsMarketplace, meta: { requiresAuth: true } },
-  { path: '/auction/:id', name: 'AuctionDetail', component: AuctionDetail, meta: { requiresAuth: true } },
-  { path: '/my-bids', name: 'MyBids', component: MyBids, meta: { requiresAuth: true } },
-  { path: '/my-projects', name: 'MyProjects', component: MyProjects, meta: { requiresAuth: true } },
-  { path: '/wallet', name: 'Wallet', component: Wallet, meta: { requiresAuth: true } },
-  { path: '/create-project', name: 'CreateProject', component: CreateProject, meta: { requiresAuth: true } },
-  { path: '/provider/:id', name: 'ProviderProfile', component: ProviderProfile, meta: { requiresAuth: false } },
-  { path: '/notifications', name: 'Notifications', component: Notifications, meta: { requiresAuth: true } },
-  { path: '/project/:id', name: 'ProjectDetail', component: ProjectDetail, meta: { requiresAuth: true } },
-  
-  // Admin routes
-  { path: '/admin/dashboard', name: 'AdminDashboard', component: AdminDashboard, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/users', name: 'AdminUsers', component: AdminUsers, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/projects', name: 'AdminProjects', component: AdminProjects, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/payments', name: 'AdminPayments', component: AdminPayments, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/settings', name: 'AdminSettings', component: AdminSettings, meta: { requiresAuth: true, requiresAdmin: true } },
-  { path: '/admin/disputes', name: 'AdminDisputes', component: AdminDisputes, meta: { requiresAuth: true, requiresAdmin: true } }
-]
-
-const router = createRouter({
-  history: createWebHistory('/kadesh/'),
-  routes
-})
-
-// Navigation guard
-router.beforeEach((to, from, next) => {
-  // Verificar localStorage também (login persistente)
-  const userJson = localStorage.getItem('kadesh_user') || sessionStorage.getItem('kadesh_user')
-  const isAuthenticated = !!userJson
-  
-  // Parse user para verificar se é admin
-  let user = null
-  if (userJson) {
-    try {
-      user = JSON.parse(userJson)
-    } catch (e) {
-      console.error('Erro ao parsear user:', e)
-    }
-  }
-  
-  // Verificar autenticação
-  if (to.meta.requiresAuth && !isAuthenticated) {
-    next('/login')
-    return
-  }
-  
-  // Verificar se requer admin
-  if (to.meta.requiresAdmin && (!user || user.user_type !== 'admin')) {
-    alert('Acesso negado. Apenas administradores podem acessar esta área.')
-    next('/dashboard')
-    return
-  }
-  
-  next()
-})
-
+// Create app
 const app = createApp(App)
+
+// Install Pinia
+app.use(createPinia())
+
+// Install Router
 app.use(router)
+
+// Install Toast with custom options
+app.use(Toast, {
+  position: 'top-right',
+  timeout: 5000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: true,
+  closeButton: 'button',
+  icon: true,
+  rtl: false,
+  transition: 'Vue-Toastification__bounce',
+  maxToasts: 5,
+  newestOnTop: true,
+  toastClassName: 'custom-toast',
+  bodyClassName: 'custom-toast-body'
+})
+
+// Mount app
 app.mount('#app')

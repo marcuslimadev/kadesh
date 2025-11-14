@@ -1,0 +1,80 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - navigation [ref=e5]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - link "⚡ KADESH" [ref=e9] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e10]: ⚡ KADESH
+        - generic [ref=e11]:
+          - link "Dashboard" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Leilões" [ref=e13] [cursor=pointer]:
+            - /url: /auctions
+          - link "Carteira" [ref=e14] [cursor=pointer]:
+            - /url: /wallet
+      - generic [ref=e16]:
+        - button "🔔" [ref=e18] [cursor=pointer]
+        - generic [ref=e19]:
+          - generic [ref=e20]: Admin Kadesh
+          - generic [ref=e21]: 7 dias restantes
+        - button "Sair" [ref=e22] [cursor=pointer]
+  - main [ref=e23]:
+    - generic [ref=e24]:
+      - heading "➕ Criar Novo Projeto" [level=1] [ref=e25]
+      - paragraph [ref=e26]: Publique seu projeto e receba propostas de prestadores qualificados
+    - generic [ref=e28]:
+      - generic [ref=e29]:
+        - generic [ref=e30]: Título do Projeto *
+        - 'textbox "Ex: Desenvolvimento de aplicativo mobile para delivery" [ref=e31]'
+        - paragraph [ref=e32]: Mínimo 10 caracteres. 0/200
+      - generic [ref=e33]:
+        - generic [ref=e34]: Descrição Detalhada *
+        - 'textbox "Descreva em detalhes o que você precisa: - Objetivos do projeto - Funcionalidades esperadas - Requisitos técnicos - Prazo esperado - Qualquer outra informação relevante" [ref=e35]':
+          - /placeholder: "Descreva em detalhes o que você precisa:\n- Objetivos do projeto\n- Funcionalidades esperadas\n- Requisitos técnicos\n- Prazo esperado\n- Qualquer outra informação relevante"
+        - paragraph [ref=e36]: Mínimo 50 caracteres. 0/2000
+      - generic [ref=e37]:
+        - generic [ref=e38]: Categoria *
+        - combobox [ref=e39]:
+          - option "Selecione uma categoria" [selected]
+          - option "Desenvolvimento Web"
+          - option "Desenvolvimento Mobile"
+          - option "Design Gráfico"
+          - option "Marketing Digital"
+          - option "Copywriting"
+          - option "Edição de Vídeo"
+          - option "Consultoria"
+          - option "Ciência de Dados"
+          - option "Outros"
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]: Orçamento Mínimo (R$) *
+          - spinbutton [ref=e43]
+          - paragraph [ref=e44]: "Valor mínimo: R$ 50,00"
+        - generic [ref=e45]:
+          - generic [ref=e46]: Orçamento Máximo (R$) *
+          - spinbutton [ref=e47]
+          - paragraph [ref=e48]: Deve ser maior que o mínimo
+      - generic [ref=e49]:
+        - generic [ref=e50]: Duração do Leilão
+        - combobox [ref=e51]:
+          - option "3 dias"
+          - option "5 dias"
+          - option "7 dias (Recomendado)" [selected]
+          - option "10 dias"
+          - option "14 dias"
+        - paragraph [ref=e52]: O leilão ficará aberto para receber propostas por 7 dias
+      - generic [ref=e53]:
+        - heading "ℹ️ Como Funciona o Leilão Reverso" [level=4] [ref=e54]
+        - list [ref=e55]:
+          - listitem [ref=e56]: ✅ Os prestadores fazem lances cada vez menores
+          - listitem [ref=e57]: ⭐ Score = 70% do preço + 30% da reputação
+          - listitem [ref=e58]: 🏆 Melhor score vence quando o leilão encerrar
+          - listitem [ref=e59]: 💰 Você paga apenas o valor do lance vencedor
+          - listitem [ref=e60]: 🔒 Valor fica em garantia até entrega do trabalho
+      - generic [ref=e61]:
+        - button "← Cancelar" [ref=e62] [cursor=pointer]
+        - button "🚀 Criar Projeto e Iniciar Leilão" [disabled] [ref=e63]
+```
