@@ -1,0 +1,36 @@
+# Backend files (deploy no Render)
+server.js
+config/
+routes/
+middleware/
+utils/
+database/
+scripts/migrate-data.js
+render.yaml
+.env.production
+
+# Old files
+old/
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+
+# Test files
+tests/
+test-results/
+
+# Database
+*.sql
+*.db
+
+# PHP files
+*.php
+.htaccess
+
+# Environment
+.env
+.env.local
+.env.*.local
