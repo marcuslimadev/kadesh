@@ -143,13 +143,31 @@
               <h2 class="text-lg font-semibold text-gray-900">
                 Propostas ({{ bids.length }})
               </h2>
-              <button
-                v-if="canSubmitBid"
-                @click="showBidForm = !showBidForm"
-                class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
-              >
-                {{ showBidForm ? 'Cancelar' : 'Enviar Proposta' }}
-              </button>
+              <div class="flex items-center gap-3">
+                <!-- Sort Dropdown -->
+                <div v-if="bids.length > 1" class="relative">
+                  <label for="bidSort" class="sr-only">Ordenar propostas</label>
+                  <select
+                    id="bidSort"
+                    v-model="bidSortBy"
+                    class="block pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md"
+                  >
+                    <option value="score">Melhor Score</option>
+                    <option value="price-low">Menor Preço</option>
+                    <option value="price-high">Maior Preço</option>
+                    <option value="date-new">Mais Recentes</option>
+                    <option value="date-old">Mais Antigas</option>
+                  </select>
+                </div>
+                
+                <button
+                  v-if="canSubmitBid"
+                  @click="showBidForm = !showBidForm"
+                  class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                >
+                  {{ showBidForm ? 'Cancelar' : 'Enviar Proposta' }}
+                </button>
+              </div>
             </div>
 
             <!-- Bid Form -->
@@ -217,7 +235,7 @@
             <!-- Bids List -->
             <div v-else-if="bids.length > 0" class="space-y-4">
               <BidCard
-                v-for="bid in bids"
+                v-for="bid in sortedBids"
                 :key="bid.id"
                 :bid="bid"
                 :show-actions="isProjectOwner"
@@ -323,6 +341,7 @@ const showBidForm = ref(false)
 const isBidSubmitting = ref(false)
 const timeRemaining = ref(null)
 const countdownInterval = ref(null)
+const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
 
 const bidForm = ref({
   amount: null,
@@ -374,6 +393,34 @@ const formattedTimeRemaining = computed(() => {
   return { 
     text: `${minutes}m ${seconds}s`, 
     class: 'text-red-600 font-bold' 
+  }
+})
+
+const sortedBids = computed(() => {
+  if (!bids.value || bids.value.length === 0) return []
+  
+  const sorted = [...bids.value]
+  
+  switch (bidSortBy.value) {
+    case 'price-low':
+      return sorted.sort((a, b) => (a.amount || 0) - (b.amount || 0))
+    case 'price-high':
+      return sorted.sort((a, b) => (b.amount || 0) - (a.amount || 0))
+    case 'date-new':
+      return sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    case 'date-old':
+      return sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    case 'score':
+    default:
+      // Sort by score (highest first), then by amount (lowest first)
+      return sorted.sort((a, b) => {
+        const scoreA = a.score || 0
+        const scoreB = b.score || 0
+        if (scoreB !== scoreA) {
+          return scoreB - scoreA
+        }
+        return (a.amount || 0) - (b.amount || 0)
+      })
   }
 })
 
