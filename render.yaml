@@ -38,7 +38,7 @@ envVars:
       name: kadesh-postgres
       property: password
   - key: FRONTEND_URL
-    value: https://kadesh.vercel.app
+    value: https://kadesh-two.vercel.app
 
 # Database
 databases:
