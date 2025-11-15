@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import { toast } from 'vue-toastification'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 export const useProjectsStore = defineStore('projects', () => {
   // State
