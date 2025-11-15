@@ -96,11 +96,61 @@ export const projectService = {
   },
 
   /**
-   * Get my projects (as client or provider)
+   * Get project bids
+   */
+  async getProjectBids(projectId) {
+    try {
+      const response = await api.get(`/api/projects/${projectId}/bids`)
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error fetching project bids:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao carregar propostas'
+      }
+    }
+  },
+
+  /**
+   * Upload project attachment
+   */
+  async uploadAttachment(projectId, file) {
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      const response = await api.post(
+        `/api/projects/${projectId}/attachments`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error uploading attachment:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao fazer upload do arquivo'
+      }
+    }
+  },
+
+  /**
+   * Get my projects (as client)
    */
   async getMyProjects(params = {}) {
     try {
-      const response = await api.get('/api/projects/my', { params })
+      const response = await api.get('/api/projects/my-projects', { params })
       return {
         success: true,
         data: response.data
@@ -115,33 +165,24 @@ export const projectService = {
   },
 
   /**
-   * Get project categories
+   * Get featured projects
    */
-  getCategories() {
-    return [
-      { value: 'desenvolvimento-web', label: 'Desenvolvimento Web' },
-      { value: 'desenvolvimento-mobile', label: 'Desenvolvimento Mobile' },
-      { value: 'design', label: 'Design' },
-      { value: 'marketing', label: 'Marketing' },
-      { value: 'redacao', label: 'Redação' },
-      { value: 'traducao', label: 'Tradução' },
-      { value: 'video', label: 'Vídeo & Animação' },
-      { value: 'audio', label: 'Áudio & Música' },
-      { value: 'consultoria', label: 'Consultoria' },
-      { value: 'outros', label: 'Outros' }
-    ]
-  },
-
-  /**
-   * Get project statuses
-   */
-  getStatuses() {
-    return [
-      { value: 'open', label: 'Aberto' },
-      { value: 'in_progress', label: 'Em Andamento' },
-      { value: 'completed', label: 'Concluído' },
-      { value: 'cancelled', label: 'Cancelado' }
-    ]
+  async getFeaturedProjects() {
+    try {
+      const response = await api.get('/api/projects', {
+        params: { featured: true, limit: 6 }
+      })
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error fetching featured projects:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao carregar projetos em destaque'
+      }
+    }
   }
 }
 

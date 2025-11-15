@@ -1,319 +1,242 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl w-full">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-gray-900">
-          Crie sua conta
-        </h2>
-        <p class="mt-2 text-sm text-gray-600">
-          Já tem uma conta?
-          <router-link to="/login" class="font-medium text-primary-600 hover:text-primary-500">
-            Faça login
-          </router-link>
-        </p>
-      </div>
+  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <router-link to="/" class="flex justify-center">
+        <h1 class="text-4xl font-bold text-primary-600">Kadesh</h1>
+      </router-link>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Crie sua conta
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Já tem uma conta?
+        <router-link to="/login" class="font-medium text-primary-600 hover:text-primary-500">
+          Faça login
+        </router-link>
+      </p>
+    </div>
 
-      <!-- Progress Steps -->
-      <div class="mb-8">
-        <div class="flex items-center justify-center">
-          <div 
-            v-for="(stepItem, index) in steps" 
-            :key="index"
-            class="flex items-center"
-          >
-            <div class="flex flex-col items-center">
-              <div 
-                class="w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors"
-                :class="currentStep >= index + 1 
-                  ? 'bg-primary-600 border-primary-600 text-white' 
-                  : 'bg-white border-gray-300 text-gray-500'"
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <form @submit.prevent="handleRegister" class="space-y-6">
+          <!-- User Type Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">
+              Tipo de conta
+            </label>
+            <div class="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                @click="form.type = 'client'"
+                :class="[
+                  'flex flex-col items-center p-4 border-2 rounded-lg transition-all',
+                  form.type === 'client'
+                    ? 'border-primary-600 bg-primary-50'
+                    : 'border-gray-300 hover:border-gray-400'
+                ]"
               >
-                <span v-if="currentStep > index + 1">✓</span>
-                <span v-else>{{ index + 1 }}</span>
-              </div>
-              <span class="mt-2 text-xs font-medium" :class="currentStep >= index + 1 ? 'text-primary-600' : 'text-gray-500'">
-                {{ stepItem }}
-              </span>
-            </div>
-            <div 
-              v-if="index < steps.length - 1" 
-              class="w-20 h-0.5 mx-2"
-              :class="currentStep > index + 1 ? 'bg-primary-600' : 'bg-gray-300'"
-            ></div>
-          </div>
-        </div>
-      </div>
+                <svg class="w-8 h-8 mb-2" :class="form.type === 'client' ? 'text-primary-600' : 'text-gray-400'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span :class="['text-sm font-medium', form.type === 'client' ? 'text-primary-700' : 'text-gray-700']">
+                  Cliente
+                </span>
+                <span class="text-xs text-gray-500 mt-1">Contratar serviços</span>
+              </button>
 
-      <!-- Form Card -->
-      <div class="bg-white rounded-lg shadow-md p-8">
-        <form @submit.prevent="handleSubmit">
-          <!-- Step 1: Dados Pessoais -->
-          <div v-show="currentStep === 1" class="space-y-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Dados Pessoais</h3>
-            
-            <div>
-              <label for="name" class="block text-sm font-medium text-gray-700 mb-1">
-                Nome Completo *
-              </label>
+              <button
+                type="button"
+                @click="form.type = 'provider'"
+                :class="[
+                  'flex flex-col items-center p-4 border-2 rounded-lg transition-all',
+                  form.type === 'provider'
+                    ? 'border-primary-600 bg-primary-50'
+                    : 'border-gray-300 hover:border-gray-400'
+                ]"
+              >
+                <svg class="w-8 h-8 mb-2" :class="form.type === 'provider' ? 'text-primary-600' : 'text-gray-400'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+                <span :class="['text-sm font-medium', form.type === 'provider' ? 'text-primary-700' : 'text-gray-700']">
+                  Prestador
+                </span>
+                <span class="text-xs text-gray-500 mt-1">Oferecer serviços</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">
+              Nome completo
+            </label>
+            <div class="mt-1">
               <input
                 id="name"
                 v-model="form.name"
                 type="text"
+                autocomplete="name"
                 required
-                :disabled="isLoading"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 :class="{ 'border-red-500': errors.name }"
                 placeholder="João Silva"
               />
-              <p v-if="errors.name" class="mt-1 text-sm text-red-600">{{ errors.name }}</p>
+              <p v-if="errors.name" class="mt-1 text-sm text-red-600">
+                {{ errors.name }}
+              </p>
             </div>
+          </div>
 
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                Email *
-              </label>
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <div class="mt-1">
               <input
                 id="email"
                 v-model="form.email"
                 type="email"
+                autocomplete="email"
                 required
-                :disabled="isLoading"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 :class="{ 'border-red-500': errors.email }"
-                placeholder="joao@exemplo.com"
+                placeholder="seu@email.com"
               />
-              <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
+              <p v-if="errors.email" class="mt-1 text-sm text-red-600">
+                {{ errors.email }}
+              </p>
             </div>
+          </div>
 
-            <div>
-              <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                Senha *
-              </label>
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">
+              Senha
+            </label>
+            <div class="mt-1 relative">
               <input
                 id="password"
                 v-model="form.password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
                 required
-                :disabled="isLoading"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm pr-10"
                 :class="{ 'border-red-500': errors.password }"
                 placeholder="Mínimo 6 caracteres"
               />
-              <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password }}</p>
+              <button
+                type="button"
+                @click="showPassword = !showPassword"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <svg v-if="!showPassword" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <svg v-else class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                </svg>
+              </button>
+              <p v-if="errors.password" class="mt-1 text-sm text-red-600">
+                {{ errors.password }}
+              </p>
             </div>
+            <!-- Password strength indicator -->
+            <div v-if="form.password" class="mt-2">
+              <div class="flex items-center gap-2">
+                <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    :class="[
+                      'h-full transition-all',
+                      passwordStrength === 'weak' ? 'w-1/3 bg-red-500' : '',
+                      passwordStrength === 'medium' ? 'w-2/3 bg-yellow-500' : '',
+                      passwordStrength === 'strong' ? 'w-full bg-green-500' : ''
+                    ]"
+                  ></div>
+                </div>
+                <span :class="[
+                  'text-xs font-medium',
+                  passwordStrength === 'weak' ? 'text-red-600' : '',
+                  passwordStrength === 'medium' ? 'text-yellow-600' : '',
+                  passwordStrength === 'strong' ? 'text-green-600' : ''
+                ]">
+                  {{ passwordStrength === 'weak' ? 'Fraca' : passwordStrength === 'medium' ? 'Média' : 'Forte' }}
+                </span>
+              </div>
+            </div>
+          </div>
 
-            <div>
-              <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
-                Confirmar Senha *
-              </label>
+          <!-- Confirm Password -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+              Confirmar senha
+            </label>
+            <div class="mt-1">
               <input
                 id="confirmPassword"
                 v-model="form.confirmPassword"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
                 required
-                :disabled="isLoading"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 :class="{ 'border-red-500': errors.confirmPassword }"
                 placeholder="Digite a senha novamente"
               />
-              <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">{{ errors.confirmPassword }}</p>
+              <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">
+                {{ errors.confirmPassword }}
+              </p>
             </div>
           </div>
 
-          <!-- Step 2: Tipo de Conta -->
-          <div v-show="currentStep === 2" class="space-y-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Tipo de Conta</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div 
-                class="border-2 rounded-lg p-6 cursor-pointer transition-all"
-                :class="form.type === 'client' 
-                  ? 'border-primary-600 bg-primary-50' 
-                  : 'border-gray-300 hover:border-primary-300'"
-                @click="form.type = 'client'"
-              >
-                <div class="flex items-center justify-between mb-3">
-                  <h4 class="text-lg font-semibold text-gray-900">Cliente</h4>
-                  <div 
-                    class="w-6 h-6 rounded-full border-2 flex items-center justify-center"
-                    :class="form.type === 'client' 
-                      ? 'border-primary-600 bg-primary-600' 
-                      : 'border-gray-300'"
-                  >
-                    <div v-if="form.type === 'client'" class="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                </div>
-                <p class="text-sm text-gray-600">
-                  Contrate profissionais qualificados para seus projetos
-                </p>
-                <ul class="mt-4 space-y-2 text-sm text-gray-600">
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Publique projetos
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Receba propostas
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Gerencie pagamentos
-                  </li>
-                </ul>
-              </div>
-
-              <div 
-                class="border-2 rounded-lg p-6 cursor-pointer transition-all"
-                :class="form.type === 'provider' 
-                  ? 'border-primary-600 bg-primary-50' 
-                  : 'border-gray-300 hover:border-primary-300'"
-                @click="form.type = 'provider'"
-              >
-                <div class="flex items-center justify-between mb-3">
-                  <h4 class="text-lg font-semibold text-gray-900">Prestador</h4>
-                  <div 
-                    class="w-6 h-6 rounded-full border-2 flex items-center justify-center"
-                    :class="form.type === 'provider' 
-                      ? 'border-primary-600 bg-primary-600' 
-                      : 'border-gray-300'"
-                  >
-                    <div v-if="form.type === 'provider'" class="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                </div>
-                <p class="text-sm text-gray-600">
-                  Ofereça seus serviços e conquiste novos clientes
-                </p>
-                <ul class="mt-4 space-y-2 text-sm text-gray-600">
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Envie propostas
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Mostre seu portfólio
-                  </li>
-                  <li class="flex items-center">
-                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Receba pagamentos
-                  </li>
-                </ul>
-              </div>
+          <!-- Terms acceptance -->
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input
+                id="terms"
+                v-model="form.acceptTerms"
+                type="checkbox"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
             </div>
-            <p v-if="errors.type" class="mt-1 text-sm text-red-600">{{ errors.type }}</p>
-          </div>
-
-          <!-- Step 3: Termos -->
-          <div v-show="currentStep === 3" class="space-y-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Termos e Condições</h3>
-            
-            <div class="bg-gray-50 rounded-lg p-6 max-h-64 overflow-y-auto border border-gray-200">
-              <h4 class="font-semibold text-gray-900 mb-3">Termos de Uso - Kadesh</h4>
-              <div class="space-y-3 text-sm text-gray-600">
-                <p>Ao criar uma conta na plataforma Kadesh, você concorda com os seguintes termos:</p>
-                <ul class="list-disc list-inside space-y-2">
-                  <li>Você fornecerá informações verdadeiras e atualizadas</li>
-                  <li>Você é responsável pela segurança da sua conta</li>
-                  <li>Você não usará a plataforma para atividades ilegais</li>
-                  <li>A plataforma cobra uma taxa de 1% sobre transações</li>
-                  <li>Você concorda com nossa política de privacidade</li>
-                  <li>Você pode encerrar sua conta a qualquer momento</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="space-y-3">
-              <div class="flex items-start">
-                <input
-                  id="terms"
-                  v-model="form.acceptTerms"
-                  type="checkbox"
-                  class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                />
-                <label for="terms" class="ml-2 text-sm text-gray-700">
-                  Eu li e aceito os <a href="#" class="text-primary-600 hover:text-primary-500">Termos de Uso</a> e a 
-                  <a href="#" class="text-primary-600 hover:text-primary-500">Política de Privacidade</a>
-                </label>
-              </div>
-              <p v-if="errors.acceptTerms" class="text-sm text-red-600">{{ errors.acceptTerms }}</p>
-
-              <div class="flex items-start">
-                <input
-                  id="newsletter"
-                  v-model="form.acceptNewsletter"
-                  type="checkbox"
-                  class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                />
-                <label for="newsletter" class="ml-2 text-sm text-gray-700">
-                  Quero receber novidades, dicas e ofertas exclusivas por email
-                </label>
-              </div>
+            <div class="ml-3 text-sm">
+              <label for="terms" class="font-medium text-gray-700">
+                Aceito os
+                <a href="#" class="text-primary-600 hover:text-primary-500">termos de uso</a>
+                e a
+                <a href="#" class="text-primary-600 hover:text-primary-500">política de privacidade</a>
+              </label>
+              <p v-if="errors.acceptTerms" class="mt-1 text-red-600">
+                {{ errors.acceptTerms }}
+              </p>
             </div>
           </div>
 
           <!-- Error message -->
-          <div v-if="errors.general" class="mt-6 rounded-md bg-red-50 p-4">
+          <div v-if="errors.general" class="rounded-md bg-red-50 p-4">
             <div class="flex">
               <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                 </svg>
               </div>
               <div class="ml-3">
-                <p class="text-sm text-red-800">{{ errors.general }}</p>
+                <p class="text-sm text-red-700">{{ errors.general }}</p>
               </div>
             </div>
           </div>
 
-          <!-- Navigation Buttons -->
-          <div class="mt-8 flex items-center justify-between">
+          <!-- Submit button -->
+          <div>
             <button
-              v-if="currentStep > 1"
-              type="button"
-              @click="previousStep"
-              :disabled="isLoading"
-              class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Voltar
-            </button>
-            <div v-else></div>
-
-            <button
-              v-if="currentStep < 3"
-              type="button"
-              @click="nextStep"
-              :disabled="isLoading"
-              class="px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Próximo
-            </button>
-
-            <button
-              v-else
               type="submit"
-              :disabled="isLoading || !form.acceptTerms"
-              class="px-6 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              :disabled="isLoading"
+              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span v-if="!isLoading">Criar Conta</span>
-              <span v-else class="flex items-center">
-                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Criando...
-              </span>
+              <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              {{ isLoading ? 'Criando conta...' : 'Criar conta' }}
             </button>
           </div>
         </form>
@@ -323,15 +246,12 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const authStore = useAuthStore()
-
-const steps = ['Dados Pessoais', 'Tipo de Conta', 'Termos']
-const currentStep = ref(1)
 
 const form = reactive({
   name: '',
@@ -339,8 +259,7 @@ const form = reactive({
   password: '',
   confirmPassword: '',
   type: 'client',
-  acceptTerms: false,
-  acceptNewsletter: false
+  acceptTerms: false
 })
 
 const errors = reactive({
@@ -348,36 +267,56 @@ const errors = reactive({
   email: '',
   password: '',
   confirmPassword: '',
-  type: '',
   acceptTerms: '',
   general: ''
 })
 
+const showPassword = ref(false)
 const isLoading = ref(false)
 
-const clearErrors = () => {
-  Object.keys(errors).forEach(key => {
-    errors[key] = ''
-  })
-}
+const passwordStrength = computed(() => {
+  const password = form.password
+  if (password.length < 6) return 'weak'
+  if (password.length < 10) return 'medium'
+  
+  const hasLowerCase = /[a-z]/.test(password)
+  const hasUpperCase = /[A-Z]/.test(password)
+  const hasNumbers = /\d/.test(password)
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+  
+  const strength = [hasLowerCase, hasUpperCase, hasNumbers, hasSpecialChar].filter(Boolean).length
+  
+  if (strength >= 3) return 'strong'
+  if (strength >= 2) return 'medium'
+  return 'weak'
+})
 
-const validateStep1 = () => {
-  clearErrors()
+const validateForm = () => {
   let isValid = true
+  
+  // Reset errors
+  Object.keys(errors).forEach(key => errors[key] = '')
 
-  if (!form.name || form.name.trim().length < 3) {
+  // Validate name
+  if (!form.name.trim()) {
+    errors.name = 'Nome é obrigatório'
+    isValid = false
+  } else if (form.name.trim().length < 3) {
     errors.name = 'Nome deve ter pelo menos 3 caracteres'
     isValid = false
   }
 
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!form.email) {
     errors.email = 'Email é obrigatório'
     isValid = false
-  } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+  } else if (!emailRegex.test(form.email)) {
     errors.email = 'Email inválido'
     isValid = false
   }
 
+  // Validate password
   if (!form.password) {
     errors.password = 'Senha é obrigatória'
     isValid = false
@@ -386,59 +325,26 @@ const validateStep1 = () => {
     isValid = false
   }
 
-  if (form.password !== form.confirmPassword) {
+  // Validate confirm password
+  if (!form.confirmPassword) {
+    errors.confirmPassword = 'Confirmação de senha é obrigatória'
+    isValid = false
+  } else if (form.password !== form.confirmPassword) {
     errors.confirmPassword = 'As senhas não coincidem'
+    isValid = false
+  }
+
+  // Validate terms
+  if (!form.acceptTerms) {
+    errors.acceptTerms = 'Você deve aceitar os termos de uso'
     isValid = false
   }
 
   return isValid
 }
 
-const validateStep2 = () => {
-  clearErrors()
-  
-  if (!form.type) {
-    errors.type = 'Selecione um tipo de conta'
-    return false
-  }
-
-  return true
-}
-
-const validateStep3 = () => {
-  clearErrors()
-  
-  if (!form.acceptTerms) {
-    errors.acceptTerms = 'Você deve aceitar os termos de uso'
-    return false
-  }
-
-  return true
-}
-
-const nextStep = () => {
-  let isValid = false
-
-  if (currentStep.value === 1) {
-    isValid = validateStep1()
-  } else if (currentStep.value === 2) {
-    isValid = validateStep2()
-  }
-
-  if (isValid && currentStep.value < 3) {
-    currentStep.value++
-  }
-}
-
-const previousStep = () => {
-  if (currentStep.value > 1) {
-    clearErrors()
-    currentStep.value--
-  }
-}
-
-const handleSubmit = async () => {
-  if (!validateStep3()) {
+const handleRegister = async () => {
+  if (!validateForm()) {
     return
   }
 
@@ -446,8 +352,8 @@ const handleSubmit = async () => {
 
   try {
     const result = await authStore.register({
-      name: form.name,
-      email: form.email,
+      name: form.name.trim(),
+      email: form.email.trim().toLowerCase(),
       password: form.password,
       type: form.type
     })
@@ -459,7 +365,6 @@ const handleSubmit = async () => {
       errors.general = result.error
     }
   } catch (error) {
-    console.error('Register error:', error)
     errors.general = 'Erro ao criar conta. Tente novamente.'
   } finally {
     isLoading.value = false
