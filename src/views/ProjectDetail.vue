@@ -94,10 +94,10 @@
           <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-gray-900">
-                Propostas ({{ project.bid_count || 0 }})
+                Propostas ({{ bids.length }})
               </h2>
               <button
-                v-if="authStore.isProvider && project.status === 'open'"
+                v-if="canSubmitBid"
                 @click="showBidForm = !showBidForm"
                 class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
               >
@@ -106,7 +106,7 @@
             </div>
 
             <!-- Bid Form -->
-            <div v-if="showBidForm && authStore.isProvider" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-gray-50 rounded-lg">
               <h3 class="font-medium text-gray-900 mb-4">Nova Proposta</h3>
               <form @submit.prevent="submitBid" class="space-y-4">
                 <div>
@@ -161,9 +161,31 @@
               </form>
             </div>
 
-            <!-- Bids List Placeholder -->
-            <div class="text-center py-8 text-gray-500">
-              <p>Sistema de propostas será implementado na Fase 1 - Semana 2</p>
+            <!-- Bids Loading State -->
+            <div v-if="isBidsLoading" class="text-center py-8">
+              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <p class="mt-2 text-gray-600 text-sm">Carregando propostas...</p>
+            </div>
+
+            <!-- Bids List -->
+            <div v-else-if="bids.length > 0" class="space-y-4">
+              <BidCard
+                v-for="bid in bids"
+                :key="bid.id"
+                :bid="bid"
+                :show-actions="isProjectOwner"
+                @accept="acceptBid"
+                @reject="rejectBid"
+              />
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="text-center py-8 text-gray-500">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <p class="mt-2">Nenhuma proposta enviada ainda</p>
+              <p v-if="canSubmitBid" class="text-sm mt-1">Seja o primeiro a enviar uma proposta!</p>
             </div>
           </div>
         </div>
@@ -232,7 +254,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useProjectsStore } from '@/stores/projects'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
+import BidCard from '@/components/project/BidCard.vue'
 import projectService from '@/services/projectService'
+import bidService from '@/services/bidService'
 import { useToast } from 'vue-toastification'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -244,7 +268,9 @@ const projectsStore = useProjectsStore()
 const toast = useToast()
 
 const project = ref(null)
+const bids = ref([])
 const isLoading = ref(false)
+const isBidsLoading = ref(false)
 const error = ref(null)
 const showBidForm = ref(false)
 const isBidSubmitting = ref(false)
@@ -258,6 +284,14 @@ const bidForm = ref({
 const skillsArray = computed(() => {
   if (!project.value?.skills) return []
   return project.value.skills.split(',').map(s => s.trim()).filter(Boolean)
+})
+
+const isProjectOwner = computed(() => {
+  return authStore.user?.id === project.value?.client_id
+})
+
+const canSubmitBid = computed(() => {
+  return authStore.isProvider && project.value?.status === 'open' && !isProjectOwner.value
 })
 
 const formatDate = (date) => {
@@ -319,6 +353,8 @@ const loadProject = async () => {
 
     if (result.success) {
       project.value = result.data.project
+      // Load bids after project is loaded
+      await loadBids()
     } else {
       error.value = result.error
     }
@@ -327,6 +363,30 @@ const loadProject = async () => {
     error.value = 'Erro ao carregar projeto'
   } finally {
     isLoading.value = false
+  }
+}
+
+const loadBids = async () => {
+  if (!project.value?.id) return
+  
+  isBidsLoading.value = true
+  
+  try {
+    const result = await projectService.getProjectBids(project.value.id)
+    
+    if (result.success) {
+      bids.value = result.data.bids || []
+      // Update bid count in project
+      if (project.value) {
+        project.value.bid_count = bids.value.length
+      }
+    } else {
+      console.error('Error loading bids:', result.error)
+    }
+  } catch (err) {
+    console.error('Error loading bids:', err)
+  } finally {
+    isBidsLoading.value = false
   }
 }
 
@@ -342,22 +402,83 @@ const submitBid = async () => {
     return
   }
 
+  if (!bidForm.value.amount || !bidForm.value.description || !bidForm.value.delivery_time_days) {
+    toast.error('Por favor, preencha todos os campos')
+    return
+  }
+
   isBidSubmitting.value = true
 
   try {
-    // TODO: Implement bid submission with backend
-    toast.success('Proposta enviada com sucesso!')
-    showBidForm.value = false
-    bidForm.value = {
-      amount: null,
-      description: '',
-      delivery_time_days: null
+    const bidData = {
+      project_id: project.value.id,
+      amount: bidForm.value.amount,
+      description: bidForm.value.description,
+      delivery_time_days: bidForm.value.delivery_time_days
+    }
+
+    const result = await bidService.createBid(bidData)
+    
+    if (result.success) {
+      toast.success('Proposta enviada com sucesso!')
+      showBidForm.value = false
+      bidForm.value = {
+        amount: null,
+        description: '',
+        delivery_time_days: null
+      }
+      // Reload bids to show the new one
+      await loadBids()
+    } else {
+      toast.error(result.error || 'Erro ao enviar proposta')
     }
   } catch (err) {
     console.error('Error submitting bid:', err)
     toast.error('Erro ao enviar proposta')
   } finally {
     isBidSubmitting.value = false
+  }
+}
+
+const acceptBid = async (bidId) => {
+  if (!confirm('Tem certeza que deseja aceitar esta proposta? Isso encerrará o leilão.')) {
+    return
+  }
+
+  try {
+    const result = await bidService.acceptBid(project.value.id, bidId)
+    
+    if (result.success) {
+      toast.success('Proposta aceita com sucesso!')
+      // Reload project and bids
+      await loadProject()
+    } else {
+      toast.error(result.error || 'Erro ao aceitar proposta')
+    }
+  } catch (err) {
+    console.error('Error accepting bid:', err)
+    toast.error('Erro ao aceitar proposta')
+  }
+}
+
+const rejectBid = async (bidId) => {
+  if (!confirm('Tem certeza que deseja rejeitar esta proposta?')) {
+    return
+  }
+
+  try {
+    const result = await bidService.rejectBid(bidId)
+    
+    if (result.success) {
+      toast.success('Proposta rejeitada')
+      // Reload bids
+      await loadBids()
+    } else {
+      toast.error(result.error || 'Erro ao rejeitar proposta')
+    }
+  } catch (err) {
+    console.error('Error rejecting bid:', err)
+    toast.error('Erro ao rejeitar proposta')
   }
 }
 
