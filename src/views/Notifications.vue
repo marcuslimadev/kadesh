@@ -185,6 +185,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/ui/Pagination.vue'
+import notificationService from '@/services/notificationService'
 import { useToast } from 'vue-toastification'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -339,12 +340,17 @@ const handleNotificationClick = (notification) => {
 
 const markAsRead = async (notificationId) => {
   try {
-    // TODO: Implement API call
-    const notification = notifications.value.find(n => n.id === notificationId)
-    if (notification) {
-      notification.is_read = true
+    const result = await notificationService.markAsRead(notificationId)
+    
+    if (result.success) {
+      const notification = notifications.value.find(n => n.id === notificationId)
+      if (notification) {
+        notification.is_read = true
+      }
+      toast.success('Notificação marcada como lida')
+    } else {
+      toast.error(result.error || 'Erro ao marcar notificação como lida')
     }
-    toast.success('Notificação marcada como lida')
   } catch (err) {
     console.error('Error marking notification as read:', err)
     toast.error('Erro ao marcar notificação como lida')
@@ -353,11 +359,16 @@ const markAsRead = async (notificationId) => {
 
 const markAllAsRead = async () => {
   try {
-    // TODO: Implement API call
-    notifications.value.forEach(n => {
-      n.is_read = true
-    })
-    toast.success('Todas as notificações foram marcadas como lidas')
+    const result = await notificationService.markAllAsRead()
+    
+    if (result.success) {
+      notifications.value.forEach(n => {
+        n.is_read = true
+      })
+      toast.success('Todas as notificações foram marcadas como lidas')
+    } else {
+      toast.error(result.error || 'Erro ao marcar notificações como lidas')
+    }
   } catch (err) {
     console.error('Error marking all notifications as read:', err)
     toast.error('Erro ao marcar notificações como lidas')
@@ -370,12 +381,17 @@ const deleteNotification = async (notificationId) => {
   }
 
   try {
-    // TODO: Implement API call
-    const index = notifications.value.findIndex(n => n.id === notificationId)
-    if (index !== -1) {
-      notifications.value.splice(index, 1)
+    const result = await notificationService.deleteNotification(notificationId)
+    
+    if (result.success) {
+      const index = notifications.value.findIndex(n => n.id === notificationId)
+      if (index !== -1) {
+        notifications.value.splice(index, 1)
+      }
+      toast.success('Notificação excluída')
+    } else {
+      toast.error(result.error || 'Erro ao excluir notificação')
     }
-    toast.success('Notificação excluída')
   } catch (err) {
     console.error('Error deleting notification:', err)
     toast.error('Erro ao excluir notificação')
@@ -387,61 +403,21 @@ const loadNotifications = async () => {
   error.value = null
 
   try {
-    // Mock data for now - will be replaced with actual API call
-    setTimeout(() => {
-      notifications.value = [
-        {
-          id: 1,
-          type: 'bid',
-          title: 'Nova proposta recebida',
-          message: 'João Silva enviou uma proposta para o projeto "Website Institucional"',
-          link: '/projects/123',
-          is_read: false,
-          created_at: new Date(Date.now() - 3600000).toISOString()
-        },
-        {
-          id: 2,
-          type: 'project',
-          title: 'Projeto publicado com sucesso',
-          message: 'Seu projeto "Desenvolvimento de App Mobile" foi publicado e está visível para prestadores',
-          link: '/projects/124',
-          is_read: false,
-          created_at: new Date(Date.now() - 7200000).toISOString()
-        },
-        {
-          id: 3,
-          type: 'payment',
-          title: 'Pagamento recebido',
-          message: 'Você recebeu R$ 750,00 referente ao projeto "Logo Design"',
-          link: '/wallet',
-          is_read: true,
-          created_at: new Date(Date.now() - 86400000).toISOString()
-        },
-        {
-          id: 4,
-          type: 'message',
-          title: 'Nova mensagem',
-          message: 'Maria Santos enviou uma mensagem sobre o projeto "Website Institucional"',
-          link: '/projects/123',
-          is_read: true,
-          created_at: new Date(Date.now() - 172800000).toISOString()
-        },
-        {
-          id: 5,
-          type: 'system',
-          title: 'Bem-vindo ao Kadesh!',
-          message: 'Complete seu perfil para aumentar suas chances de conseguir projetos',
-          link: '/profile',
-          is_read: true,
-          created_at: new Date(Date.now() - 259200000).toISOString()
-        }
-      ]
-      
-      isLoading.value = false
-    }, 800)
+    const result = await notificationService.getNotifications({
+      type: filters.value.type,
+      is_read: filters.value.status === 'read' ? true : filters.value.status === 'unread' ? false : undefined,
+      limit: 100 // Load all for client-side filtering
+    })
+    
+    if (result.success) {
+      notifications.value = result.data.data?.notifications || []
+    } else {
+      error.value = result.error
+    }
   } catch (err) {
     console.error('Error loading notifications:', err)
     error.value = 'Erro ao carregar notificações'
+  } finally {
     isLoading.value = false
   }
 }

@@ -246,6 +246,10 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
+import walletService from '@/services/walletService'
+import { useToast } from 'vue-toastification'
+
+const toast = useToast()
 
 const transactions = ref([])
 const isLoading = ref(false)
@@ -394,62 +398,32 @@ const loadTransactions = async () => {
   error.value = null
 
   try {
-    // Mock data for now - will be replaced with actual API call
-    setTimeout(() => {
-      balance.value = {
-        available: 1250.00,
-        escrow: 500.00,
-        pending: 150.00
+    // Load balance
+    const balanceResult = await walletService.getBalance()
+    if (balanceResult.success) {
+      balance.value = balanceResult.data.data || {
+        available: 0,
+        escrow: 0,
+        pending: 0
       }
-      
-      transactions.value = [
-        {
-          id: 1,
-          type: 'deposit',
-          description: 'Depósito via Mercado Pago',
-          amount: 500.00,
-          status: 'completed',
-          created_at: new Date(Date.now() - 86400000 * 1).toISOString()
-        },
-        {
-          id: 2,
-          type: 'escrow_hold',
-          description: 'Bloqueio para Projeto #123 - Website Institucional',
-          amount: 500.00,
-          status: 'completed',
-          created_at: new Date(Date.now() - 86400000 * 2).toISOString()
-        },
-        {
-          id: 3,
-          type: 'payment',
-          description: 'Pagamento para João Silva - Projeto #120',
-          amount: 750.00,
-          status: 'completed',
-          created_at: new Date(Date.now() - 86400000 * 5).toISOString()
-        },
-        {
-          id: 4,
-          type: 'deposit',
-          description: 'Depósito via Mercado Pago',
-          amount: 1000.00,
-          status: 'completed',
-          created_at: new Date(Date.now() - 86400000 * 7).toISOString()
-        },
-        {
-          id: 5,
-          type: 'escrow_release',
-          description: 'Liberação de Escrow - Projeto #118',
-          amount: 1500.00,
-          status: 'completed',
-          created_at: new Date(Date.now() - 86400000 * 10).toISOString()
-        }
-      ]
-      
-      isLoading.value = false
-    }, 800)
+    }
+
+    // Load transactions
+    const result = await walletService.getTransactions({
+      type: filters.value.type,
+      status: filters.value.status,
+      limit: 100 // Load all for client-side filtering
+    })
+    
+    if (result.success) {
+      transactions.value = result.data.data?.transactions || []
+    } else {
+      error.value = result.error
+    }
   } catch (err) {
-    console.error('Error loading transactions:', err)
-    error.value = 'Erro ao carregar transações'
+    console.error('Error loading wallet data:', err)
+    error.value = 'Erro ao carregar dados da carteira'
+  } finally {
     isLoading.value = false
   }
 }
