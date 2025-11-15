@@ -60,6 +60,17 @@
               <div>
                 <p class="text-sm text-gray-600 mb-1">Prazo de Entrega</p>
                 <p class="text-lg font-semibold text-gray-900">{{ formatDeadline(project.deadline) }}</p>
+                <!-- Countdown Timer -->
+                <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm font-medium" :class="formattedTimeRemaining.class">
+                      {{ formattedTimeRemaining.text }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -92,6 +103,42 @@
 
           <!-- Bids Section -->
           <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Auction Timer Banner -->
+            <div v-if="project.status === 'open' && formattedTimeRemaining && !formattedTimeRemaining.expired" 
+                 class="mb-4 p-4 rounded-lg border-2"
+                 :class="{
+                   'bg-green-50 border-green-300': timeRemaining?.days > 2,
+                   'bg-yellow-50 border-yellow-300': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                   'bg-orange-50 border-orange-300': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                   'bg-red-50 border-red-300': timeRemaining?.hours === 0
+                 }">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-full" 
+                       :class="{
+                         'bg-green-100': timeRemaining?.days > 2,
+                         'bg-yellow-100': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                         'bg-orange-100': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                         'bg-red-100': timeRemaining?.hours === 0
+                       }">
+                    <svg class="w-6 h-6" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-gray-900">Leilão Ativo</p>
+                    <p class="text-sm text-gray-600">Envie sua proposta antes do prazo</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm text-gray-600">Tempo restante</p>
+                  <p class="text-2xl font-bold" :class="formattedTimeRemaining.class">
+                    {{ formattedTimeRemaining.text }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-gray-900">
                 Propostas ({{ bids.length }})
@@ -249,7 +296,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useProjectsStore } from '@/stores/projects'
@@ -258,7 +305,7 @@ import BidCard from '@/components/project/BidCard.vue'
 import projectService from '@/services/projectService'
 import bidService from '@/services/bidService'
 import { useToast } from 'vue-toastification'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, differenceInSeconds } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 const route = useRoute()
@@ -274,6 +321,8 @@ const isBidsLoading = ref(false)
 const error = ref(null)
 const showBidForm = ref(false)
 const isBidSubmitting = ref(false)
+const timeRemaining = ref(null)
+const countdownInterval = ref(null)
 
 const bidForm = ref({
   amount: null,
@@ -292,6 +341,40 @@ const isProjectOwner = computed(() => {
 
 const canSubmitBid = computed(() => {
   return authStore.isProvider && project.value?.status === 'open' && !isProjectOwner.value
+})
+
+const hasDeadlinePassed = computed(() => {
+  if (!project.value?.deadline) return false
+  return new Date(project.value.deadline) < new Date()
+})
+
+const formattedTimeRemaining = computed(() => {
+  if (!timeRemaining.value) return null
+  
+  const { days, hours, minutes, seconds, expired } = timeRemaining.value
+  
+  if (expired) {
+    return { text: 'Prazo encerrado', class: 'text-red-600' }
+  }
+  
+  if (days > 0) {
+    return { 
+      text: `${days}d ${hours}h ${minutes}m`, 
+      class: days > 2 ? 'text-green-600' : 'text-yellow-600' 
+    }
+  }
+  
+  if (hours > 0) {
+    return { 
+      text: `${hours}h ${minutes}m ${seconds}s`, 
+      class: hours > 6 ? 'text-yellow-600' : 'text-orange-600' 
+    }
+  }
+  
+  return { 
+    text: `${minutes}m ${seconds}s`, 
+    class: 'text-red-600 font-bold' 
+  }
 })
 
 const formatDate = (date) => {
@@ -343,6 +426,59 @@ const getInitials = (name) => {
     .substring(0, 2)
 }
 
+const updateCountdown = () => {
+  if (!project.value?.deadline) {
+    timeRemaining.value = null
+    return
+  }
+  
+  const deadline = new Date(project.value.deadline)
+  const now = new Date()
+  const secondsLeft = differenceInSeconds(deadline, now)
+  
+  if (secondsLeft <= 0) {
+    timeRemaining.value = {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      expired: true
+    }
+    // Stop the countdown
+    if (countdownInterval.value) {
+      clearInterval(countdownInterval.value)
+      countdownInterval.value = null
+    }
+    return
+  }
+  
+  const days = Math.floor(secondsLeft / 86400)
+  const hours = Math.floor((secondsLeft % 86400) / 3600)
+  const minutes = Math.floor((secondsLeft % 3600) / 60)
+  const seconds = secondsLeft % 60
+  
+  timeRemaining.value = {
+    days,
+    hours,
+    minutes,
+    seconds,
+    expired: false
+  }
+}
+
+const startCountdown = () => {
+  // Clear any existing interval
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value)
+  }
+  
+  // Update immediately
+  updateCountdown()
+  
+  // Update every second
+  countdownInterval.value = setInterval(updateCountdown, 1000)
+}
+
 const loadProject = async () => {
   isLoading.value = true
   error.value = null
@@ -353,6 +489,10 @@ const loadProject = async () => {
 
     if (result.success) {
       project.value = result.data.project
+      // Start countdown if project is open and has a deadline
+      if (project.value.status === 'open' && project.value.deadline) {
+        startCountdown()
+      }
       // Load bids after project is loaded
       await loadBids()
     } else {
@@ -484,5 +624,12 @@ const rejectBid = async (bidId) => {
 
 onMounted(() => {
   loadProject()
+})
+
+onUnmounted(() => {
+  // Clean up countdown interval
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value)
+  }
 })
 </script>
