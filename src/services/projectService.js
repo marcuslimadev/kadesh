@@ -183,6 +183,25 @@ export const projectService = {
         error: error.response?.data?.error || 'Erro ao carregar projetos em destaque'
       }
     }
+  },
+
+  /**
+   * Get available project categories
+   */
+  getCategories() {
+    return [
+      { value: 'web', label: 'Desenvolvimento Web' },
+      { value: 'mobile', label: 'Desenvolvimento Mobile' },
+      { value: 'design', label: 'Design Gráfico' },
+      { value: 'marketing', label: 'Marketing Digital' },
+      { value: 'writing', label: 'Redação e Conteúdo' },
+      { value: 'video', label: 'Vídeo e Animação' },
+      { value: 'audio', label: 'Áudio e Música' },
+      { value: 'translation', label: 'Tradução' },
+      { value: 'data', label: 'Análise de Dados' },
+      { value: 'consulting', label: 'Consultoria' },
+      { value: 'other', label: 'Outros' }
+    ]
   }
 }
 
