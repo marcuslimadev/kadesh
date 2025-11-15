@@ -14,6 +14,14 @@ const ProviderProfile = () => import('../views/ProviderProfile.vue')
 const Wallet = () => import('../views/Wallet.vue')
 const Notifications = () => import('../views/Notifications.vue')
 
+// Admin views
+const AdminLogin = () => import('../views/admin/AdminLogin.vue')
+const AdminDashboard = () => import('../views/admin/AdminDashboard.vue')
+const AdminUsers = () => import('../views/admin/AdminUsers.vue')
+const AdminProjects = () => import('../views/admin/AdminProjects.vue')
+const AdminPayments = () => import('../views/admin/AdminPayments.vue')
+const AdminSettings = () => import('../views/admin/AdminSettings.vue')
+
 const routes = [
   {
     path: '/',
@@ -87,6 +95,43 @@ const routes = [
     component: Notifications,
     meta: { requiresAuth: true }
   },
+  // Admin routes
+  {
+    path: '/admin/login',
+    name: 'admin-login',
+    component: AdminLogin,
+    meta: { requiresAuth: false, adminOnly: true }
+  },
+  {
+    path: '/admin/dashboard',
+    name: 'admin-dashboard',
+    component: AdminDashboard,
+    meta: { requiresAdminAuth: true }
+  },
+  {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: AdminUsers,
+    meta: { requiresAdminAuth: true }
+  },
+  {
+    path: '/admin/projects',
+    name: 'admin-projects',
+    component: AdminProjects,
+    meta: { requiresAdminAuth: true }
+  },
+  {
+    path: '/admin/payments',
+    name: 'admin-payments',
+    component: AdminPayments,
+    meta: { requiresAdminAuth: true }
+  },
+  {
+    path: '/admin/settings',
+    name: 'admin-settings',
+    component: AdminSettings,
+    meta: { requiresAdminAuth: true }
+  },
   {
     path: '/:pathMatch(.*)*',
     redirect: '/'
@@ -108,9 +153,14 @@ const router = createRouter({
 // Navigation guards
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
+  const adminToken = localStorage.getItem('adminToken')
   const isAuthenticated = !!token
+  const isAdminAuthenticated = !!adminToken
 
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  // Admin routes protection
+  if (to.meta.requiresAdminAuth && !isAdminAuthenticated) {
+    next({ name: 'admin-login' })
+  } else if (to.meta.requiresAuth && !isAuthenticated) {
     // Redirect to login if route requires auth and user is not authenticated
     next({ name: 'login', query: { redirect: to.fullPath } })
   } else if (to.meta.guestOnly && isAuthenticated) {

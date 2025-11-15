@@ -11,6 +11,7 @@ const bidRoutes = require('./routes/bids');
 const userRoutes = require('./routes/users');
 const walletRoutes = require('./routes/wallet');
 const notificationRoutes = require('./routes/notifications');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -58,6 +59,7 @@ app.use('/api/bids', bidRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/wallet', walletRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
