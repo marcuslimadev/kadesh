@@ -5,9 +5,17 @@ import { useToast } from 'vue-toastification'
 // Toast instance (guarded for SSR/build time)
 const toast = typeof window !== 'undefined' ? useToast() : null
 
+const DEFAULT_API_URL = 'https://kadesh-backend.onrender.com'
+
+const resolveBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
+  if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
+  return DEFAULT_API_URL
+}
+
 // Create axios instance
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
+  baseURL: resolveBaseUrl(),
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || 10000,
   headers: {
     'Content-Type': 'application/json',
