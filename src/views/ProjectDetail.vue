@@ -60,6 +60,17 @@
               <div>
                 <p class="text-sm text-gray-600 mb-1">Prazo de Entrega</p>
                 <p class="text-lg font-semibold text-gray-900">{{ formatDeadline(project.deadline) }}</p>
+                <!-- Countdown Timer -->
+                <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-4 h-4" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm font-medium" :class="formattedTimeRemaining.class">
+                      {{ formattedTimeRemaining.text }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -92,21 +103,75 @@
 
           <!-- Bids Section -->
           <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Auction Timer Banner -->
+            <div v-if="project.status === 'open' && formattedTimeRemaining && !formattedTimeRemaining.expired" 
+                 class="mb-4 p-4 rounded-lg border-2"
+                 :class="{
+                   'bg-green-50 border-green-300': timeRemaining?.days > 2,
+                   'bg-yellow-50 border-yellow-300': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                   'bg-orange-50 border-orange-300': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                   'bg-red-50 border-red-300': timeRemaining?.hours === 0
+                 }">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-full" 
+                       :class="{
+                         'bg-green-100': timeRemaining?.days > 2,
+                         'bg-yellow-100': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                         'bg-orange-100': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                         'bg-red-100': timeRemaining?.hours === 0
+                       }">
+                    <svg class="w-6 h-6" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-gray-900">Leilão Ativo</p>
+                    <p class="text-sm text-gray-600">Envie sua proposta antes do prazo</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm text-gray-600">Tempo restante</p>
+                  <p class="text-2xl font-bold" :class="formattedTimeRemaining.class">
+                    {{ formattedTimeRemaining.text }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-semibold text-gray-900">
-                Propostas ({{ project.bid_count || 0 }})
+                Propostas ({{ bids.length }})
               </h2>
-              <button
-                v-if="authStore.isProvider && project.status === 'open'"
-                @click="showBidForm = !showBidForm"
-                class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
-              >
-                {{ showBidForm ? 'Cancelar' : 'Enviar Proposta' }}
-              </button>
+              <div class="flex items-center gap-3">
+                <!-- Sort Dropdown -->
+                <div v-if="bids.length > 1" class="relative">
+                  <label for="bidSort" class="sr-only">Ordenar propostas</label>
+                  <select
+                    id="bidSort"
+                    v-model="bidSortBy"
+                    class="block pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md"
+                  >
+                    <option value="score">Melhor Score</option>
+                    <option value="price-low">Menor Preço</option>
+                    <option value="price-high">Maior Preço</option>
+                    <option value="date-new">Mais Recentes</option>
+                    <option value="date-old">Mais Antigas</option>
+                  </select>
+                </div>
+                
+                <button
+                  v-if="canSubmitBid"
+                  @click="showBidForm = !showBidForm"
+                  class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                >
+                  {{ showBidForm ? 'Cancelar' : 'Enviar Proposta' }}
+                </button>
+              </div>
             </div>
 
             <!-- Bid Form -->
-            <div v-if="showBidForm && authStore.isProvider" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-gray-50 rounded-lg">
               <h3 class="font-medium text-gray-900 mb-4">Nova Proposta</h3>
               <form @submit.prevent="submitBid" class="space-y-4">
                 <div>
@@ -161,9 +226,31 @@
               </form>
             </div>
 
-            <!-- Bids List Placeholder -->
-            <div class="text-center py-8 text-gray-500">
-              <p>Sistema de propostas será implementado na Fase 1 - Semana 2</p>
+            <!-- Bids Loading State -->
+            <div v-if="isBidsLoading" class="text-center py-8">
+              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <p class="mt-2 text-gray-600 text-sm">Carregando propostas...</p>
+            </div>
+
+            <!-- Bids List -->
+            <div v-else-if="bids.length > 0" class="space-y-4">
+              <BidCard
+                v-for="bid in sortedBids"
+                :key="bid.id"
+                :bid="bid"
+                :show-actions="isProjectOwner"
+                @accept="acceptBid"
+                @reject="rejectBid"
+              />
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="text-center py-8 text-gray-500">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <p class="mt-2">Nenhuma proposta enviada ainda</p>
+              <p v-if="canSubmitBid" class="text-sm mt-1">Seja o primeiro a enviar uma proposta!</p>
             </div>
           </div>
         </div>
@@ -227,14 +314,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useProjectsStore } from '@/stores/projects'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
+import BidCard from '@/components/project/BidCard.vue'
 import projectService from '@/services/projectService'
+import bidService from '@/services/bidService'
 import { useToast } from 'vue-toastification'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, differenceInSeconds } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 const route = useRoute()
@@ -244,10 +333,15 @@ const projectsStore = useProjectsStore()
 const toast = useToast()
 
 const project = ref(null)
+const bids = ref([])
 const isLoading = ref(false)
+const isBidsLoading = ref(false)
 const error = ref(null)
 const showBidForm = ref(false)
 const isBidSubmitting = ref(false)
+const timeRemaining = ref(null)
+const countdownInterval = ref(null)
+const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
 
 const bidForm = ref({
   amount: null,
@@ -258,6 +352,76 @@ const bidForm = ref({
 const skillsArray = computed(() => {
   if (!project.value?.skills) return []
   return project.value.skills.split(',').map(s => s.trim()).filter(Boolean)
+})
+
+const isProjectOwner = computed(() => {
+  return authStore.user?.id === project.value?.client_id
+})
+
+const canSubmitBid = computed(() => {
+  return authStore.isProvider && project.value?.status === 'open' && !isProjectOwner.value
+})
+
+const hasDeadlinePassed = computed(() => {
+  if (!project.value?.deadline) return false
+  return new Date(project.value.deadline) < new Date()
+})
+
+const formattedTimeRemaining = computed(() => {
+  if (!timeRemaining.value) return null
+  
+  const { days, hours, minutes, seconds, expired } = timeRemaining.value
+  
+  if (expired) {
+    return { text: 'Prazo encerrado', class: 'text-red-600' }
+  }
+  
+  if (days > 0) {
+    return { 
+      text: `${days}d ${hours}h ${minutes}m`, 
+      class: days > 2 ? 'text-green-600' : 'text-yellow-600' 
+    }
+  }
+  
+  if (hours > 0) {
+    return { 
+      text: `${hours}h ${minutes}m ${seconds}s`, 
+      class: hours > 6 ? 'text-yellow-600' : 'text-orange-600' 
+    }
+  }
+  
+  return { 
+    text: `${minutes}m ${seconds}s`, 
+    class: 'text-red-600 font-bold' 
+  }
+})
+
+const sortedBids = computed(() => {
+  if (!bids.value || bids.value.length === 0) return []
+  
+  const sorted = [...bids.value]
+  
+  switch (bidSortBy.value) {
+    case 'price-low':
+      return sorted.sort((a, b) => (a.amount || 0) - (b.amount || 0))
+    case 'price-high':
+      return sorted.sort((a, b) => (b.amount || 0) - (a.amount || 0))
+    case 'date-new':
+      return sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    case 'date-old':
+      return sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+    case 'score':
+    default:
+      // Sort by score (highest first), then by amount (lowest first)
+      return sorted.sort((a, b) => {
+        const scoreA = a.score || 0
+        const scoreB = b.score || 0
+        if (scoreB !== scoreA) {
+          return scoreB - scoreA
+        }
+        return (a.amount || 0) - (b.amount || 0)
+      })
+  }
 })
 
 const formatDate = (date) => {
@@ -309,6 +473,59 @@ const getInitials = (name) => {
     .substring(0, 2)
 }
 
+const updateCountdown = () => {
+  if (!project.value?.deadline) {
+    timeRemaining.value = null
+    return
+  }
+  
+  const deadline = new Date(project.value.deadline)
+  const now = new Date()
+  const secondsLeft = differenceInSeconds(deadline, now)
+  
+  if (secondsLeft <= 0) {
+    timeRemaining.value = {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      expired: true
+    }
+    // Stop the countdown
+    if (countdownInterval.value) {
+      clearInterval(countdownInterval.value)
+      countdownInterval.value = null
+    }
+    return
+  }
+  
+  const days = Math.floor(secondsLeft / 86400)
+  const hours = Math.floor((secondsLeft % 86400) / 3600)
+  const minutes = Math.floor((secondsLeft % 3600) / 60)
+  const seconds = secondsLeft % 60
+  
+  timeRemaining.value = {
+    days,
+    hours,
+    minutes,
+    seconds,
+    expired: false
+  }
+}
+
+const startCountdown = () => {
+  // Clear any existing interval
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value)
+  }
+  
+  // Update immediately
+  updateCountdown()
+  
+  // Update every second
+  countdownInterval.value = setInterval(updateCountdown, 1000)
+}
+
 const loadProject = async () => {
   isLoading.value = true
   error.value = null
@@ -319,6 +536,12 @@ const loadProject = async () => {
 
     if (result.success) {
       project.value = result.data.project
+      // Start countdown if project is open and has a deadline
+      if (project.value.status === 'open' && project.value.deadline) {
+        startCountdown()
+      }
+      // Load bids after project is loaded
+      await loadBids()
     } else {
       error.value = result.error
     }
@@ -327,6 +550,30 @@ const loadProject = async () => {
     error.value = 'Erro ao carregar projeto'
   } finally {
     isLoading.value = false
+  }
+}
+
+const loadBids = async () => {
+  if (!project.value?.id) return
+  
+  isBidsLoading.value = true
+  
+  try {
+    const result = await projectService.getProjectBids(project.value.id)
+    
+    if (result.success) {
+      bids.value = result.data.bids || []
+      // Update bid count in project
+      if (project.value) {
+        project.value.bid_count = bids.value.length
+      }
+    } else {
+      console.error('Error loading bids:', result.error)
+    }
+  } catch (err) {
+    console.error('Error loading bids:', err)
+  } finally {
+    isBidsLoading.value = false
   }
 }
 
@@ -342,16 +589,35 @@ const submitBid = async () => {
     return
   }
 
+  if (!bidForm.value.amount || !bidForm.value.description || !bidForm.value.delivery_time_days) {
+    toast.error('Por favor, preencha todos os campos')
+    return
+  }
+
   isBidSubmitting.value = true
 
   try {
-    // TODO: Implement bid submission with backend
-    toast.success('Proposta enviada com sucesso!')
-    showBidForm.value = false
-    bidForm.value = {
-      amount: null,
-      description: '',
-      delivery_time_days: null
+    const bidData = {
+      project_id: project.value.id,
+      amount: bidForm.value.amount,
+      description: bidForm.value.description,
+      delivery_time_days: bidForm.value.delivery_time_days
+    }
+
+    const result = await bidService.createBid(bidData)
+    
+    if (result.success) {
+      toast.success('Proposta enviada com sucesso!')
+      showBidForm.value = false
+      bidForm.value = {
+        amount: null,
+        description: '',
+        delivery_time_days: null
+      }
+      // Reload bids to show the new one
+      await loadBids()
+    } else {
+      toast.error(result.error || 'Erro ao enviar proposta')
     }
   } catch (err) {
     console.error('Error submitting bid:', err)
@@ -361,7 +627,56 @@ const submitBid = async () => {
   }
 }
 
+const acceptBid = async (bidId) => {
+  if (!confirm('Tem certeza que deseja aceitar esta proposta? Isso encerrará o leilão.')) {
+    return
+  }
+
+  try {
+    const result = await bidService.acceptBid(project.value.id, bidId)
+    
+    if (result.success) {
+      toast.success('Proposta aceita com sucesso!')
+      // Reload project and bids
+      await loadProject()
+    } else {
+      toast.error(result.error || 'Erro ao aceitar proposta')
+    }
+  } catch (err) {
+    console.error('Error accepting bid:', err)
+    toast.error('Erro ao aceitar proposta')
+  }
+}
+
+const rejectBid = async (bidId) => {
+  if (!confirm('Tem certeza que deseja rejeitar esta proposta?')) {
+    return
+  }
+
+  try {
+    const result = await bidService.rejectBid(bidId)
+    
+    if (result.success) {
+      toast.success('Proposta rejeitada')
+      // Reload bids
+      await loadBids()
+    } else {
+      toast.error(result.error || 'Erro ao rejeitar proposta')
+    }
+  } catch (err) {
+    console.error('Error rejecting bid:', err)
+    toast.error('Erro ao rejeitar proposta')
+  }
+}
+
 onMounted(() => {
   loadProject()
+})
+
+onUnmounted(() => {
+  // Clean up countdown interval
+  if (countdownInterval.value) {
+    clearInterval(countdownInterval.value)
+  }
 })
 </script>
