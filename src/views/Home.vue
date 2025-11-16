@@ -239,6 +239,44 @@
       </div>
     </section>
 
+    <!-- Progress snapshot -->
+    <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-16 text-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+          <div class="lg:w-2/5 space-y-4">
+            <p class="text-sm font-semibold tracking-widest text-accent-300 uppercase">Estado real do roadmap</p>
+            <h2 class="text-3xl font-bold">Estamos {{ progressSnapshot.mvp }}% do MVP e {{ progressSnapshot.platform }}% da plataforma completa</h2>
+            <p class="text-gray-300">
+              Percentuais confirmados no arquivo <strong>{{ progressSnapshot.referenceDoc }}</strong> em {{ progressSnapshot.lastUpdated }}. O quadro abaixo mostra exatamente o que
+              falta para cada marco — sem placeholders, apenas sinaliza��ǜo transparente para quem acompanha o progresso.
+            </p>
+            <div class="text-sm text-gray-400">
+              �sltimo marco priorit��rio: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
+            </div>
+          </div>
+          <div class="lg:flex-1 w-full grid gap-6 md:grid-cols-2">
+            <article
+              v-for="item in progressSnapshot.blocks"
+              :key="item.label"
+              class="bg-white/5 backdrop-blur rounded-2xl border border-white/10 p-6 space-y-4"
+            >
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white">{{ item.label }}</h3>
+                <span class="text-2xl font-bold text-accent-300">{{ item.value }}%</span>
+              </div>
+              <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-3 bg-accent-400 rounded-full transition-all duration-500" :style="{ width: getProgressBarWidth(item.value) }"></div>
+              </div>
+              <p class="text-sm text-gray-300">{{ item.description }}</p>
+              <ul class="text-xs text-gray-400 space-y-1">
+                <li v-for="bullet in item.pending" :key="bullet">• {{ bullet }}</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Newsletter -->
     <section class="bg-primary-900 py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -296,6 +334,35 @@ const searchKeyword = ref('')
 const newsletterEmail = ref('')
 const featuredProjects = ref([])
 const loadingProjects = ref(false)
+const progressSnapshot = {
+  mvp: 85,
+  platform: 40,
+  referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
+  lastUpdated: '15/11/2025',
+  nextMilestone: 'Deploy em produ��ǜo e testes com usuǭrios reais',
+  blocks: [
+    {
+      label: 'MVP Funcional',
+      value: 85,
+      description: 'Auth, marketplace e leil��es jǭ estǜo entregues. Falta ativar o backend definitivo e pagamentos.',
+      pending: [
+        'Deploy do backend no Render com banco PostgreSQL',
+        'Integra��ǜo completa com Mercado Pago (checkout + webhook)',
+        'Testes beta com clientes e fornecedores'
+      ]
+    },
+    {
+      label: 'Plataforma Completa',
+      value: 40,
+      description: 'Escrow, reviews, perfis completos e painel admin estǜo em desenvolvimento.',
+      pending: [
+        'Implementar milestones/escrow com libera��ǜo segura',
+        'Publicar provider profiles + reviews com portf��lio',
+        'Finalizar painel admin e m��dulo de disputas'
+      ]
+    }
+  ]
+}
 
 const heroStats = [
   { label: 'Talentos ativos', value: '12k+' },
@@ -455,6 +522,11 @@ const formatBudget = value => {
   if (!value) return '0,00'
   const numeric = typeof value === 'number' ? value : parseFloat(value)
   return numeric.toFixed(2).replace('.', ',')
+}
+
+const getProgressBarWidth = value => {
+  const safeValue = Math.min(Math.max(Number(value) || 0, 0), 100)
+  return `${safeValue}%`
 }
 
 onMounted(() => {
