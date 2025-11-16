@@ -6,6 +6,7 @@ import { useToast } from 'vue-toastification'
 const toast = typeof window !== 'undefined' ? useToast() : null
 
 const DEFAULT_API_URL = 'https://kadesh-backend.onrender.com'
+const DEFAULT_API_TIMEOUT = 30000
 
 const resolveBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
@@ -13,10 +14,12 @@ const resolveBaseUrl = () => {
   return DEFAULT_API_URL
 }
 
+const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT) || DEFAULT_API_TIMEOUT
+
 // Create axios instance
 const api = axios.create({
   baseURL: resolveBaseUrl(),
-  timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || 10000,
+  timeout: API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -99,7 +102,7 @@ api.interceptors.response.use(
           toast?.error(data?.error || 'Ocorreu um erro inesperado.')
       }
     } else if (error.code === 'ECONNABORTED') {
-      toast?.error('Timeout: A requisição demorou muito para responder.')
+      toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
     } else if (error.message === 'Network Error') {
       toast?.error('Erro de conexão. Verifique sua internet.')
     } else {
@@ -111,3 +114,5 @@ api.interceptors.response.use(
 )
 
 export default api
+
+
