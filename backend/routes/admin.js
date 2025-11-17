@@ -600,3 +600,192 @@ router.post('/settings', adminAuth, async (req, res) => {
 });
 
 module.exports = router;
+
+// ===== DISPUTE MANAGEMENT =====
+// List disputes grouped by contract
+router.get('/disputes', adminAuth, async (req, res) => {
+  try {
+    const { status } = req.query // optional: 'open' | 'closed'
+
+    const rows = await db.query(
+      `WITH base AS (
+         SELECT 
+           c.id AS contract_id,
+           c.project_id,
+           c.client_id,
+           c.provider_id,
+           c.amount,
+           c.status AS contract_status,
+           p.title AS project_title,
+           uc.name AS client_name,
+           up.name AS provider_name,
+           MAX(allm.created_at) AS last_activity,
+           EXISTS (
+             SELECT 1 FROM messages m2 
+             WHERE m2.contract_id = c.id 
+               AND m2.is_system_message = TRUE 
+               AND m2.content LIKE '[DISPUTE_CLOSED%'
+           ) AS is_closed
+         FROM contracts c
+         JOIN projects p ON c.project_id = p.id
+         JOIN users uc ON c.client_id = uc.id
+         JOIN users up ON c.provider_id = up.id
+         JOIN messages m ON m.contract_id = c.id AND m.is_system_message = TRUE AND m.content LIKE '[DISPUTE%'
+         JOIN messages allm ON allm.contract_id = c.id
+         GROUP BY c.id, p.title, uc.name, up.name
+       )
+       SELECT * FROM base
+       ${status === 'open' ? 'WHERE NOT is_closed' : status === 'closed' ? 'WHERE is_closed' : ''}
+       ORDER BY last_activity DESC`
+    )
+
+    res.json({ success: true, data: rows.rows })
+  } catch (error) {
+    console.error('Get disputes error:', error)
+    res.status(500).json({ error: 'Erro ao buscar disputas' })
+  }
+})
+
+// Get details for a specific contract dispute
+router.get('/disputes/:id', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params
+
+    const contractResult = await db.query(
+      `SELECT 
+         c.*, p.title AS project_title, p.description AS project_description,
+         uc.name AS client_name, uc.email AS client_email,
+         up.name AS provider_name, up.email AS provider_email
+       FROM contracts c
+       JOIN projects p ON c.project_id = p.id
+       JOIN users uc ON c.client_id = uc.id
+       JOIN users up ON c.provider_id = up.id
+       WHERE c.id = $1`,
+      [id]
+    )
+
+    if (contractResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Contrato não encontrado' })
+    }
+
+    const messagesResult = await db.query(
+      `SELECT id, content, created_at
+       FROM messages
+       WHERE contract_id = $1 AND is_system_message = TRUE AND content LIKE '[DISPUTE%'
+       ORDER BY created_at ASC`,
+      [id]
+    )
+
+    const isClosed = messagesResult.rows.some(m => m.content.startsWith('[DISPUTE_CLOSED'))
+
+    res.json({
+      success: true,
+      data: {
+        contract: contractResult.rows[0],
+        disputeMessages: messagesResult.rows,
+        isClosed
+      }
+    })
+  } catch (error) {
+    console.error('Get dispute details error:', error)
+    res.status(500).json({ error: 'Erro ao buscar disputa' })
+  }
+})
+
+// Resolve a contract dispute
+router.post('/disputes/:id/resolve', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params
+    const { action, notes } = req.body // action: release | refund | dismiss
+
+    if (!['release', 'refund', 'dismiss'].includes(action)) {
+      return res.status(400).json({ error: 'Ação inválida' })
+    }
+
+    const { createWalletTransaction } = require('../services/walletService')
+
+    await db.transaction(async (client) => {
+      const contractResult = await client.query('SELECT * FROM contracts WHERE id = $1 FOR UPDATE', [id])
+      if (contractResult.rows.length === 0) {
+        const e = new Error('Contrato não encontrado')
+        e.status = 404
+        throw e
+      }
+
+      const contract = contractResult.rows[0]
+      const amount = Number(contract.amount)
+
+      if (action === 'release') {
+        // Credit provider, debit client
+        await createWalletTransaction(
+          contract.provider_id,
+          {
+            amount: amount,
+            type: 'escrow_release',
+            description: 'Liberação de pagamento do contrato',
+            referenceType: 'contract',
+            referenceId: contract.id
+          },
+          client
+        )
+
+        await createWalletTransaction(
+          contract.client_id,
+          {
+            amount: -amount,
+            type: 'payment_sent',
+            description: 'Pagamento de contrato (liberação)',
+            referenceType: 'contract',
+            referenceId: contract.id
+          },
+          client
+        )
+
+        // Ensure end_date is set
+        await client.query(
+          `UPDATE contracts SET end_date = COALESCE(end_date, NOW()), updated_at = NOW() WHERE id = $1`,
+          [id]
+        )
+      } else if (action === 'refund') {
+        // Refund client (no debit to provider since funds aren't held here)
+        await createWalletTransaction(
+          contract.client_id,
+          {
+            amount: amount,
+            type: 'refund',
+            description: 'Reembolso de contrato',
+            referenceType: 'contract',
+            referenceId: contract.id
+          },
+          client
+        )
+
+        // Mark as cancelled
+        await client.query(
+          `UPDATE contracts SET status = 'cancelled', updated_at = NOW() WHERE id = $1`,
+          [id]
+        )
+      }
+
+      // Register resolution system message
+      const resolutionTag = `[DISPUTE_CLOSED:${action.toUpperCase()}]`
+      const messageContent = `${resolutionTag} ${notes || ''}`.trim()
+
+      await client.query(
+        `INSERT INTO messages (contract_id, sender_id, receiver_id, content, is_system_message)
+         VALUES ($1, $2, $3, $4, TRUE)`,
+        [
+          id,
+          contract.client_id,
+          contract.provider_id,
+          messageContent
+        ]
+      )
+    })
+
+    res.json({ success: true, message: 'Disputa resolvida com sucesso' })
+  } catch (error) {
+    console.error('Resolve dispute error:', error)
+    res.status(error.status || 500).json({ error: error.message || 'Erro ao resolver disputa' })
+  }
+})

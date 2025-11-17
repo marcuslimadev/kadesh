@@ -341,7 +341,7 @@ router.put('/:id/cancel', auth, async (req, res) => {
     // Update contract status
     const updated = await db.query(
       `UPDATE contracts SET status = 'cancelled', updated_at = NOW()
-      WHERE id = $2
+      WHERE id = $1
       RETURNING *`,
       [id]
     );

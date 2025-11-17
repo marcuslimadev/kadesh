@@ -24,6 +24,7 @@ const AdminUsers = () => import('../views/admin/AdminUsers.vue')
 const AdminProjects = () => import('../views/admin/AdminProjects.vue')
 const AdminPayments = () => import('../views/admin/AdminPayments.vue')
 const AdminSettings = () => import('../views/admin/AdminSettings.vue')
+const AdminDisputes = () => import('../views/admin/AdminDisputes.vue')
 
 const routes = [
   {
@@ -145,6 +146,12 @@ const routes = [
     path: '/admin/payments',
     name: 'admin-payments',
     component: AdminPayments,
+    meta: { requiresAdminAuth: true }
+  },
+  {
+    path: '/admin/disputes',
+    name: 'admin-disputes',
+    component: AdminDisputes,
     meta: { requiresAdminAuth: true }
   },
   {
