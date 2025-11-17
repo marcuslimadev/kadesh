@@ -11,6 +11,7 @@ const CreateProject = () => import('../views/CreateProject.vue')
 const MyProjects = () => import('../views/MyProjects.vue')
 const MyBids = () => import('../views/MyBids.vue')
 const ProviderProfile = () => import('../views/ProviderProfile.vue')
+const PublicProviderProfile = () => import('../views/PublicProviderProfile.vue')
 const Wallet = () => import('../views/Wallet.vue')
 const Notifications = () => import('../views/Notifications.vue')
 const Settings = () => import('../views/Settings.vue')
@@ -86,6 +87,12 @@ const routes = [
     name: 'profile',
     component: ProviderProfile,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/provider/:id',
+    name: 'public-provider-profile',
+    component: PublicProviderProfile,
+    meta: { requiresAuth: false }
   },
   {
     path: '/wallet',
