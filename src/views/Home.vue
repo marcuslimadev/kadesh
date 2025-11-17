@@ -336,10 +336,10 @@ const featuredProjects = ref([])
 const loadingProjects = ref(false)
 const progressSnapshot = {
   mvp: 100,
-  platform: 50,
+  platform: 95,
   referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
   lastUpdated: '17/11/2025',
-  nextMilestone: 'Implementar features avançadas (escrow, reviews, chat)',
+  nextMilestone: 'Analytics e dashboards (admin/provedor/cliente)',
   blocks: [
     {
       label: 'MVP Funcional',
@@ -351,13 +351,10 @@ const progressSnapshot = {
     },
     {
       label: 'Plataforma Completa',
-      value: 50,
-      description: 'Metade das features avançadas prontas. Falta escrow, reviews completo, profiles e chat.',
+      value: 95,
+      description: 'Quase completo: escrow/milestones, reviews, perfis públicos e chat prontos. Resta analytics.',
       pending: [
-        'Implementar milestones/escrow com liberação segura',
-        'Sistema de reviews completo com moderação',
-        'Provider profiles públicos + portfólio',
-        'Chat em tempo real (Socket.io)'
+        'Dashboard de analytics (admin, provedor, cliente)'
       ]
     }
   ]

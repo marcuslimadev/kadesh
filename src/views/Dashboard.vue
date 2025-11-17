@@ -285,7 +285,9 @@ const loadDashboardData = async () => {
   try {
     // Load stats
     const statsResponse = await api.get('/api/dashboard/stats')
-    if (statsResponse.data) {
+    if (statsResponse.data?.stats) {
+      stats.value = statsResponse.data.stats
+    } else if (statsResponse.data) {
       stats.value = statsResponse.data
     }
 

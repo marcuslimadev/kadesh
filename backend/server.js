@@ -117,8 +117,8 @@ app.use('/api/messages', messageRoutes);
 const auth = require('./middleware/auth');
 const db = require('./config/database');
 
-// Alias: GET /api/dashboard/stats -> GET /api/users/dashboard/stats
-app.get('/api/dashboard/stats', auth, async (req, res) => {
+// Alias: GET /api/dashboard/stats and /api/users/dashboard/stats
+async function userDashboardStatsHandler(req, res) {
   try {
     const userId = req.user.userId;
     const userType = req.user.type;
@@ -180,7 +180,10 @@ app.get('/api/dashboard/stats', auth, async (req, res) => {
       error: 'Erro ao carregar estatísticas'
     });
   }
-});
+}
+
+app.get('/api/dashboard/stats', auth, userDashboardStatsHandler);
+app.get('/api/users/dashboard/stats', auth, userDashboardStatsHandler);
 
 // 404 handler
 app.use('*', (req, res) => {
