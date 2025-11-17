@@ -21,12 +21,29 @@ app.use(helmet());
 app.use(compression());
 
 // CORS configuration
+const allowedOrigins = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || 'http://localhost:3000')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow non-browser tools (curl, Postman) which have no origin
+    if (!origin) return callback(null, true);
+    // If no allowedOrigins configured, allow all origins (useful for local/dev)
+    if (allowedOrigins.length === 0) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Ensure preflight requests are handled
+app.options('*', cors());
 
 // Rate limiting
 const limiter = rateLimit({
