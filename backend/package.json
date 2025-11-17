@@ -2,6 +2,7 @@
   "name": "kadesh-backend",
   "version": "1.1.0",
   "description": "API do Kadesh com PostgreSQL, carteiras e rotas administrativas",
+  "packageManager": "npm@9.9.4",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
