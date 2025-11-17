@@ -56,7 +56,6 @@ router.get('/', async (req, res) => {
     if (search) {
       query += ` AND (p.title ILIKE $${++paramCount} OR p.description ILIKE $${++paramCount})`;
       params.push(`%${search}%`, `%${search}%`);
-      paramCount++;
     }
 
     query += `
