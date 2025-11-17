@@ -1,8 +1,8 @@
 # 📊 Status Atual do Desenvolvimento - Kadesh
 
-**Data:** 15 de Novembro de 2025  
+**Data:** 17 de Novembro de 2025  
 **Versão:** 2.0.0  
-**Branch:** copilot/continue-development-progress
+**Branch:** copilot/update-roadmap-status
 
 ---
 
@@ -200,51 +200,71 @@ node server.js
 
 ---
 
-## 📋 Próximos Passos Recomendados
+## 📋 Roadmap de Desenvolvimento
 
-### Prioridade ALTA 🔴
+### 🔴 PRIORIDADE ALTA - MVP (85% → 100%)
 
-1. **Deploy em Produção**
-   - [ ] Deploy do backend no Render
-   - [ ] Configurar banco PostgreSQL no Render
-   - [ ] Deploy do frontend no Vercel
-   - [ ] Configurar variáveis de ambiente
+#### **1. Deploy em Produção**
+   - [ ] Deploy do backend no Render com PostgreSQL
+   - [ ] Configurar variáveis de ambiente de produção
+   - [ ] Migração completa do banco de dados
+   - [ ] Deploy do frontend no Vercel (já configurado)
 
-2. **Testes E2E**
+#### **2. Integração Mercado Pago Completa**
+   - [x] Implementar checkout de depósito
+   - [x] Configurar webhooks básicos
+   - [ ] Testar fluxo completo de pagamento em produção
+   - [ ] Implementar tratamento de erros e fallbacks
+   - [ ] Validar assinaturas de webhook (X-Signature)
+
+#### **3. Testes Beta**
    - [ ] Fluxo completo: Registro → Login → Criar Projeto
    - [ ] Fluxo de leilão: Ver projeto → Enviar proposta → Aceitar proposta
+   - [ ] Testes com clientes reais
+   - [ ] Testes com fornecedores reais
    - [ ] Validar timer e ordenação de propostas
 
-3. **Integração Mercado Pago**
-   - [x] Implementar checkout
-   - [x] Configurar webhooks
-   - [x] Testar fluxo de pagamento (fluxo de depósito em carteira)
+### 🟡 PRIORIDADE MÉDIA - Plataforma Completa (40% → 100%)
 
-### Prioridade MÉDIA 🟡
+#### **4. Sistema de Escrow (Milestones)**
+   - [ ] Implementar criação de milestones
+   - [ ] Bloqueio de fundos por milestone
+   - [ ] Liberação segura de pagamentos
+   - [ ] Dashboard de acompanhamento
 
-4. **Sistema de Escrow**
-   - [ ] Implementar milestones
-   - [ ] Bloqueio de fundos
-   - [ ] Liberação de pagamentos
-
-5. **Perfis de Prestadores**
-   - [ ] Implementar página de perfil público
+#### **5. Perfis de Prestadores Completos**
+   - [ ] Página de perfil público
    - [ ] Sistema de portfólio (upload de imagens)
    - [ ] Galeria com lightbox
+   - [ ] Informações profissionais detalhadas
 
-6. **Sistema de Reviews**
+#### **6. Sistema de Reviews**
    - [ ] Implementar avaliações multidimensionais
-   - [ ] Comentários
-   - [ ] Moderação
+   - [ ] Sistema de comentários
+   - [ ] Moderação de reviews
+   - [ ] Cálculo de reputação agregada
 
-### Prioridade BAIXA 🟢
+#### **7. Painel Admin Completo**
+   - [ ] Dashboard administrativo
+   - [ ] Gestão de usuários
+   - [ ] Gestão de projetos
+   - [ ] Configurações do sistema
 
-7. **Funcionalidades Extras**
+#### **8. Módulo de Disputas**
+   - [ ] Sistema de abertura de disputas
+   - [ ] Chat de mediação
+   - [ ] Resolução de conflitos
+   - [ ] Histórico de disputas
+
+### 🟢 PRIORIDADE BAIXA - Funcionalidades Extras
+
+#### **9. Funcionalidades Avançadas**
    - [ ] Chat em tempo real (Socket.io)
    - [ ] Notificações push (Service Workers)
    - [ ] Dark mode
    - [ ] Múltiplos idiomas (i18n)
    - [ ] PWA (offline support)
+   - [ ] Sistema de email automatizado
 
 ---
 
@@ -345,20 +365,42 @@ Para dúvidas ou problemas:
 
 ---
 
-## 🎉 Conclusão
+## 🎉 Estado Real do Roadmap
 
-**Status Geral:** ✅ Sistema de leilão 100% funcional
+Estamos **85% do MVP** e **40% da plataforma completa**.
 
-**Próximo Marco:** Deploy em produção e testes com usuários reais
+Percentuais confirmados neste arquivo em 17/11/2025. O quadro abaixo mostra exatamente o que falta para cada marco — sem placeholders, apenas sinalização transparente para quem acompanha o progresso.
 
-**MVP Completo:** ~92% (backend pronto com Render + pagamentos Mercado Pago em produção)
+---
 
-**Plataforma Completa:** ~40% (falta escrow, reviews, perfis, admin)
+### 🎯 Último Marco Prioritário: Deploy em Produção e Testes com Usuários Reais
+
+#### **MVP Funcional - 85%**
+Auth, marketplace e leilões já estão entregues. Falta ativar o backend definitivo e pagamentos.
+
+**O que falta:**
+- [ ] Deploy do backend no Render com banco PostgreSQL
+- [ ] Integração completa com Mercado Pago (checkout + webhook)
+- [ ] Testes beta com clientes e fornecedores
+
+#### **Plataforma Completa - 40%**
+Escrow, reviews, perfis completos e painel admin estão em desenvolvimento.
+
+**O que falta:**
+- [ ] Implementar milestones/escrow com liberação segura
+- [ ] Publicar provider profiles + reviews com portfólio
+- [ ] Finalizar painel admin e módulo de disputas
+
+---
+
+**Status Geral:** ✅ Sistema de leilão 100% funcional | Backend e pagamentos pendentes
+
+**Próximo Marco:** Deploy em produção com PostgreSQL + Mercado Pago completo
 
 ---
 
 **Desenvolvido com ❤️ para a plataforma Kadesh**
 
-**Última Atualização:** 15 de Novembro de 2025  
+**Última Atualização:** 17 de Novembro de 2025  
 **Autor:** GitHub Copilot Agent  
 **Repositório:** https://github.com/marcuslimadev/kadesh
