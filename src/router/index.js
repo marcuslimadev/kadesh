@@ -152,7 +152,11 @@ const router = createRouter({
 
 // Navigation guards
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  // Frontend stores the JWT under the `kadesh_token` key (see src/stores/auth.js)
+  // so the navigation guard needs to look up the same key to accurately determine
+  // whether the user is authenticated. Otherwise, even users with a valid session
+  // would be redirected back to the login screen.
+  const token = localStorage.getItem('kadesh_token')
   const adminToken = localStorage.getItem('adminToken')
   const isAuthenticated = !!token
   const isAdminAuthenticated = !!adminToken
