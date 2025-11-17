@@ -21,12 +21,12 @@ app.use(helmet());
 app.use(compression());
 
 // CORS configuration
-// Add a safe fallback list that includes common dev hosts and the current Vercel frontend
+// Add a safe fallback list that includes common dev hosts and the Render frontend
 const defaultFrontends = [
   'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  'https://kadesh-seven.vercel.app'
+  'https://kadesh-frontend.onrender.com'
 ];
 
 const envList = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || '';
