@@ -67,6 +67,56 @@
             Sacar Fundos
           </button>
         </div>
+        <div
+          v-if="hasPendingDeposits"
+          class="mt-6 bg-blue-50/80 border border-blue-100 rounded-2xl p-4"
+        >
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-sm font-semibold text-blue-700 uppercase tracking-wide">Pagamentos aguardando confirmação</p>
+              <p class="text-sm text-blue-900/80">Assim que o Mercado Pago aprovar, o valor aparecerá automaticamente no saldo.</p>
+            </div>
+            <button
+              type="button"
+              class="text-sm font-medium text-blue-700 hover:text-blue-900"
+              @click="loadPendingDeposits"
+            >
+              Atualizar status
+            </button>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div
+              v-for="intent in pendingDeposits"
+              :key="intent.id"
+              class="bg-white border border-blue-100 rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
+            >
+              <div>
+                <p class="text-base font-semibold text-gray-900">
+                  {{ formatCurrency(intent.amount) }} • {{ formatDate(intent.created_at) }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  Preferência #{{ intent.preference_id?.slice(-6) || intent.id.slice(0, 6) }} · Método: Mercado Pago
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  @click="openCheckoutLink(intent.checkout_url)"
+                >
+                  Reabrir checkout
+                </button>
+                <button
+                  type="button"
+                  class="px-4 py-2 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50"
+                  @click="copyCheckoutLink(intent.checkout_url)"
+                >
+                  Copiar link
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Filters -->
@@ -225,7 +275,8 @@
           <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-sm font-medium text-primary-600 uppercase tracking-wide">Adicionar fundos</p>
-              <h3 class="text-2xl font-semibold text-gray-900">Depósito na carteira</h3>
+              <h3 class="text-2xl font-semibold text-gray-900">Checkout seguro Mercado Pago</h3>
+              <p class="text-sm text-gray-500 mt-1">PIX, boleto ou cartão em um único fluxo. O saldo é liberado automaticamente após a aprovação.</p>
             </div>
             <button @click="closeDepositModal" class="text-gray-400 hover:text-gray-600">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -255,23 +306,25 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">Método de pagamento</label>
               <select
                 v-model="depositForm.method"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100"
+                disabled
               >
                 <option v-for="method in depositMethods" :key="method.value" :value="method.value">
                   {{ method.label }}
                 </option>
               </select>
+              <p class="mt-1 text-xs text-gray-500">Integração oficial com autenticação de webhook.</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Referência (opcional)</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Descrição (opcional)</label>
               <input
-                v-model="depositForm.reference"
+                v-model="depositForm.description"
                 type="text"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                placeholder="Ex.: PIX 123 ou ID do pagamento"
+                placeholder="Ex.: Depósito para projeto Landing Page"
               />
-              <p class="mt-1 text-xs text-gray-500">Use para guardar comprovantes ou ID da transação.</p>
+              <p class="mt-1 text-xs text-gray-500">Esse texto aparece no comprovante interno da Kadesh.</p>
             </div>
 
             <p v-if="depositError" class="text-sm text-red-600">{{ depositError }}</p>
@@ -295,7 +348,7 @@
                   </svg>
                   Processando...
                 </span>
-                <span v-else>Confirmar Depósito</span>
+                <span v-else>Ir para o Mercado Pago</span>
               </button>
             </div>
           </form>
@@ -415,8 +468,8 @@ const depositError = ref('')
 const withdrawError = ref('')
 const depositForm = ref({
   amount: '',
-  method: 'pix',
-  reference: ''
+  method: 'mercadopago',
+  description: ''
 })
 const withdrawForm = ref({
   amount: '',
@@ -425,9 +478,7 @@ const withdrawForm = ref({
 })
 
 const depositMethods = [
-  { value: 'pix', label: 'PIX (instantâneo)' },
-  { value: 'boleto', label: 'Boleto bancário' },
-  { value: 'credit_card', label: 'Cartão de crédito' }
+  { value: 'mercadopago', label: 'Mercado Pago (PIX, cartão, boleto)' }
 ]
 
 const withdrawMethods = [
@@ -443,6 +494,7 @@ const defaultBalance = {
 }
 
 const balance = ref({ ...defaultBalance })
+const pendingDeposits = ref([])
 
 const filters = ref({
   type: '',
@@ -477,6 +529,8 @@ const transactionTypeColors = {
 const hasActiveFilters = computed(() => {
   return filters.value.type !== '' || filters.value.status !== ''
 })
+
+const hasPendingDeposits = computed(() => pendingDeposits.value.length > 0)
 
 const filteredTransactions = computed(() => {
   let result = [...transactions.value]
@@ -582,8 +636,8 @@ const normalizeTransactions = (items = []) => {
 const resetDepositForm = () => {
   depositForm.value = {
     amount: '',
-    method: 'pix',
-    reference: ''
+    method: 'mercadopago',
+    description: ''
   }
   depositError.value = ''
 }
@@ -623,24 +677,33 @@ const handleDeposit = async () => {
     return
   }
 
+  if (depositForm.value.method !== 'mercadopago') {
+    depositError.value = 'Atualmente apenas o Mercado Pago está disponível'
+    return
+  }
+
   isDepositing.value = true
   try {
     const result = await walletService.deposit(
       amountValue,
       depositForm.value.method,
-      depositForm.value.reference
+      depositForm.value.description
     )
 
     if (result.success) {
-      toast.success('Depósito registrado com sucesso!')
+      const checkoutUrl = result.data?.data?.checkout_url
+      toast.success('Checkout seguro criado! Finalize o pagamento no Mercado Pago.')
       closeDepositModal()
-      await loadTransactions()
+      if (checkoutUrl) {
+        window.open(checkoutUrl, '_blank', 'noopener')
+      }
+      await loadPendingDeposits()
     } else {
-      depositError.value = result.error || 'Erro ao registrar depósito'
+      depositError.value = result.error || 'Erro ao criar checkout'
     }
   } catch (err) {
     console.error('Error creating deposit:', err)
-    depositError.value = 'Erro ao registrar depósito'
+    depositError.value = 'Erro ao criar checkout'
   } finally {
     isDepositing.value = false
   }
@@ -683,6 +746,45 @@ const handleWithdraw = async () => {
   }
 }
 
+const loadPendingDeposits = async () => {
+  try {
+    const result = await walletService.getPaymentIntents({
+      type: 'wallet_deposit',
+      status: 'pending',
+      limit: 5
+    })
+
+    if (result.success) {
+      pendingDeposits.value = result.data?.data?.intents || []
+    }
+  } catch (error) {
+    console.error('Error loading pending deposits:', error)
+  }
+}
+
+const openCheckoutLink = (url) => {
+  if (!url) {
+    toast.error('Link de checkout indisponível')
+    return
+  }
+  window.open(url, '_blank', 'noopener')
+}
+
+const copyCheckoutLink = async (url) => {
+  if (!url) {
+    toast.error('Link não encontrado')
+    return
+  }
+
+  try {
+    await navigator.clipboard.writeText(url)
+    toast.success('Link copiado!')
+  } catch (error) {
+    console.error('Clipboard error:', error)
+    toast.error('Não foi possível copiar o link')
+  }
+}
+
 const loadTransactions = async () => {
   isLoading.value = true
   error.value = null
@@ -712,6 +814,8 @@ const loadTransactions = async () => {
       error.value = result.error
       transactions.value = []
     }
+
+    await loadPendingDeposits()
   } catch (err) {
     console.error('Error loading wallet data:', err)
     error.value = 'Erro ao carregar dados da carteira'

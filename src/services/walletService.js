@@ -65,12 +65,12 @@ export const walletService = {
   /**
    * Create deposit
    */
-  async deposit(amount, method = 'pix', reference = '') {
+  async deposit(amount, method = 'mercadopago', description = '') {
     try {
-      const response = await api.post('/api/wallet/deposit', {
+      const response = await api.post('/api/payments/deposit', {
         amount,
         method,
-        reference
+        description
       })
       return {
         success: true,
@@ -80,7 +80,23 @@ export const walletService = {
       console.error('Error creating deposit:', error)
       return {
         success: false,
-        error: error.response?.data?.error || 'Erro ao criar depósito'
+        error: error.response?.data?.error || 'Erro ao criar checkout'
+      }
+    }
+  },
+
+  async getPaymentIntents(params = {}) {
+    try {
+      const response = await api.get('/api/payments/intents', { params })
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error fetching payment intents:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao carregar pagamentos pendentes'
       }
     }
   }

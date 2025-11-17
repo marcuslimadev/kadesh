@@ -23,6 +23,22 @@ services:
         value: ""
       - key: FRONTEND_URL
         value: ""
+      - key: MP_ACCESS_TOKEN
+        value: ""
+      - key: MP_PUBLIC_KEY
+        value: ""
+      - key: MP_WEBHOOK_SECRET
+        value: ""
+      - key: MP_NOTIFICATION_URL
+        value: ""
+      - key: MP_SUCCESS_URL
+        value: ""
+      - key: MP_FAILURE_URL
+        value: ""
+      - key: MP_PENDING_URL
+        value: ""
+      - key: MP_MIN_DEPOSIT
+        value: "10"
 
   - type: static_site
     name: kadesh-frontend

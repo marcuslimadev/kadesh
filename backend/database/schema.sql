@@ -139,6 +139,30 @@ CREATE TABLE payments (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Payment intents table (async integrations like Mercado Pago)
+CREATE TABLE payment_intents (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    type VARCHAR(50) NOT NULL,
+    payment_method VARCHAR(50) DEFAULT 'mercadopago',
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(3) DEFAULT 'BRL',
+    status payment_status DEFAULT 'pending',
+    description TEXT,
+    reference_type VARCHAR(50),
+    reference_id UUID,
+    preference_id VARCHAR(255),
+    checkout_url TEXT,
+    notification_url TEXT,
+    gateway_payment_id VARCHAR(255),
+    gateway_reference VARCHAR(255),
+    metadata JSONB DEFAULT '{}',
+    error_message TEXT,
+    processed_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Wallet transactions table
 CREATE TABLE wallet_transactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -260,6 +284,9 @@ CREATE INDEX idx_contracts_status ON contracts(status);
 CREATE INDEX idx_payments_contract_id ON payments(contract_id);
 CREATE INDEX idx_payments_status ON payments(status);
 CREATE INDEX idx_payments_created_at ON payments(created_at DESC);
+CREATE INDEX idx_payment_intents_user_id ON payment_intents(user_id);
+CREATE INDEX idx_payment_intents_status ON payment_intents(status);
+CREATE INDEX idx_payment_intents_preference ON payment_intents(preference_id);
 
 CREATE INDEX idx_wallet_transactions_user_id ON wallet_transactions(user_id);
 CREATE INDEX idx_wallet_transactions_type ON wallet_transactions(type);
@@ -314,6 +341,8 @@ CREATE TRIGGER update_contracts_updated_at BEFORE UPDATE ON contracts
 
 CREATE TRIGGER update_payments_updated_at BEFORE UPDATE ON payments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_payment_intents_updated_at BEFORE UPDATE ON payment_intents
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_reviews_updated_at BEFORE UPDATE ON reviews
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
@@ -346,6 +375,7 @@ COMMENT ON TABLE projects IS 'Projects posted by clients';
 COMMENT ON TABLE bids IS 'Bids submitted by providers for projects';
 COMMENT ON TABLE contracts IS 'Active contracts between clients and providers';
 COMMENT ON TABLE payments IS 'Payment transactions';
+COMMENT ON TABLE payment_intents IS 'Async payment intents (checkout + webhook)';
 COMMENT ON TABLE reviews IS 'Reviews and ratings between users';
 COMMENT ON TABLE messages IS 'Messages between users';
 COMMENT ON TABLE notifications IS 'System notifications for users';

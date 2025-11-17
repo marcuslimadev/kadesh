@@ -443,7 +443,7 @@ npm run lint
 
 ### Prioridade Alta 🔴
 - [ ] Testes automatizados (unitários e E2E)
-- [ ] Integração com Mercado Pago
+- [x] Integração com Mercado Pago (checkout + webhook + depósitos em carteira)
 - [ ] Sistema de email (recuperação de senha, notificações)
 - [ ] Sistema de chat em tempo real
 
