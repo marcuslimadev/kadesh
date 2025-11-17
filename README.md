@@ -31,7 +31,7 @@ Esta é uma plataforma completa e funcional de marketplace para freelancers, inc
 - **bcrypt** - Hash de senhas
 - **Helmet** - Segurança HTTP
 
-## ?? Contas de Teste
+## 👥 Contas de Teste
 
 Use qualquer conta abaixo para validar rapidamente o login (todas usam a senha `kadesh2025`):
 
@@ -45,7 +45,7 @@ Use qualquer conta abaixo para validar rapidamente o login (todas usam a senha `
 | Fornecedor | Ricardo Alves | `ricardo.alves@example.com` |
 | Fornecedor | Juliana Pereira | `juliana.pereira@example.com` |
 
-> ? Essas contas j? est?o migradas para o backend do Render (`https://kadesh-backend.onrender.com`) e funcionam tanto localmente quanto no deploy do Vercel (`https://kadesh-two.vercel.app`).
+> ℹ️ Essas contas já estão migradas para o backend do Render (`https://kadesh-backend.onrender.com`) e funcionam tanto localmente quanto no deploy do Vercel (`https://kadesh-two.vercel.app`).
 
 ## 📦 Instalação e Configuração
 
