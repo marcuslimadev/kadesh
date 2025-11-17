@@ -3,6 +3,8 @@ import { ref, computed } from 'vue'
 import api from '@/services/api'
 import { useToast } from 'vue-toastification'
 
+const VERIFY_TOKEN_TIMEOUT_MS = Number(import.meta.env.VITE_VERIFY_TOKEN_TIMEOUT) || 8000
+
 const getToast = () => {
   if (typeof window === 'undefined') return null
   return useToast()
@@ -103,17 +105,33 @@ export const useAuthStore = defineStore('auth', () => {
   const verifyToken = async () => {
     if (!token.value) return false
 
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), VERIFY_TOKEN_TIMEOUT_MS)
+
     isLoading.value = true
     try {
-      const response = await api.get('/api/auth/verify')
+      const response = await api.get('/api/auth/verify', { signal: controller.signal })
       user.value = response.data.user
       localStorage.setItem('kadesh_user', JSON.stringify(response.data.user))
       return true
     } catch (error) {
+      const isTimeoutOrOffline =
+        error.code === 'ECONNABORTED' ||
+        error.code === 'ERR_NETWORK' ||
+        error.code === 'ERR_CANCELED' ||
+        error.name === 'CanceledError' ||
+        error.message === 'Network Error'
+
+      if (isTimeoutOrOffline) {
+        console.warn('Token verification skipped: backend indisponível ou sem resposta rápida.', error)
+        return false
+      }
+
       console.error('Token verification failed:', error)
       logout()
       return false
     } finally {
+      clearTimeout(timeoutId)
       isLoading.value = false
     }
   }
