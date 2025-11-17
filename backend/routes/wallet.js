@@ -1,0 +1,337 @@
+const express = require('express')
+const db = require('../config/database')
+const auth = require('../middleware/auth')
+
+const router = express.Router()
+
+const DEFAULT_DESCRIPTIONS = {
+  deposit: 'Depósito na carteira',
+  withdrawal: 'Saque solicitado',
+  escrow_hold: 'Valor bloqueado em escrow',
+  escrow_release: 'Liberação de escrow',
+  payment: 'Pagamento de projeto',
+  payment_received: 'Pagamento recebido',
+  payment_sent: 'Pagamento enviado',
+  refund: 'Reembolso',
+  fee: 'Taxa da plataforma'
+}
+
+const parseMetadata = (metadata) => {
+  if (!metadata) return {}
+  if (typeof metadata === 'object') return metadata
+
+  try {
+    return JSON.parse(metadata)
+  } catch (error) {
+    console.error('Failed to parse wallet metadata:', error.message)
+    return {}
+  }
+}
+
+const buildTransactionPayload = (row) => ({
+  id: row.id,
+  user_id: row.user_id,
+  type: row.type,
+  amount: Number(row.amount),
+  balance_after: Number(row.balance_after),
+  description: row.description || DEFAULT_DESCRIPTIONS[row.type] || 'Transação',
+  reference_type: row.reference_type,
+  reference_id: row.reference_id,
+  status: row.status,
+  metadata: parseMetadata(row.metadata),
+  created_at: row.created_at
+})
+
+const getCurrentBalance = async (userId) => {
+  const result = await db.query(
+    `SELECT balance_after FROM wallet_transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1`,
+    [userId]
+  )
+
+  if (result.rows.length === 0) {
+    return 0
+  }
+
+  return Number(result.rows[0].balance_after)
+}
+
+const createWalletTransaction = async (userId, {
+  amount,
+  type,
+  description,
+  referenceType,
+  referenceId,
+  status = 'completed',
+  metadata = {}
+}) => {
+  const numericAmount = Number(amount)
+
+  if (!Number.isFinite(numericAmount) || numericAmount === 0) {
+    const error = new Error('Valor inválido')
+    error.status = 400
+    throw error
+  }
+
+  if (!type) {
+    const error = new Error('Tipo de transação é obrigatório')
+    error.status = 400
+    throw error
+  }
+
+  return db.transaction(async (client) => {
+    const previousResult = await client.query(
+      `SELECT balance_after FROM wallet_transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT 1 FOR UPDATE`,
+      [userId]
+    )
+
+    const previousBalance = previousResult.rows.length ? Number(previousResult.rows[0].balance_after) : 0
+    const balanceAfter = Number((previousBalance + numericAmount).toFixed(2))
+
+    if (balanceAfter < -0.01) {
+      const error = new Error('Saldo insuficiente')
+      error.status = 400
+      throw error
+    }
+
+    const insertResult = await client.query(
+      `INSERT INTO wallet_transactions (
+        user_id, type, amount, balance_after, description, reference_type, reference_id, status, metadata
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      RETURNING *`,
+      [
+        userId,
+        type,
+        numericAmount,
+        balanceAfter,
+        description || DEFAULT_DESCRIPTIONS[type] || null,
+        referenceType || null,
+        referenceId || null,
+        status,
+        JSON.stringify(metadata || {})
+      ]
+    )
+
+    return {
+      transaction: buildTransactionPayload(insertResult.rows[0]),
+      balanceAfter
+    }
+  })
+}
+
+router.get('/balance', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const available = await getCurrentBalance(userId)
+
+    const escrowResult = await db.query(
+      `SELECT
+        COALESCE(SUM(amount) FILTER (WHERE type = 'escrow_hold' AND status IN ('pending', 'completed')), 0) as hold,
+        COALESCE(SUM(amount) FILTER (WHERE type = 'escrow_release' AND status IN ('pending', 'completed')), 0) as release
+      FROM wallet_transactions
+      WHERE user_id = $1`,
+      [userId]
+    )
+
+    const hold = Number(escrowResult.rows[0]?.hold || 0)
+    const release = Number(escrowResult.rows[0]?.release || 0)
+    const escrow = Math.max(0, Math.abs(hold) - Math.abs(release))
+
+    const pendingResult = await db.query(
+      `SELECT
+        COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) as pending_in,
+        COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) as pending_out
+      FROM wallet_transactions
+      WHERE user_id = $1 AND status IN ('pending', 'processing')`,
+      [userId]
+    )
+
+    const pendingIn = Number(pendingResult.rows[0]?.pending_in || 0)
+    const pendingOut = Math.abs(Number(pendingResult.rows[0]?.pending_out || 0))
+    const pending = pendingIn + pendingOut
+
+    res.json({
+      success: true,
+      data: {
+        available: Number(available.toFixed(2)),
+        escrow: Number(escrow.toFixed(2)),
+        pending: Number(pending.toFixed(2)),
+        total: Number((available + escrow + pending).toFixed(2))
+      }
+    })
+  } catch (error) {
+    console.error('Get balance error:', error)
+    res.status(500).json({
+      error: 'Erro ao buscar saldo'
+    })
+  }
+})
+
+router.get('/transactions', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const { type, status, limit = 20, offset = 0, sort = 'desc' } = req.query
+
+    let query = `
+      SELECT
+        id,
+        user_id,
+        type,
+        amount,
+        balance_after,
+        description,
+        reference_type,
+        reference_id,
+        metadata,
+        status,
+        created_at
+      FROM wallet_transactions
+      WHERE user_id = $1
+    `
+
+    const params = [userId]
+    let paramCount = 1
+
+    if (type) {
+      query += ` AND type = $${++paramCount}`
+      params.push(type)
+    }
+
+    if (status) {
+      query += ` AND status = $${++paramCount}`
+      params.push(status)
+    }
+
+    const sortDirection = sort === 'asc' ? 'ASC' : 'DESC'
+    query += ` ORDER BY created_at ${sortDirection} LIMIT $${++paramCount} OFFSET $${++paramCount}`
+    params.push(parseInt(limit, 10), parseInt(offset, 10))
+
+    const result = await db.query(query, params)
+
+    let countQuery = 'SELECT COUNT(*) as total FROM wallet_transactions WHERE user_id = $1'
+    const countParams = [userId]
+
+    if (type) {
+      countQuery += ' AND type = $2'
+      countParams.push(type)
+      if (status) {
+        countQuery += ' AND status = $3'
+        countParams.push(status)
+      }
+    } else if (status) {
+      countQuery += ' AND status = $2'
+      countParams.push(status)
+    }
+
+    const countResult = await db.query(countQuery, countParams)
+    const total = parseInt(countResult.rows[0].total, 10)
+
+    res.json({
+      success: true,
+      data: {
+        transactions: result.rows.map(buildTransactionPayload),
+        pagination: {
+          total,
+          limit: parseInt(limit, 10),
+          offset: parseInt(offset, 10),
+          hasMore: offset + result.rows.length < total
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Get transactions error:', error)
+    res.status(500).json({
+      error: 'Erro ao buscar transações'
+    })
+  }
+})
+
+router.post('/withdraw', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const amount = Number(req.body.amount)
+    const method = req.body.method || 'bank_transfer'
+    const notes = req.body.notes || req.body.details || null
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        error: 'Valor inválido'
+      })
+    }
+
+    const currentBalance = await getCurrentBalance(userId)
+    if (amount > currentBalance) {
+      return res.status(400).json({
+        error: 'Saldo insuficiente'
+      })
+    }
+
+    const { transaction, balanceAfter } = await createWalletTransaction(userId, {
+      amount: -Math.abs(amount),
+      type: 'withdrawal',
+      description: `Saque via ${method.toUpperCase()}`,
+      referenceType: 'withdrawal',
+      status: 'completed',
+      metadata: {
+        method,
+        ...(notes ? { notes } : {})
+      }
+    })
+
+    res.json({
+      success: true,
+      message: 'Solicitação de saque registrada com sucesso',
+      data: {
+        balance: balanceAfter,
+        transaction
+      }
+    })
+  } catch (error) {
+    console.error('Withdraw error:', error)
+    res.status(error.status || 500).json({
+      error: error.status === 400 ? error.message : 'Erro ao processar saque'
+    })
+  }
+})
+
+router.post('/deposit', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId
+    const amount = Number(req.body.amount)
+    const method = req.body.method || 'pix'
+    const reference = req.body.reference || null
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        error: 'Valor inválido'
+      })
+    }
+
+    const { transaction, balanceAfter } = await createWalletTransaction(userId, {
+      amount: Math.abs(amount),
+      type: 'deposit',
+      description: `Depósito via ${method.toUpperCase()}`,
+      referenceType: 'deposit',
+      status: 'completed',
+      metadata: {
+        method,
+        ...(reference ? { reference } : {})
+      }
+    })
+
+    res.json({
+      success: true,
+      message: 'Depósito registrado com sucesso',
+      data: {
+        balance: balanceAfter,
+        transaction
+      }
+    })
+  } catch (error) {
+    console.error('Deposit error:', error)
+    res.status(error.status || 500).json({
+      error: error.status === 400 ? error.message : 'Erro ao registrar depósito'
+    })
+  }
+})
+
+module.exports = router

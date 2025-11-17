@@ -37,7 +37,7 @@ services:
           name: kadesh-postgres
           property: password
       - key: FRONTEND_URL
-        value: https://kadesh-two.vercel.app
+        value: https://kadesh.vercel.app
 
 databases:
   - name: kadesh-postgres
