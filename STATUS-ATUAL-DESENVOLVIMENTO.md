@@ -1,8 +1,8 @@
 # 📊 Status Atual do Desenvolvimento - Kadesh
 
-**Data:** 15 de Novembro de 2025  
-**Versão:** 2.0.0  
-**Branch:** copilot/continue-development-progress
+**Data:** 17 de Novembro de 2025  
+**Versão:** 2.1.0  
+**Branch:** main
 
 ---
 
@@ -62,7 +62,10 @@ Suporte a 5 tipos de ordenação:
 ```
 src/
 ├── views/
-│   └── ProjectDetail.vue         ✅ Sistema de leilão completo
+│   ├── ProjectDetail.vue         ✅ Sistema de leilão completo
+│   ├── admin/
+│   │   ├── AdminLogin.vue       ✅ Login administrativo
+│   │   └── AdminDisputes.vue    ✅ Gerenciamento de disputas
 ├── components/
 │   ├── project/
 │   │   ├── BidCard.vue          ✅ Card de proposta
@@ -72,7 +75,9 @@ src/
 │       └── Pagination.vue        ✅ Paginação
 └── services/
     ├── projectService.js         ✅ CRUD de projetos
-    └── bidService.js             ✅ Gestão de propostas
+    ├── bidService.js             ✅ Gestão de propostas
+    ├── contractService.js        ✅ Gestão de contratos
+    └── adminService.js           ✅ API admin
 ```
 
 ### Backend (Node.js + Express)
@@ -80,9 +85,12 @@ src/
 routes/
 ├── projects.js                   ✅ Endpoints de projetos
 ├── bids.js                       ✅ Endpoints de propostas
+├── contracts.js                  ✅ Contratos (criar, cancelar)
+├── admin.js                      ✅ Admin (listar/resolver disputas)
 ├── auth.js                       ✅ Autenticação
 ├── users.js                      ✅ Usuários
 ├── wallet.js                     ✅ Carteira
+├── payments.js                   ✅ Mercado Pago (checkout + webhook)
 └── notifications.js              ✅ Notificações
 ```
 
@@ -93,9 +101,13 @@ tables:
 - provider_profiles               ✅ Perfis de prestadores
 - projects                        ✅ Projetos
 - bids                           ✅ Propostas
+- contracts                      ✅ Contratos
+- messages                       ✅ Mensagens (incluindo disputas)
 - project_attachments            ✅ Anexos
 - notifications                  ✅ Notificações
 - wallet_transactions            ✅ Transações
+- payment_intents                ✅ Intenções de pagamento MP
+- admin_users                    ✅ Usuários administrativos
 ```
 
 ---
@@ -150,6 +162,28 @@ tables:
    - Checkout criado dinamicamente para depósitos de carteira
    - Webhook com assinatura (X-Signature) atualiza intentos e saldo
    - Configuração simples via variáveis `MP_*` (Render + ambiente local)
+
+9. **Sistema de Contratos**
+   - Criação automática ao aceitar proposta
+   - Cancelamento com reembolso automático
+   - Status tracking (active, completed, cancelled)
+   - Validações de proprietário
+
+10. **Sistema de Disputas**
+   - Criação de disputa por cliente ou prestador
+   - Listagem de disputas com filtros (status, prioridade, tipo)
+   - Detalhamento completo da disputa
+   - Resolução via admin (release/refund/dismiss)
+   - Transações automáticas de carteira
+   - Mensagens sistêmicas como trilha de auditoria
+   - Painel admin completo no frontend
+
+11. **Painel Administrativo**
+   - Autenticação admin separada
+   - Dashboard de disputas
+   - Filtros por status, prioridade, tipo de disputa
+   - Ações de resolução com confirmação
+   - Interface responsiva e intuitiva
 
 ---
 
@@ -219,32 +253,72 @@ node server.js
    - [x] Implementar checkout
    - [x] Configurar webhooks
    - [x] Testar fluxo de pagamento (fluxo de depósito em carteira)
+   - [ ] Validar em produção com usuários reais
 
 ### Prioridade MÉDIA 🟡
 
-4. **Sistema de Escrow**
+4. **Sistema de Contratos e Disputas**
+   - [x] Criar contrato ao aceitar proposta
+   - [x] Cancelamento de contrato
+   - [x] Sistema de disputas (criar, listar, resolver)
+   - [x] Painel admin para gerenciamento de disputas
+   - [x] Ações de resolução (release/refund/dismiss)
+   - [x] Transações automáticas de carteira na resolução
+   - [x] Trilha de mensagens sistêmicas [DISPUTE]/[DISPUTE_CLOSED:*]
+   - [ ] Testes E2E do fluxo completo de disputa
+
+5. **Sistema de Escrow**
    - [ ] Implementar milestones
    - [ ] Bloqueio de fundos
    - [ ] Liberação de pagamentos
 
-5. **Perfis de Prestadores**
+6. **Perfis de Prestadores**
    - [ ] Implementar página de perfil público
    - [ ] Sistema de portfólio (upload de imagens)
    - [ ] Galeria com lightbox
 
-6. **Sistema de Reviews**
+7. **Sistema de Reviews**
    - [ ] Implementar avaliações multidimensionais
    - [ ] Comentários
    - [ ] Moderação
 
 ### Prioridade BAIXA 🟢
 
-7. **Funcionalidades Extras**
+8. **Funcionalidades Extras**
    - [ ] Chat em tempo real (Socket.io)
    - [ ] Notificações push (Service Workers)
    - [ ] Dark mode
    - [ ] Múltiplos idiomas (i18n)
    - [ ] PWA (offline support)
+
+---
+
+## ✅ Implementações Recentes (17/11/2025)
+
+### Sistema Completo de Disputas Admin
+
+**Backend:**
+- ✅ `POST /api/admin/login` - Autenticação administrativa
+- ✅ `GET /api/admin/disputes` - Listagem com filtros (status, prioridade, tipo)
+- ✅ `GET /api/admin/disputes/:id` - Detalhes da disputa
+- ✅ `POST /api/admin/disputes/:id/resolve` - Resolução (release/refund/dismiss)
+- ✅ Transações automáticas de carteira na resolução
+- ✅ Mensagens sistêmicas como trilha: `[DISPUTE]`, `[DISPUTE_CLOSED:release]`, etc
+- ✅ Validações e controle de estado
+
+**Frontend:**
+- ✅ `AdminLogin.vue` - Página de login administrativo
+- ✅ `AdminDisputes.vue` - Dashboard completo de disputas
+- ✅ Filtros por status, prioridade e tipo
+- ✅ Ações de resolução com confirmação
+- ✅ Interface responsiva e intuitiva
+- ✅ Integração com `adminService.js`
+- ✅ Rotas protegidas com middleware admin
+
+**Database:**
+- ✅ Tabela `admin_users` para autenticação separada
+- ✅ Views e queries otimizadas para listagem de disputas
+- ✅ Triggers e constraints para integridade
 
 ---
 
@@ -347,18 +421,27 @@ Para dúvidas ou problemas:
 
 ## 🎉 Conclusão
 
-**Status Geral:** ✅ Sistema de leilão 100% funcional
+**Status Geral:** ✅ Sistema de leilão 100% funcional + Sistema de disputas admin completo
+
+**Último Marco Implementado:** Gerenciamento completo de disputas via painel administrativo (17/11/2025)
 
 **Próximo Marco:** Deploy em produção e testes com usuários reais
 
-**MVP Completo:** ~92% (backend pronto com Render + pagamentos Mercado Pago em produção)
+**MVP Funcional:** ~85% 
+- ✅ Auth, marketplace e leilões completos
+- ✅ Contratos e disputas implementados
+- ⏳ Deploy backend Render + integração MP em produção
+- ⏳ Testes beta com clientes e fornecedores
 
-**Plataforma Completa:** ~40% (falta escrow, reviews, perfis, admin)
+**Plataforma Completa:** ~40%
+- ⏳ Milestones/escrow com liberação segura
+- ⏳ Provider profiles + reviews com portfólio
+- ✅ Painel admin e módulo de disputas (COMPLETO)
 
 ---
 
 **Desenvolvido com ❤️ para a plataforma Kadesh**
 
-**Última Atualização:** 15 de Novembro de 2025  
+**Última Atualização:** 17 de Novembro de 2025  
 **Autor:** GitHub Copilot Agent  
 **Repositório:** https://github.com/marcuslimadev/kadesh
