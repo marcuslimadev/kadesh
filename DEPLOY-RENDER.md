@@ -21,6 +21,14 @@ Passos rápidos
    - `FRONTEND_URLS` = https://<SEU_FRONTEND_DOMINIO>
    - `FRONTEND_URL` = https://<SEU_FRONTEND_DOMINIO>
    - `MAX_REQUESTS_PER_MINUTE` = 100
+   - `MP_ACCESS_TOKEN` = token do Mercado Pago (sandbox ou produção)
+   - `MP_PUBLIC_KEY` = public key do Mercado Pago (usada no frontend futuramente)
+   - `MP_WEBHOOK_SECRET` = secret configurado no painel do Mercado Pago → Webhooks
+   - `MP_NOTIFICATION_URL` = https://<SEU_BACKEND>/api/payments/mercadopago/webhook
+   - `MP_SUCCESS_URL` = https://<SEU_FRONTEND>/wallet?payment=success
+   - `MP_FAILURE_URL` = https://<SEU_FRONTEND>/wallet?payment=failure
+   - `MP_PENDING_URL` = https://<SEU_FRONTEND>/wallet?payment=pending
+   - `MP_MIN_DEPOSIT` = 10 (ou o mínimo desejado)
 
 5. (Opcional) No serviço `kadesh-frontend` → **Environment** → adicione:
 
