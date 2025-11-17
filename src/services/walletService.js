@@ -42,11 +42,12 @@ export const walletService = {
   /**
    * Create withdrawal request
    */
-  async withdraw(amount, method = 'bank_transfer') {
+  async withdraw(amount, method = 'bank_transfer', notes = '') {
     try {
       const response = await api.post('/api/wallet/withdraw', {
         amount,
-        method
+        method,
+        notes
       })
       return {
         success: true,
@@ -64,10 +65,12 @@ export const walletService = {
   /**
    * Create deposit
    */
-  async deposit(amount) {
+  async deposit(amount, method = 'pix', reference = '') {
     try {
       const response = await api.post('/api/wallet/deposit', {
-        amount
+        amount,
+        method,
+        reference
       })
       return {
         success: true,

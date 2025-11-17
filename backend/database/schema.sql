@@ -139,6 +139,21 @@ CREATE TABLE payments (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Wallet transactions table
+CREATE TABLE wallet_transactions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    type VARCHAR(50) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    balance_after DECIMAL(10,2) NOT NULL,
+    description TEXT,
+    reference_type VARCHAR(50),
+    reference_id UUID,
+    metadata JSONB DEFAULT '{}',
+    status VARCHAR(20) DEFAULT 'completed',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Reviews table
 CREATE TABLE reviews (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -245,6 +260,11 @@ CREATE INDEX idx_contracts_status ON contracts(status);
 CREATE INDEX idx_payments_contract_id ON payments(contract_id);
 CREATE INDEX idx_payments_status ON payments(status);
 CREATE INDEX idx_payments_created_at ON payments(created_at DESC);
+
+CREATE INDEX idx_wallet_transactions_user_id ON wallet_transactions(user_id);
+CREATE INDEX idx_wallet_transactions_type ON wallet_transactions(type);
+CREATE INDEX idx_wallet_transactions_created_at ON wallet_transactions(created_at DESC);
+CREATE INDEX idx_wallet_transactions_reference ON wallet_transactions(reference_type, reference_id);
 
 CREATE INDEX idx_reviews_contract_id ON reviews(contract_id);
 CREATE INDEX idx_reviews_reviewed_id ON reviews(reviewed_id);

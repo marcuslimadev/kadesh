@@ -1,5 +1,6 @@
 # Render Deploy Configuration
 name: kadesh-backend
+rootDir: backend
 type: web
 env: node
 region: oregon
