@@ -61,7 +61,7 @@ MAX_REQUESTS_PER_MINUTE=100
 
 1. Clique em **"Create Web Service"**
 2. Aguarde o deploy automático (3-5 minutos)
-3. Sua API estará em: `https://kadesh-backend.onrender.com`
+3. Sua API estará em: `https://kadesh-2.onrender.com`
 
 ---
 
@@ -139,7 +139,7 @@ Você também pode usar:
 Adicione em **"Environment Variables"**:
 
 ```bash
-VITE_API_URL=https://kadesh-backend.onrender.com
+VITE_API_URL=https://kadesh-2.onrender.com
 VITE_APP_NAME=Kadesh
 VITE_APP_DESCRIPTION=Plataforma de freelancers profissionais
 VITE_ENABLE_NOTIFICATIONS=true
@@ -200,7 +200,7 @@ LOG_LEVEL=info
 ### Frontend (.env.production ou Vercel Environment)
 
 ```bash
-VITE_API_URL=https://kadesh-backend.onrender.com
+VITE_API_URL=https://kadesh-2.onrender.com
 VITE_APP_NAME=Kadesh
 VITE_APP_DESCRIPTION=Plataforma de freelancers profissionais
 VITE_ENABLE_NOTIFICATIONS=true
@@ -310,7 +310,7 @@ psql $DATABASE_URL -c "SELECT 1"
 
 1. Verifique CORS no backend
 2. Confirme `VITE_API_URL` correto
-3. Teste API diretamente: `curl https://kadesh-backend.onrender.com/health`
+3. Teste API diretamente: `curl https://kadesh-2.onrender.com/health`
 
 ### Build falha no Vercel
 
@@ -407,7 +407,7 @@ psql $DATABASE_URL < backup-20250115.sql
 Sua aplicação está no ar! 🚀
 
 - **Frontend:** https://seu-app.vercel.app
-- **Backend API:** https://kadesh-backend.onrender.com
+- **Backend API:** https://kadesh-2.onrender.com
 - **Admin Panel:** https://seu-app.vercel.app/admin/login
 
 ### Próximos Passos

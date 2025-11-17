@@ -45,7 +45,7 @@ Use qualquer conta abaixo para validar rapidamente o login (todas usam a senha `
 | Fornecedor | Ricardo Alves | `ricardo.alves@example.com` |
 | Fornecedor | Juliana Pereira | `juliana.pereira@example.com` |
 
-> ℹ️ Essas contas já estão migradas para o backend do Render (`https://kadesh-backend.onrender.com`) e funcionam tanto localmente quanto no deploy do Vercel (`https://kadesh-two.vercel.app`).
+> ℹ️ Essas contas já estão migradas para o backend do Render (`https://kadesh-2.onrender.com`) e funcionam tanto localmente quanto no deploy do Vercel (`https://kadesh-two.vercel.app`).
 
 ## 📦 Instalação e Configuração
 
@@ -208,7 +208,7 @@ VITE_ENABLE_NOTIFICATIONS=true
 
 ### URLs em Produção
 - **Frontend:** https://seu-app.vercel.app
-- **Backend API:** https://kadesh-backend.onrender.com
+- **Backend API:** https://kadesh-2.onrender.com
 - **Admin Panel:** https://seu-app.vercel.app/admin/login
 
 ## 🎨 Design System

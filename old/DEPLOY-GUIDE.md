@@ -73,7 +73,7 @@ MAX_REQUESTS_PER_MINUTE = 100
 ### 5. Deploy
 - Clicar **Create Web Service**
 - Aguardar deploy (3-5 minutos)
-- URL final: `https://kadesh-backend.onrender.com`
+- URL final: `https://kadesh-2.onrender.com`
 
 ## 🌐 DEPLOY NO VERCEL (Frontend)
 
@@ -94,7 +94,7 @@ MAX_REQUESTS_PER_MINUTE = 100
 
 ### 4. Environment Variables
 ```
-VITE_API_URL = https://kadesh-backend.onrender.com
+VITE_API_URL = https://kadesh-2.onrender.com
 
 VITE_APP_NAME = Kadesh
 
@@ -116,7 +116,7 @@ VITE_DEBUG_MODE = false
 Testar endpoints:
 ```bash
 # Health check
-curl https://kadesh-backend.onrender.com/health
+curl https://kadesh-2.onrender.com/health
 
 # Resposta esperada:
 {
@@ -147,9 +147,9 @@ node scripts/migrate-data.js
 ## 📱 URLs FINAIS
 
 - **🎨 Frontend**: https://kadesh-frontend.vercel.app
-- **🚀 Backend**: https://kadesh-backend.onrender.com
+- **🚀 Backend**: https://kadesh-2.onrender.com
 - **🗄️ Database**: Render PostgreSQL (interno)
-- **📊 API Docs**: https://kadesh-backend.onrender.com/health
+- **📊 API Docs**: https://kadesh-2.onrender.com/health
 
 ## 🎉 SISTEMA COMPLETO
 

@@ -5,7 +5,7 @@ import { useToast } from 'vue-toastification'
 // Toast instance (guarded for SSR/build time)
 const toast = typeof window !== 'undefined' ? useToast() : null
 
-const DEFAULT_API_URL = 'https://kadesh-backend.onrender.com'
+const DEFAULT_API_URL = 'https://kadesh-2.onrender.com'
 const DEFAULT_API_TIMEOUT = 30000
 
 const resolveBaseUrl = () => {
