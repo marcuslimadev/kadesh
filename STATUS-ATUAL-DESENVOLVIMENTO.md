@@ -427,16 +427,28 @@ Para dúvidas ou problemas:
 
 **Próximo Marco:** Deploy em produção e testes com usuários reais
 
-**MVP Funcional:** ~85% 
-- ✅ Auth, marketplace e leilões completos
-- ✅ Contratos e disputas implementados
-- ⏳ Deploy backend Render + integração MP em produção
+**MVP Funcional:** ~90% 
+- ✅ Auth completo (login, registro, JWT)
+- ✅ Marketplace (projetos, busca, filtros, categorias)
+- ✅ Sistema de leilões (propostas, timer, ordenação, aceitação)
+- ✅ Contratos (criação automática, cancelamento)
+- ✅ Disputas completas (criar, listar, resolver)
+- ✅ Painel Admin (autenticação, gerenciamento de disputas)
+- ✅ Wallet (transações, saldo, histórico)
+- ✅ Mercado Pago (checkout + webhook funcionais)
+- ✅ Notificações sistema completo
+- ⏳ Deploy backend Render em produção
 - ⏳ Testes beta com clientes e fornecedores
 
-**Plataforma Completa:** ~40%
-- ⏳ Milestones/escrow com liberação segura
-- ⏳ Provider profiles + reviews com portfólio
-- ✅ Painel admin e módulo de disputas (COMPLETO)
+**Plataforma Completa:** ~50%
+- ✅ Core do marketplace funcional
+- ✅ Sistema de disputas admin
+- ✅ Pagamentos integrados
+- ⏳ Milestones/escrow com liberação segura (15%)
+- ⏳ Sistema de reviews completo (10%)
+- ⏳ Provider profiles públicos + portfólio (10%)
+- ⏳ Chat em tempo real com Socket.io (10%)
+- ⏳ Analytics e dashboard avançado (5%)
 
 ---
 

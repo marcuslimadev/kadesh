@@ -335,30 +335,30 @@ const newsletterEmail = ref('')
 const featuredProjects = ref([])
 const loadingProjects = ref(false)
 const progressSnapshot = {
-  mvp: 85,
-  platform: 40,
+  mvp: 90,
+  platform: 50,
   referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
   lastUpdated: '17/11/2025',
   nextMilestone: 'Deploy em produção e testes com usuários reais',
   blocks: [
     {
       label: 'MVP Funcional',
-      value: 85,
-      description: 'Auth, marketplace e leilões já estão entregues. Falta ativar o backend definitivo e pagamentos.',
+      value: 90,
+      description: 'Auth, marketplace, leilões, contratos, disputas admin, wallet e pagamentos implementados.',
       pending: [
         'Deploy do backend no Render com banco PostgreSQL',
-        'Integração completa com Mercado Pago (checkout + webhook)',
-        'Testes beta com clientes e fornecedores'
+        'Testes beta com clientes e fornecedores reais'
       ]
     },
     {
       label: 'Plataforma Completa',
-      value: 40,
-      description: 'Escrow, reviews, perfis completos e painel admin estão em desenvolvimento.',
+      value: 50,
+      description: 'Metade das features avançadas prontas. Falta escrow, reviews completo, profiles e chat.',
       pending: [
         'Implementar milestones/escrow com liberação segura',
-        'Publicar provider profiles + reviews com portfólio',
-        'Painel admin e módulo de disputas (COMPLETO ✅)'
+        'Sistema de reviews completo com moderação',
+        'Provider profiles públicos + portfólio',
+        'Chat em tempo real (Socket.io)'
       ]
     }
   ]
