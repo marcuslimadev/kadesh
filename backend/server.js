@@ -26,7 +26,9 @@ const defaultFrontends = [
   'http://localhost:3000',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  'https://kadesh-frontend.onrender.com'
+  'https://kadesh-frontend.onrender.com',
+  // Primary vanity domain for the production frontend
+  'https://kadesh.onrender.com'
 ];
 
 const envList = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || '';
