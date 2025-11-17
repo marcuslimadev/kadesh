@@ -38,6 +38,22 @@ services:
           property: password
       - key: FRONTEND_URL
         value: https://kadesh-two.vercel.app
+      - key: MP_ACCESS_TOKEN
+        value: your-access-token-here
+      - key: MP_PUBLIC_KEY
+        value: your-public-key-here
+      - key: MP_WEBHOOK_SECRET
+        value: webhook-secret-here
+      - key: MP_NOTIFICATION_URL
+        value: https://kadesh-backend.onrender.com/api/payments/mercadopago/webhook
+      - key: MP_SUCCESS_URL
+        value: https://kadesh-two.vercel.app/wallet?payment=success
+      - key: MP_FAILURE_URL
+        value: https://kadesh-two.vercel.app/wallet?payment=failure
+      - key: MP_PENDING_URL
+        value: https://kadesh-two.vercel.app/wallet?payment=pending
+      - key: MP_MIN_DEPOSIT
+        value: "10"
 
 databases:
   - name: kadesh-postgres

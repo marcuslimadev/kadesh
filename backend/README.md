@@ -43,6 +43,18 @@ JWT_SECRET=your_super_secure_jwt_secret_here
 PORT=3000
 NODE_ENV=production
 FRONTEND_URL=https://your-frontend-url.vercel.app
+FRONTEND_URLS=https://your-frontend-url.vercel.app,http://localhost:5173
+MAX_REQUESTS_PER_MINUTE=100
+
+# Mercado Pago
+MP_ACCESS_TOKEN=TEST-your-access-token
+MP_PUBLIC_KEY=TEST-your-public-key
+MP_WEBHOOK_SECRET=change-me
+MP_NOTIFICATION_URL=https://api.your-domain.com/api/payments/mercadopago/webhook
+MP_SUCCESS_URL=https://your-frontend-url.vercel.app/wallet?payment=success
+MP_FAILURE_URL=https://your-frontend-url.vercel.app/wallet?payment=failure
+MP_PENDING_URL=https://your-frontend-url.vercel.app/wallet?payment=pending
+MP_MIN_DEPOSIT=10
 ```
 
 ### Banco de Dados
@@ -80,6 +92,11 @@ psql $DATABASE_URL -f database/schema.sql
 - `PUT /api/users/profile` - Atualizar perfil
 - `GET /api/users/:id/public` - Perfil público
 - `GET /api/users/providers/search` - Buscar prestadores
+
+### Pagamentos
+- `POST /api/payments/deposit` - Cria checkout seguro do Mercado Pago
+- `GET /api/payments/intents` - Lista intentos do usuário (pendentes/completos)
+- `POST /api/payments/mercadopago/webhook` - Webhook para o Mercado Pago (não requer auth)
 
 ## 🚀 Deploy no Render
 

@@ -35,6 +35,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const isInitializing = ref(true)
+const INITIALIZATION_FALLBACK_MS = 2000
 
 // Compute whether to show navigation
 const showNavigation = computed(() => {
@@ -42,18 +43,30 @@ const showNavigation = computed(() => {
   return !hideNavRoutes.includes(route.name)
 })
 
+const finishInitialization = () => {
+  if (!isInitializing.value) return
+  isInitializing.value = false
+}
+
 // Initialize app
-onMounted(async () => {
-  try {
-    // Verify token if exists
-    if (authStore.token) {
-      await authStore.verifyToken()
-    }
-  } catch (error) {
-    console.error('App initialization error:', error)
-  } finally {
-    isInitializing.value = false
+onMounted(() => {
+  const fallbackTimer = setTimeout(finishInitialization, INITIALIZATION_FALLBACK_MS)
+
+  if (!authStore.token) {
+    clearTimeout(fallbackTimer)
+    finishInitialization()
+    return
   }
+
+  authStore
+    .verifyToken()
+    .catch((error) => {
+      console.error('App initialization error:', error)
+    })
+    .finally(() => {
+      clearTimeout(fallbackTimer)
+      finishInitialization()
+    })
 })
 </script>
 

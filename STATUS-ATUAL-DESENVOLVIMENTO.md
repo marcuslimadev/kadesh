@@ -146,6 +146,11 @@ tables:
    - Gestão de propostas enviadas
    - Filtros e ordenação
 
+8. **Pagamentos com Mercado Pago**
+   - Checkout criado dinamicamente para depósitos de carteira
+   - Webhook com assinatura (X-Signature) atualiza intentos e saldo
+   - Configuração simples via variáveis `MP_*` (Render + ambiente local)
+
 ---
 
 ## 🚀 Como Executar Localmente
@@ -211,9 +216,9 @@ node server.js
    - [ ] Validar timer e ordenação de propostas
 
 3. **Integração Mercado Pago**
-   - [ ] Implementar checkout
-   - [ ] Configurar webhooks
-   - [ ] Testar fluxo de pagamento
+   - [x] Implementar checkout
+   - [x] Configurar webhooks
+   - [x] Testar fluxo de pagamento (fluxo de depósito em carteira)
 
 ### Prioridade MÉDIA 🟡
 
@@ -346,7 +351,7 @@ Para dúvidas ou problemas:
 
 **Próximo Marco:** Deploy em produção e testes com usuários reais
 
-**MVP Completo:** ~85% (falta principalmente backend deploy e Mercado Pago)
+**MVP Completo:** ~92% (backend pronto com Render + pagamentos Mercado Pago em produção)
 
 **Plataforma Completa:** ~40% (falta escrow, reviews, perfis, admin)
 
