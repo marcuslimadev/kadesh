@@ -15,9 +15,17 @@ const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payments');
 const contractRoutes = require('./routes/contracts');
 const reviewRoutes = require('./routes/reviews');
+const milestoneRoutes = require('./routes/milestones');
+const messageRoutes = require('./routes/messages');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// HTTP server + Socket.io
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const { setIO } = require('./utils/socket');
 
 // Security middleware
 app.use(helmet());
@@ -102,6 +110,8 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/contracts', contractRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/milestones', milestoneRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
@@ -199,10 +209,55 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// Setup Socket.io
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET','POST']
+  }
+});
+
+setIO(io);
+
+const jwt = require('jsonwebtoken');
+const db = require('./config/database');
+
+io.on('connection', async (socket) => {
+  try {
+    const { token } = socket.handshake.auth || socket.handshake.query || {};
+    if (!token) {
+      socket.disconnect(true);
+      return;
+    }
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    socket.data.user = user;
+
+    socket.on('join:contract', async (contractId) => {
+      try {
+        const { userId } = socket.data.user;
+        const result = await db.query(
+          'SELECT 1 FROM contracts WHERE id = $1 AND (client_id = $2 OR provider_id = $2) LIMIT 1',
+          [contractId, userId]
+        );
+        if (result.rows.length === 0) return;
+        socket.join(`contract:${contractId}`);
+      } catch {}
+    });
+
+    socket.on('typing', (payload) => {
+      const { contract_id } = payload || {};
+      if (!contract_id) return;
+      socket.to(`contract:${contract_id}`).emit('typing', { from: socket.data.user.userId, at: Date.now() });
+    });
+  } catch (err) {
+    socket.disconnect(true);
+  }
+});
+
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Kadesh API running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
 });
-
 module.exports = app;

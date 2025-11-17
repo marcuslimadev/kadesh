@@ -74,6 +74,20 @@
           </div>
         </section>
 
+        <!-- Chat -->
+        <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <ChatBox :contract-id="contract.id" />
+        </section>
+
+        <!-- Milestones Section -->
+        <section v-if="['in_progress', 'completed', 'accepted'].includes(contract.status)">
+          <MilestoneList
+            :contract-id="contract.id"
+            :client-id="contract.client_id"
+            :provider-id="contract.provider_id"
+          />
+        </section>
+
         <section v-if="contract.status === 'accepted'" class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
           <h2 class="text-lg font-semibold text-gray-900 mb-4">Avaliar parceiro</h2>
           <div class="space-y-4">
@@ -100,6 +114,8 @@ import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
 import { useToast } from 'vue-toastification'
+import MilestoneList from '@/components/milestone/MilestoneList.vue'
+import ChatBox from '@/components/chat/ChatBox.vue'
 
 const route = useRoute()
 const router = useRouter()

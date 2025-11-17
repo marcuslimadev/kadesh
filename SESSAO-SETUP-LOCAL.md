@@ -120,12 +120,14 @@ Get-Process -Id (Get-NetTCPConnection -LocalPort 3001).OwningProcess
 ### Rodar Backend (Porta 3001)
 ```powershell
 cd c:\xampp\htdocs\kadesh\backend
-npm start
+$env:PORT=3001
+npm run dev
 ```
 
 ### Rodar Frontend (Porta 3000)
 ```powershell
 cd c:\xampp\htdocs\kadesh
+$env:VITE_API_URL="http://localhost:3001"
 npm run dev
 ```
 
@@ -153,6 +155,51 @@ if ($proc) {
     Write-Host "✅ Processo na porta $port encerrado"
 }
 ```
+
+## Novidades: Milestones (Escrow) + Chat em Tempo Real
+
+### 1) Milestones
+- Criar milestones no contrato (Cliente)
+- Fluxo: Provider envia → Cliente aprova/rejeita → Cliente libera pagamento
+- Telas/arquivos:
+  - `src/components/milestone/MilestoneForm.vue`
+  - `src/components/milestone/MilestoneList.vue`
+  - `src/components/milestone/MilestoneCard.vue`
+  - Integrado em `src/views/ContractDetail.vue`
+
+APIs:
+- `POST /api/milestones` { contract_id, title, description?, amount, due_date? }
+- `GET /api/milestones/contract/:contractId`
+- `PUT /api/milestones/:id/submit|approve|reject|release`
+- `DELETE /api/milestones/:id`
+
+### 2) Chat em Tempo Real
+- Persistência em `messages`
+- Socket.io com salas por contrato (`contract:<id>`) e indicador de digitando
+- Telas/arquivos:
+  - `src/components/chat/ChatBox.vue`
+  - Integrado em `src/views/ContractDetail.vue`
+
+APIs:
+- `GET /api/messages/contract/:contractId`
+- `POST /api/messages` { contract_id, content }
+
+Socket:
+- Handshake com JWT (usa token do login)
+- Eventos: `join:contract`, `message:new`, `typing`
+
+### Instalação de dependências
+```powershell
+cd c:\xampp\htdocs\kadesh\backend
+npm install
+
+cd c:\xampp\htdocs\kadesh
+npm install
+```
+
+### Dica de ambiente
+- Setar `VITE_API_URL` para `http://localhost:3001` antes de `npm run dev` no frontend
+- Setar `PORT=3001` no backend antes de `npm run dev`
 
 ## Referências
 - **Database**: PostgreSQL 18 @ `localhost:5432`
