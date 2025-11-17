@@ -21,16 +21,25 @@ app.use(helmet());
 app.use(compression());
 
 // CORS configuration
-const allowedOrigins = (process.env.FRONTEND_URLS || process.env.FRONTEND_URL || 'http://localhost:3000')
-  .split(',')
+// Add a safe fallback list that includes common dev hosts and the current Vercel frontend
+const defaultFrontends = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://kadesh-seven.vercel.app'
+];
+
+const envList = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || '';
+const allowedOrigins = (envList ? envList.split(',') : [])
+  .concat(defaultFrontends)
   .map(s => s.trim())
-  .filter(Boolean);
+  .filter((v, i, a) => v && a.indexOf(v) === i);
 
 app.use(cors({
   origin: function(origin, callback) {
     // Allow non-browser tools (curl, Postman) which have no origin
     if (!origin) return callback(null, true);
-    // If no allowedOrigins configured, allow all origins (useful for local/dev)
+    // If allowedOrigins not configured (shouldn't happen), allow all origins for dev convenience
     if (allowedOrigins.length === 0) return callback(null, true);
     if (allowedOrigins.indexOf(origin) !== -1) {
       return callback(null, true);
@@ -108,7 +117,7 @@ process.on('SIGTERM', () => {
 app.listen(PORT, () => {
   console.log(`🚀 Kadesh API running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🌐 CORS origin: ${process.env.FRONTEND_URL}`);
+  console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
 });
 
 module.exports = app;
