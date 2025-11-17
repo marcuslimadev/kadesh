@@ -88,7 +88,7 @@
 #### **Infraestrutura**
 - ✅ Repositório GitHub (`marcuslimadev/kadesh`)
 - ✅ Deploy Vercel configurado (frontend em `https://kadesh-seven.vercel.app`)
-- ✅ Backend Render preparado (`https://kadesh-backend.onrender.com`)
+- ✅ Backend Render preparado (`https://kadesh-2.onrender.com`)
 - ✅ Build otimizado (Terser, chunks separados: vue, ui, utils)
 - ✅ Env vars configuradas (`.env.production.frontend`, `.env.production`)
 
