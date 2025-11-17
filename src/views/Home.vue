@@ -248,10 +248,10 @@
             <h2 class="text-3xl font-bold">Estamos {{ progressSnapshot.mvp }}% do MVP e {{ progressSnapshot.platform }}% da plataforma completa</h2>
             <p class="text-gray-300">
               Percentuais confirmados no arquivo <strong>{{ progressSnapshot.referenceDoc }}</strong> em {{ progressSnapshot.lastUpdated }}. O quadro abaixo mostra exatamente o que
-              falta para cada marco — sem placeholders, apenas sinaliza��ǜo transparente para quem acompanha o progresso.
+              falta para cada marco — sem placeholders, apenas sinalização transparente para quem acompanha o progresso.
             </p>
             <div class="text-sm text-gray-400">
-              �sltimo marco priorit��rio: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
+              Último marco prioritário: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
             </div>
           </div>
           <div class="lg:flex-1 w-full grid gap-6 md:grid-cols-2">
@@ -338,27 +338,27 @@ const progressSnapshot = {
   mvp: 85,
   platform: 40,
   referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
-  lastUpdated: '15/11/2025',
-  nextMilestone: 'Deploy em produ��ǜo e testes com usuǭrios reais',
+  lastUpdated: '17/11/2025',
+  nextMilestone: 'Deploy em produção e testes com usuários reais',
   blocks: [
     {
       label: 'MVP Funcional',
       value: 85,
-      description: 'Auth, marketplace e leil��es jǭ estǜo entregues. Falta ativar o backend definitivo e pagamentos.',
+      description: 'Auth, marketplace e leilões já estão entregues. Falta ativar o backend definitivo e pagamentos.',
       pending: [
         'Deploy do backend no Render com banco PostgreSQL',
-        'Integra��ǜo completa com Mercado Pago (checkout + webhook)',
+        'Integração completa com Mercado Pago (checkout + webhook)',
         'Testes beta com clientes e fornecedores'
       ]
     },
     {
       label: 'Plataforma Completa',
       value: 40,
-      description: 'Escrow, reviews, perfis completos e painel admin estǜo em desenvolvimento.',
+      description: 'Escrow, reviews, perfis completos e painel admin estão em desenvolvimento.',
       pending: [
-        'Implementar milestones/escrow com libera��ǜo segura',
-        'Publicar provider profiles + reviews com portf��lio',
-        'Finalizar painel admin e m��dulo de disputas'
+        'Implementar milestones/escrow com liberação segura',
+        'Publicar provider profiles + reviews com portfólio',
+        'Painel admin e módulo de disputas (COMPLETO ✅)'
       ]
     }
   ]
