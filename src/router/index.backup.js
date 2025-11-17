@@ -13,9 +13,6 @@ const MyBids = () => import('../views/MyBids.vue')
 const ProviderProfile = () => import('../views/ProviderProfile.vue')
 const Wallet = () => import('../views/Wallet.vue')
 const Notifications = () => import('../views/Notifications.vue')
-const Settings = () => import('../views/Settings.vue')
-const Contracts = () => import('../views/Contracts.vue')
-const ContractDetail = () => import('../views/ContractDetail.vue')
 
 // Admin views
 const AdminLogin = () => import('../views/admin/AdminLogin.vue')
@@ -90,24 +87,6 @@ const routes = [
     path: '/wallet',
     name: 'wallet',
     component: Wallet,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/contracts',
-    name: 'contracts',
-    component: Contracts,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/contracts/:id',
-    name: 'contract-detail',
-    component: ContractDetail,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/settings',
-    name: 'settings',
-    component: Settings,
     meta: { requiresAuth: true }
   },
   {

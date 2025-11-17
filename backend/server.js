@@ -13,6 +13,8 @@ const walletRoutes = require('./routes/wallet');
 const notificationRoutes = require('./routes/notifications');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payments');
+const contractRoutes = require('./routes/contracts');
+const reviewRoutes = require('./routes/reviews');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -97,6 +99,8 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/contracts', contractRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
