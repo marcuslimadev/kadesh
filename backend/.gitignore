@@ -1,5 +1,8 @@
 node_modules/
 dist/
+.render-build/
+.cache/
+.vercel/
 .env
 .env.local
 .env.production
@@ -23,14 +26,11 @@ yarn-error.log*
 Thumbs.db
 .DS_Store
 
-# Temporary files
-*.tmp
-*.temp
-.cache/
-
-# Coverage directory used by tools like istanbul
+# Coverage / temporary files
 coverage/
 *.lcov
+*.tmp
+*.temp
 
 # Runtime data
 pids
@@ -44,4 +44,3 @@ pids
 
 # Build outputs
 build/
-dist/
