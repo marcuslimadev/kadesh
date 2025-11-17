@@ -9,11 +9,13 @@ const auth = require('../middleware/auth');
  */
 router.get('/', auth, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     const contracts = await db.query(
       `SELECT 
-        c.*,
+        c.id, c.project_id, c.client_id, c.provider_id, c.bid_id,
+        c.amount, c.start_date, c.end_date, c.actual_completion_date,
+        c.status, c.created_at, c.updated_at,
         p.title as project_title,
         p.budget as project_budget,
         u_client.name as client_name,
@@ -48,11 +50,13 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     const contract = await db.query(
       `SELECT 
-        c.*,
+        c.id, c.project_id, c.client_id, c.provider_id, c.bid_id,
+        c.amount, c.start_date, c.end_date, c.actual_completion_date,
+        c.status, c.created_at, c.updated_at,
         p.title as project_title,
         p.description as project_description,
         p.budget as project_budget,
@@ -97,16 +101,16 @@ router.get('/:id', auth, async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { bid_id } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
-    // Verify bid exists and is accepted
+    // Verify bid exists and is accepted and fetch project client
     const bid = await db.query(
-      `SELECT b.*, p.budget, u.id as provider_id
-      FROM bids b
-      JOIN projects p ON b.project_id = p.id
-      JOIN users u ON u.id = $1
-      WHERE b.id = $2 AND b.status = 'accepted'`,
-      [userId, bid_id]
+      `SELECT b.id, b.project_id, b.provider_id, b.amount, b.status,
+              p.client_id
+       FROM bids b
+       JOIN projects p ON b.project_id = p.id
+       WHERE b.id = $1 AND b.status = 'accepted'`,
+      [bid_id]
     );
 
     if (bid.rows.length === 0) {
@@ -114,6 +118,11 @@ router.post('/', auth, async (req, res) => {
         success: false,
         message: 'Bid não encontrado ou não está aceito'
       });
+    }
+
+    // Only the project client can create the contract
+    if (bid.rows[0].client_id !== userId) {
+      return res.status(403).json({ success: false, message: 'Apenas o cliente pode criar o contrato' });
     }
 
     // Check if contract already exists for this bid
@@ -129,12 +138,18 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    // Create contract
+    // Create contract (status in_progress)
     const contract = await db.query(
-      `INSERT INTO contracts (bid_id, project_id, client_id, provider_id, status, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, 'active', NOW(), NOW())
-      RETURNING *`,
-      [bid_id, bid.rows[0].project_id, bid.rows[0].client_id, bid.rows[0].provider_id]
+      `INSERT INTO contracts (bid_id, project_id, client_id, provider_id, amount, status, start_date, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, 'in_progress', NOW(), NOW(), NOW())
+       RETURNING *`,
+      [
+        bid_id,
+        bid.rows[0].project_id,
+        bid.rows[0].client_id,
+        bid.rows[0].provider_id,
+        bid.rows[0].amount
+      ]
     );
 
     // Lock payment (optional - for future escrow implementation)
@@ -162,11 +177,11 @@ router.post('/', auth, async (req, res) => {
 router.put('/:id/mark-complete', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
-    // Verify user is provider
+    // Verify user is provider and contract is in_progress
     const contract = await db.query(
-      'SELECT * FROM contracts WHERE id = $1 AND provider_id = $2',
+      `SELECT * FROM contracts WHERE id = $1 AND provider_id = $2 AND status = 'in_progress'`,
       [id, userId]
     );
 
@@ -177,11 +192,11 @@ router.put('/:id/mark-complete', auth, async (req, res) => {
       });
     }
 
-    // Update contract status
+    // Update contract status to completed and set actual_completion_date
     const updated = await db.query(
-      `UPDATE contracts SET status = 'completed', updated_at = NOW()
-      WHERE id = $1
-      RETURNING *`,
+      `UPDATE contracts SET status = 'completed', actual_completion_date = NOW(), updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
       [id]
     );
 
@@ -207,11 +222,11 @@ router.put('/:id/mark-complete', auth, async (req, res) => {
 router.put('/:id/accept-completion', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
-    // Verify user is client
+    // Verify user is client and contract is completed
     const contract = await db.query(
-      'SELECT * FROM contracts WHERE id = $1 AND client_id = $2',
+      `SELECT * FROM contracts WHERE id = $1 AND client_id = $2 AND status = 'completed'`,
       [id, userId]
     );
 
@@ -222,11 +237,11 @@ router.put('/:id/accept-completion', auth, async (req, res) => {
       });
     }
 
-    // Update contract status
+    // Set end_date (status already completed)
     const updated = await db.query(
-      `UPDATE contracts SET status = 'accepted', updated_at = NOW()
-      WHERE id = $1
-      RETURNING *`,
+      `UPDATE contracts SET end_date = NOW(), updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
       [id]
     );
 
@@ -250,13 +265,13 @@ router.put('/:id/accept-completion', auth, async (req, res) => {
 
 /**
  * PUT /api/contracts/:id/dispute
- * File dispute on contract
+ * File dispute on contract: cria uma mensagem sistêmica e mantém status
  */
 router.put('/:id/dispute', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const { reason } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     // Verify user is involved in contract
     const contract = await db.query(
@@ -271,20 +286,16 @@ router.put('/:id/dispute', auth, async (req, res) => {
       });
     }
 
-    // Update contract status
-    const updated = await db.query(
-      `UPDATE contracts SET status = 'disputed', dispute_reason = $1, updated_at = NOW()
-      WHERE id = $2
-      RETURNING *`,
-      [reason, id]
+    // Create a system message to register dispute
+    await db.query(
+      `INSERT INTO messages (contract_id, sender_id, receiver_id, content, is_system_message)
+       VALUES ($1, $2, $3, $4, TRUE)`,
+      [id, userId, userId, `[DISPUTE] ${reason || 'Sem motivo informado'}`]
     );
-
-    // Notify admin (TODO: implement admin notification)
 
     res.json({
       success: true,
-      message: 'Disputa registrada, equipe será notificada',
-      data: updated.rows[0]
+      message: 'Disputa registrada, equipe será notificada'
     });
   } catch (error) {
     console.error('[Contracts] Error filing dispute:', error);
@@ -304,7 +315,7 @@ router.put('/:id/cancel', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const { reason } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     // Verify user is involved in contract
     const contract = await db.query(
@@ -319,8 +330,8 @@ router.put('/:id/cancel', auth, async (req, res) => {
       });
     }
 
-    // Only allow cancellation if contract is active
-    if (contract.rows[0].status !== 'active') {
+    // Only allow cancellation if contract is in_progress
+    if (contract.rows[0].status !== 'in_progress') {
       return res.status(400).json({
         success: false,
         message: `Não é possível cancelar contrato com status ${contract.rows[0].status}`
@@ -329,10 +340,10 @@ router.put('/:id/cancel', auth, async (req, res) => {
 
     // Update contract status
     const updated = await db.query(
-      `UPDATE contracts SET status = 'cancelled', dispute_reason = $1, updated_at = NOW()
+      `UPDATE contracts SET status = 'cancelled', updated_at = NOW()
       WHERE id = $2
       RETURNING *`,
-      [reason, id]
+      [id]
     );
 
     res.json({

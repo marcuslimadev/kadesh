@@ -20,21 +20,21 @@ router.get('/', async (req, res) => {
 
     const reviews = await db.query(
       `SELECT 
-        r.*,
+        r.id, r.contract_id, r.reviewer_id, r.reviewed_id, r.rating, r.comment, r.is_public, r.created_at,
         u_reviewer.name as reviewer_name,
         u_reviewer.avatar as reviewer_avatar,
         c.project_id
       FROM reviews r
       JOIN users u_reviewer ON r.reviewer_id = u_reviewer.id
       JOIN contracts c ON r.contract_id = c.id
-      WHERE r.reviewed_user_id = $1
+      WHERE r.reviewed_id = $1
       ORDER BY r.created_at DESC
       LIMIT $2 OFFSET $3`,
       [user_id, parseInt(limit), parseInt(offset)]
     );
 
     const countResult = await db.query(
-      'SELECT COUNT(*) as total FROM reviews WHERE reviewed_user_id = $1',
+      'SELECT COUNT(*) as total FROM reviews WHERE reviewed_id = $1',
       [user_id]
     );
 
@@ -73,7 +73,7 @@ router.get('/:id', async (req, res) => {
 
     const review = await db.query(
       `SELECT 
-        r.*,
+        r.id, r.contract_id, r.reviewer_id, r.reviewed_id, r.rating, r.comment, r.is_public, r.created_at,
         u_reviewer.name as reviewer_name,
         u_reviewer.email as reviewer_email,
         u_reviewer.avatar as reviewer_avatar,
@@ -81,7 +81,7 @@ router.get('/:id', async (req, res) => {
         p.title as project_title
       FROM reviews r
       JOIN users u_reviewer ON r.reviewer_id = u_reviewer.id
-      JOIN users u_reviewed ON r.reviewed_user_id = u_reviewed.id
+      JOIN users u_reviewed ON r.reviewed_id = u_reviewed.id
       JOIN contracts c ON r.contract_id = c.id
       JOIN projects p ON c.project_id = p.id
       WHERE r.id = $1`,
@@ -117,7 +117,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { contract_id, reviewed_user_id, rating, comment } = req.body;
-    const reviewerId = req.user.id;
+    const reviewerId = req.user.userId;
 
     // Validation
     if (!contract_id || !reviewed_user_id || !rating) {
@@ -144,8 +144,8 @@ router.post('/', auth, async (req, res) => {
     // Verify contract is completed and involves both users
     const contract = await db.query(
       `SELECT * FROM contracts 
-      WHERE id = $1 AND status = 'accepted' 
-      AND ((client_id = $2 AND provider_id = $3) OR (client_id = $3 AND provider_id = $2))`,
+       WHERE id = $1 AND status = 'completed'
+       AND ((client_id = $2 AND provider_id = $3) OR (client_id = $3 AND provider_id = $2))`,
       [contract_id, reviewerId, reviewed_user_id]
     );
 
@@ -159,7 +159,7 @@ router.post('/', auth, async (req, res) => {
     // Check if review already exists
     const existing = await db.query(
       `SELECT id FROM reviews 
-      WHERE contract_id = $1 AND reviewer_id = $2 AND reviewed_user_id = $3`,
+       WHERE contract_id = $1 AND reviewer_id = $2 AND reviewed_id = $3`,
       [contract_id, reviewerId, reviewed_user_id]
     );
 
@@ -172,9 +172,9 @@ router.post('/', auth, async (req, res) => {
 
     // Create review
     const review = await db.query(
-      `INSERT INTO reviews (contract_id, reviewer_id, reviewed_user_id, rating, comment, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
-      RETURNING *`,
+      `INSERT INTO reviews (contract_id, reviewer_id, reviewed_id, rating, comment, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+       RETURNING *`,
       [contract_id, reviewerId, reviewed_user_id, rating, comment || null]
     );
 
@@ -201,7 +201,7 @@ router.put('/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const { rating, comment } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     // Verify review exists and user is the reviewer
     const review = await db.query(
@@ -254,7 +254,7 @@ router.put('/:id', auth, async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     // Verify review exists and user is the reviewer
     const review = await db.query(

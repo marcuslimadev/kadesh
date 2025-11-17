@@ -114,13 +114,13 @@ const contract = ref(null)
 
 const review = ref({ rating: 5, comment: '' })
 
-const canMarkComplete = computed(() => auth.user?.id === contract.value?.provider_id && contract.value?.status === 'active')
+const canMarkComplete = computed(() => auth.user?.id === contract.value?.provider_id && contract.value?.status === 'in_progress')
 const canAcceptCompletion = computed(() => auth.user?.id === contract.value?.client_id && contract.value?.status === 'completed')
-const canDispute = computed(() => ['active','completed'].includes(contract.value?.status))
-const canCancel = computed(() => contract.value?.status === 'active')
+const canDispute = computed(() => ['in_progress','completed'].includes(contract.value?.status))
+const canCancel = computed(() => contract.value?.status === 'in_progress')
 
 function formatDate(v){ return v ? new Date(v).toLocaleDateString('pt-BR') : '-' }
-function formatStatus(s){ const m={active:'Ativo',completed:'Entregue',accepted:'Concluído',disputed:'Em disputa',cancelled:'Cancelado'};return m[s]||s }
+function formatStatus(s){ const m={in_progress:'Em andamento',completed:'Concluído',cancelled:'Cancelado'};return m[s]||s }
 
 async function fetchContract(){
   loading.value = true

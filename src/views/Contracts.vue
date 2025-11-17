@@ -73,10 +73,8 @@ function formatDate(value) {
 }
 function formatStatus(status) {
   const map = {
-    active: 'Ativo',
-    completed: 'Entregue',
-    accepted: 'Concluído',
-    disputed: 'Em disputa',
+    in_progress: 'Em andamento',
+    completed: 'Concluído',
     cancelled: 'Cancelado'
   }
   return map[status] || status

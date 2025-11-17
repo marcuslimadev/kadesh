@@ -12,13 +12,13 @@ async function ensurePreferencesTable() {
   try {
     await db.query(`
       CREATE TABLE IF NOT EXISTS user_preferences (
-        user_id INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
         email_notifications BOOLEAN DEFAULT TRUE,
         email_marketing BOOLEAN DEFAULT FALSE,
         email_weekly BOOLEAN DEFAULT TRUE,
         profile_public VARCHAR(16) DEFAULT 'public',
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `);
     preferencesTableEnsured = true;
@@ -511,8 +511,8 @@ router.delete('/profile', auth, async (req, res) => {
     // Mark user as deleted and scrub non-essential PII fields
     const result = await db.query(`
       UPDATE users SET
-        status = 'deleted',
-        name = CONCAT('Deleted User ', id),
+        status = 'inactive',
+        name = CONCAT('Deleted User ', id::text),
         phone = NULL,
         bio = NULL,
         website = NULL,
