@@ -98,9 +98,9 @@ export const projectService = {
   /**
    * Get project bids
    */
-  async getProjectBids(projectId) {
+  async getProjectBids(projectId, params = {}) {
     try {
-      const response = await api.get(`/api/projects/${projectId}/bids`)
+      const response = await api.get(`/api/bids/project/${projectId}`, { params })
       return {
         success: true,
         data: response.data
