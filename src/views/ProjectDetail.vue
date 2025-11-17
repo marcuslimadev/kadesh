@@ -195,7 +195,7 @@
                   </label>
                   <textarea
                     id="bidDescription"
-                    v-model="bidForm.description"
+                    v-model="bidForm.proposal"
                     rows="4"
                     required
                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -208,7 +208,7 @@
                   </label>
                   <input
                     id="bidDeliveryTime"
-                    v-model.number="bidForm.delivery_time_days"
+                    v-model.number="bidForm.delivery_time"
                     type="number"
                     min="1"
                     required
@@ -345,8 +345,8 @@ const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-o
 
 const bidForm = ref({
   amount: null,
-  description: '',
-  delivery_time_days: null
+  proposal: '',
+  delivery_time: null
 })
 
 const skillsArray = computed(() => {
@@ -589,8 +589,13 @@ const submitBid = async () => {
     return
   }
 
-  if (!bidForm.value.amount || !bidForm.value.description || !bidForm.value.delivery_time_days) {
+  if (!bidForm.value.amount || !bidForm.value.proposal || !bidForm.value.delivery_time) {
     toast.error('Por favor, preencha todos os campos')
+    return
+  }
+
+  if (bidForm.value.proposal.trim().length < 20) {
+    toast.error('Descrição da proposta deve ter pelo menos 20 caracteres')
     return
   }
 
@@ -600,8 +605,8 @@ const submitBid = async () => {
     const bidData = {
       project_id: project.value.id,
       amount: bidForm.value.amount,
-      description: bidForm.value.description,
-      delivery_time_days: bidForm.value.delivery_time_days
+      proposal: bidForm.value.proposal,
+      delivery_time: bidForm.value.delivery_time
     }
 
     const result = await bidService.createBid(bidData)
@@ -611,8 +616,8 @@ const submitBid = async () => {
       showBidForm.value = false
       bidForm.value = {
         amount: null,
-        description: '',
-        delivery_time_days: null
+        proposal: '',
+        delivery_time: null
       }
       // Reload bids to show the new one
       await loadBids()

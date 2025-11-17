@@ -13,9 +13,9 @@
             <svg class="w-3 h-3 mr-1 text-yellow-500 fill-current" viewBox="0 0 20 20">
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
             </svg>
-            <span>{{ bid.provider_rating || 'Novo' }}</span>
+            <span>{{ formatRating(bid.rating) }}</span>
             <span class="mx-1">•</span>
-            <span>{{ bid.provider_completed_projects || 0 }} projetos</span>
+            <span>{{ bid.total_projects || 0 }} projetos</span>
           </div>
         </div>
       </div>
@@ -23,13 +23,13 @@
       <!-- Bid Amount -->
       <div class="text-right">
         <p class="text-2xl font-bold text-primary-600">{{ formatCurrency(bid.amount) }}</p>
-        <p class="text-xs text-gray-500">{{ formatDeliveryTime(bid.delivery_time_days) }}</p>
+        <p class="text-xs text-gray-500">{{ formatDeliveryTime(bid.delivery_time ?? bid.delivery_time_days) }}</p>
       </div>
     </div>
 
     <!-- Description -->
     <div class="mb-3">
-      <p class="text-sm text-gray-700">{{ bid.description }}</p>
+      <p class="text-sm text-gray-700">{{ bid.proposal || bid.description }}</p>
     </div>
 
     <!-- Bid Stats -->
@@ -112,6 +112,13 @@ const formatCurrency = (value) => {
     style: 'currency',
     currency: 'BRL'
   }).format(value)
+}
+
+const formatRating = (rating) => {
+  if (!rating && rating !== 0) return 'Novo'
+  const parsed = Number(rating)
+  if (Number.isNaN(parsed)) return 'Novo'
+  return parsed.toFixed(1)
 }
 
 const formatDeliveryTime = (days) => {
