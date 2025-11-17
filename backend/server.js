@@ -27,6 +27,7 @@ app.use(compression());
 // Add a safe fallback list that includes common dev hosts and the Render frontend
 const defaultFrontends = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'https://kadesh-frontend.onrender.com',
@@ -198,7 +199,7 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Kadesh API running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
