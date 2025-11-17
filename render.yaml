@@ -1,4 +1,42 @@
 services:
+  - type: web_service
+    name: kadesh-backend
+    env: node
+    plan: free
+    branch: main
+    root: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        value: "" # set in Render dashboard (do NOT commit secrets)
+      - key: JWT_SECRET
+        value: ""
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: FRONTEND_URLS
+        value: ""
+      - key: FRONTEND_URL
+        value: ""
+      - key: MAX_REQUESTS_PER_MINUTE
+        value: "100"
+
+  - type: static_site
+    name: kadesh-frontend
+    branch: main
+    root: /
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    publishPath: dist
+    autoDeploy: true
+    envVars:
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
+services:
   - type: web
     name: kadesh-backend
     env: node
