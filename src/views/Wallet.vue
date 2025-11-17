@@ -85,7 +85,10 @@
               <option value="escrow_hold">Bloqueio (Escrow)</option>
               <option value="escrow_release">Liberação (Escrow)</option>
               <option value="payment">Pagamento</option>
+              <option value="payment_received">Pagamento Recebido</option>
+              <option value="payment_sent">Pagamento Enviado</option>
               <option value="refund">Reembolso</option>
+              <option value="fee">Taxa</option>
             </select>
           </div>
           
@@ -191,8 +194,8 @@
                 <td class="px-6 py-4 text-sm text-gray-900">
                   {{ transaction.description }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" :class="getAmountColor(transaction.type)">
-                  {{ getAmountPrefix(transaction.type) }}{{ formatCurrency(Math.abs(transaction.amount)) }}
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" :class="getAmountColor(transaction)">
+                  {{ getAmountPrefix(transaction) }}{{ formatCurrency(Math.abs(transaction.amount)) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <StatusBadge :status="transaction.status" />
@@ -212,30 +215,178 @@
         />
       </div>
 
-      <!-- Modals Placeholder -->
-      <div v-if="showDepositModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showDepositModal = false">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full">
-          <h3 class="text-xl font-semibold mb-4">Adicionar Fundos</h3>
-          <p class="text-gray-600 mb-6">Funcionalidade de depósito será implementada na Fase 2</p>
-          <button
-            @click="showDepositModal = false"
-            class="w-full px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
-          >
-            Fechar
-          </button>
+      <!-- Deposit Modal -->
+      <div
+        v-if="showDepositModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
+        @click.self="closeDepositModal"
+      >
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <p class="text-sm font-medium text-primary-600 uppercase tracking-wide">Adicionar fundos</p>
+              <h3 class="text-2xl font-semibold text-gray-900">Depósito na carteira</h3>
+            </div>
+            <button @click="closeDepositModal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <form @submit.prevent="handleDeposit" class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Valor</label>
+              <div class="relative mt-1">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">R$</span>
+                <input
+                  v-model.number="depositForm.amount"
+                  type="number"
+                  min="10"
+                  step="0.01"
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="0,00"
+                />
+              </div>
+              <p class="mt-1 text-xs text-gray-500">Valor mínimo de R$ 10,00</p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Método de pagamento</label>
+              <select
+                v-model="depositForm.method"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option v-for="method in depositMethods" :key="method.value" :value="method.value">
+                  {{ method.label }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Referência (opcional)</label>
+              <input
+                v-model="depositForm.reference"
+                type="text"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Ex.: PIX 123 ou ID do pagamento"
+              />
+              <p class="mt-1 text-xs text-gray-500">Use para guardar comprovantes ou ID da transação.</p>
+            </div>
+
+            <p v-if="depositError" class="text-sm text-red-600">{{ depositError }}</p>
+
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+              <button
+                type="button"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                @click="closeDepositModal"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                :disabled="isDepositing"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <span v-if="isDepositing" class="flex items-center justify-center">
+                  <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9M20 20v-5h-.581m-15.357-2a8.003 8.003 0 0015.357 2" />
+                  </svg>
+                  Processando...
+                </span>
+                <span v-else>Confirmar Depósito</span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
 
-      <div v-if="showWithdrawModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showWithdrawModal = false">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full">
-          <h3 class="text-xl font-semibold mb-4">Sacar Fundos</h3>
-          <p class="text-gray-600 mb-6">Funcionalidade de saque será implementada na Fase 2</p>
-          <button
-            @click="showWithdrawModal = false"
-            class="w-full px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
-          >
-            Fechar
-          </button>
+      <!-- Withdraw Modal -->
+      <div
+        v-if="showWithdrawModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
+        @click.self="closeWithdrawModal"
+      >
+        <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <p class="text-sm font-medium text-primary-600 uppercase tracking-wide">Solicitar saque</p>
+              <h3 class="text-2xl font-semibold text-gray-900">Transferir fundos</h3>
+            </div>
+            <button @click="closeWithdrawModal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <form @submit.prevent="handleWithdraw" class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Valor</label>
+              <div class="relative mt-1">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">R$</span>
+                <input
+                  v-model.number="withdrawForm.amount"
+                  type="number"
+                  min="50"
+                  step="0.01"
+                  class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="0,00"
+                />
+              </div>
+              <p class="mt-1 text-xs text-gray-500">
+                Disponível para saque: <span class="font-semibold text-gray-900">{{ formatCurrency(balance.available) }}</span>
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Método</label>
+              <select
+                v-model="withdrawForm.method"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option v-for="method in withdrawMethods" :key="method.value" :value="method.value">
+                  {{ method.label }}
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Instruções ou chave PIX</label>
+              <textarea
+                v-model="withdrawForm.notes"
+                rows="3"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                placeholder="Informe a chave PIX ou dados bancários para transferência"
+              ></textarea>
+            </div>
+
+            <p v-if="withdrawError" class="text-sm text-red-600">{{ withdrawError }}</p>
+
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+              <button
+                type="button"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                @click="closeWithdrawModal"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                :disabled="isWithdrawing"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <span v-if="isWithdrawing" class="flex items-center justify-center">
+                  <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9M20 20v-5h-.581m-15.357-2a8.003 8.003 0 0015.357 2" />
+                  </svg>
+                  Registrando...
+                </span>
+                <span v-else>Confirmar Saque</span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -258,18 +409,70 @@ const currentPage = ref(1)
 const itemsPerPage = 20
 const showDepositModal = ref(false)
 const showWithdrawModal = ref(false)
+const isDepositing = ref(false)
+const isWithdrawing = ref(false)
+const depositError = ref('')
+const withdrawError = ref('')
+const depositForm = ref({
+  amount: '',
+  method: 'pix',
+  reference: ''
+})
+const withdrawForm = ref({
+  amount: '',
+  method: 'pix',
+  notes: ''
+})
 
-const balance = ref({
+const depositMethods = [
+  { value: 'pix', label: 'PIX (instantâneo)' },
+  { value: 'boleto', label: 'Boleto bancário' },
+  { value: 'credit_card', label: 'Cartão de crédito' }
+]
+
+const withdrawMethods = [
+  { value: 'pix', label: 'PIX' },
+  { value: 'bank_transfer', label: 'Transferência bancária (TED/DOC)' }
+]
+
+const defaultBalance = {
   available: 0,
   escrow: 0,
-  pending: 0
-})
+  pending: 0,
+  total: 0
+}
+
+const balance = ref({ ...defaultBalance })
 
 const filters = ref({
   type: '',
   status: '',
   sortBy: 'date_desc'
 })
+
+const transactionTypeLabels = {
+  deposit: 'Depósito',
+  withdrawal: 'Saque',
+  escrow_hold: 'Bloqueio (Escrow)',
+  escrow_release: 'Liberação (Escrow)',
+  payment: 'Pagamento',
+  payment_received: 'Pagamento Recebido',
+  payment_sent: 'Pagamento Enviado',
+  refund: 'Reembolso',
+  fee: 'Taxa da Plataforma'
+}
+
+const transactionTypeColors = {
+  deposit: 'bg-green-100 text-green-800',
+  withdrawal: 'bg-red-100 text-red-800',
+  escrow_hold: 'bg-yellow-100 text-yellow-800',
+  escrow_release: 'bg-blue-100 text-blue-800',
+  payment: 'bg-purple-100 text-purple-800',
+  payment_received: 'bg-emerald-100 text-emerald-800',
+  payment_sent: 'bg-purple-100 text-purple-800',
+  refund: 'bg-emerald-100 text-emerald-800',
+  fee: 'bg-gray-100 text-gray-800'
+}
 
 const hasActiveFilters = computed(() => {
   return filters.value.type !== '' || filters.value.status !== ''
@@ -347,41 +550,59 @@ const formatCurrency = (value) => {
 }
 
 const getTypeLabel = (type) => {
-  const types = {
-    deposit: 'Depósito',
-    withdrawal: 'Saque',
-    escrow_hold: 'Bloqueio',
-    escrow_release: 'Liberação',
-    payment: 'Pagamento',
-    refund: 'Reembolso'
-  }
-  return types[type] || type
+  return transactionTypeLabels[type] || type
 }
 
 const getTypeColor = (type) => {
-  const colors = {
-    deposit: 'bg-green-100 text-green-800',
-    withdrawal: 'bg-red-100 text-red-800',
-    escrow_hold: 'bg-yellow-100 text-yellow-800',
-    escrow_release: 'bg-blue-100 text-blue-800',
-    payment: 'bg-purple-100 text-purple-800',
-    refund: 'bg-gray-100 text-gray-800'
-  }
-  return colors[type] || 'bg-gray-100 text-gray-800'
+  return transactionTypeColors[type] || 'bg-gray-100 text-gray-800'
 }
 
-const getAmountColor = (type) => {
-  if (type === 'deposit' || type === 'escrow_release' || type === 'refund') {
-    return 'text-green-600'
-  }
-  return 'text-red-600'
+const getAmountColor = (transaction) => {
+  const amount = Number(transaction?.amount || 0)
+  if (amount === 0) return 'text-gray-600'
+  return amount > 0 ? 'text-green-600' : 'text-red-600'
 }
 
-const getAmountPrefix = (type) => {
-  if (type === 'deposit' || type === 'escrow_release' || type === 'refund') {
-    return '+ '
+const getAmountPrefix = (transaction) => {
+  const amount = Number(transaction?.amount || 0)
+  return amount >= 0 ? '+ ' : '- '
+}
+
+const normalizeTransactions = (items = []) => {
+  return items.map(item => {
+    const amount = Number(item.amount || 0)
+    return {
+      ...item,
+      amount,
+      description: item.description || getTypeLabel(item.type)
+    }
+  })
+}
+
+const resetDepositForm = () => {
+  depositForm.value = {
+    amount: '',
+    method: 'pix',
+    reference: ''
   }
-  return '- '
+  depositError.value = ''
+}
+
+const resetWithdrawForm = () => {
+  withdrawForm.value = {
+    amount: '',
+    method: 'pix',
+    notes: ''
+  }
+  withdrawError.value = ''
+}
+
+const closeDepositModal = () => {
+  showDepositModal.value = false
+}
+
+const closeWithdrawModal = () => {
+  showWithdrawModal.value = false
 }
 
 const clearFilters = () => {
@@ -393,6 +614,75 @@ const clearFilters = () => {
   currentPage.value = 1
 }
 
+const handleDeposit = async () => {
+  depositError.value = ''
+  const amountValue = Math.abs(Number(depositForm.value.amount))
+
+  if (!amountValue || amountValue < 10) {
+    depositError.value = 'Informe um valor mínimo de R$ 10,00'
+    return
+  }
+
+  isDepositing.value = true
+  try {
+    const result = await walletService.deposit(
+      amountValue,
+      depositForm.value.method,
+      depositForm.value.reference
+    )
+
+    if (result.success) {
+      toast.success('Depósito registrado com sucesso!')
+      closeDepositModal()
+      await loadTransactions()
+    } else {
+      depositError.value = result.error || 'Erro ao registrar depósito'
+    }
+  } catch (err) {
+    console.error('Error creating deposit:', err)
+    depositError.value = 'Erro ao registrar depósito'
+  } finally {
+    isDepositing.value = false
+  }
+}
+
+const handleWithdraw = async () => {
+  withdrawError.value = ''
+  const amountValue = Math.abs(Number(withdrawForm.value.amount))
+
+  if (!amountValue || amountValue < 50) {
+    withdrawError.value = 'Informe um valor mínimo de R$ 50,00'
+    return
+  }
+
+  if (amountValue > Number(balance.value.available || 0)) {
+    withdrawError.value = 'Valor superior ao saldo disponível'
+    return
+  }
+
+  isWithdrawing.value = true
+  try {
+    const result = await walletService.withdraw(
+      amountValue,
+      withdrawForm.value.method,
+      withdrawForm.value.notes
+    )
+
+    if (result.success) {
+      toast.success('Solicitação de saque registrada!')
+      closeWithdrawModal()
+      await loadTransactions()
+    } else {
+      withdrawError.value = result.error || 'Erro ao solicitar saque'
+    }
+  } catch (err) {
+    console.error('Error creating withdraw:', err)
+    withdrawError.value = 'Erro ao solicitar saque'
+  } finally {
+    isWithdrawing.value = false
+  }
+}
+
 const loadTransactions = async () => {
   isLoading.value = true
   error.value = null
@@ -401,10 +691,9 @@ const loadTransactions = async () => {
     // Load balance
     const balanceResult = await walletService.getBalance()
     if (balanceResult.success) {
-      balance.value = balanceResult.data.data || {
-        available: 0,
-        escrow: 0,
-        pending: 0
+      balance.value = {
+        ...defaultBalance,
+        ...(balanceResult.data?.data || {})
       }
     }
 
@@ -412,13 +701,16 @@ const loadTransactions = async () => {
     const result = await walletService.getTransactions({
       type: filters.value.type,
       status: filters.value.status,
-      limit: 100 // Load all for client-side filtering
+      limit: 200,
+      sort: 'desc'
     })
-    
+
     if (result.success) {
-      transactions.value = result.data.data?.transactions || []
+      const items = result.data?.data?.transactions || []
+      transactions.value = normalizeTransactions(items)
     } else {
       error.value = result.error
+      transactions.value = []
     }
   } catch (err) {
     console.error('Error loading wallet data:', err)
@@ -431,6 +723,18 @@ const loadTransactions = async () => {
 // Reset to page 1 when filters change
 watch(() => [filters.value.type, filters.value.status], () => {
   currentPage.value = 1
+})
+
+watch(showDepositModal, (visible) => {
+  if (!visible) {
+    resetDepositForm()
+  }
+})
+
+watch(showWithdrawModal, (visible) => {
+  if (!visible) {
+    resetWithdrawForm()
+  }
 })
 
 onMounted(() => {
