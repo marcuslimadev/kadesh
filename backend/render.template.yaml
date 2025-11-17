@@ -1,0 +1,59 @@
+# Render Deploy Configuration
+name: kadesh-backend
+type: web
+env: node
+region: oregon
+plan: free
+
+# Build settings
+buildCommand: npm install
+startCommand: npm start
+
+# Environment variables (set these in Render dashboard)
+envVars:
+  - key: NODE_ENV
+    value: production
+  - key: JWT_SECRET
+    generateValue: true
+  - key: PORT
+    value: 10000
+  - key: DB_HOST
+    fromDatabase:
+      name: kadesh-postgres
+      property: host
+  - key: DB_PORT
+    fromDatabase:
+      name: kadesh-postgres
+      property: port
+  - key: DB_NAME
+    fromDatabase:
+      name: kadesh-postgres
+      property: database
+  - key: DB_USER
+    fromDatabase:
+      name: kadesh-postgres
+      property: user
+  - key: DB_PASSWORD
+    fromDatabase:
+      name: kadesh-postgres
+      property: password
+  - key: FRONTEND_URL
+    value: https://kadesh.vercel.app
+
+# Database
+databases:
+  - name: kadesh-postgres
+    plan: free
+    databaseName: kadesh
+    user: kadesh
+
+# Health check
+healthCheckPath: /health
+
+# Auto-deploy
+autoDeploy: true
+
+# Disk size (free tier)
+disk:
+  size: 512MB
+  mount: /opt/render/project/src

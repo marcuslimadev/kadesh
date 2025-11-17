@@ -49,17 +49,24 @@ Use qualquer conta abaixo para validar rapidamente o login (todas usam a senha `
 
 ## 📦 Instalação e Configuração
 
+### Estrutura do Repositório
+- `frontend/` (raiz do projeto): app Vue 3 + Vite
+- `backend/`: API Express/PostgreSQL importada de [`marcuslimadev/kadesh-backend`](https://github.com/marcuslimadev/kadesh-backend)
+- Documentação: guias de deploy e resumos para operação
+
 ### Pré-requisitos
 - Node.js 20+
 - PostgreSQL 14+
 - npm ou yarn
 
-### Backend
+### Backend (`./backend`)
 
 ```bash
+cd backend
+
 # Configurar variáveis de ambiente
 cp .env.example .env
-# Edite .env com suas configurações
+# Edite backend/.env com suas configurações
 
 # Criar banco de dados
 createdb kadesh_dev
@@ -74,10 +81,10 @@ psql -d kadesh_dev -f database/migration_001_wallet_and_samples.sql
 npm install
 
 # Executar servidor (porta 3000)
-node server.js
+npm run dev
 ```
 
-### Frontend
+### Frontend (`./`)
 
 ```bash
 # Instalar dependências
@@ -95,7 +102,7 @@ npm run preview
 
 ### Variáveis de Ambiente
 
-**Backend (.env):**
+**Backend (`backend/.env`):**
 ```env
 NODE_ENV=development
 PORT=3000
@@ -105,7 +112,7 @@ FRONTEND_URL=http://localhost:3000
 MAX_REQUESTS_PER_MINUTE=100
 ```
 
-**Frontend (.env):**
+**Frontend (`.env`):**
 ```env
 VITE_API_URL=http://localhost:3000
 VITE_APP_NAME=Kadesh
