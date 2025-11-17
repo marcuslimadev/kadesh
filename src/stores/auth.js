@@ -53,11 +53,12 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('kadesh_token', userToken)
       localStorage.setItem('kadesh_user', JSON.stringify(userData))
 
+      console.log('[Auth] Login realizado com sucesso:', userData.email, userData.name)
       showToast('success', `Bem-vindo, ${userData.name}!`)
       return { success: true, user: userData }
 
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('[Auth] Erro ao fazer login:', error.response?.status, error.response?.data?.error || error.message)
       return { 
         success: false, 
         error: error.response?.data?.error || 'Erro ao fazer login'
@@ -113,6 +114,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.get('/api/auth/verify', { signal: controller.signal })
       user.value = response.data.user
       localStorage.setItem('kadesh_user', JSON.stringify(response.data.user))
+      console.log('[Auth] Token verificado com sucesso para:', user.value.email)
       return true
     } catch (error) {
       const isTimeoutOrOffline =
@@ -123,12 +125,14 @@ export const useAuthStore = defineStore('auth', () => {
         error.message === 'Network Error'
 
       if (isTimeoutOrOffline) {
-        console.warn('Token verification skipped: backend indisponível ou sem resposta rápida.', error)
+        console.warn('[Auth] Verificação de token ignorada: backend indisponível ou sem resposta rápida.', error)
         return false
       }
 
-      console.error('Token verification failed:', error)
-      logout()
+      console.error('[Auth] Falha na verificação de token:', error.response?.status, error.message)
+      if (error.response?.status === 401) {
+        logout()
+      }
       return false
     } finally {
       clearTimeout(timeoutId)
@@ -167,10 +171,13 @@ export const useAuthStore = defineStore('auth', () => {
       try {
         user.value = JSON.parse(storedUser)
         token.value = storedToken
+        console.log('[Auth] Inicializado do localStorage:', user.value.email)
       } catch (error) {
-        console.error('Error parsing stored auth data:', error)
+        console.error('[Auth] Erro ao decodificar dados do localStorage:', error)
         logout()
       }
+    } else {
+      console.log('[Auth] Nenhum dado de autenticação armazenado')
     }
   }
 

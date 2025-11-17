@@ -31,12 +31,50 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
               </svg>
             </router-link>
-            <button
-              @click="handleLogout"
-              class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition"
-            >
-              Sair
-            </button>
+
+            <!-- User Menu -->
+            <div class="relative">
+              <button
+                @click="userMenuOpen = !userMenuOpen"
+                class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
+              >
+                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                  {{ userInitials }}
+                </div>
+                <span class="text-sm font-medium text-gray-700">{{ userName }}</span>
+                <svg :class="['w-4 h-4 transition', userMenuOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+              </button>
+
+              <!-- Dropdown menu -->
+              <div v-if="userMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                <div class="px-4 py-3 border-b border-gray-200">
+                  <p class="text-sm font-medium text-gray-900">{{ user?.name }}</p>
+                  <p class="text-xs text-gray-500">{{ user?.email }}</p>
+                </div>
+                <router-link
+                  to="/profile"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                  @click="userMenuOpen = false"
+                >
+                  Meu Perfil
+                </router-link>
+                <router-link
+                  to="/settings"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+                  @click="userMenuOpen = false"
+                >
+                  Configurações
+                </router-link>
+                <button
+                  @click="handleLogout"
+                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                >
+                  Sair
+                </button>
+              </div>
+            </div>
           </template>
           
           <template v-else>
@@ -115,6 +153,25 @@
           >
             Notificações
           </router-link>
+          <!-- User info in mobile menu -->
+          <div class="px-3 py-2 border-b border-gray-200">
+            <p class="text-sm font-medium text-gray-900">{{ user?.name }}</p>
+            <p class="text-xs text-gray-500">{{ user?.email }}</p>
+          </div>
+          <router-link
+            to="/profile"
+            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            @click="mobileMenuOpen = false"
+          >
+            Meu Perfil
+          </router-link>
+          <router-link
+            to="/settings"
+            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            @click="mobileMenuOpen = false"
+          >
+            Configurações
+          </router-link>
           <button
             @click="handleLogout"
             class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-red-50"
@@ -153,12 +210,17 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const mobileMenuOpen = ref(false)
+const userMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const user = computed(() => authStore.user)
+const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
+const userInitials = computed(() => authStore.userInitials)
 
 const handleLogout = async () => {
   await authStore.logout()
   mobileMenuOpen.value = false
-  router.push('/login')
+  userMenuOpen.value = false
+  router.push('/')
 }
 </script>

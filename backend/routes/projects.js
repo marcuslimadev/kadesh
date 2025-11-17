@@ -300,10 +300,17 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// Get user's projects
-router.get('/user/my-projects', auth, async (req, res) => {
+// Obter projetos do usuário (como cliente) - ambos os caminhos suportados
+const getMyProjectsHandler = async (req, res) => {
   try {
-    const { status, limit = 20, offset = 0 } = req.query;
+    // Validar autenticação
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({
+        error: 'Usuário não autenticado'
+      });
+    }
+
+    const { status, limit = 20, offset = 0, sort = 'recent' } = req.query;
 
     let query = `
       SELECT 
@@ -322,11 +329,20 @@ router.get('/user/my-projects', auth, async (req, res) => {
       params.push(status);
     }
 
-    query += `
-      GROUP BY p.id
-      ORDER BY p.created_at DESC
-      LIMIT $${++paramCount} OFFSET $${++paramCount}
-    `;
+    query += ` GROUP BY p.id`;
+
+    // Ordenação
+    if (sort === 'recent') {
+      query += ` ORDER BY p.created_at DESC`;
+    } else if (sort === 'oldest') {
+      query += ` ORDER BY p.created_at ASC`;
+    } else if (sort === 'budget-high') {
+      query += ` ORDER BY p.budget DESC`;
+    } else if (sort === 'budget-low') {
+      query += ` ORDER BY p.budget ASC`;
+    }
+
+    query += ` LIMIT $${++paramCount} OFFSET $${++paramCount}`;
     params.push(parseInt(limit), parseInt(offset));
 
     const result = await db.query(query, params);
@@ -339,11 +355,16 @@ router.get('/user/my-projects', auth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Get user projects error:', error);
+    console.error('Erro ao obter projetos do usuário:', error.message);
     res.status(500).json({
-      error: 'Erro interno do servidor'
+      error: 'Erro ao carregar projetos',
+      message: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
-});
+};
+
+// Ambos os caminhos para compatibilidade
+router.get('/user/my-projects', auth, getMyProjectsHandler);
+router.get('/my-projects', auth, getMyProjectsHandler);
 
 module.exports = router;

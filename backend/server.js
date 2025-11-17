@@ -98,6 +98,75 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Rotas de compatibilidade (aliases para retro-compatibilidade)
+const auth = require('./middleware/auth');
+const db = require('./config/database');
+
+// Alias: GET /api/dashboard/stats -> GET /api/users/dashboard/stats
+app.get('/api/dashboard/stats', auth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const userType = req.user.type;
+
+    let stats = {};
+
+    if (userType === 'client') {
+      // Stats de cliente
+      const projectsResult = await db.query(`
+        SELECT 
+          COUNT(*) as total_projects,
+          COUNT(*) FILTER (WHERE status = 'open') as open_projects,
+          COUNT(*) FILTER (WHERE status = 'in_progress') as active_projects,
+          COUNT(*) FILTER (WHERE status = 'completed') as completed_projects
+        FROM projects WHERE client_id = $1 AND status != 'deleted'
+      `, [userId]);
+
+      const bidsResult = await db.query(`
+        SELECT COUNT(*) as total_bids
+        FROM bids b
+        JOIN projects p ON b.project_id = p.id
+        WHERE p.client_id = $1 AND b.status = 'pending'
+      `, [userId]);
+
+      stats = {
+        ...projectsResult.rows[0],
+        pending_bids: parseInt(bidsResult.rows[0].total_bids)
+      };
+    } else if (userType === 'provider') {
+      // Stats de provedor
+      const bidsResult = await db.query(`
+        SELECT 
+          COUNT(*) as total_bids,
+          COUNT(*) FILTER (WHERE status = 'pending') as pending_bids,
+          COUNT(*) FILTER (WHERE status = 'accepted') as accepted_bids
+        FROM bids WHERE provider_id = $1 AND status != 'withdrawn'
+      `, [userId]);
+
+      const contractsResult = await db.query(`
+        SELECT 
+          COUNT(*) as total_contracts,
+          COUNT(*) FILTER (WHERE status = 'in_progress') as active_contracts,
+          COUNT(*) FILTER (WHERE status = 'completed') as completed_contracts,
+          COALESCE(SUM(amount) FILTER (WHERE status = 'completed'), 0) as total_earnings
+        FROM contracts WHERE provider_id = $1
+      `, [userId]);
+
+      stats = {
+        ...bidsResult.rows[0],
+        ...contractsResult.rows[0]
+      };
+    }
+
+    res.json({ stats });
+
+  } catch (error) {
+    console.error('Erro ao obter estatísticas do dashboard:', error);
+    res.status(500).json({
+      error: 'Erro ao carregar estatísticas'
+    });
+  }
+});
+
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({
