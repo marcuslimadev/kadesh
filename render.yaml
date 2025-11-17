@@ -1,10 +1,11 @@
 services:
-  - type: web_service
+  - type: web
     name: kadesh-backend
     env: node
     plan: free
+    region: oregon
     branch: main
-    root: backend
+    rootDir: backend
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /health
@@ -22,63 +23,16 @@ services:
         value: ""
       - key: FRONTEND_URL
         value: ""
-      - key: MAX_REQUESTS_PER_MINUTE
-        value: "100"
 
   - type: static_site
     name: kadesh-frontend
-    branch: main
-    root: /
     plan: free
+    region: oregon
+    branch: main
+    rootDir: /
     buildCommand: npm install --include=dev && npm run build
     publishPath: dist
     autoDeploy: true
     envVars:
       - key: NPM_CONFIG_PRODUCTION
         value: "false"
-services:
-  - type: web
-    name: kadesh-backend
-    env: node
-    plan: free
-    region: oregon
-    rootDir: backend
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    healthCheckPath: /health
-    autoDeploy: true
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: JWT_SECRET
-        generateValue: true
-      - key: PORT
-        value: 10000
-      - key: DB_HOST
-        fromDatabase:
-          name: kadesh-postgres
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: kadesh-postgres
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: kadesh-postgres
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: kadesh-postgres
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: kadesh-postgres
-          property: password
-      - key: FRONTEND_URL
-        value: https://kadesh-two.vercel.app
-
-databases:
-  - name: kadesh-postgres
-    plan: free
-    databaseName: kadesh
-    user: kadesh
