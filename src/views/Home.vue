@@ -46,12 +46,17 @@
               </div>
             </div>
 
-            <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+            <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-6">
               <div v-for="stat in heroStats" :key="stat.label" class="bg-white/10 rounded-2xl p-4 border border-white/10">
                 <dt class="text-sm text-gray-300">{{ stat.label }}</dt>
                 <dd class="text-3xl font-bold text-white">{{ stat.value }}</dd>
               </div>
             </dl>
+            <div class="w-full flex justify-center">
+              <router-link to="/tutorial" class="btn btn-accent px-6 py-3 rounded-xl font-bold text-primary-900 shadow-lg hover:bg-accent-600 transition-all">
+                Como usar a plataforma (Tutorial)
+              </router-link>
+            </div>
           </div>
 
           <div class="relative animate-slide-in-right">
@@ -336,10 +341,10 @@ const featuredProjects = ref([])
 const loadingProjects = ref(false)
 const progressSnapshot = {
   mvp: 100,
-  platform: 95,
+  platform: 100,
   referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
   lastUpdated: '17/11/2025',
-  nextMilestone: 'Analytics e dashboards (admin/provedor/cliente)',
+  nextMilestone: 'Lançar gráficos/relatórios (analytics) como melhoria contínua',
   blocks: [
     {
       label: 'MVP Funcional',
@@ -351,10 +356,10 @@ const progressSnapshot = {
     },
     {
       label: 'Plataforma Completa',
-      value: 95,
-      description: 'Quase completo: escrow/milestones, reviews, perfis públicos e chat prontos. Resta analytics.',
+      value: 100,
+      description: 'Plataforma completa entregue: escrow/milestones, reviews com moderação, perfis públicos/portfólio e chat em tempo real concluídos.',
       pending: [
-        'Dashboard de analytics (admin, provedor, cliente)'
+        'Concluído! ✅'
       ]
     }
   ]

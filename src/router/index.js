@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // Lazy load views
 const Home = () => import('../views/Home.vue')
+const Tutorial = () => import('../views/Tutorial.vue')
 const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -32,6 +33,12 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/tutorial',
+    name: 'tutorial',
+    component: Tutorial,
     meta: { requiresAuth: false }
   },
   {
