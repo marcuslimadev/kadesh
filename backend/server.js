@@ -115,7 +115,7 @@ app.use('/api/messages', messageRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
-const db = require('./config/database');
+// db já será importado abaixo para socket.io, não precisa duplicar aqui
 
 // Alias: GET /api/dashboard/stats and /api/users/dashboard/stats
 async function userDashboardStatsHandler(req, res) {
