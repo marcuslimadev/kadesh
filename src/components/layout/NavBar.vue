@@ -12,6 +12,9 @@
           <router-link to="/projects" class="text-gray-700 hover:text-blue-600 transition">
             Projetos
           </router-link>
+          <router-link to="/tutorial" class="text-gray-700 hover:text-blue-600 transition">
+            Tutorial
+          </router-link>
           
           <template v-if="isAuthenticated">
             <router-link to="/dashboard" class="text-gray-700 hover:text-blue-600 transition">
@@ -118,6 +121,13 @@
           @click="mobileMenuOpen = false"
         >
           Projetos
+        </router-link>
+        <router-link
+          to="/tutorial"
+          class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+          @click="mobileMenuOpen = false"
+        >
+          Tutorial
         </router-link>
         
         <template v-if="isAuthenticated">
