@@ -282,7 +282,248 @@
       </div>
     </section>
 
-    <!-- Newsletter -->
+    <!-- Lobby de Leilões Reversos -->
+    <section class="bg-gradient-to-br from-blue-50 to-indigo-50 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-sm text-blue-600 font-semibold uppercase tracking-wide">🎯 Coração da Plataforma</p>
+          <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
+            Lobby de <span class="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">Leilões Reversos</span>
+          </h2>
+          <p class="text-gray-700 text-lg max-w-3xl mx-auto">
+            O Lobby é onde a mágica acontece! Acompanhe em tempo real todos os projetos abertos, propostas em disputa e negocie com transparência total.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Projetos em Tempo Real</h3>
+            <p class="text-gray-600">Veja todos os projetos ativos, quantas propostas receberam e participe da disputa.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Filtros Inteligentes</h3>
+            <p class="text-gray-600">Filtre por categoria, orçamento, prazo e status. Encontre exatamente o que procura.</p>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Ações Rápidas</h3>
+            <p class="text-gray-600">Acesse Dashboard, crie projetos, veja sua carteira e contratos em um clique.</p>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <router-link
+            v-if="isAuthenticated"
+            to="/lobby"
+            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
+          >
+            🎯 Acessar Lobby Agora
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </router-link>
+          <router-link
+            v-else
+            to="/register"
+            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
+          >
+            Cadastre-se para Acessar o Lobby
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </router-link>
+        </div>
+      </div>
+    </section>
+
+    <!-- Documentação -->
+    <section class="bg-white py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-sm text-green-600 font-semibold uppercase tracking-wide">📚 Central de Conhecimento</p>
+          <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
+            Documentação <span class="bg-gradient-to-r from-green-500 to-teal-600 bg-clip-text text-transparent">Completa</span>
+          </h2>
+          <p class="text-gray-700 text-lg max-w-3xl mx-auto">
+            Aprenda como funciona cada recurso da plataforma com guias detalhados, exemplos práticos e FAQs.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <router-link
+            to="/tutorial"
+            class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 hover:shadow-lg transition group"
+          >
+            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Tutorial Passo a Passo</h3>
+            <p class="text-sm text-gray-600">Guia completo dividido para Contratantes e Prestadores</p>
+          </router-link>
+
+          <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 hover:shadow-lg transition group cursor-pointer">
+            <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Como Funciona o Escrow</h3>
+            <p class="text-sm text-gray-600">Entenda a proteção de pagamentos e liberação de milestones</p>
+          </div>
+
+          <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 hover:shadow-lg transition group cursor-pointer">
+            <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Contratos & Milestones</h3>
+            <p class="text-sm text-gray-600">Gerencie contratos, etapas e entregas com segurança</p>
+          </div>
+
+          <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 hover:shadow-lg transition group cursor-pointer">
+            <div class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">FAQ & Suporte</h3>
+            <p class="text-sm text-gray-600">Dúvidas frequentes e como entrar em contato</p>
+          </div>
+        </div>
+
+        <div class="mt-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 class="text-2xl font-bold mb-2">📄 Comprovantes de Pagamento</h3>
+              <p class="text-blue-100">Gere comprovantes em PDF (modelo RPA) de todas as suas transações e serviços executados. Ideal para declaração e contabilidade!</p>
+            </div>
+            <div class="flex gap-4">
+              <div class="text-center">
+                <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p class="text-sm font-semibold">RPA Digital</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comunidade -->
+    <section class="bg-gradient-to-br from-purple-50 to-pink-50 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <p class="text-sm text-purple-600 font-semibold uppercase tracking-wide">🤝 Junte-se a Nós</p>
+          <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
+            Nossa <span class="bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">Comunidade</span>
+          </h2>
+          <p class="text-gray-700 text-lg max-w-3xl mx-auto">
+            Conecte-se com outros profissionais, compartilhe experiências e cresça junto com a comunidade Kaddesh.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Chat da Comunidade</h3>
+            <p class="text-gray-600 mb-4">Converse com outros membros, tire dúvidas e faça networking.</p>
+            <button class="text-purple-600 font-semibold hover:underline">Em breve</button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Blog & Artigos</h3>
+            <p class="text-gray-600 mb-4">Conteúdo exclusivo sobre freelancing, gestão e produtividade.</p>
+            <button class="text-blue-600 font-semibold hover:underline">Em breve</button>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
+            <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Eventos & Webinars</h3>
+            <p class="text-gray-600 mb-4">Participe de lives, workshops e eventos exclusivos.</p>
+            <button class="text-pink-600 font-semibold hover:underline">Em breve</button>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center bg-white rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">💬 Sugestões e Feedback</h3>
+          <p class="text-gray-600 mb-6">Sua opinião é muito importante! Ajude-nos a melhorar a plataforma.</p>
+          <button class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg transition">
+            Enviar Sugestão
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap / Progresso -->
+    <section class="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+          <div class="lg:w-2/5 space-y-4">
+            <p class="text-sm font-semibold tracking-widest text-accent-300 uppercase">Estado real do roadmap</p>
+            <h2 class="text-3xl font-bold">Estamos {{ progressSnapshot.mvp }}% do MVP e {{ progressSnapshot.platform }}% da plataforma completa</h2>
+            <p class="text-gray-300">
+              Percentuais confirmados no arquivo <strong>{{ progressSnapshot.referenceDoc }}</strong> em {{ progressSnapshot.lastUpdated }}. O quadro abaixo mostra exatamente o que
+              falta para cada marco — sem placeholders, apenas sinalização transparente para quem acompanha o progresso.
+            </p>
+            <div class="text-sm text-gray-400">
+              Último marco prioritário: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
+            </div>
+          </div>
+          <div class="lg:flex-1 w-full grid gap-6 md:grid-cols-2">
+            <article
+              v-for="item in progressSnapshot.blocks"
+              :key="item.label"
+              class="bg-white/5 backdrop-blur rounded-2xl border border-white/10 p-6 space-y-4"
+            >
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white">{{ item.label }}</h3>
+                <span class="text-2xl font-bold text-accent-300">{{ item.value }}%</span>
+              </div>
+              <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
+                <div class="h-3 bg-accent-400 rounded-full transition-all duration-500" :style="{ width: getProgressBarWidth(item.value) }"></div>
+              </div>
+              <p class="text-sm text-gray-300">{{ item.description }}</p>
+              <ul class="text-xs text-gray-400 space-y-1">
+                <li v-for="bullet in item.pending" :key="bullet">• {{ bullet }}</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="bg-primary-900 py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-4">Inscreva-se no nosso boletim</h2>
@@ -310,7 +551,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
@@ -334,6 +575,8 @@ import {
 const router = useRouter()
 const authStore = useAuthStore()
 const toast = typeof window !== 'undefined' ? useToast() : null
+
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 
 const searchKeyword = ref('')
 const newsletterEmail = ref('')
