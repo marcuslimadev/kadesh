@@ -17,12 +17,15 @@
           </router-link>
           
           <template v-if="isAuthenticated">
+            <!-- Switch Ver Como -->
+            <ViewModeSwitch />
+            
             <router-link to="/dashboard" class="text-gray-700 hover:text-blue-600 transition">
               Dashboard
             </router-link>
 
             <!-- Menu específico para CONTRATANTE -->
-            <template v-if="isClient">
+            <template v-if="viewMode.isContractor">
               <router-link to="/projects" class="text-gray-700 hover:text-blue-600 transition">
                 Projetos
               </router-link>
@@ -32,7 +35,7 @@
             </template>
 
             <!-- Menu específico para PRESTADOR -->
-            <template v-if="isProvider">
+            <template v-if="viewMode.isProvider">
               <router-link to="/my-bids" class="text-gray-700 hover:text-blue-600 transition">
                 Minhas Propostas
               </router-link>
@@ -156,9 +159,14 @@
           >
             Dashboard
           </router-link>
+          
+          <!-- Switch Ver Como Mobile -->
+          <div class="px-3 py-2">
+            <ViewModeSwitch />
+          </div>
 
           <!-- Menu específico para CONTRATANTE -->
-          <template v-if="isClient">
+          <template v-if="viewMode.isContractor">
             <router-link
               to="/projects"
               class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -176,7 +184,7 @@
           </template>
 
           <!-- Menu específico para PRESTADOR -->
-          <template v-if="isProvider">
+          <template v-if="viewMode.isProvider">
             <router-link
               to="/my-bids"
               class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
@@ -267,17 +275,18 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
+import ViewModeSwitch from '@/components/ViewModeSwitch.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const viewMode = useViewModeStore()
 
 const mobileMenuOpen = ref(false)
 const userMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const user = computed(() => authStore.user)
-const isClient = computed(() => authStore.isClient)
-const isProvider = computed(() => authStore.isProvider)
 const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
 const userInitials = computed(() => authStore.userInitials)
 

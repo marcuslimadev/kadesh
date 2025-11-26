@@ -8,24 +8,57 @@
       <h2 class="text-2xl font-semibold mb-4 text-primary-700">1. Cadastro e Login (Primeiro acesso)</h2>
       <ul class="list-disc ml-6 text-gray-800 space-y-2">
         <li>Acesse a Home e clique em <strong>Cadastrar</strong>.</li>
-        <li>Escolha se deseja ser <strong>Contratante</strong> ou <strong>Prestador</strong>:
+        <li>Preencha seu nome, e-mail e senha.</li>
+        <li>Confirme o cadastro pelo e-mail recebido (se configurado).</li>
+        <li>Após login, você verá seu painel pessoal.</li>
+        <li><strong>Novidade! 🔄</strong> Agora você pode alternar entre <strong>Contratante</strong> e <strong>Prestador</strong> a qualquer momento usando o botão <strong>"Ver como"</strong> no topo da página.
           <ul class="list-circle ml-6 mt-2 text-gray-700">
-            <li><strong>Contratante</strong> – quem oferta serviços</li>
-            <li><strong>Prestador</strong> – quem procura serviços</li>
+            <li><strong>Contratante</strong> – visualize como quem contrata serviços e publica projetos</li>
+            <li><strong>Prestador</strong> – visualize como quem oferece serviços e envia propostas</li>
+            <li>Você não precisa criar contas separadas! Use o switch para trocar de perfil instantaneamente.</li>
           </ul>
         </li>
-        <li>Preencha seu e-mail, senha e dados básicos.</li>
-        <li>Confirme o cadastro pelo e-mail recebido.</li>
-        <li>Após login, você verá seu painel pessoal.</li>
       </ul>
     </section>
 
     <section class="mb-10 bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-2xl font-semibold mb-4 text-primary-700">2. Lobby de Leilões Reversos</h2>
       <p class="text-gray-800 mb-3">Após Login, você verá o <strong>Lobby de Leilões Reversos</strong> onde conseguirá visualizar todas as propostas ofertadas e todas as disputas em negociação, com opções de <strong>Filtros</strong> e <strong>Botões de ações rápidas</strong>.</p>
+      <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
+        <p class="text-sm text-blue-800">
+          <strong>💡 Dica:</strong> O conteúdo do Lobby muda conforme o perfil selecionado no switch "Ver como". Como Contratante, você vê projetos publicados. Como Prestador, você vê oportunidades para dar lances.
+        </p>
+      </div>
     </section>
 
     <!-- Divisão em Duas Torres -->
+    <div class="mb-6 bg-gradient-to-r from-blue-100 to-green-100 p-6 rounded-xl border-2 border-gray-300">
+      <h2 class="text-2xl font-bold mb-3 text-gray-900 text-center">🔄 Como usar o Switch "Ver como"</h2>
+      <p class="text-gray-800 text-center mb-4">
+        A Kaddesh agora oferece <strong>perfis unificados</strong>! Você pode alternar entre Contratante e Prestador usando o botão no topo da página.
+      </p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-lg">
+          <h3 class="font-semibold text-blue-700 mb-2">👔 Modo Contratante</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li>• Criar e publicar projetos</li>
+            <li>• Ver propostas recebidas</li>
+            <li>• Gerenciar contratos como cliente</li>
+            <li>• Liberar pagamentos por milestone</li>
+          </ul>
+        </div>
+        <div class="bg-white p-4 rounded-lg">
+          <h3 class="font-semibold text-green-700 mb-2">⚙️ Modo Prestador</h3>
+          <ul class="text-sm text-gray-700 space-y-1">
+            <li>• Buscar oportunidades de trabalho</li>
+            <li>• Enviar propostas competitivas</li>
+            <li>• Gerenciar contratos como executor</li>
+            <li>• Receber pagamentos por entregas</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="grid md:grid-cols-2 gap-8 mb-12">
       <!-- Torre: CONTRATANTE -->
       <div class="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">

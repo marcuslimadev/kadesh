@@ -24,7 +24,7 @@
         </router-link>
 
         <router-link
-          v-if="isClient"
+          v-if="viewMode.isContractor"
           to="/projects/create"
           class="flex items-center justify-center p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow hover:shadow-lg transition"
         >
@@ -35,7 +35,7 @@
         </router-link>
 
         <router-link
-          v-if="isProvider"
+          v-if="viewMode.isProvider"
           to="/my-bids"
           class="flex items-center justify-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow hover:shadow-lg transition"
         >
@@ -89,7 +89,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm font-medium text-gray-600">
-                  {{ isClient ? 'Projetos Criados' : 'Projetos Ganhos' }}
+                  {{ viewMode.isContractor ? 'Projetos Criados' : 'Projetos Ganhos' }}
                 </p>
                 <p class="text-3xl font-bold text-gray-900 mt-2">
                   {{ stats.total_projects || 0 }}
@@ -317,12 +317,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import api from '@/services/api'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 
 const authStore = useAuthStore()
+const viewMode = useViewModeStore()
 
 const isLoading = ref(false)
 const stats = ref({})
@@ -330,7 +332,6 @@ const recentProjects = ref([])
 const recentNotifications = ref([])
 
 const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
-const isClient = computed(() => authStore.isClient)
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR', {

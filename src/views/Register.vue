@@ -17,53 +17,23 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form @submit.prevent="handleRegister" class="space-y-6">
-          <!-- User Type Selection -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-3">
-              Tipo de conta
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                @click="form.type = 'client'"
-                :class="[
-                  'flex flex-col items-center p-4 border-2 rounded-lg transition-all',
-                  form.type === 'client'
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-300 hover:border-gray-400'
-                ]"
-              >
-                <svg class="w-8 h-8 mb-2" :class="form.type === 'client' ? 'text-primary-600' : 'text-gray-400'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <span :class="['text-sm font-medium', form.type === 'client' ? 'text-primary-700' : 'text-gray-700']">
-                  Contratante
-                </span>
-                <span class="text-xs text-gray-500 mt-1">Contratar serviços</span>
-              </button>
-
-              <button
-                type="button"
-                @click="form.type = 'provider'"
-                :class="[
-                  'flex flex-col items-center p-4 border-2 rounded-lg transition-all',
-                  form.type === 'provider'
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-300 hover:border-gray-400'
-                ]"
-              >
-                <svg class="w-8 h-8 mb-2" :class="form.type === 'provider' ? 'text-primary-600' : 'text-gray-400'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-                <span :class="['text-sm font-medium', form.type === 'provider' ? 'text-primary-700' : 'text-gray-700']">
-                  Prestador
-                </span>
-                <span class="text-xs text-gray-500 mt-1">Oferecer serviços</span>
-              </button>
+        <!-- Info Box -->
+        <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-blue-700">
+                <strong>Novidade!</strong> Você pode alternar entre Contratante e Prestador a qualquer momento usando o switch "Ver como" após o login. 🔄
+              </p>
             </div>
           </div>
+        </div>
 
+        <form @submit.prevent="handleRegister" class="space-y-6">
           <!-- Name -->
           <div>
             <label for="name" class="block text-sm font-medium text-gray-700">
@@ -258,7 +228,6 @@ const form = reactive({
   email: '',
   password: '',
   confirmPassword: '',
-  type: 'client',
   acceptTerms: false
 })
 
@@ -354,8 +323,8 @@ const handleRegister = async () => {
     const result = await authStore.register({
       name: form.name.trim(),
       email: form.email.trim().toLowerCase(),
-      password: form.password,
-      type: form.type
+      password: form.password
+      // Não enviamos mais 'type' - todos os usuários podem usar ambos os perfis
     })
 
     if (result.success) {

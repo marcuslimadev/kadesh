@@ -10,7 +10,8 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, type = 'client' } = req.body;
+    const { name, email, password } = req.body;
+    // Tipo agora é sempre 'unified' - usuários podem alternar entre perfis via frontend
 
     // Validations
     if (!name || !email || !password) {
@@ -31,12 +32,6 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    if (!['client', 'provider'].includes(type)) {
-      return res.status(400).json({
-        error: 'Tipo de usuário inválido'
-      });
-    }
-
     // Check if user already exists
     const existingUser = await db.query(
       'SELECT id FROM users WHERE email = $1',
@@ -53,12 +48,12 @@ router.post('/register', async (req, res) => {
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // Create user
+    // Create user with unified type (can use both profiles)
     const result = await db.query(
       `INSERT INTO users (name, email, password_hash, type, created_at, updated_at)
        VALUES ($1, $2, $3, $4, NOW(), NOW())
        RETURNING id, name, email, type, created_at`,
-      [name, email, passwordHash, type]
+      [name, email, passwordHash, 'unified']
     );
 
     const user = result.rows[0];
