@@ -152,11 +152,11 @@
                     v-model="bidSortBy"
                     class="block pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md"
                   >
-                    <option value="score">Melhor Score</option>
-                    <option value="price-low">Menor Preço</option>
+                    <option value="price-low">Menor Preço (Vencedor)</option>
                     <option value="price-high">Maior Preço</option>
                     <option value="date-new">Mais Recentes</option>
                     <option value="date-old">Mais Antigas</option>
+                    <option value="score">Melhor Score</option>
                   </select>
                 </div>
                 
@@ -341,7 +341,7 @@ const showBidForm = ref(false)
 const isBidSubmitting = ref(false)
 const timeRemaining = ref(null)
 const countdownInterval = ref(null)
-const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
+const bidSortBy = ref('price-low') // price-low (default for reverse auction), price-high, date-new, date-old, score
 
 const bidForm = ref({
   amount: null,
@@ -591,11 +591,6 @@ const submitBid = async () => {
 
   if (!bidForm.value.amount || !bidForm.value.proposal || !bidForm.value.delivery_time) {
     toast.error('Por favor, preencha todos os campos')
-    return
-  }
-
-  if (bidForm.value.proposal.trim().length < 20) {
-    toast.error('Descrição da proposta deve ter pelo menos 20 caracteres')
     return
   }
 

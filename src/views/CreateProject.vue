@@ -165,6 +165,69 @@ Preferência por design clean e profissional, com cores azul e branco."
               </p>
             </div>
 
+            <!-- File Attachments -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                Anexos (Fotos ou Vídeos) - Opcional
+              </label>
+              <div 
+                class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition-colors cursor-pointer"
+                @click="$refs.fileInput.click()"
+                @dragover.prevent="isDragging = true"
+                @dragleave="isDragging = false"
+                @drop.prevent="handleFileDrop"
+                :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+              >
+                <input
+                  ref="fileInput"
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  class="hidden"
+                  @change="handleFileSelect"
+                />
+                <svg class="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-gray-600 font-medium">Arraste arquivos ou clique para selecionar</p>
+                <p class="text-sm text-gray-500 mt-1">Suporta imagens e vídeos (máximo 10MB por arquivo)</p>
+              </div>
+              
+              <!-- Preview dos arquivos selecionados -->
+              <div v-if="form.attachments.length > 0" class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div 
+                  v-for="(file, index) in form.attachments" 
+                  :key="index"
+                  class="relative group"
+                >
+                  <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
+                    <img 
+                      v-if="file.type.startsWith('image/')"
+                      :src="file.preview" 
+                      :alt="file.name"
+                      class="w-full h-full object-cover"
+                    />
+                    <div v-else class="w-full h-full flex flex-col items-center justify-center">
+                      <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      <span class="text-xs text-gray-500 mt-1 px-2 truncate w-full text-center">{{ file.name }}</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    @click="removeFile(index)"
+                    class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <p v-if="errors.attachments" class="mt-2 text-sm text-red-600">{{ errors.attachments }}</p>
+            </div>
+
             <!-- Requirements -->
             <div>
               <label for="requirements" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -230,13 +293,13 @@ Preferência por design clean e profissional, com cores azul e branco."
               <!-- Deadline -->
               <div>
                 <label for="deadline" class="block text-sm font-semibold text-gray-700 mb-2">
-                  Prazo de Entrega
+                  Prazo de Entrega (Data e Hora)
                 </label>
                 <input
                   id="deadline"
                   v-model="form.deadline"
-                  type="date"
-                  :min="minDate"
+                  type="datetime-local"
+                  :min="minDateTime"
                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   :class="{ 'border-red-500 focus:ring-red-500': errors.deadline }"
                 />
@@ -247,7 +310,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                   {{ errors.deadline }}
                 </p>
                 <p v-else class="mt-2 text-sm text-gray-500">
-                  💡 Prazo flexível? Deixe em branco para receber mais propostas
+                  💡 Defina a data e hora limite para o encerramento do leilão
                 </p>
               </div>
             </div>
@@ -480,7 +543,8 @@ const form = reactive({
   deadline: '',
   requirements: '',
   skills_required: [],
-  priority: 3
+  priority: 3,
+  attachments: []
 })
 
 const errors = reactive({
@@ -489,11 +553,67 @@ const errors = reactive({
   category: '',
   budget: '',
   deadline: '',
+  attachments: '',
   general: ''
 })
 
 const skillInput = ref('')
 const isSubmitting = ref(false)
+const isDragging = ref(false)
+const fileInput = ref(null)
+
+// File handling functions
+const handleFileSelect = (event) => {
+  const files = event.target.files
+  addFiles(files)
+}
+
+const handleFileDrop = (event) => {
+  isDragging.value = false
+  const files = event.dataTransfer.files
+  addFiles(files)
+}
+
+const addFiles = (files) => {
+  const maxSize = 10 * 1024 * 1024 // 10MB
+  const maxFiles = 10
+  
+  for (const file of files) {
+    if (form.attachments.length >= maxFiles) {
+      toast.warning('Máximo de 10 arquivos permitidos')
+      break
+    }
+    
+    if (file.size > maxSize) {
+      toast.error(`Arquivo ${file.name} excede o limite de 10MB`)
+      continue
+    }
+    
+    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+      toast.error(`Arquivo ${file.name} não é uma imagem ou vídeo válido`)
+      continue
+    }
+    
+    // Create preview URL for images
+    const fileWithPreview = {
+      file,
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+    }
+    
+    form.attachments.push(fileWithPreview)
+  }
+}
+
+const removeFile = (index) => {
+  const file = form.attachments[index]
+  if (file.preview) {
+    URL.revokeObjectURL(file.preview)
+  }
+  form.attachments.splice(index, 1)
+}
 
 const priorities = [
   { value: 1, label: 'Urgente', icon: '🔥', color: 'text-red-500' },
@@ -508,10 +628,16 @@ const suggestedSkills = [
   'SEO', 'Marketing Digital', 'Copywriting', 'Design Gráfico'
 ]
 
-const minDate = computed(() => {
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  return tomorrow.toISOString().split('T')[0]
+const minDateTime = computed(() => {
+  const now = new Date()
+  now.setHours(now.getHours() + 1) // Minimum 1 hour from now
+  // Format as YYYY-MM-DDTHH:MM for datetime-local input
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = String(now.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
 })
 
 const nextStep = () => {
@@ -636,6 +762,11 @@ const handleSubmit = async () => {
     const result = await projectService.createProject(projectData)
 
     if (result.success) {
+      // Upload attachments if any
+      if (form.attachments.length > 0) {
+        await uploadAttachments(result.data.project.id)
+      }
+      
       toast.success('🎉 Projeto criado com sucesso! Agora você receberá propostas de profissionais qualificados.')
       router.push(`/projects/${result.data.project.id}`)
     } else {
@@ -647,6 +778,20 @@ const handleSubmit = async () => {
     toast.error('Erro ao criar projeto. Tente novamente.')
   } finally {
     isSubmitting.value = false
+  }
+}
+
+// Upload attachments after project creation
+const uploadAttachments = async (projectId) => {
+  const uploadPromises = form.attachments.map(attachment => 
+    projectService.uploadAttachment(projectId, attachment.file)
+  )
+  
+  const results = await Promise.allSettled(uploadPromises)
+  const failedUploads = results.filter(r => r.status === 'rejected' || !r.value?.success)
+  
+  if (failedUploads.length > 0) {
+    toast.warning(`${failedUploads.length} arquivo(s) não puderam ser enviados`)
   }
 }
 </script>
