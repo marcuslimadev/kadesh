@@ -4,13 +4,13 @@
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
         <router-link to="/" class="flex items-center space-x-2">
-          <span class="text-2xl font-bold text-blue-600">Kadesh</span>
+          <span class="text-2xl font-bold text-blue-600">Kaddesh</span>
         </router-link>
 
         <!-- Desktop Navigation -->
         <div class="hidden md:flex items-center space-x-8">
-          <router-link to="/projects" class="text-gray-700 hover:text-blue-600 transition">
-            Projetos
+          <router-link to="/lobby" v-if="isAuthenticated" class="text-gray-700 hover:text-blue-600 transition font-medium">
+            🎯 Lobby
           </router-link>
           <router-link to="/tutorial" class="text-gray-700 hover:text-blue-600 transition">
             Tutorial
@@ -20,18 +20,32 @@
             <router-link to="/dashboard" class="text-gray-700 hover:text-blue-600 transition">
               Dashboard
             </router-link>
-            <router-link to="/my-projects" class="text-gray-700 hover:text-blue-600 transition">
-              Meus Projetos
-            </router-link>
-            <router-link to="/my-bids" class="text-gray-700 hover:text-blue-600 transition">
-              Minhas Propostas
-            </router-link>
+
+            <!-- Menu específico para CONTRATANTE -->
+            <template v-if="isClient">
+              <router-link to="/projects" class="text-gray-700 hover:text-blue-600 transition">
+                Projetos
+              </router-link>
+              <router-link to="/my-projects" class="text-gray-700 hover:text-blue-600 transition">
+                Meus Projetos
+              </router-link>
+            </template>
+
+            <!-- Menu específico para PRESTADOR -->
+            <template v-if="isProvider">
+              <router-link to="/my-bids" class="text-gray-700 hover:text-blue-600 transition">
+                Minhas Propostas
+              </router-link>
+              <router-link to="/contracts" class="text-gray-700 hover:text-blue-600 transition">
+                Contratos
+              </router-link>
+            </template>
+
+            <!-- Comuns a ambos -->
             <router-link to="/wallet" class="text-gray-700 hover:text-blue-600 transition">
               Carteira
             </router-link>
-            <router-link to="/contracts" class="text-gray-700 hover:text-blue-600 transition">
-              Contratos
-            </router-link>
+            
             <router-link to="/notifications" class="relative text-gray-700 hover:text-blue-600 transition">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -116,11 +130,12 @@
     <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <router-link
-          to="/projects"
-          class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+          v-if="isAuthenticated"
+          to="/lobby"
+          class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium"
           @click="mobileMenuOpen = false"
         >
-          Projetos
+          🎯 Lobby de Leilões
         </router-link>
         <router-link
           to="/tutorial"
@@ -138,33 +153,50 @@
           >
             Dashboard
           </router-link>
-          <router-link
-            to="/my-projects"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Meus Projetos
-          </router-link>
-          <router-link
-            to="/my-bids"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Minhas Propostas
-          </router-link>
+
+          <!-- Menu específico para CONTRATANTE -->
+          <template v-if="isClient">
+            <router-link
+              to="/projects"
+              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              @click="mobileMenuOpen = false"
+            >
+              Projetos
+            </router-link>
+            <router-link
+              to="/my-projects"
+              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              @click="mobileMenuOpen = false"
+            >
+              Meus Projetos
+            </router-link>
+          </template>
+
+          <!-- Menu específico para PRESTADOR -->
+          <template v-if="isProvider">
+            <router-link
+              to="/my-bids"
+              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              @click="mobileMenuOpen = false"
+            >
+              Minhas Propostas
+            </router-link>
+            <router-link
+              to="/contracts"
+              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              @click="mobileMenuOpen = false"
+            >
+              Contratos
+            </router-link>
+          </template>
+
+          <!-- Comuns a ambos -->
           <router-link
             to="/wallet"
             class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
             @click="mobileMenuOpen = false"
           >
             Carteira
-          </router-link>
-          <router-link
-            to="/contracts"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Contratos
           </router-link>
           <router-link
             to="/notifications"
@@ -234,6 +266,8 @@ const userMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const user = computed(() => authStore.user)
+const isClient = computed(() => authStore.isClient)
+const isProvider = computed(() => authStore.isProvider)
 const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
 const userInitials = computed(() => authStore.userInitials)
 

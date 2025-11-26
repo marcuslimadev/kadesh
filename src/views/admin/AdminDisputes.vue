@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Kadesh Admin</h1>
+            <h1 class="text-2xl font-bold text-blue-600">Kaddesh Admin</h1>
             <div class="hidden md:ml-10 md:flex md:space-x-4">
               <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Dashboard</router-link>
               <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Usuários</router-link>
@@ -48,7 +48,7 @@
             <thead class="bg-gray-50">
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Projeto</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contratante</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fornecedor</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Atualização</th>
@@ -100,7 +100,7 @@
         <div v-else>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div class="bg-gray-50 rounded-lg p-4">
-              <div class="text-xs text-gray-500 mb-1">Cliente</div>
+              <div class="text-xs text-gray-500 mb-1">Contratante</div>
               <div class="font-medium text-gray-900">{{ disputeDetail?.contract?.client_name }} <span class="text-xs text-gray-500">({{ disputeDetail?.contract?.client_email }})</span></div>
             </div>
             <div class="bg-gray-50 rounded-lg p-4">

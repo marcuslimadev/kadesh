@@ -4,7 +4,7 @@
       <div class="mb-6 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-gray-900">Meus Contratos</h1>
-          <p class="text-gray-600">Acompanhe seus contratos como cliente ou fornecedor</p>
+          <p class="text-gray-600">Acompanhe seus contratos como Contratante ou Prestador</p>
         </div>
         <button @click="fetchContracts" class="px-4 py-2 border rounded-lg text-sm hover:bg-gray-100">Atualizar</button>
       </div>
@@ -33,7 +33,7 @@
 
             <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p class="text-gray-500">Cliente</p>
+                <p class="text-gray-500">Contratante</p>
                 <p class="font-medium text-gray-900">{{ c.client_name }}</p>
               </div>
               <div>

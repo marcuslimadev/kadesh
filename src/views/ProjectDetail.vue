@@ -259,14 +259,14 @@
         <div class="lg:col-span-1 space-y-6">
           <!-- Client Info -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Cliente</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Contratante</h3>
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-lg font-semibold mr-3">
                 {{ getInitials(project.client_name) }}
               </div>
               <div>
                 <p class="font-medium text-gray-900">{{ project.client_name }}</p>
-                <p class="text-sm text-gray-500">Cliente</p>
+                <p class="text-sm text-gray-500">Contratante</p>
               </div>
             </div>
           </div>

@@ -17,7 +17,7 @@
             </h1>
             <p class="text-xl text-accent-100 font-semibold">Melhores profissionais ou talentos</p>
             <p class="text-lg text-gray-200">
-              Reunimos talentos verificados, leilões seguros e ferramentas para que clientes e fornecedores negociem com transparência.
+              Reunimos talentos verificados, leilões seguros e ferramentas para que Contratantes e Prestadores negociem com transparência.
             </p>
 
             <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-4 animate-fade-in-up">
@@ -93,7 +93,7 @@
             Vamos explorar <span class="bg-gradient-to-r from-accent-500 to-accent-600 bg-clip-text text-transparent">categorias populares</span>
           </h2>
           <p class="text-gray-600 text-lg mt-4 max-w-3xl mx-auto">
-            Use o leilão reverso da Kadesh para contratar especialistas ou aplicar seus talentos nos projetos certos.
+            Use o leilão reverso da Kaddesh para contratar especialistas ou aplicar seus talentos nos projetos certos.
           </p>
         </div>
 
@@ -156,7 +156,7 @@
         <div class="flex justify-center lg:justify-end animate-slide-in-right">
           <div class="relative">
             <div class="absolute inset-0 bg-accent-500/20 rounded-full blur-3xl animate-pulse-slow scale-110"></div>
-            <img src="/assets/images/mobile-app.png" alt="Aplicativo Kadesh" class="relative w-full max-w-md animate-float" />
+            <img src="/assets/images/mobile-app.png" alt="Aplicativo Kaddesh" class="relative w-full max-w-md animate-float" />
             <div class="absolute top-10 -left-8 bg-white rounded-2xl shadow-xl p-4 w-48">
               <p class="text-sm text-gray-500">Notificações inteligentes</p>
               <p class="font-semibold text-primary-900">12 convites pendentes</p>
@@ -177,7 +177,7 @@
           <div>
             <p class="text-sm text-accent-500 font-semibold uppercase tracking-wide">Quer começar a trabalhar?</p>
             <h2 class="text-4xl font-bold text-primary-900">Aplique os projetos mais bem avaliados</h2>
-            <p class="text-gray-600 mt-3 max-w-2xl">Selecionamos oportunidades em aberto com pagamentos protegidos em escrow e clientes verificados.</p>
+            <p class="text-gray-600 mt-3 max-w-2xl">Selecionamos oportunidades em aberto com pagamentos protegidos em escrow e Contratantes verificados.</p>
           </div>
           <button type="button" @click="router.push({ name: 'projects' })" class="text-accent-600 font-semibold flex items-center gap-2">
             Ver todos os projetos
@@ -286,7 +286,7 @@
     <section class="bg-primary-900 py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-4">Inscreva-se no nosso boletim</h2>
-        <p class="text-gray-300 mb-8">Receba novidades das categorias, eventos e vagas urgentes da comunidade Kadesh.</p>
+        <p class="text-gray-300 mb-8">Receba novidades das categorias, eventos e vagas urgentes da comunidade Kaddesh.</p>
 
         <form @submit.prevent="handleNewsletter" class="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
           <label class="sr-only" for="newsletterEmail">Informe seu e-mail</label>
@@ -368,7 +368,7 @@ const progressSnapshot = {
 const heroStats = [
   { label: 'Talentos ativos', value: '12k+' },
   { label: 'Projetos financiados', value: '2.4k+' },
-  { label: 'Clientes verificados', value: '940+' }
+  { label: 'Contratantes verificados', value: '940+' }
 ]
 
 const categories = [
@@ -437,7 +437,7 @@ const mobileHighlights = [
   },
   {
     title: 'Escrow protegido',
-    description: 'Liberamos o pagamento assim que o cliente aprova as entregas.',
+    description: 'Liberamos o pagamento assim que o Contratante aprova as entregas.',
     icon: CheckCircleIcon
   },
   {

@@ -20,7 +20,7 @@
         <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <p class="text-sm text-gray-500">Cliente</p>
+              <p class="text-sm text-gray-500">Contratante</p>
               <p class="font-medium text-gray-900">{{ contract.client_name }} ({{ contract.client_email }})</p>
             </div>
             <div>

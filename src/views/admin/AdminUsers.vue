@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Kadesh Admin</h1>
+            <h1 class="text-2xl font-bold text-blue-600">Kaddesh Admin</h1>
             <div class="hidden md:ml-10 md:flex md:space-x-4">
               <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Dashboard</router-link>
               <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100" :class="{ 'bg-gray-100': $route.path === '/admin/users' }">Usuários</router-link>
@@ -41,7 +41,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
             <select v-model="filters.type" @change="fetchUsers" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
               <option value="">Todos</option>
-              <option value="client">Clientes</option>
+              <option value="client">Contratantes</option>
               <option value="provider">Fornecedores</option>
             </select>
           </div>
@@ -87,7 +87,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 py-1 text-xs font-medium rounded-full" :class="user.type === 'client' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'">
-                    {{ user.type === 'client' ? 'Cliente' : 'Fornecedor' }}
+                    {{ user.type === 'client' ? 'Contratante' : 'Prestador' }}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 // Lazy load views
 const Home = () => import('../views/Home.vue')
 const Tutorial = () => import('../views/Tutorial.vue')
+const AuctionLobby = () => import('../views/AuctionLobby.vue')
 const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -40,6 +41,12 @@ const routes = [
     name: 'tutorial',
     component: Tutorial,
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/lobby',
+    name: 'auction-lobby',
+    component: AuctionLobby,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
