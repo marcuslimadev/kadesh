@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const PDFDocument = require('pdfkit');
 const db = require('../config/database');
-const { authenticateToken } = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
 /**
  * @route   GET /api/receipts/contract/:id
  * @desc    Gera PDF de comprovante RPA para contrato finalizado
  * @access  Private
  */
-router.get('/contract/:id', authenticateToken, async (req, res) => {
+router.get('/contract/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
@@ -224,7 +224,7 @@ router.get('/contract/:id', authenticateToken, async (req, res) => {
  * @desc    Gera PDF de comprovante RPA para transação de carteira
  * @access  Private
  */
-router.get('/transaction/:id', authenticateToken, async (req, res) => {
+router.get('/transaction/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
