@@ -45,6 +45,9 @@
             <router-link to="/wallet" class="text-gray-700 hover:text-blue-600 transition">
               Carteira
             </router-link>
+            <router-link to="/receipts" class="text-gray-700 hover:text-blue-600 transition">
+              Comprovantes
+            </router-link>
             
             <router-link to="/notifications" class="relative text-gray-700 hover:text-blue-600 transition">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,6 +200,13 @@
             @click="mobileMenuOpen = false"
           >
             Carteira
+          </router-link>
+          <router-link
+            to="/receipts"
+            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            @click="mobileMenuOpen = false"
+          >
+            Comprovantes
           </router-link>
           <router-link
             to="/notifications"

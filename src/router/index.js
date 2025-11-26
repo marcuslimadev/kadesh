@@ -15,6 +15,7 @@ const MyBids = () => import('../views/MyBids.vue')
 const ProviderProfile = () => import('../views/ProviderProfile.vue')
 const PublicProviderProfile = () => import('../views/PublicProviderProfile.vue')
 const Wallet = () => import('../views/Wallet.vue')
+const Receipts = () => import('../views/Receipts.vue')
 const Notifications = () => import('../views/Notifications.vue')
 const Settings = () => import('../views/Settings.vue')
 const Contracts = () => import('../views/Contracts.vue')
@@ -112,6 +113,12 @@ const routes = [
     path: '/wallet',
     name: 'wallet',
     component: Wallet,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/receipts',
+    name: 'receipts',
+    component: Receipts,
     meta: { requiresAuth: true }
   },
   {
