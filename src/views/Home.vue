@@ -694,14 +694,16 @@ const fetchFeaturedProjects = async () => {
   loadingProjects.value = true
   try {
     const { data } = await api.get('/api/projects', {
-      params: { status: 'open', limit: 4 }
+      params: { status: 'open', limit: 4 },
+      silent: true // Não mostrar toast de erro
     })
 
     const payload = Array.isArray(data) ? data : data?.projects || []
     featuredProjects.value = payload.slice(0, 4)
   } catch (error) {
-    console.error('Erro ao buscar projetos em destaque', error)
-    toast?.error('Não foi possível carregar os projetos em destaque.')
+    console.warn('Projetos em destaque não disponíveis:', error.message)
+    // Silenciosamente define array vazio - não mostrar erro ao usuário
+    featuredProjects.value = []
   } finally {
     loadingProjects.value = false
   }

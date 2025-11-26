@@ -60,6 +60,9 @@ api.interceptors.response.use(
   },
   (error) => {
     console.error('[API] Response error:', error)
+    
+    // Check if request is marked as silent (no toast on error)
+    const isSilent = error.config?.silent === true
 
     // Handle common error cases
     if (error.response) {
@@ -70,43 +73,62 @@ api.interceptors.response.use(
           // Unauthorized - clear auth and redirect to login
           const authStore = useAuthStore()
           authStore.logout()
-          toast?.error('Sessão expirada. Faça login novamente.')
+          if (!isSilent) {
+            toast?.error('Sessão expirada. Faça login novamente.')
+          }
           break
 
         case 403:
-          toast?.error('Você não tem permissão para esta ação.')
+          if (!isSilent) {
+            toast?.error('Você não tem permissão para esta ação.')
+          }
           break
 
         case 404:
-          toast?.error('Recurso não encontrado.')
+          if (!isSilent) {
+            toast?.error('Recurso não encontrado.')
+          }
           break
 
         case 422:
           // Validation errors
-          if (data.errors && Array.isArray(data.errors)) {
-            data.errors.forEach(err => toast?.error(err))
-          } else if (data.error) {
-            toast?.error(data.error)
+          if (!isSilent) {
+            if (data.errors && Array.isArray(data.errors)) {
+              data.errors.forEach(err => toast?.error(err))
+            } else if (data.error) {
+              toast?.error(data.error)
+            }
           }
           break
 
         case 429:
-          toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
+          if (!isSilent) {
+            toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
+          }
           break
 
         case 500:
-          toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
+          if (!isSilent) {
+            toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
+          }
           break
 
         default:
-          toast?.error(data?.error || 'Ocorreu um erro inesperado.')
+          if (!isSilent) {
+            toast?.error(data?.error || 'Ocorreu um erro inesperado.')
+          }
       }
     } else if (error.code === 'ECONNABORTED') {
-      toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
+      if (!isSilent) {
+        toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
+      }
     } else if (error.message === 'Network Error') {
-      toast?.error('Erro de conexão. Verifique sua internet.')
+      // Network errors são sempre silenciosos para não assustar o usuário na home
+      console.warn('Network error - servidor pode estar indisponível')
     } else {
-      toast?.error('Ocorreu um erro inesperado.')
+      if (!isSilent) {
+        toast?.error('Ocorreu um erro inesperado.')
+      }
     }
 
     return Promise.reject(error)
