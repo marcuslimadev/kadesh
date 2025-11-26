@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- main [ref=e4]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - link "Kaddesh" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - heading "Kaddesh" [level=1] [ref=e8]
+      - heading "Crie sua conta" [level=2] [ref=e9]
+      - paragraph [ref=e10]:
+        - text: Já tem uma conta?
+        - link "Faça login" [ref=e11] [cursor=pointer]:
+          - /url: /login
+    - generic [ref=e13]:
+      - generic [ref=e15]:
+        - img [ref=e17]
+        - paragraph [ref=e20]:
+          - strong [ref=e21]: Novidade!
+          - text: Você pode alternar entre Contratante e Prestador a qualquer momento usando o switch "Ver como" após o login. 🔄
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: Nome completo
+          - textbox "Nome completo" [ref=e26]:
+            - /placeholder: João Silva
+            - text: Teste Unificado
+        - generic [ref=e27]:
+          - generic [ref=e28]: Email
+          - textbox "Email" [ref=e30]:
+            - /placeholder: seu@email.com
+            - text: teste.1764176425459@kadesh.com
+        - generic [ref=e31]:
+          - generic [ref=e32]: Senha
+          - generic [ref=e33]:
+            - textbox "Senha" [ref=e34]:
+              - /placeholder: Mínimo 6 caracteres
+              - text: senha123456
+            - button [ref=e35] [cursor=pointer]:
+              - img [ref=e36]
+          - generic [ref=e43]: Média
+        - generic [ref=e44]:
+          - generic [ref=e45]: Confirmar senha
+          - textbox "Confirmar senha" [ref=e47]:
+            - /placeholder: Digite a senha novamente
+            - text: senha123456
+        - generic [ref=e48]:
+          - checkbox "Aceito os termos de uso e a política de privacidade" [checked] [ref=e50]
+          - generic [ref=e52]:
+            - text: Aceito os
+            - link "termos de uso" [ref=e53] [cursor=pointer]:
+              - /url: "#"
+            - text: e a
+            - link "política de privacidade" [ref=e54] [cursor=pointer]:
+              - /url: "#"
+        - generic [ref=e56]:
+          - img [ref=e58]
+          - paragraph [ref=e61]: Erro ao criar conta
+        - button "Criar conta" [ref=e63] [cursor=pointer]
+```

@@ -1,18 +1,25 @@
 <template>
-  <nav class="bg-white shadow-sm fixed top-0 left-0 right-0 z-40">
+  <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-40 transition-all duration-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
-        <router-link to="/" class="flex items-center space-x-2">
-          <span class="text-2xl font-bold text-blue-600">Kaddesh</span>
+        <router-link to="/" class="flex items-center space-x-2 group">
+          <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent transition-all duration-500 group-hover:from-indigo-500 group-hover:to-purple-500">Kaddesh</span>
         </router-link>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-8">
-          <router-link to="/lobby" v-if="isAuthenticated" class="text-gray-700 hover:text-blue-600 transition font-medium">
+        <div class="hidden md:flex items-center space-x-6">
+          <router-link 
+            to="/lobby" 
+            v-if="isAuthenticated" 
+            class="text-gray-600 hover:text-blue-600 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-blue-50"
+          >
             🎯 Lobby
           </router-link>
-          <router-link to="/tutorial" class="text-gray-700 hover:text-blue-600 transition">
+          <router-link 
+            to="/tutorial" 
+            class="text-gray-600 hover:text-indigo-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-indigo-50"
+          >
             Tutorial
           </router-link>
           
@@ -20,35 +27,56 @@
             <!-- Switch Ver Como -->
             <ViewModeSwitch />
             
-            <router-link to="/dashboard" class="text-gray-700 hover:text-blue-600 transition">
+            <router-link 
+              to="/dashboard" 
+              class="text-gray-600 hover:text-purple-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-purple-50"
+            >
               Dashboard
             </router-link>
 
             <!-- Menu específico para CONTRATANTE -->
             <template v-if="viewMode.isContractor">
-              <router-link to="/projects" class="text-gray-700 hover:text-blue-600 transition">
+              <router-link 
+                to="/projects" 
+                class="text-gray-600 hover:text-blue-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-blue-50 animate-fade-in"
+              >
                 Projetos
               </router-link>
-              <router-link to="/my-projects" class="text-gray-700 hover:text-blue-600 transition">
+              <router-link 
+                to="/my-projects" 
+                class="text-gray-600 hover:text-blue-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-blue-50 animate-fade-in"
+              >
                 Meus Projetos
               </router-link>
             </template>
 
             <!-- Menu específico para PRESTADOR -->
             <template v-if="viewMode.isProvider">
-              <router-link to="/my-bids" class="text-gray-700 hover:text-blue-600 transition">
+              <router-link 
+                to="/my-bids" 
+                class="text-gray-600 hover:text-emerald-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-emerald-50 animate-fade-in"
+              >
                 Minhas Propostas
               </router-link>
-              <router-link to="/contracts" class="text-gray-700 hover:text-blue-600 transition">
+              <router-link 
+                to="/contracts" 
+                class="text-gray-600 hover:text-teal-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-teal-50 animate-fade-in"
+              >
                 Contratos
               </router-link>
             </template>
 
             <!-- Comuns a ambos -->
-            <router-link to="/wallet" class="text-gray-700 hover:text-blue-600 transition">
+            <router-link 
+              to="/wallet" 
+              class="text-gray-600 hover:text-amber-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-amber-50"
+            >
               Carteira
             </router-link>
-            <router-link to="/receipts" class="text-gray-700 hover:text-blue-600 transition">
+            <router-link 
+              to="/receipts" 
+              class="text-gray-600 hover:text-pink-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-pink-50"
+            >
               Comprovantes
             </router-link>
             
@@ -297,3 +325,26 @@ const handleLogout = async () => {
   router.push('/')
 }
 </script>
+
+<style scoped>
+/* Animação fade-in para menus que aparecem/desaparecem */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Transições suaves para todos os elementos */
+a, button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>

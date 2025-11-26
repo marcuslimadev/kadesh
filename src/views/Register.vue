@@ -1,33 +1,33 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <router-link to="/" class="flex justify-center">
-        <h1 class="text-4xl font-bold text-primary-600">Kaddesh</h1>
+      <router-link to="/" class="flex justify-center group">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent transition-all duration-500 group-hover:from-indigo-500 group-hover:to-purple-500">Kaddesh</h1>
       </router-link>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Crie sua conta
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Já tem uma conta?
-        <router-link to="/login" class="font-medium text-primary-600 hover:text-primary-500">
+        <router-link to="/login" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors duration-300">
           Faça login
         </router-link>
       </p>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-white/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
         <!-- Info Box -->
-        <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="mb-6 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 border border-indigo-200 rounded-xl p-4 shadow-sm">
           <div class="flex items-start">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm text-blue-700">
-                <strong>Novidade!</strong> Você pode alternar entre Contratante e Prestador a qualquer momento usando o switch "Ver como" após o login. 🔄
+              <p class="text-sm text-indigo-900">
+                <strong>✨ Novidade!</strong> Você pode alternar entre Contratante e Prestador a qualquer momento usando o switch "Ver como" após o login. 🔄
               </p>
             </div>
           </div>
@@ -200,7 +200,7 @@
             <button
               type="submit"
               :disabled="isLoading"
-              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-500 transform hover:scale-105"
             >
               <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
