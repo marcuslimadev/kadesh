@@ -17,6 +17,7 @@ const contractRoutes = require('./routes/contracts');
 const reviewRoutes = require('./routes/reviews');
 const milestoneRoutes = require('./routes/milestones');
 const messageRoutes = require('./routes/messages');
+const receiptsRoutes = require('./routes/receipts');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -112,6 +113,7 @@ app.use('/api/contracts', contractRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/milestones', milestoneRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/receipts', receiptsRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
