@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    // Tipo agora é sempre 'unified' - usuários podem alternar entre perfis via frontend
+    // Tipo é 'client' no DB - usuários alternam entre perfis via switch frontend
 
     // Validations
     if (!name || !email || !password) {
@@ -48,12 +48,12 @@ router.post('/register', async (req, res) => {
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // Create user with unified type (can use both profiles)
+    // Create user with client type (frontend switch controls view mode)
     const result = await db.query(
       `INSERT INTO users (name, email, password_hash, type, created_at, updated_at)
        VALUES ($1, $2, $3, $4, NOW(), NOW())
        RETURNING id, name, email, type, created_at`,
-      [name, email, passwordHash, 'unified']
+      [name, email, passwordHash, 'client']
     );
 
     const user = result.rows[0];
@@ -82,9 +82,11 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Register error:', error);
+    console.error('❌ [Register] Error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
-      error: 'Erro interno do servidor'
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -169,9 +171,11 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('❌ [Register] Error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
-      error: 'Erro interno do servidor'
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });

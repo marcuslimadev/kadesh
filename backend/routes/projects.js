@@ -82,7 +82,62 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get project by ID
+// Handler para "meus projetos" - DEVE vir ANTES de /:id
+const getMyProjectsHandler = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { status, limit = 20, offset = 0 } = req.query;
+
+    let query = `
+      SELECT 
+        p.*,
+        u.name as client_name,
+        u.email as client_email,
+        COUNT(b.id) as bid_count
+      FROM projects p
+      JOIN users u ON p.client_id = u.id
+      LEFT JOIN bids b ON p.id = b.project_id
+      WHERE p.client_id = $1
+    `;
+    
+    const params = [userId];
+    let paramCount = 1;
+
+    if (status) {
+      query += ` AND p.status = $${++paramCount}`;
+      params.push(status);
+    }
+
+    query += `
+      GROUP BY p.id, u.name, u.email
+      ORDER BY p.created_at DESC
+      LIMIT $${++paramCount} OFFSET $${++paramCount}
+    `;
+    params.push(parseInt(limit), parseInt(offset));
+
+    const result = await db.query(query, params);
+
+    res.json({
+      projects: result.rows,
+      total: result.rowCount,
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    });
+
+  } catch (error) {
+    console.error('❌ [My Projects] Error:', error.message);
+    res.status(500).json({
+      error: 'Erro ao carregar projetos',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// Rotas específicas ANTES da rota genérica /:id
+router.get('/my-projects', auth, getMyProjectsHandler);
+router.get('/user/my-projects', auth, getMyProjectsHandler);
+
+// Get project by ID - DEVE vir DEPOIS das rotas específicas
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -299,72 +354,5 @@ router.delete('/:id', auth, async (req, res) => {
     });
   }
 });
-
-// Obter projetos do usuário (como cliente) - ambos os caminhos suportados
-const getMyProjectsHandler = async (req, res) => {
-  try {
-    // Validar autenticação
-    if (!req.user || !req.user.userId) {
-      return res.status(401).json({
-        error: 'Usuário não autenticado'
-      });
-    }
-
-    const { status, limit = 20, offset = 0, sort = 'recent' } = req.query;
-
-    let query = `
-      SELECT 
-        p.*,
-        COUNT(b.id) as bid_count
-      FROM projects p
-      LEFT JOIN bids b ON p.id = b.project_id
-      WHERE p.client_id = $1
-    `;
-    
-    const params = [req.user.userId];
-    let paramCount = 1;
-
-    if (status && status !== 'all') {
-      query += ` AND p.status = $${++paramCount}`;
-      params.push(status);
-    }
-
-    query += ` GROUP BY p.id`;
-
-    // Ordenação
-    if (sort === 'recent') {
-      query += ` ORDER BY p.created_at DESC`;
-    } else if (sort === 'oldest') {
-      query += ` ORDER BY p.created_at ASC`;
-    } else if (sort === 'budget-high') {
-      query += ` ORDER BY p.budget DESC`;
-    } else if (sort === 'budget-low') {
-      query += ` ORDER BY p.budget ASC`;
-    }
-
-    query += ` LIMIT $${++paramCount} OFFSET $${++paramCount}`;
-    params.push(parseInt(limit), parseInt(offset));
-
-    const result = await db.query(query, params);
-
-    res.json({
-      projects: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
-    });
-
-  } catch (error) {
-    console.error('Erro ao obter projetos do usuário:', error.message);
-    res.status(500).json({
-      error: 'Erro ao carregar projetos',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
-  }
-};
-
-// Ambos os caminhos para compatibilidade
-router.get('/user/my-projects', auth, getMyProjectsHandler);
-router.get('/my-projects', auth, getMyProjectsHandler);
 
 module.exports = router;

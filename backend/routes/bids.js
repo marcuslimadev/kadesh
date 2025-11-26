@@ -57,6 +57,60 @@ router.get('/project/:projectId', async (req, res) => {
   }
 });
 
+// Handler para "minhas propostas" - DEVE vir ANTES de /:id
+const getMyBidsHandler = async (req, res) => {
+  try {
+    const { status, limit = 20, offset = 0 } = req.query;
+
+    let query = `
+      SELECT 
+        b.*,
+        p.title as project_title,
+        p.status as project_status,
+        p.budget as project_budget,
+        u.name as client_name
+      FROM bids b
+      JOIN projects p ON b.project_id = p.id
+      JOIN users u ON p.client_id = u.id
+      WHERE b.provider_id = $1
+    `;
+    
+    const params = [req.user.userId];
+    let paramCount = 1;
+
+    if (status && status !== 'all') {
+      query += ` AND b.status = $${++paramCount}`;
+      params.push(status);
+    }
+
+    query += `
+      ORDER BY b.created_at DESC
+      LIMIT $${++paramCount} OFFSET $${++paramCount}
+    `;
+    params.push(parseInt(limit), parseInt(offset));
+
+    const result = await db.query(query, params);
+
+    res.json({
+      bids: result.rows,
+      total: result.rowCount,
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    });
+
+  } catch (error) {
+    console.error('❌ [My Bids] Error:', error.message);
+    res.status(500).json({
+      error: 'Erro ao carregar propostas',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// Rotas específicas ANTES da rota genérica /:id
+router.get('/my-bids', auth, getMyBidsHandler);
+router.get('/user/my-bids', auth, getMyBidsHandler);
+
 // Create a bid
 router.post('/', auth, async (req, res) => {
   try {
@@ -385,55 +439,6 @@ router.post('/:id/accept', auth, async (req, res) => {
 
   } catch (error) {
     console.error('Accept bid error:', error);
-    res.status(500).json({
-      error: 'Erro interno do servidor'
-    });
-  }
-});
-
-// Get user's bids
-router.get('/user/my-bids', auth, async (req, res) => {
-  try {
-    const { status, limit = 20, offset = 0 } = req.query;
-
-    let query = `
-      SELECT 
-        b.*,
-        p.title as project_title,
-        p.status as project_status,
-        p.budget as project_budget,
-        u.name as client_name
-      FROM bids b
-      JOIN projects p ON b.project_id = p.id
-      JOIN users u ON p.client_id = u.id
-      WHERE b.provider_id = $1
-    `;
-    
-    const params = [req.user.userId];
-    let paramCount = 1;
-
-    if (status && status !== 'all') {
-      query += ` AND b.status = $${++paramCount}`;
-      params.push(status);
-    }
-
-    query += `
-      ORDER BY b.created_at DESC
-      LIMIT $${++paramCount} OFFSET $${++paramCount}
-    `;
-    params.push(parseInt(limit), parseInt(offset));
-
-    const result = await db.query(query, params);
-
-    res.json({
-      bids: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
-    });
-
-  } catch (error) {
-    console.error('Get user bids error:', error);
     res.status(500).json({
       error: 'Erro interno do servidor'
     });
