@@ -524,7 +524,7 @@ Preferência por design clean e profissional, com cores azul e branco."
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import projectService from '@/services/projectService'
@@ -614,6 +614,19 @@ const removeFile = (index) => {
   }
   form.attachments.splice(index, 1)
 }
+
+// Cleanup blob URLs when component unmounts
+const cleanupAttachments = () => {
+  form.attachments.forEach(attachment => {
+    if (attachment.preview) {
+      URL.revokeObjectURL(attachment.preview)
+    }
+  })
+}
+
+onUnmounted(() => {
+  cleanupAttachments()
+})
 
 const priorities = [
   { value: 1, label: 'Urgente', icon: '🔥', color: 'text-red-500' },
@@ -793,5 +806,8 @@ const uploadAttachments = async (projectId) => {
   if (failedUploads.length > 0) {
     toast.warning(`${failedUploads.length} arquivo(s) não puderam ser enviados`)
   }
+  
+  // Clean up blob URLs after upload completes
+  cleanupAttachments()
 }
 </script>

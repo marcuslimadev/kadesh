@@ -409,7 +409,7 @@ const loading = ref(false)
 const projects = ref([])
 const currentPage = ref(1)
 const pageSize = ref(20)
-const countdownIntervals = ref({})
+const currentTimestamp = ref(Date.now()) // Reactive timestamp for countdown updates
 
 const filters = ref({
   category: '',
@@ -447,11 +447,19 @@ const loadProjects = async () => {
     })
     const projectList = response.data.projects || response.data
     
-    // Load bids for each project
+    // Load bids for each project to display in the auction cards
+    // TODO: Optimize this by creating a batch endpoint or including top bids in the main project response
+    // This creates N+1 queries but ensures accurate bid data for the auction display
     const projectsWithBids = await Promise.all(
       projectList.map(async (project) => {
+        // Only fetch bids for open projects that need countdown/bid display
+        if (project.status !== 'open') {
+          return { ...project, bids: [] }
+        }
         try {
-          const bidsResponse = await api.get(`/api/bids/project/${project.id}`)
+          const bidsResponse = await api.get(`/api/bids/project/${project.id}`, {
+            params: { limit: 5 } // Only fetch top 5 bids for display
+          })
           return {
             ...project,
             bids: bidsResponse.data.bids || []
@@ -495,11 +503,12 @@ const getSortedBids = (bids) => {
   return [...bids].sort((a, b) => (a.amount || 0) - (b.amount || 0))
 }
 
-// Countdown helpers
+// Countdown helpers - uses reactive timestamp for efficient updates
 const getTimeRemaining = (deadline) => {
   if (!deadline) return null
   
-  const now = new Date()
+  // Use reactive timestamp to trigger recalculation
+  const now = new Date(currentTimestamp.value)
   const deadlineDate = new Date(deadline)
   const diff = deadlineDate - now
   
@@ -573,13 +582,13 @@ const getStatusLabel = (status) => {
   return labels[status] || status
 }
 
-// Update countdowns every second
+// Update countdowns every second by updating the reactive timestamp
 let countdownTimer = null
 
 const startCountdownTimer = () => {
   countdownTimer = setInterval(() => {
-    // Force reactivity update by triggering a small state change
-    projects.value = [...projects.value]
+    // Update only the timestamp to trigger countdown recalculation
+    currentTimestamp.value = Date.now()
   }, 1000)
 }
 

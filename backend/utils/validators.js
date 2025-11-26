@@ -28,10 +28,9 @@ const validateProjectData = (data) => {
   
   if (data.deadline) {
     const deadline = new Date(data.deadline);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
     
-    if (deadline < today) {
+    if (deadline < now) {
       errors.push('Prazo não pode ser no passado');
     }
   }
