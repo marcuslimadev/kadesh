@@ -819,8 +819,6 @@ const getProgressBarWidth = value => {
 }
 
 const router = useRouter()
-const loginEmail = ref('')
-const loginPassword = ref('')
 
 const goToLogin = () => {
   router.push({ name: 'login', query: { redirect: '/lobby' } })
