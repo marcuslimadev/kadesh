@@ -679,7 +679,7 @@ const categories = [
     label: 'Sob medida',
     tagline: 'Personalizado',
     slug: 'outros',
-    image: '/assets/images/project-placeholder.png',
+    image: '/assets/images/category-obras-real.jpg',
     icon: BriefcaseIcon,
     delay: '440ms'
   }
