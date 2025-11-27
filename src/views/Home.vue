@@ -118,6 +118,28 @@
       </div>
     </section>
 
+    <!-- Acesso rápido (login/registro) -->
+    <section class="bg-white py-12">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-2xl border border-gray-200 shadow-sm bg-gray-50">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Já tem conta?</h3>
+            <p class="text-sm text-gray-600 mb-4">Entre para acessar o Lobby de acordo com seu perfil.</p>
+            <button @click="goToLogin" class="w-full px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition">
+              Fazer login
+            </button>
+          </div>
+          <div class="p-6 rounded-2xl border border-gray-200 shadow-sm bg-gray-50">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Novo por aqui?</h3>
+            <p class="text-sm text-gray-600 mb-4">Crie sua conta para contratar ou prestar serviços.</p>
+            <button @click="goToRegister" class="w-full px-4 py-3 rounded-xl bg-dark text-offwhite font-semibold hover:bg-black transition">
+              Criar conta
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Experiência Mobile -->
     <section class="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 py-24 overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
@@ -691,7 +713,7 @@ const categories = [
     label: 'Sob medida',
     tagline: 'Personalizado',
     slug: 'outros',
-    image: '',
+    image: '/assets/images/category-obras-real.jpg',
     gradient: 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)',
     icon: BriefcaseIcon,
     delay: '440ms'
