@@ -624,7 +624,7 @@ const categories = [
     label: 'Popular',
     tagline: 'Stack moderna',
     slug: 'desenvolvimento-web',
-    gradient: 'linear-gradient(180deg, #3b4f72 0%, #0f1625 100%)',
+    image: '/assets/images/category-design.jpg',
     icon: CommandLineIcon,
     delay: '0ms'
   },
@@ -635,7 +635,7 @@ const categories = [
     label: 'Creative',
     tagline: 'Interface e marca',
     slug: 'design',
-    gradient: 'linear-gradient(180deg, #2e3b55 0%, #0f1625 100%)',
+    image: '/assets/images/category-design-real.jpg',
     icon: PaintBrushIcon,
     delay: '120ms'
   },
@@ -646,7 +646,7 @@ const categories = [
     label: 'Trending',
     tagline: 'Performance',
     slug: 'marketing',
-    gradient: 'linear-gradient(180deg, #2f4b64 0%, #0f1625 100%)',
+    image: '/assets/images/category-marketing.jpg',
     icon: MegaphoneIcon,
     delay: '200ms'
   },
@@ -657,7 +657,7 @@ const categories = [
     label: 'Conteúdo',
     tagline: 'Copy e roteiro',
     slug: 'redacao',
-    gradient: 'linear-gradient(180deg, #2d3f58 0%, #0f1625 100%)',
+    image: '/assets/images/category-email-real.jpg',
     icon: CpuChipIcon,
     delay: '280ms'
   },
@@ -668,7 +668,7 @@ const categories = [
     label: 'Premium',
     tagline: 'Estratégia',
     slug: 'consultoria',
-    gradient: 'linear-gradient(180deg, #2d4056 0%, #0f1625 100%)',
+    image: '/assets/images/hero-business.jpg',
     icon: BriefcaseIcon,
     delay: '360ms'
   },
@@ -679,7 +679,7 @@ const categories = [
     label: 'Sob medida',
     tagline: 'Personalizado',
     slug: 'outros',
-    gradient: 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)',
+    image: '/assets/images/project-placeholder.png',
     icon: BriefcaseIcon,
     delay: '440ms'
   }
