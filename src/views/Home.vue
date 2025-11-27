@@ -93,7 +93,19 @@
             class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-accent-500 animate-fade-in-up"
             :style="{ animationDelay: category.delay }"
           >
-            <img :src="category.image" :alt="category.title" class="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="h-56 w-full overflow-hidden">
+              <img
+                v-if="category.image"
+                :src="category.image"
+                :alt="category.title"
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div
+                v-else
+                class="h-full w-full transition-transform duration-700 group-hover:scale-105"
+                :style="{ background: category.gradient || 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)' }"
+              ></div>
+            </div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-5">
               <component :is="category.icon" class="h-8 w-8 text-accent-400 mb-3 animate-bounce-slow"></component>
               <p class="text-xs text-gray-300 uppercase tracking-wider">{{ category.tagline }}</p>
@@ -679,7 +691,8 @@ const categories = [
     label: 'Sob medida',
     tagline: 'Personalizado',
     slug: 'outros',
-    image: '/assets/images/category-obras-real.jpg',
+    image: '',
+    gradient: 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)',
     icon: BriefcaseIcon,
     delay: '440ms'
   }
