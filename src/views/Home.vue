@@ -10,6 +10,7 @@
               <p class="eyebrow">KADDESH • Marketplace premium</p>
             </div>
             <h1 class="hero-title">Leilões reversos com curadoria e segurança</h1>
+            <p class="hero-sub tagline">Kaddesh: Onde a excelência encontra a demanda.</p>
             <p class="hero-sub">
               Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.
             </p>
@@ -871,6 +872,10 @@ onMounted(() => {
   color: #e5e5e5;
   font-size: 1.05rem;
   max-width: 680px;
+}
+.hero-sub.tagline {
+  font-weight: 700;
+  color: #d4af37;
 }
 
 .hero-search {
