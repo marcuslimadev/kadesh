@@ -41,7 +41,7 @@
 
         <div class="mb-4" v-if="isAuthenticated">
           <div class="sidebar-switch">
-            <ViewModeSwitch />
+            <ViewModeSwitch variant="sidebar" />
           </div>
         </div>
 
@@ -104,7 +104,7 @@
 
     <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
       <div class="sidebar-switch">
-        <ViewModeSwitch />
+        <ViewModeSwitch variant="sidebar" />
       </div>
     </div>
 
