@@ -196,49 +196,60 @@
           </div>
         </div>
 
-        <div v-else-if="featuredProjects.length" class="space-y-6">
+                <div v-else-if="featuredProjects.length" class="space-y-6">
           <article
             v-for="project in featuredProjects"
             :key="project.id"
             class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-2xl transition-shadow"
           >
             <div class="flex flex-col lg:flex-row gap-6">
-              <div class="flex-1 flex gap-4">
-                <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center">
-                  <img src="/assets/images/project-placeholder.png" alt="Projeto" class="w-full h-full object-cover rounded-2xl" />
-                </div>
-                <div>
-                  <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-2">
-                    <span class="px-3 py-1 bg-accent-100 text-primary-900 rounded-full text-xs font-bold">⚡ Destaque</span>
-                    <span>Postado {{ formatDate(project.created_at) }}</span>
-                    <span class="flex items-center gap-1"><UsersIcon class="h-4 w-4" /> {{ project.bids_count || 0 }} propostas</span>
-                  </div>
-                  <h3 class="text-2xl font-semibold text-primary-900">{{ project.title }}</h3>
-                  <p class="text-gray-600 mt-2">{{ project.description }}</p>
-                  <div class="flex flex-wrap gap-4 text-sm text-gray-600 mt-4">
-                    <span class="flex items-center gap-1"><CalendarDaysIcon class="h-4 w-4 text-accent-500" /> {{ formatTimeLeft(project.bidding_ends_at) }}</span>
-                    <span class="flex items-center gap-1"><MapPinIcon class="h-4 w-4 text-accent-500" /> Remoto</span>
-                  </div>
-                </div>
+              <div class="w-full lg:w-48 h-32 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
+                <img
+                  v-if="getHeroImage(project)"
+                  :src="getHeroImage(project)"
+                  :alt="project.title"
+                  class="w-full h-full object-cover"
+                />
+                <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Sem imagem</div>
               </div>
-              <div class="lg:w-64 flex flex-col justify-between">
-                <div>
-                  <p class="text-sm text-gray-500">Budget estimado</p>
-                  <p class="text-3xl font-bold text-green-600">R$ {{ formatBudget(project.max_budget) }}</p>
+              <div class="flex-1 space-y-3">
+                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                  <span class="px-3 py-1 bg-accent-100 text-primary-900 rounded-full text-xs font-bold">Destaque</span>
+                  <span>Postado {{ formatDate(project.created_at) }}</span>
+                  <span class="flex items-center gap-1"><UsersIcon class="h-4 w-4" /> {{ project.bid_count || 0 }} propostas</span>
+                  <span class="flex items-center gap-1"><CalendarDaysIcon class="h-4 w-4 text-accent-500" /> Termina em {{ formatTimeLeft(project.deadline) }}</span>
+                </div>
+                <div class="flex items-start justify-between gap-4">
+                  <div class="space-y-1">
+                    <h3 class="text-2xl font-semibold text-primary-900">{{ project.title }}</h3>
+                    <p class="text-sm text-gray-600 line-clamp-3">{{ project.description }}</p>
+                    <div class="flex flex-wrap gap-3 text-sm text-gray-600 pt-1">
+                      <span class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-gray-700">
+                        <MapPinIcon class="h-4 w-4 text-accent-500" /> Remoto
+                      </span>
+                      <span class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-gray-700">
+                        <CalendarDaysIcon class="h-4 w-4 text-accent-500" /> Prazo {{ formatDateShort(project.deadline) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-xs text-gray-500">Orçamento</p>
+                    <p class="text-2xl font-bold text-green-600">R$ {{ formatBudget(project.budget) }}</p>
+                    <p v-if="project.lowest_bid_amount" class="text-xs text-gray-500 mt-1">Menor lance: R$ {{ formatBudget(project.lowest_bid_amount) }}</p>
+                  </div>
                 </div>
                 <button
                   type="button"
                   @click="handleApplyProject(project.id)"
-                  class="btn btn-primary w-full mt-4"
+                  class="btn btn-primary w-full sm:w-auto"
                 >
-                  Inscreva-se agora
+                  Ver leilão
                 </button>
               </div>
             </div>
           </article>
         </div>
-
-        <div v-else class="text-center py-12 text-gray-500">
+<div v-else class="text-center py-12 text-gray-500">
           <p class="text-lg">Nenhum projeto disponível no momento. Cadastre-se para ser notificado.</p>
         </div>
       </div>
@@ -628,47 +639,58 @@ const categories = [
   },
   {
     id: 2,
-    title: 'Marketing Digital',
-    description: 'Growth, mídia paga e social',
-    label: 'Trending',
-    tagline: 'Performance',
-    slug: 'marketing-digital',
-    image: '/assets/images/category-marketing.jpg',
-    icon: MegaphoneIcon,
-    delay: '100ms'
+    title: 'Design',
+    description: 'Identidade visual e UX/UI',
+    label: 'Creative',
+    tagline: 'Interface e marca',
+    slug: 'design',
+    image: '/assets/images/category-design-real.jpg',
+    icon: PaintBrushIcon,
+    delay: '120ms'
   },
   {
     id: 3,
-    title: 'Design & Branding',
-    description: 'Identidade visual e UX/UI',
-    label: 'Creative',
-    tagline: 'Estética e produto',
-    slug: 'design-branding',
-    image: '/assets/images/category-design-real.jpg',
-    icon: PaintBrushIcon,
+    title: 'Marketing',
+    description: 'Growth, mídia paga e social',
+    label: 'Trending',
+    tagline: 'Performance',
+    slug: 'marketing',
+    image: '/assets/images/category-marketing.jpg',
+    icon: MegaphoneIcon,
     delay: '200ms'
   },
   {
     id: 4,
-    title: 'Tecnologia & Dados',
-    description: 'IA, integrações e automações',
-    label: 'Hot',
-    tagline: 'SaaS • AI',
-    slug: 'tecnologia-dados',
+    title: 'Redação',
+    description: 'Conteúdo, roteiros e scripts',
+    label: 'Conteúdo',
+    tagline: 'Copy e roteiro',
+    slug: 'redacao',
     image: '/assets/images/category-email-real.jpg',
     icon: CpuChipIcon,
-    delay: '300ms'
+    delay: '280ms'
   },
   {
     id: 5,
-    title: 'Consultoria de Negócios',
+    title: 'Consultoria',
     description: 'Plano de crescimento e processos',
     label: 'Premium',
     tagline: 'Estratégia',
-    slug: 'consultoria-negocios',
+    slug: 'consultoria',
     image: '/assets/images/hero-business.jpg',
     icon: BriefcaseIcon,
-    delay: '400ms'
+    delay: '360ms'
+  },
+  {
+    id: 6,
+    title: 'Outros',
+    description: 'Projetos especiais e sob demanda',
+    label: 'Sob medida',
+    tagline: 'Personalizado',
+    slug: 'outros',
+    image: '/assets/images/project-placeholder.png',
+    icon: BriefcaseIcon,
+    delay: '440ms'
   }
 ]
 
@@ -694,7 +716,7 @@ const fetchFeaturedProjects = async () => {
   loadingProjects.value = true
   try {
     const { data } = await api.get('/api/projects', {
-      params: { status: 'open', limit: 4 },
+      params: { status: 'open', per_page: 4, page: 1 },
       silent: true // Não mostrar toast de erro
     })
 
@@ -759,15 +781,32 @@ const formatTimeLeft = endsAt => {
   const diff = end - now
   if (diff <= 0) return 'Encerrado'
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  if (days > 0) return `${days} dias restantes`
+  if (days > 0) return `${days}d`
   const hours = Math.floor(diff / (1000 * 60 * 60))
-  return `${hours} horas restantes`
+  if (hours > 0) return `${hours}h`
+  const minutes = Math.floor(diff / (1000 * 60))
+  return `${minutes}min`
 }
 
 const formatBudget = value => {
   if (!value) return '0,00'
   const numeric = typeof value === 'number' ? value : parseFloat(value)
   return numeric.toFixed(2).replace('.', ',')
+}
+
+const formatDateShort = date => {
+  if (!date) return 'Sem prazo'
+  try {
+    return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+  } catch {
+    return 'Sem prazo'
+  }
+}
+
+const getHeroImage = project => {
+  const attachments = Array.isArray(project.attachments) ? project.attachments : []
+  const firstImage = attachments.find(att => (att.mime_type || '').startsWith('image/') || /\.(jpg|jpeg|png|webp)$/i.test(att.original_name || ''))
+  return firstImage?.file_url || null
 }
 
 const getProgressBarWidth = value => {
