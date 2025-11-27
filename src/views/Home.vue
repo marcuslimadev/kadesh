@@ -1,44 +1,35 @@
 <template>
-  <div class="bg-white text-gray-900 overflow-hidden">
+    <div class="home-shell overflow-hidden">
     <!-- Hero -->
-    <section class="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 overflow-hidden">
-      <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute w-96 h-96 bg-accent-500/10 rounded-full blur-3xl -top-48 -left-48 animate-blob"></div>
-        <div class="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -bottom-48 -right-48 animate-blob animation-delay-2000"></div>
-        <div class="absolute inset-0 opacity-5 bg-grid-pattern animate-grid-scroll"></div>
-      </div>
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div class="space-y-6 animate-slide-in-left">
-            <p class="text-accent-400 font-semibold uppercase tracking-[0.3em] text-xs sm:text-sm">Plataforma completa de serviços profissionais</p>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              Seja você um <span class="bg-gradient-to-r from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent animate-gradient-text">Kaddesh</span>
-            </h1>
-            <p class="text-xl text-accent-100 font-semibold">Melhores profissionais ou talentos</p>
-            <p class="text-lg text-gray-200">
-              Reunimos talentos verificados, leilões seguros e ferramentas para que Contratantes e Prestadores negociem com transparência.
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">KADDESH • Marketplace premium</p>
+            <h1 class="hero-title">Leilões reversos com curadoria e segurança</h1>
+            <p class="hero-sub">
+              Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.
             </p>
 
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-4 animate-fade-in-up">
+            <div class="hero-search">
               <div class="flex flex-col md:flex-row gap-3">
                 <div class="flex-1">
                   <label class="sr-only" for="searchKeyword">Pesquise por palavra-chave</label>
                   <div class="relative group">
-                    <MagnifyingGlassIcon class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-500" />
+                    <MagnifyingGlassIcon class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-offwhite-muted group-focus-within:text-gold" />
                     <input
                       id="searchKeyword"
                       v-model="searchKeyword"
                       type="text"
-                      placeholder="Desenvolvedor, branding, social media..."
-                      class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                      placeholder="Desenvolvimento web, branding, social media..."
+                      class="search-input"
                     />
                   </div>
                 </div>
                 <button
                   type="button"
                   @click="handleSearch"
-                  class="bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-primary-900 px-8 py-3 rounded-xl font-bold whitespace-nowrap flex items-center justify-center gap-2"
+                  class="cta-primary"
                 >
                   Procurar agora
                   <ArrowRightIcon class="h-5 w-5" />
@@ -46,41 +37,33 @@
               </div>
             </div>
 
-            <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-6">
-              <div v-for="stat in heroStats" :key="stat.label" class="bg-white/10 rounded-2xl p-4 border border-white/10">
-                <dt class="text-sm text-gray-300">{{ stat.label }}</dt>
-                <dd class="text-3xl font-bold text-white">{{ stat.value }}</dd>
+            <dl class="hero-stats">
+              <div v-for="stat in heroStats" :key="stat.label" class="hero-stat-card">
+                <dt class="hero-stat-label">{{ stat.label }}</dt>
+                <dd class="hero-stat-value">{{ stat.value }}</dd>
               </div>
             </dl>
-            <div class="w-full flex justify-center">
-              <router-link to="/tutorial" class="btn btn-accent px-6 py-3 rounded-xl font-bold text-primary-900 shadow-lg hover:bg-accent-600 transition-all">
-                Como usar a plataforma (Tutorial)
-              </router-link>
-            </div>
           </div>
 
-          <div class="relative animate-slide-in-right">
-            <div class="absolute -inset-4 bg-gradient-to-r from-accent-500/20 to-blue-500/20 rounded-3xl blur-3xl animate-pulse-slow"></div>
-            <img
-              src="/assets/images/hero-handshake.avif"
-              alt="Profissionais fechando parceria"
-              class="relative rounded-3xl shadow-3xl w-full object-cover"
-            />
-            <div class="absolute -bottom-8 -right-6 bg-white rounded-2xl shadow-xl p-4 w-48 animate-float hidden sm:block">
-              <p class="text-xs text-gray-500">Escrow liberado ─ 12:32</p>
-              <p class="font-semibold text-primary-900">Projeto Branding Premium</p>
-              <p class="text-sm text-green-600 font-bold">R$ 8.400,00</p>
+          <div class="hero-visual">
+            <div class="hero-visual-glow"></div>
+            <div class="hero-visual-card">
+              <img
+                src="/assets/images/hero-handshake.avif"
+                alt="Profissionais fechando parceria"
+                class="hero-visual-image"
+              />
+              <div class="hero-visual-overlay">
+                <p class="hero-visual-caption">Prazo em horas + anexos ativos</p>
+                <p class="hero-visual-highlight">Leilão ativo • menor lance define</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="absolute bottom-0 left-0 right-0 text-gray-50">
-        <svg class="w-full h-20" viewBox="0 0 1440 74" fill="currentColor" preserveAspectRatio="none">
-          <path d="M0 74L60 61.8C120 49.7 240 25.3 360 16.5C480 7.7 600 14.3 720 24.7C840 35 960 49 1080 53.2C1200 57.3 1320 51.7 1380 48.8L1440 46V74H1380C1320 74 1200 74 1080 74C960 74 840 74 720 74C600 74 480 74 360 74C240 74 120 74 60 74H0Z" />
-        </svg>
-      </div>
     </section>
 
+    <!-- Categorias -->
     <!-- Categorias -->
     <section class="bg-gradient-to-b from-gray-50 to-white py-20 relative">
       <div class="absolute top-16 left-12 w-20 h-20 bg-accent-500/10 rounded-full blur-3xl animate-float"></div>
@@ -818,3 +801,201 @@ onMounted(() => {
   fetchFeaturedProjects()
 })
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Lato:wght@400;500;600&display=swap');
+
+.home-shell {
+  background: #f5f5f5;
+  color: #1a1a1a;
+  font-family: 'Lato', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.hero-section {
+  background: #1a1a1a;
+  color: #f5f5f5;
+  position: relative;
+}
+
+.hero-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 4rem 1rem 3rem;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hero-container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.eyebrow {
+  color: #d4af37;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.hero-title {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #d4af37;
+}
+
+.hero-sub {
+  color: #e5e5e5;
+  font-size: 1.05rem;
+  max-width: 680px;
+}
+
+.hero-search {
+  background: rgba(245, 245, 245, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
+
+.search-input::placeholder {
+  color: #b8b8b8;
+}
+
+.cta-primary {
+  background: #d4af37;
+  color: #1a1a1a;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cta-primary:hover {
+  background: #c49c2f;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.hero-stat-card {
+  background: rgba(245, 245, 245, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.hero-stat-label {
+  color: #cfcfcf;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hero-stat-value {
+  color: #d4af37;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.hero-visual {
+  position: relative;
+}
+
+.hero-visual-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 28px;
+  background: rgba(212, 175, 55, 0.12);
+  filter: blur(32px);
+}
+
+.hero-visual-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #0f0f0f;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.hero-visual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  display: block;
+}
+
+.hero-visual-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.hero-visual-caption {
+  color: #cfcfcf;
+  font-size: 0.85rem;
+}
+
+.hero-visual-highlight {
+  color: #d4af37;
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+
+.text-gold {
+  color: #d4af37;
+}
+
+.text-offwhite-muted {
+  color: #d0d0d0;
+}
+
+.bg-dark {
+  background: #111111;
+}
+
+.bg-dark-80 {
+  background: rgba(17, 17, 17, 0.85);
+}
+
+.shadow-gold {
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
+}
+</style>
