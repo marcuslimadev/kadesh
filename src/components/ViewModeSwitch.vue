@@ -8,7 +8,7 @@
       ]"
     >
       <button
-        @click="goToMode("contractor")"
+        @click="goToMode('contractor')"
         :class="[
           'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
@@ -26,7 +26,7 @@
       </button>
       
       <button
-        @click="goToMode("provider")"
+        @click="goToMode('provider')"
         :class="[
           'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
