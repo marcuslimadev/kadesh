@@ -181,7 +181,7 @@ router.get('/', async (req, res) => {
       'desenvolvimento-web': 'Desenvolvimento Web',
       'design': 'Design',
       'marketing': 'Marketing',
-      'redacao': 'Reda��o',
+      'redacao': 'Redação',
       'mobile': 'Mobile',
       'consultoria': 'Consultoria',
       'outros': 'Outros'
