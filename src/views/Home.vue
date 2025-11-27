@@ -147,11 +147,11 @@
           </ul>
 
           <div class="flex flex-wrap gap-3">
-            <button class="px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition">
-              Baixar na App Store
+            <button class="px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition" @click="goToLogin">
+              Entrar
             </button>
-            <button class="px-4 py-3 rounded-xl bg-dark-80 border border-gold/30 text-offwhite font-semibold hover:border-gold/50 transition">
-              Baixar na Play Store
+            <button class="px-4 py-3 rounded-xl bg-dark-80 border border-gold/30 text-offwhite font-semibold hover:border-gold/50 transition" @click="goToRegister">
+              Criar conta
             </button>
           </div>
         </div>
@@ -816,6 +816,18 @@ const getHeroImage = project => {
 const getProgressBarWidth = value => {
   const safeValue = Math.min(Math.max(Number(value) || 0, 0), 100)
   return `${safeValue}%`
+}
+
+const router = useRouter()
+const loginEmail = ref('')
+const loginPassword = ref('')
+
+const goToLogin = () => {
+  router.push({ name: 'login', query: { redirect: '/lobby' } })
+}
+
+const goToRegister = () => {
+  router.push({ name: 'register' })
 }
 
 onMounted(() => {
