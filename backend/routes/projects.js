@@ -1,9 +1,56 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const db = require('../config/database');
 const auth = require('../middleware/auth');
 const { validateProjectData } = require('../utils/validators');
 
 const router = express.Router();
+
+const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_UPLOAD_SIZE, 10) || (5 * 1024 * 1024);
+const ALLOWED_MIME_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+  'application/pdf'
+];
+
+const attachmentsDir = path.join(__dirname, '..', 'uploads', 'project-attachments');
+fs.mkdirSync(attachmentsDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => cb(null, attachmentsDir),
+  filename: (_, file, cb) => {
+    const timestamp = Date.now();
+    const randomPart = Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname) || '';
+    cb(null, `${timestamp}-${randomPart}${extension}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: MAX_FILE_SIZE },
+  fileFilter: (_, file, cb) => {
+    if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+      return cb(new Error('Formato de arquivo não suportado. Envie imagens ou PDFs.'));
+    }
+    cb(null, true);
+  }
+});
+
+const removeLocalFile = async (filePath) => {
+  if (!filePath) return;
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      console.warn('Não foi possível remover arquivo temporário:', error.message);
+    }
+  }
+};
 
 // Get all projects (with filters)
 router.get('/', async (req, res) => {
@@ -23,10 +70,32 @@ router.get('/', async (req, res) => {
         p.*,
         u.name as client_name,
         u.email as client_email,
-        COUNT(b.id) as bid_count
+          COALESCE(b_data.bid_count, 0) as bid_count,
+          b_data.lowest_bid_amount,
+        COALESCE(attachment_data.attachments, '[]'::json) as attachments
       FROM projects p
       JOIN users u ON p.client_id = u.id
-      LEFT JOIN bids b ON p.id = b.project_id
+        LEFT JOIN LATERAL (
+          SELECT 
+            COUNT(*)::int as bid_count,
+            MIN(b.amount) as lowest_bid_amount
+          FROM bids b
+          WHERE b.project_id = p.id
+        ) b_data ON true
+      LEFT JOIN LATERAL (
+        SELECT json_agg(
+          json_build_object(
+            'id', pa.id,
+            'file_url', pa.file_url,
+            'original_name', pa.original_name,
+            'mime_type', pa.mime_type,
+            'file_size', pa.file_size,
+            'created_at', pa.created_at
+          ) ORDER BY pa.created_at ASC
+        ) as attachments
+        FROM project_attachments pa
+        WHERE pa.project_id = p.id
+      ) attachment_data ON true
       WHERE 1=1
     `;
     
@@ -59,7 +128,6 @@ router.get('/', async (req, res) => {
     }
 
     query += `
-      GROUP BY p.id, u.name, u.email
       ORDER BY p.created_at DESC
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
@@ -93,10 +161,32 @@ const getMyProjectsHandler = async (req, res) => {
         p.*,
         u.name as client_name,
         u.email as client_email,
-        COUNT(b.id) as bid_count
+          COALESCE(b_data.bid_count, 0) as bid_count,
+          b_data.lowest_bid_amount,
+        COALESCE(attachment_data.attachments, '[]'::json) as attachments
       FROM projects p
       JOIN users u ON p.client_id = u.id
-      LEFT JOIN bids b ON p.id = b.project_id
+        LEFT JOIN LATERAL (
+          SELECT 
+            COUNT(*)::int as bid_count,
+            MIN(b.amount) as lowest_bid_amount
+          FROM bids b
+          WHERE b.project_id = p.id
+        ) b_data ON true
+      LEFT JOIN LATERAL (
+        SELECT json_agg(
+          json_build_object(
+            'id', pa.id,
+            'file_url', pa.file_url,
+            'original_name', pa.original_name,
+            'mime_type', pa.mime_type,
+            'file_size', pa.file_size,
+            'created_at', pa.created_at
+          ) ORDER BY pa.created_at ASC
+        ) as attachments
+        FROM project_attachments pa
+        WHERE pa.project_id = p.id
+      ) attachment_data ON true
       WHERE p.client_id = $1
     `;
     
@@ -109,7 +199,6 @@ const getMyProjectsHandler = async (req, res) => {
     }
 
     query += `
-      GROUP BY p.id, u.name, u.email
       ORDER BY p.created_at DESC
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
@@ -137,6 +226,126 @@ const getMyProjectsHandler = async (req, res) => {
 router.get('/my-projects', auth, getMyProjectsHandler);
 router.get('/user/my-projects', auth, getMyProjectsHandler);
 
+router.get('/:id/attachments', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const attachmentsResult = await db.query(
+      `SELECT id, filename, original_name, file_url, file_size, mime_type, uploaded_by, created_at
+       FROM project_attachments
+       WHERE project_id = $1
+       ORDER BY created_at ASC`,
+      [id]
+    );
+
+    res.json({
+      attachments: attachmentsResult.rows || []
+    });
+  } catch (error) {
+    console.error('Erro ao listar anexos:', error);
+    res.status(500).json({ error: 'Erro ao carregar anexos' });
+  }
+});
+
+router.post('/:id/attachments', auth, (req, res) => {
+  upload.single('file')(req, res, async (err) => {
+    if (err) {
+      const message = err instanceof multer.MulterError
+        ? (err.code === 'LIMIT_FILE_SIZE'
+          ? 'Arquivo excede o tamanho máximo permitido'
+          : 'Erro ao processar upload')
+        : err.message || 'Erro ao enviar arquivo';
+      return res.status(400).json({ error: message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Nenhum arquivo enviado' });
+    }
+
+    const { id } = req.params;
+
+    try {
+      const projectResult = await db.query(
+        'SELECT client_id FROM projects WHERE id = $1',
+        [id]
+      );
+
+      if (projectResult.rows.length === 0) {
+        await removeLocalFile(req.file.path);
+        return res.status(404).json({ error: 'Projeto não encontrado' });
+      }
+
+      if (projectResult.rows[0].client_id !== req.user.userId) {
+        await removeLocalFile(req.file.path);
+        return res.status(403).json({ error: 'Você não tem permissão para adicionar anexos neste projeto' });
+      }
+
+      const relativeUrl = `/uploads/project-attachments/${req.file.filename}`;
+
+      const insertResult = await db.query(
+        `INSERT INTO project_attachments (project_id, filename, original_name, file_url, file_size, mime_type, uploaded_by)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING id, filename, original_name, file_url, file_size, mime_type, uploaded_by, created_at`,
+        [
+          id,
+          req.file.filename,
+          req.file.originalname,
+          relativeUrl,
+          req.file.size,
+          req.file.mimetype,
+          req.user.userId
+        ]
+      );
+
+      res.status(201).json({
+        message: 'Anexo enviado com sucesso',
+        attachment: insertResult.rows[0]
+      });
+    } catch (error) {
+      await removeLocalFile(req.file.path);
+      console.error('Erro ao salvar anexo:', error);
+      res.status(500).json({ error: 'Erro ao salvar anexo' });
+    }
+  });
+});
+
+router.delete('/:id/attachments/:attachmentId', auth, async (req, res) => {
+  try {
+    const { id, attachmentId } = req.params;
+
+    const projectResult = await db.query(
+      'SELECT client_id FROM projects WHERE id = $1',
+      [id]
+    );
+
+    if (projectResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Projeto não encontrado' });
+    }
+
+    if (projectResult.rows[0].client_id !== req.user.userId) {
+      return res.status(403).json({ error: 'Você não tem permissão para remover anexos deste projeto' });
+    }
+
+    const attachmentResult = await db.query(
+      `SELECT id, filename FROM project_attachments WHERE id = $1 AND project_id = $2`,
+      [attachmentId, id]
+    );
+
+    if (attachmentResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Anexo não encontrado' });
+    }
+
+    await db.query('DELETE FROM project_attachments WHERE id = $1', [attachmentId]);
+
+    const filePath = path.join(attachmentsDir, attachmentResult.rows[0].filename);
+    await removeLocalFile(filePath);
+
+    res.json({ message: 'Anexo removido com sucesso' });
+  } catch (error) {
+    console.error('Erro ao remover anexo:', error);
+    res.status(500).json({ error: 'Erro ao remover anexo' });
+  }
+});
+
 // Get project by ID - DEVE vir DEPOIS das rotas específicas
 router.get('/:id', async (req, res) => {
   try {
@@ -147,12 +356,33 @@ router.get('/:id', async (req, res) => {
         p.*,
         u.name as client_name,
         u.email as client_email,
-        COUNT(b.id) as bid_count
+          COALESCE(b_data.bid_count, 0) as bid_count,
+          b_data.lowest_bid_amount,
+        COALESCE(attachment_data.attachments, '[]'::json) as attachments
       FROM projects p
       JOIN users u ON p.client_id = u.id
-      LEFT JOIN bids b ON p.id = b.project_id
+        LEFT JOIN LATERAL (
+          SELECT 
+            COUNT(*)::int as bid_count,
+            MIN(b.amount) as lowest_bid_amount
+          FROM bids b
+          WHERE b.project_id = p.id
+        ) b_data ON true
+      LEFT JOIN LATERAL (
+        SELECT json_agg(
+          json_build_object(
+            'id', pa.id,
+            'file_url', pa.file_url,
+            'original_name', pa.original_name,
+            'mime_type', pa.mime_type,
+            'file_size', pa.file_size,
+            'created_at', pa.created_at
+          ) ORDER BY pa.created_at ASC
+        ) as attachments
+        FROM project_attachments pa
+        WHERE pa.project_id = p.id
+      ) attachment_data ON true
       WHERE p.id = $1
-      GROUP BY p.id, u.name, u.email
     `, [id]);
 
     if (result.rows.length === 0) {

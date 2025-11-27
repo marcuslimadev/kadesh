@@ -146,6 +146,22 @@ export const projectService = {
   },
 
   /**
+   * Delete project attachment
+   */
+  async deleteAttachment(projectId, attachmentId) {
+    try {
+      await api.delete(`/api/projects/${projectId}/attachments/${attachmentId}`)
+      return { success: true }
+    } catch (error) {
+      console.error('Error deleting attachment:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao remover anexo'
+      }
+    }
+  },
+
+  /**
    * Get my projects (as client)
    */
   async getMyProjects(params = {}) {
