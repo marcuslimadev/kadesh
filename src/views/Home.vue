@@ -5,7 +5,10 @@
       <div class="hero-container">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">KADDESH • Marketplace premium</p>
+            <div class="flex items-center gap-3">
+              <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-xl border border-gold/40 shadow-sm object-cover" />
+              <p class="eyebrow">KADDESH • Marketplace premium</p>
+            </div>
             <h1 class="hero-title">Leilões reversos com curadoria e segurança</h1>
             <p class="hero-sub">
               Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.

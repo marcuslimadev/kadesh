@@ -3,8 +3,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
         <!-- Logo -->
-        <router-link to="/" class="flex items-center space-x-2 group">
-          <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent transition-all duration-500 group-hover:from-indigo-500 group-hover:to-purple-500">Kaddesh</span>
+        <router-link to="/" class="flex items-center space-x-3 group">
+          <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg shadow-sm border border-gold/40 object-cover" />
+          <span class="text-2xl font-bold text-gold font-heading tracking-tight">KADDESH</span>
         </router-link>
 
         <!-- Desktop Navigation -->
