@@ -8,10 +8,38 @@
 const db = require('../config/database');
 const { getIO } = require('../utils/socket');
 
+// Configuration constants
+const DEFAULT_CHECK_INTERVAL_MS = 60000; // 1 minute
+const MAX_HOURS_AHEAD = 7 * 24; // 7 days in hours
+
 // Interval for checking expired auctions (in milliseconds)
-const CHECK_INTERVAL = parseInt(process.env.AUCTION_CHECK_INTERVAL) || 60000; // Default: 1 minute
+const CHECK_INTERVAL = parseInt(process.env.AUCTION_CHECK_INTERVAL) || DEFAULT_CHECK_INTERVAL_MS;
 
 let intervalId = null;
+
+/**
+ * Sanitize string for safe display in notifications
+ * @param {string} str - Input string
+ * @param {number} maxLength - Maximum length
+ * @returns {string} - Sanitized string
+ */
+function sanitizeForDisplay(str, maxLength = 100) {
+  if (!str || typeof str !== 'string') return '';
+  
+  let result = str;
+  
+  // Remove complete HTML tags
+  let previousResult;
+  do {
+    previousResult = result;
+    result = result.replace(/<[^>]*>/g, '');
+  } while (result !== previousResult);
+  
+  // Remove any remaining angle brackets and quotes
+  result = result.replace(/[<>'"]/g, '');
+  
+  return result.trim().substring(0, maxLength);
+}
 
 /**
  * Check for expired auctions and process them
@@ -105,11 +133,12 @@ async function closeAuction(project) {
       );
 
       // Notify the client
+      const safeTitle = sanitizeForDisplay(project.title);
       await createNotification(client, {
         userId: project.client_id,
         type: 'project',
         title: 'Leilão encerrado sem propostas',
-        content: `O leilão do projeto "${project.title}" foi encerrado sem propostas recebidas.`,
+        content: `O leilão do projeto "${safeTitle}" foi encerrado sem propostas recebidas.`,
         actionUrl: `/projects/${project.id}`,
         data: { projectId: project.id, reason: 'no_bids' }
       });
@@ -155,12 +184,16 @@ async function closeAuction(project) {
       winnerBid.amount
     ]);
 
+    // Sanitize user-generated content for notifications
+    const safeTitle = sanitizeForDisplay(project.title);
+    const safeProviderName = sanitizeForDisplay(winnerBid.provider_name);
+
     // Notify the winner
     await createNotification(client, {
       userId: winnerBid.provider_id,
       type: 'bid',
       title: '🎉 Parabéns! Você venceu o leilão!',
-      content: `Sua proposta de R$ ${formatCurrency(winnerBid.amount)} para o projeto "${project.title}" foi aceita automaticamente como vencedora do leilão!`,
+      content: `Sua proposta de R$ ${formatCurrency(winnerBid.amount)} para o projeto "${safeTitle}" foi aceita automaticamente como vencedora do leilão!`,
       actionUrl: `/projects/${project.id}`,
       data: { projectId: project.id, bidId: winnerBid.id, amount: winnerBid.amount }
     });
@@ -170,7 +203,7 @@ async function closeAuction(project) {
       userId: project.client_id,
       type: 'project',
       title: 'Leilão encerrado - Vencedor selecionado',
-      content: `O leilão do projeto "${project.title}" foi encerrado. ${winnerBid.provider_name} foi selecionado(a) como vencedor(a) com a proposta de R$ ${formatCurrency(winnerBid.amount)}.`,
+      content: `O leilão do projeto "${safeTitle}" foi encerrado. ${safeProviderName} foi selecionado(a) como vencedor(a) com a proposta de R$ ${formatCurrency(winnerBid.amount)}.`,
       actionUrl: `/projects/${project.id}`,
       data: { projectId: project.id, winnerId: winnerBid.provider_id, bidId: winnerBid.id }
     });
@@ -182,18 +215,18 @@ async function closeAuction(project) {
         userId: bid.provider_id,
         type: 'bid',
         title: 'Leilão encerrado',
-        content: `O leilão do projeto "${project.title}" foi encerrado. Infelizmente, outra proposta foi selecionada.`,
+        content: `O leilão do projeto "${safeTitle}" foi encerrado. Infelizmente, outra proposta foi selecionada.`,
         actionUrl: `/projects/${project.id}`,
         data: { projectId: project.id, bidId: bid.id, status: 'rejected' }
       });
     }
 
-    console.log(`✅ Auction closed for project ${project.id}. Winner: ${winnerBid.provider_name} (${winnerBid.id})`);
+    console.log(`✅ Auction closed for project ${project.id}. Winner: ${safeProviderName} (${winnerBid.id})`);
 
     // Emit socket event for real-time updates
     emitAuctionClosed(project.id, {
       winnerId: winnerBid.provider_id,
-      winnerName: winnerBid.provider_name,
+      winnerName: safeProviderName,
       winningAmount: winnerBid.amount,
       totalBids: bids.length
     });
@@ -322,7 +355,7 @@ async function manuallyCloseAuction(projectId, clientId) {
  */
 async function getExpiringAuctions(hoursAhead = 24) {
   // Ensure hoursAhead is a valid positive number
-  const hours = Math.max(1, Math.min(parseInt(hoursAhead) || 24, 168)); // Max 7 days
+  const hours = Math.max(1, Math.min(parseInt(hoursAhead) || 24, MAX_HOURS_AHEAD));
   
   const result = await db.query(`
     SELECT 
