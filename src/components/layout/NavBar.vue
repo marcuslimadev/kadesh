@@ -39,8 +39,10 @@
           </button>
         </div>
 
-        <div class="mb-4">
-          <ViewModeSwitch v-if="isAuthenticated" />
+        <div class="mb-4" v-if="isAuthenticated">
+          <div class="sidebar-switch">
+            <ViewModeSwitch />
+          </div>
         </div>
 
         <div class="space-y-2">
@@ -77,7 +79,9 @@
     </div>
 
     <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
-      <ViewModeSwitch />
+      <div class="sidebar-switch">
+        <ViewModeSwitch />
+      </div>
     </div>
 
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
@@ -119,7 +123,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
@@ -146,7 +150,7 @@ const iconPaths = {
   receipts: 'M7 5h10v14l-2-1-2 1-2-1-2 1-2-1-2 1V5z M9 9h6m-6 4h6',
   bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
   profile: 'M12 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0',
-  settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z',
+  settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z'
 }
 
 const baseLinks = [
@@ -197,6 +201,26 @@ const allLinks = computed(() => {
   return list
 })
 
+const NavItem = defineComponent({
+  name: 'NavItem',
+  props: {
+    link: { type: Object, required: true }
+  },
+  setup(props) {
+    return () => (
+      <router-link
+        to={props.link.to}
+        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+      >
+        <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d={iconPaths[props.link.icon] || iconPaths.target} stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>{props.link.label}</span>
+      </router-link>
+    )
+  }
+})
+
 const handleNavigate = (to) => {
   mobileMenuOpen.value = false
   router.push(to)
@@ -209,49 +233,6 @@ const handleLogout = async () => {
 }
 </script>
 
-<script>
-export default {
-  components: {
-    NavItem: {
-      props: ['link'],
-      inject: ['iconPaths'],
-      setup(props, { inject }) {
-        const paths = inject('iconPaths') || {}
-        return { paths }
-      },
-      template: `
-        <router-link
-          :to="link.to"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
-        >
-          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path :d="paths[link.icon] || paths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span>{{ link.label }}</span>
-        </router-link>
-      `
-    }
-  },
-  provide() {
-    return {
-      iconPaths: {
-        target: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 110 4 2 2 0 010-4z',
-        book: 'M4 6.5A2.5 2.5 0 016.5 4h9A2.5 2.5 0 0118 6.5v11a.5.5 0 01-.757.429L12 14.5l-5.243 3.429A.5.5 0 016 17.5v-11z',
-        dashboard: 'M4 13h6v8H4v-8zm0-10h6v8H4V3zm10 10h6v8h-6v-8zm0-10h6v8h-6V3z',
-        projects: 'M4 6h16M4 12h16M4 18h16',
-        bids: 'M12 6v2m0 8v2m0-6a2 2 0 100-4 2 2 0 000 4zm0 8c-4.418 0-8-2.686-8-6 0-1.657 1.343-3 3-3h10c1.657 0 3 1.343 3 3 0 3.314-3.582 6-8 6z',
-        contracts: 'M7 7h10M7 11h10M7 15h6m-1-10l-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7h-4z',
-        wallet: 'M4 7h16v10H4z M4 11h12',
-        receipts: 'M7 5h10v14l-2-1-2 1-2-1-2 1-2-1-2 1V5z M9 9h6m-6 4h6',
-        bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
-        profile: 'M12 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0',
-        settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z'
-      }
-    }
-  }
-}
-</script>
-
 <style scoped>
 .bg-dark { background: #111; }
 .bg-dark-80 { background: rgba(17,17,17,0.85); }
@@ -260,6 +241,15 @@ export default {
 .text-gold { color: #d4af37; }
 .border-gold\/20 { border-color: rgba(212,175,55,0.2); }
 .border-gold\/40 { border-color: rgba(212,175,55,0.4); }
+
+.sidebar-switch :deep(.view-mode-switch) {
+  display: block;
+}
+.sidebar-switch :deep(button) {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid rgba(212,175,55,0.25) !important;
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s ease;

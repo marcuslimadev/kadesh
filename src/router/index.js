@@ -211,6 +211,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const isBrowser = typeof window !== 'undefined'
   const authStore = useAuthStore()
+  const viewMode = useViewModeStore()
   const token = isBrowser ? localStorage.getItem('kadesh_token') : null
   const adminToken = isBrowser ? localStorage.getItem('adminToken') : null
 
@@ -234,6 +235,11 @@ router.beforeEach(async (to, from, next) => {
       if (!verified) {
         return next({ name: 'login', query: { redirect: to.fullPath } })
       }
+    }
+
+    // Se autenticado e na home, redireciona conforme modo
+    if (to.name === 'home') {
+      return next({ name: 'auction-lobby' })
     }
   }
 
