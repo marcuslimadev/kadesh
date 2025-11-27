@@ -1,13 +1,19 @@
 <template>
   <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Header -->
+      <!-- Header - Dynamic based on view mode -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">🎯 Lobby de Leilões Reversos</h1>
-        <p class="text-gray-600">Acompanhe todas as propostas e disputas em tempo real</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+          {{ viewMode.isContractor ? '🎯 Lobby de Projetos' : '🔍 Encontre Oportunidades' }}
+        </h1>
+        <p class="text-gray-600">
+          {{ viewMode.isContractor 
+            ? 'Acompanhe seus projetos e receba propostas de profissionais' 
+            : 'Explore projetos disponíveis e envie suas propostas' }}
+        </p>
       </div>
 
-      <!-- Quick Actions -->
+      <!-- Quick Actions - Dynamic based on view mode -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <router-link
           to="/dashboard"
@@ -19,8 +25,9 @@
           <span class="text-sm font-medium">Dashboard</span>
         </router-link>
 
+        <!-- Contractor: New Project button -->
         <router-link
-          v-if="user?.type === 'client'"
+          v-if="viewMode.isContractor"
           to="/projects/create"
           class="flex items-center justify-center p-4 bg-blue-600 text-white rounded-lg shadow hover:shadow-md transition"
         >
@@ -28,6 +35,18 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           <span class="text-sm font-medium">Novo Projeto</span>
+        </router-link>
+
+        <!-- Provider: My Bids button -->
+        <router-link
+          v-if="viewMode.isProvider"
+          to="/my-bids"
+          class="flex items-center justify-center p-4 bg-emerald-600 text-white rounded-lg shadow hover:shadow-md transition"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+          <span class="text-sm font-medium">Minhas Propostas</span>
         </router-link>
 
         <router-link
@@ -62,11 +81,13 @@
               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todas</option>
-              <option value="design">Design</option>
-              <option value="desenvolvimento">Desenvolvimento</option>
-              <option value="marketing">Marketing</option>
-              <option value="escrita">Escrita</option>
-              <option value="consultoria">Consultoria</option>
+              <option value="Desenvolvimento Web">💻 Desenvolvimento Web</option>
+              <option value="Design">🎨 Design</option>
+              <option value="Marketing">📢 Marketing</option>
+              <option value="Redação">✍️ Redação</option>
+              <option value="Mobile">📱 Mobile</option>
+              <option value="Consultoria">💼 Consultoria</option>
+              <option value="Outros">📋 Outros</option>
             </select>
           </div>
 
@@ -241,9 +262,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
 import api from '@/services/api'
 
 const authStore = useAuthStore()
+const viewMode = useViewModeStore()
 const user = computed(() => authStore.user)
 
 const loading = ref(false)
