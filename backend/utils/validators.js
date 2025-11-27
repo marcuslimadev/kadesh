@@ -28,10 +28,9 @@ const validateProjectData = (data) => {
   
   if (data.deadline) {
     const deadline = new Date(data.deadline);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
     
-    if (deadline < today) {
+    if (deadline < now) {
       errors.push('Prazo não pode ser no passado');
     }
   }
@@ -49,8 +48,8 @@ const validateBidData = (data) => {
     errors.push('Valor da proposta deve ser um número válido maior que zero');
   }
   
-  if (!data.proposal || data.proposal.trim().length < 20) {
-    errors.push('Proposta deve ter pelo menos 20 caracteres');
+  if (!data.proposal || data.proposal.trim().length < 1) {
+    errors.push('Proposta é obrigatória');
   }
   
   if (data.delivery_time && (isNaN(parseInt(data.delivery_time)) || parseInt(data.delivery_time) <= 0)) {
