@@ -94,10 +94,10 @@
 
   <!-- Desktop sidebar -->
   <aside class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl">
-    <div class="p-5 border-b border-gold/20 flex items-center gap-3">
-      <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-lg border border-gold/40 object-cover shadow" />
+    <div class="p-6 border-b border-gold/20 flex items-center gap-3">
+      <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
       <div>
-        <p class="text-gold font-heading text-lg leading-none">KADDESH</p>
+        <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
         <p class="text-xs text-offwhite-muted">Marketplace premium</p>
       </div>
     </div>
@@ -284,11 +284,14 @@ const handleLogout = async () => {
 
 .sidebar-switch :deep(.view-mode-switch) {
   display: block;
+  width: 100%;
 }
 .sidebar-switch :deep(button) {
   background: #1b1b1b !important;
   color: #f5f5f5 !important;
   border: 1px solid rgba(212,175,55,0.25) !important;
+  width: 100%;
+  justify-content: center;
 }
 
 .fade-enter-active, .fade-leave-active {
