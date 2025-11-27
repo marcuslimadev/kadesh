@@ -8,7 +8,7 @@
       ]"
     >
       <button
-        @click="viewMode.setContractorMode()"
+        @click="goToMode("contractor")"
         :class="[
           'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
@@ -26,7 +26,7 @@
       </button>
       
       <button
-        @click="viewMode.setProviderMode()"
+        @click="goToMode("provider")"
         :class="[
           'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
@@ -47,7 +47,7 @@
     <!-- Mobile -->
     <div class="md:hidden flex items-center justify-center">
       <button
-        @click="viewMode.toggleMode()"
+        @click="toggleMode()"
         :class="[
           'flex items-center gap-2.5 px-5 py-3 rounded-full font-bold shadow-xl transition-all duration-700 ease-in-out transform hover:scale-105 backdrop-blur-sm',
           viewMode.isContractor
@@ -67,6 +67,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useViewModeStore } from '@/stores/viewModeStore'
 
 const props = defineProps({
@@ -80,6 +81,7 @@ const isSidebar = computed(() => props.variant === 'sidebar')
 
 const viewMode = useViewModeStore()
 const showTooltip = ref(false)
+const router = useRouter()
 
 onMounted(() => {
   if (typeof window === 'undefined') return
@@ -101,6 +103,16 @@ const dismissTooltip = () => {
   if (typeof window !== 'undefined') {
     localStorage.setItem('kadesh_viewmode_tooltip_count', '999') // Não mostra mais
   }
+}
+
+const goToMode = (mode) => {
+  viewMode.setMode(mode)
+  router.push({ name: 'auction-lobby', query: { mode } }).catch(() => {})
+}
+
+const toggleMode = () => {
+  const next = viewMode.isContractor ? 'provider' : 'contractor'
+  goToMode(next)
 }
 </script>
 
