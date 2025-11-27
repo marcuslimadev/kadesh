@@ -237,12 +237,12 @@ router.beforeEach(async (to, from, next) => {
         return next({ name: 'login', query: { redirect: to.fullPath } })
       }
     }
+  }
 
-    // Se autenticado e na home, redireciona conforme modo
-    if (to.name === 'home') {
-      const mode = viewMode.currentMode || 'contractor'
-      return next({ name: 'auction-lobby', query: { mode } })
-    }
+  // Se autenticado e tentando acessar a home pública, manda para o Lobby conforme modo
+  if (to.name === 'home' && (authStore.isAuthenticated || token)) {
+    const mode = viewMode.currentMode || 'contractor'
+    return next({ name: 'auction-lobby', query: { mode } })
   }
 
   // Guest-only routes redirect if already authenticated
