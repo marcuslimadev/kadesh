@@ -218,6 +218,46 @@ export const projectService = {
       { value: 'consulting', label: 'Consultoria' },
       { value: 'other', label: 'Outros' }
     ]
+  },
+
+  /**
+   * Close auction and select winner
+   */
+  async closeAuction(projectId) {
+    try {
+      const response = await api.post(`/api/projects/${projectId}/close-auction`)
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error closing auction:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao encerrar leilão'
+      }
+    }
+  },
+
+  /**
+   * Get auctions expiring soon
+   */
+  async getExpiringAuctions(hours = 24) {
+    try {
+      const response = await api.get('/api/projects/auctions/expiring', {
+        params: { hours }
+      })
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error fetching expiring auctions:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao carregar leilões expirando'
+      }
+    }
   }
 }
 
