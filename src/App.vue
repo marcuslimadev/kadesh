@@ -40,7 +40,9 @@ const INITIALIZATION_FALLBACK_MS = 2000
 // Compute whether to show navigation
 const showNavigation = computed(() => {
   const hideNavRoutes = ['login', 'register', 'forgot-password', 'home']
+  const isRoot = route.path === '/' || route.fullPath === '/#/' || route.fullPath === '#/'
   if (!authStore.isAuthenticated) return false
+  if (isRoot) return false
   return !hideNavRoutes.includes(route.name)
 })
 
