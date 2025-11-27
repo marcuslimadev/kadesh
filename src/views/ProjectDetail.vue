@@ -386,11 +386,41 @@
                 Editar Projeto
               </button>
               <button
+                v-if="project.status === 'open' && bids.length > 0"
+                @click="closeAuction"
+                :disabled="isClosingAuction"
+                class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilão e Selecionar Vencedor' }}
+              </button>
+              <p v-if="project.status === 'open' && bids.length > 0" class="text-xs text-gray-500 text-center">
+                O vencedor será o lance de menor valor
+              </p>
+              <button
                 v-if="project.status === 'open'"
                 class="w-full px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 transition-colors"
               >
                 Cancelar Projeto
               </button>
+            </div>
+          </div>
+
+          <!-- Auction Winner Banner -->
+          <div v-if="project.status === 'in_progress' && acceptedBid" class="bg-white rounded-lg shadow-md p-6 border-2 border-green-500">
+            <div class="flex items-center space-x-2 mb-3">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 class="text-lg font-semibold text-green-800">Vencedor do Leilão</h3>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-semibold">
+                {{ getInitials(acceptedBid.provider_name) }}
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">{{ acceptedBid.provider_name }}</p>
+                <p class="text-sm text-green-600 font-semibold">{{ formatCurrency(acceptedBid.amount) }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -428,6 +458,7 @@ const isBidSubmitting = ref(false)
 const timeRemaining = ref(null)
 const countdownInterval = ref(null)
 const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
+const isClosingAuction = ref(false)
 const deletingAttachmentId = ref(null)
 const isUploadingAttachment = ref(false)
 
@@ -515,6 +546,11 @@ const sortedBids = computed(() => {
 const attachmentsList = computed(() => {
   if (!project.value?.attachments) return []
   return Array.isArray(project.value.attachments) ? project.value.attachments : []
+})
+
+const acceptedBid = computed(() => {
+  if (!bids.value || bids.value.length === 0) return null
+  return bids.value.find(bid => bid.status === 'accepted')
 })
 
 const formatDate = (date) => {
@@ -848,6 +884,40 @@ const rejectBid = async (bidId) => {
   } catch (err) {
     console.error('Error rejecting bid:', err)
     toast.error('Erro ao rejeitar proposta')
+  }
+}
+
+const closeAuction = async () => {
+  if (bids.value.length === 0) {
+    toast.error('Não há propostas para selecionar um vencedor')
+    return
+  }
+
+  const lowestBid = [...bids.value].sort((a, b) => (a.amount || 0) - (b.amount || 0))[0]
+  
+  const confirmMessage = `Encerrar o leilão agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat('pt-BR').format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`
+  
+  if (!confirm(confirmMessage)) {
+    return
+  }
+
+  isClosingAuction.value = true
+
+  try {
+    const result = await projectService.closeAuction(project.value.id)
+    
+    if (result.success) {
+      toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
+      // Reload project and bids to show updated status
+      await loadProject()
+    } else {
+      toast.error(result.error || 'Erro ao encerrar leilão')
+    }
+  } catch (err) {
+    console.error('Error closing auction:', err)
+    toast.error('Erro ao encerrar leilão')
+  } finally {
+    isClosingAuction.value = false
   }
 }
 

@@ -266,9 +266,15 @@ io.on('connection', async (socket) => {
   }
 });
 
+// Start the auction scheduler
+const { startScheduler: startAuctionScheduler } = require('./services/auctionScheduler');
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Kadesh API running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
+  
+  // Start auction scheduler after server is listening
+  startAuctionScheduler();
 });
 module.exports = app;

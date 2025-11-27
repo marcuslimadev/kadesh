@@ -585,4 +585,54 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+// Close auction manually
+router.post('/:id/close-auction', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { manuallyCloseAuction } = require('../services/auctionScheduler');
+    
+    const result = await manuallyCloseAuction(id, req.user.userId);
+    
+    res.json(result);
+  } catch (error) {
+    console.error('Close auction error:', error);
+    
+    // Handle specific errors
+    if (error.message === 'Projeto não encontrado') {
+      return res.status(404).json({ error: error.message });
+    }
+    if (error.message === 'Você não tem permissão para encerrar este leilão') {
+      return res.status(403).json({ error: error.message });
+    }
+    if (error.message === 'Este projeto não está mais em leilão') {
+      return res.status(400).json({ error: error.message });
+    }
+    
+    res.status(500).json({
+      error: 'Erro ao encerrar leilão'
+    });
+  }
+});
+
+// Get auctions expiring soon
+router.get('/auctions/expiring', auth, async (req, res) => {
+  try {
+    const { hours = 24 } = req.query;
+    const { getExpiringAuctions } = require('../services/auctionScheduler');
+    
+    const auctions = await getExpiringAuctions(parseInt(hours));
+    
+    res.json({
+      auctions,
+      total: auctions.length,
+      hoursAhead: parseInt(hours)
+    });
+  } catch (error) {
+    console.error('Get expiring auctions error:', error);
+    res.status(500).json({
+      error: 'Erro ao buscar leilões expirando'
+    });
+  }
+});
+
 module.exports = router;
