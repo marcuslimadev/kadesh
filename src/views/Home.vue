@@ -93,10 +93,16 @@
             class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-accent-500 animate-fade-in-up"
             :style="{ animationDelay: category.delay }"
           >
-            <div
-              class="h-56 w-full transition-transform duration-700 group-hover:scale-105"
-              :style="{ background: category.gradient }"
-            ></div>
+            <img :src="category.image" :alt="category.title" class="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-5">
+              <component :is="category.icon" class="h-8 w-8 text-accent-400 mb-3 animate-bounce-slow"></component>
+              <p class="text-xs text-gray-300 uppercase tracking-wider">{{ category.tagline }}</p>
+              <h3 class="text-white text-lg font-semibold">{{ category.title }}</h3>
+              <p class="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity">{{ category.description }}</p>
+            </div>
+            <span class="absolute top-0 right-0 bg-accent-500 text-primary-900 px-3 py-1 text-xs font-bold rounded-bl-xl">{{ category.label }}</span>
+          </button>
+        </div></div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-5">
               <component :is="category.icon" class="h-8 w-8 text-accent-400 mb-3 animate-bounce-slow"></component>
               <p class="text-xs text-gray-300 uppercase tracking-wider">{{ category.tagline }}</p>
@@ -137,9 +143,13 @@
             </li>
           </ul>
 
-          <div class="flex flex-wrap gap-4">
-            <img src="/assets/images/appstore.png" alt="Download App Store" class="h-14 object-contain" />
-            <img src="/assets/images/playstore.png" alt="Download Google Play" class="h-14 object-contain" />
+          <div class="flex flex-wrap gap-3">
+            <button class="px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition">
+              Baixar na App Store
+            </button>
+            <button class="px-4 py-3 rounded-xl bg-dark-80 border border-gold/30 text-offwhite font-semibold hover:border-gold/50 transition">
+              Baixar na Play Store
+            </button>
           </div>
         </div>
 
