@@ -27,11 +27,11 @@
         </div>
         <p class="mt-2 text-gray-600">
           Mantenha seu perfil atualizado para aumentar suas chances de ser encontrado por contratantes.
-        </p>
-      </div>
-
       <div v-if="!isProvider" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-dashed border-gray-200">
         <h2 class="text-2xl font-semibold text-gray-900">Perfil de fornecedor indisponível</h2>
+        <p class="mt-3 text-gray-600">
+          Esta função está disponível apenas para contas do tipo fornecedor. Altere o tipo de conta ou crie uma nova conta de fornecedor.
+        </p>
         <p class="mt-3 text-gray-600">
           Esta fun��ǜo estǭ dispon��vel apenas para contas do tipo fornecedor. Altere o tipo de conta ou crie uma nova conta de fornecedor.
         </p>
@@ -54,7 +54,7 @@
             @click="loadData"
             class="mt-6 inline-flex items-center px-5 py-2.5 rounded-lg bg-primary-600 text-white font-medium hover:bg-primary-700 transition-colors"
           >
-            Tentar novamente
+          <p class="mt-4 text-gray-600">Carregando informações do perfil...</p>
           </button>
         </div>
 
@@ -63,7 +63,7 @@
           <aside class="space-y-6">
             <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div class="flex items-center gap-4">
-                <div class="h-20 w-20 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl font-semibold text-primary-700">
+          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Não foi possível carregar seu perfil</h2>
                   <img
                     v-if="profile?.avatar_url"
                     :src="profile?.avatar_url"
