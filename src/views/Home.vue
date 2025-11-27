@@ -119,20 +119,26 @@
     </section>
 
     <!-- Acesso rápido (login/registro) -->
-    <section class="bg-white py-12">
+    <section class="bg-gradient-to-br from-gray-50 via-white to-gray-100 py-16">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-6 rounded-2xl border border-gray-200 shadow-sm bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Já tem conta?</h3>
-            <p class="text-sm text-gray-600 mb-4">Entre para acessar o Lobby de acordo com seu perfil.</p>
-            <button @click="goToLogin" class="w-full px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition">
+          <div class="cta-card">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="cta-title">Já tem conta?</h3>
+              <span class="cta-badge">Acesso</span>
+            </div>
+            <p class="cta-text">Entre para acessar o Lobby de acordo com seu perfil.</p>
+            <button @click="goToLogin" class="cta-button primary">
               Fazer login
             </button>
           </div>
-          <div class="p-6 rounded-2xl border border-gray-200 shadow-sm bg-gray-50">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Novo por aqui?</h3>
-            <p class="text-sm text-gray-600 mb-4">Crie sua conta para contratar ou prestar serviços.</p>
-            <button @click="goToRegister" class="w-full px-4 py-3 rounded-xl bg-dark text-offwhite font-semibold hover:bg-black transition">
+          <div class="cta-card">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="cta-title">Novo por aqui?</h3>
+              <span class="cta-badge alt">Cadastro</span>
+            </div>
+            <p class="cta-text">Crie sua conta para contratar ou prestar serviços.</p>
+            <button @click="goToRegister" class="cta-button secondary">
               Criar conta
             </button>
           </div>
