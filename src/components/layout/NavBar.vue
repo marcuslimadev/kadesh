@@ -46,17 +46,41 @@
         </div>
 
         <div class="space-y-2">
-          <NavItem
+          <router-link
             v-for="link in allLinks"
             :key="link.to"
-            :link="link"
+            :to="link.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
             @click="handleNavigate(link.to)"
-          />
+          >
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ link.label }}</span>
+          </router-link>
         </div>
 
         <div v-if="isAuthenticated" class="mt-6 border-t pt-4 space-y-2">
-          <NavItem :link="profileLink" @click="handleNavigate('/profile')" />
-          <NavItem :link="settingsLink" @click="handleNavigate('/settings')" />
+          <router-link
+            :to="profileLink.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            @click="handleNavigate(profileLink.to)"
+          >
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[profileLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ profileLink.label }}</span>
+          </router-link>
+          <router-link
+            :to="settingsLink.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            @click="handleNavigate(settingsLink.to)"
+          >
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[settingsLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ settingsLink.label }}</span>
+          </router-link>
           <button @click="handleLogout" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
@@ -85,15 +109,51 @@
     </div>
 
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
-      <NavItem v-for="link in primaryLinks" :key="link.to" :link="link" />
+      <router-link
+        v-for="link in primaryLinks"
+        :key="link.to"
+        :to="link.to"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+      >
+        <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>{{ link.label }}</span>
+      </router-link>
       <div class="mt-4">
         <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Acesso rápido</p>
-        <NavItem v-for="link in secondaryLinks" :key="link.to" :link="link" />
+        <router-link
+          v-for="link in secondaryLinks"
+          :key="link.to"
+          :to="link.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ link.label }}</span>
+        </router-link>
       </div>
       <div class="mt-4" v-if="isAuthenticated">
         <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Conta</p>
-        <NavItem :link="profileLink" />
-        <NavItem :link="settingsLink" />
+        <router-link
+          :to="profileLink.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[profileLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ profileLink.label }}</span>
+        </router-link>
+        <router-link
+          :to="settingsLink.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[settingsLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ settingsLink.label }}</span>
+        </router-link>
         <button @click="handleLogout" class="mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
@@ -123,7 +183,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineComponent } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
@@ -199,26 +259,6 @@ const allLinks = computed(() => {
     list.push(...sharedLinks)
   }
   return list
-})
-
-const NavItem = defineComponent({
-  name: 'NavItem',
-  props: {
-    link: { type: Object, required: true }
-  },
-  setup(props) {
-    return () => (
-      <router-link
-        to={props.link.to}
-        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
-      >
-        <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d={iconPaths[props.link.icon] || iconPaths.target} stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span>{props.link.label}</span>
-      </router-link>
-    )
-  }
 })
 
 const handleNavigate = (to) => {
