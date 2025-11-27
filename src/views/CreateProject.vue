@@ -89,13 +89,9 @@
                 :class="{ 'border-red-500 focus:ring-red-500': errors.category }"
               >
                 <option value="">Selecione uma categoria</option>
-                <option value="Desenvolvimento Web">💻 Desenvolvimento Web</option>
-                <option value="Design">🎨 Design</option>
-                <option value="Marketing">📢 Marketing</option>
-                <option value="Redação">✍️ Redação</option>
-                <option value="Mobile">📱 Mobile</option>
-                <option value="Consultoria">💼 Consultoria</option>
-                <option value="Outros">📋 Outros</option>
+                <option v-for="cat in categories" :key="cat.value" :value="cat.value">
+                  {{ cat.icon }} {{ cat.label }}
+                </option>
               </select>
               <p v-if="errors.category" class="mt-2 text-sm text-red-600 flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -468,6 +464,9 @@ import projectService from '@/services/projectService'
 
 const router = useRouter()
 const toast = useToast()
+
+// Load categories from shared service
+const categories = projectService.getCategories()
 
 const currentStep = ref(1)
 const steps = ['Básico', 'Descrição', 'Orçamento', 'Habilidades']

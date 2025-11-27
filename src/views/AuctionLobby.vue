@@ -81,13 +81,9 @@
               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todas</option>
-              <option value="Desenvolvimento Web">💻 Desenvolvimento Web</option>
-              <option value="Design">🎨 Design</option>
-              <option value="Marketing">📢 Marketing</option>
-              <option value="Redação">✍️ Redação</option>
-              <option value="Mobile">📱 Mobile</option>
-              <option value="Consultoria">💼 Consultoria</option>
-              <option value="Outros">📋 Outros</option>
+              <option v-for="cat in categories" :key="cat.value" :value="cat.value">
+                {{ cat.icon }} {{ cat.label }}
+              </option>
             </select>
           </div>
 
@@ -264,10 +260,14 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
 import api from '@/services/api'
+import projectService from '@/services/projectService'
 
 const authStore = useAuthStore()
 const viewMode = useViewModeStore()
 const user = computed(() => authStore.user)
+
+// Load categories from shared service
+const categories = projectService.getCategories()
 
 const loading = ref(false)
 const projects = ref([])
