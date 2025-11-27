@@ -3,16 +3,33 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Loading State -->
       <div v-if="isLoading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div
+          class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"
+        ></div>
         <p class="mt-4 text-gray-600">Carregando projeto...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-white rounded-lg shadow-md p-8 text-center">
-        <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <div
+        v-else-if="error"
+        class="bg-white rounded-lg shadow-md p-8 text-center"
+      >
+        <svg
+          class="mx-auto h-12 w-12 text-red-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Erro ao carregar projeto</h3>
+        <h3 class="mt-4 text-lg font-medium text-gray-900">
+          Erro ao carregar projeto
+        </h3>
         <p class="mt-2 text-sm text-gray-600">{{ error }}</p>
         <div class="mt-6">
           <router-link
@@ -32,17 +49,39 @@
           <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ project.title }}</h1>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                  {{ project.title }}
+                </h1>
                 <div class="flex items-center gap-4 text-sm text-gray-500">
                   <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    <svg
+                      class="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                      />
                     </svg>
                     {{ getCategoryLabel(project.category) }}
                   </span>
                   <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      class="w-4 h-4 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                     {{ formatDate(project.created_at) }}
                   </span>
@@ -55,18 +94,39 @@
             <div class="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-6">
               <div>
                 <p class="text-sm text-gray-600 mb-1">Orçamento</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(project.budget) }}</p>
+                <p class="text-2xl font-bold text-gray-900">
+                  {{ formatCurrency(project.budget) }}
+                </p>
               </div>
               <div>
                 <p class="text-sm text-gray-600 mb-1">Prazo de Entrega</p>
-                <p class="text-lg font-semibold text-gray-900">{{ formatDeadline(project.deadline) }}</p>
+                <p class="text-lg font-semibold text-gray-900">
+                  {{ formatDeadline(project.deadline) }}
+                </p>
                 <!-- Countdown Timer -->
-                <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
+                <div
+                  v-if="project.status === 'open' && formattedTimeRemaining"
+                  class="mt-2"
+                >
                   <div class="flex items-center space-x-2">
-                    <svg class="w-4 h-4" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg
+                      class="w-4 h-4"
+                      :class="formattedTimeRemaining.class"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
-                    <span class="text-sm font-medium" :class="formattedTimeRemaining.class">
+                    <span
+                      class="text-sm font-medium"
+                      :class="formattedTimeRemaining.class"
+                    >
                       {{ formattedTimeRemaining.text }}
                     </span>
                   </div>
@@ -76,20 +136,30 @@
 
             <!-- Description -->
             <div>
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Descrição</h2>
-              <p class="text-gray-700 whitespace-pre-line">{{ project.description }}</p>
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">
+                Descrição
+              </h2>
+              <p class="text-gray-700 whitespace-pre-line">
+                {{ project.description }}
+              </p>
             </div>
 
             <!-- Requirements -->
             <div v-if="project.requirements" class="mt-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Requisitos</h2>
-              <p class="text-gray-700 whitespace-pre-line">{{ project.requirements }}</p>
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">
+                Requisitos
+              </h2>
+              <p class="text-gray-700 whitespace-pre-line">
+                {{ project.requirements }}
+              </p>
             </div>
 
             <!-- Attachments -->
             <div class="mt-6">
               <div class="flex items-center justify-between mb-3">
-                <h2 class="text-lg font-semibold text-gray-900">Arquivos Anexados</h2>
+                <h2 class="text-lg font-semibold text-gray-900">
+                  Arquivos Anexados
+                </h2>
                 <div v-if="isProjectOwner" class="flex items-center gap-2">
                   <input
                     id="detailAttachmentUpload"
@@ -102,7 +172,9 @@
                   <label
                     for="detailAttachmentUpload"
                     class="inline-flex items-center px-3 py-2 rounded-lg border border-blue-200 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 cursor-pointer disabled:opacity-50"
-                    :class="{ 'pointer-events-none opacity-60': isUploadingAttachment }"
+                    :class="{
+                      'pointer-events-none opacity-60': isUploadingAttachment,
+                    }"
                   >
                     <svg
                       class="w-4 h-4 mr-2"
@@ -110,35 +182,60 @@
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
                     </svg>
-                    {{ isUploadingAttachment ? 'Enviando...' : 'Adicionar Anexos' }}
+                    {{
+                      isUploadingAttachment ? "Enviando..." : "Adicionar Anexos"
+                    }}
                   </label>
                   <p class="text-xs text-gray-500">Máx. 5MB por arquivo</p>
                 </div>
               </div>
 
-              <div v-if="attachmentsList.length" class="grid gap-4 md:grid-cols-2">
+              <div
+                v-if="attachmentsList.length"
+                class="grid gap-4 md:grid-cols-2"
+              >
                 <div
                   v-for="attachment in attachmentsList"
                   :key="attachment.id"
                   class="flex items-center gap-4 p-4 border rounded-xl hover:border-primary-300 hover:bg-primary-50 transition"
                 >
-                  <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                  <div
+                    class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden"
+                  >
                     <img
                       v-if="isImageAttachment(attachment)"
                       :src="attachment.file_url"
                       :alt="attachment.original_name"
                       class="object-cover w-full h-full"
                     />
-                    <svg v-else class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
+                    <svg
+                      v-else
+                      class="w-8 h-8 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 7h10M7 11h10M7 15h7"
+                      />
                     </svg>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-gray-900 truncate">{{ attachment.original_name }}</p>
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                      {{ attachment.original_name }}
+                    </p>
                     <p class="text-xs text-gray-500">
-                      {{ attachment.mime_type || 'Arquivo' }}
+                      {{ attachment.mime_type || "Arquivo" }}
                       <span v-if="attachment.file_size">
                         · {{ formatAttachmentSize(attachment.file_size) }}
                       </span>
@@ -159,22 +256,33 @@
                         :disabled="deletingAttachmentId === attachment.id"
                         @click="removeAttachment(attachment.id)"
                       >
-                        {{ deletingAttachmentId === attachment.id ? 'Removendo...' : 'Remover' }}
+                        {{
+                          deletingAttachmentId === attachment.id
+                            ? "Removendo..."
+                            : "Remover"
+                        }}
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div v-else class="p-4 border border-dashed rounded-xl text-sm text-gray-500 bg-gray-50">
+              <div
+                v-else
+                class="p-4 border border-dashed rounded-xl text-sm text-gray-500 bg-gray-50"
+              >
                 Nenhum anexo enviado até o momento.
-                <span v-if="isProjectOwner" class="text-gray-700 font-medium">Use o botão acima para subir arquivos de referência.</span>
+                <span v-if="isProjectOwner" class="text-gray-700 font-medium"
+                  >Use o botão acima para subir arquivos de referência.</span
+                >
               </div>
             </div>
 
             <!-- Skills -->
             <div v-if="project.skills" class="mt-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Habilidades Necessárias</h2>
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">
+                Habilidades Necessárias
+              </h2>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="skill in skillsArray"
@@ -190,35 +298,63 @@
           <!-- Bids Section -->
           <div class="bg-white rounded-lg shadow-md p-6">
             <!-- Auction Timer Banner -->
-            <div v-if="project.status === 'open' && formattedTimeRemaining && !formattedTimeRemaining.expired" 
-                 class="mb-4 p-4 rounded-lg border-2"
-                 :class="{
-                   'bg-green-50 border-green-300': timeRemaining?.days > 2,
-                   'bg-yellow-50 border-yellow-300': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
-                   'bg-orange-50 border-orange-300': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
-                   'bg-red-50 border-red-300': timeRemaining?.hours === 0
-                 }">
+            <div
+              v-if="
+                project.status === 'open' &&
+                formattedTimeRemaining &&
+                !formattedTimeRemaining.expired
+              "
+              class="mb-4 p-4 rounded-lg border-2"
+              :class="{
+                'bg-green-50 border-green-300': timeRemaining?.days > 2,
+                'bg-yellow-50 border-yellow-300':
+                  timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                'bg-orange-50 border-orange-300':
+                  timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                'bg-red-50 border-red-300': timeRemaining?.hours === 0,
+              }"
+            >
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                  <div class="flex items-center justify-center w-10 h-10 rounded-full" 
-                       :class="{
-                         'bg-green-100': timeRemaining?.days > 2,
-                         'bg-yellow-100': timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
-                         'bg-orange-100': timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
-                         'bg-red-100': timeRemaining?.hours === 0
-                       }">
-                    <svg class="w-6 h-6" :class="formattedTimeRemaining.class" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <div
+                    class="flex items-center justify-center w-10 h-10 rounded-full"
+                    :class="{
+                      'bg-green-100': timeRemaining?.days > 2,
+                      'bg-yellow-100':
+                        timeRemaining?.days <= 2 && timeRemaining?.hours > 6,
+                      'bg-orange-100':
+                        timeRemaining?.hours <= 6 && timeRemaining?.hours > 0,
+                      'bg-red-100': timeRemaining?.hours === 0,
+                    }"
+                  >
+                    <svg
+                      class="w-6 h-6"
+                      :class="formattedTimeRemaining.class"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
                     </svg>
                   </div>
                   <div>
                     <p class="font-semibold text-gray-900">Leilão Ativo</p>
-                    <p class="text-sm text-gray-600">Envie sua proposta antes do prazo</p>
+                    <p class="text-sm text-gray-600">
+                      Envie sua proposta antes do prazo
+                    </p>
                   </div>
                 </div>
                 <div class="text-right">
                   <p class="text-sm text-gray-600">Tempo restante</p>
-                  <p class="text-2xl font-bold" :class="formattedTimeRemaining.class">
+                  <p
+                    class="text-2xl font-bold"
+                    :class="formattedTimeRemaining.class"
+                  >
                     {{ formattedTimeRemaining.text }}
                   </p>
                 </div>
@@ -245,23 +381,29 @@
                     <option value="date-old">Mais Antigas</option>
                   </select>
                 </div>
-                
+
                 <button
                   v-if="canSubmitBid"
-                  @click="showBidForm = !showBidForm"
                   class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors"
+                  @click="showBidForm = !showBidForm"
                 >
-                  {{ showBidForm ? 'Cancelar' : 'Enviar Proposta' }}
+                  {{ showBidForm ? "Cancelar" : "Enviar Proposta" }}
                 </button>
               </div>
             </div>
 
             <!-- Bid Form -->
-            <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div
+              v-if="showBidForm && canSubmitBid"
+              class="mb-6 p-4 bg-gray-50 rounded-lg"
+            >
               <h3 class="font-medium text-gray-900 mb-4">Nova Proposta</h3>
-              <form @submit.prevent="submitBid" class="space-y-4">
+              <form class="space-y-4" @submit.prevent="submitBid">
                 <div>
-                  <label for="bidAmount" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    for="bidAmount"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Valor da Proposta (R$) *
                   </label>
                   <input
@@ -276,7 +418,10 @@
                   />
                 </div>
                 <div>
-                  <label for="bidDescription" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    for="bidDescription"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Descrição da Proposta *
                   </label>
                   <textarea
@@ -289,7 +434,10 @@
                   ></textarea>
                 </div>
                 <div>
-                  <label for="bidDeliveryTime" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    for="bidDeliveryTime"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Tempo de Entrega (dias) *
                   </label>
                   <input
@@ -307,14 +455,16 @@
                   :disabled="isBidSubmitting"
                   class="w-full px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:bg-gray-400 transition-colors"
                 >
-                  {{ isBidSubmitting ? 'Enviando...' : 'Enviar Proposta' }}
+                  {{ isBidSubmitting ? "Enviando..." : "Enviar Proposta" }}
                 </button>
               </form>
             </div>
 
             <!-- Bids Loading State -->
             <div v-if="isBidsLoading" class="text-center py-8">
-              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <div
+                class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"
+              ></div>
               <p class="mt-2 text-gray-600 text-sm">Carregando propostas...</p>
             </div>
 
@@ -332,11 +482,23 @@
 
             <!-- Empty State -->
             <div v-else class="text-center py-8 text-gray-500">
-              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <svg
+                class="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
               </svg>
               <p class="mt-2">Nenhuma proposta enviada ainda</p>
-              <p v-if="canSubmitBid" class="text-sm mt-1">Seja o primeiro a enviar uma proposta!</p>
+              <p v-if="canSubmitBid" class="text-sm mt-1">
+                Seja o primeiro a enviar uma proposta!
+              </p>
             </div>
           </div>
         </div>
@@ -345,13 +507,19 @@
         <div class="lg:col-span-1 space-y-6">
           <!-- Client Info -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Contratante</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Contratante
+            </h3>
             <div class="flex items-center mb-4">
-              <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-lg font-semibold mr-3">
+              <div
+                class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-lg font-semibold mr-3"
+              >
                 {{ getInitials(project.client_name) }}
               </div>
               <div>
-                <p class="font-medium text-gray-900">{{ project.client_name }}</p>
+                <p class="font-medium text-gray-900">
+                  {{ project.client_name }}
+                </p>
                 <p class="text-sm text-gray-500">Contratante</p>
               </div>
             </div>
@@ -359,15 +527,21 @@
 
           <!-- Project Stats -->
           <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Estatísticas</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Estatísticas
+            </h3>
             <div class="space-y-3">
               <div class="flex justify-between">
                 <span class="text-sm text-gray-600">Propostas</span>
-                <span class="text-sm font-medium text-gray-900">{{ project.bid_count || 0 }}</span>
+                <span class="text-sm font-medium text-gray-900">{{
+                  project.bid_count || 0
+                }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-sm text-gray-600">Orçamento Médio</span>
-                <span class="text-sm font-medium text-gray-900">{{ formatCurrency(project.budget) }}</span>
+                <span class="text-sm font-medium text-gray-900">{{
+                  formatCurrency(project.budget)
+                }}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-sm text-gray-600">Status</span>
@@ -377,7 +551,10 @@
           </div>
 
           <!-- Actions (for project owner) -->
-          <div v-if="authStore.user?.id === project.client_id" class="bg-white rounded-lg shadow-md p-6">
+          <div
+            v-if="authStore.user?.id === project.client_id"
+            class="bg-white rounded-lg shadow-md p-6"
+          >
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações</h3>
             <div class="space-y-3">
               <button
@@ -387,13 +564,20 @@
               </button>
               <button
                 v-if="project.status === 'open' && bids.length > 0"
-                @click="closeAuction"
                 :disabled="isClosingAuction"
                 class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                @click="closeAuction"
               >
-                {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilão e Selecionar Vencedor' }}
+                {{
+                  isClosingAuction
+                    ? "Encerrando..."
+                    : "🏁 Encerrar Leilão e Selecionar Vencedor"
+                }}
               </button>
-              <p v-if="project.status === 'open' && bids.length > 0" class="text-xs text-gray-500 text-center">
+              <p
+                v-if="project.status === 'open' && bids.length > 0"
+                class="text-xs text-gray-500 text-center"
+              >
                 O vencedor será o lance de menor valor
               </p>
               <button
@@ -406,20 +590,41 @@
           </div>
 
           <!-- Auction Winner Banner -->
-          <div v-if="project.status === 'in_progress' && acceptedBid" class="bg-white rounded-lg shadow-md p-6 border-2 border-green-500">
+          <div
+            v-if="project.status === 'in_progress' && acceptedBid"
+            class="bg-white rounded-lg shadow-md p-6 border-2 border-green-500"
+          >
             <div class="flex items-center space-x-2 mb-3">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                class="w-6 h-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
-              <h3 class="text-lg font-semibold text-green-800">Vencedor do Leilão</h3>
+              <h3 class="text-lg font-semibold text-green-800">
+                Vencedor do Leilão
+              </h3>
             </div>
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-semibold">
+              <div
+                class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-semibold"
+              >
                 {{ getInitials(acceptedBid.provider_name) }}
               </div>
               <div>
-                <p class="font-medium text-gray-900">{{ acceptedBid.provider_name }}</p>
-                <p class="text-sm text-green-600 font-semibold">{{ formatCurrency(acceptedBid.amount) }}</p>
+                <p class="font-medium text-gray-900">
+                  {{ acceptedBid.provider_name }}
+                </p>
+                <p class="text-sm text-green-600 font-semibold">
+                  {{ formatCurrency(acceptedBid.amount) }}
+                </p>
               </div>
             </div>
           </div>
@@ -430,505 +635,535 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { useProjectsStore } from '@/stores/projects'
-import StatusBadge from '@/components/ui/StatusBadge.vue'
-import BidCard from '@/components/project/BidCard.vue'
-import projectService from '@/services/projectService'
-import bidService from '@/services/bidService'
-import { useToast } from 'vue-toastification'
-import { formatDistanceToNow, differenceInSeconds } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import StatusBadge from "@/components/ui/StatusBadge.vue";
+import BidCard from "@/components/project/BidCard.vue";
+import projectService from "@/services/projectService";
+import bidService from "@/services/bidService";
+import { useToast } from "vue-toastification";
+import { formatDistanceToNow, differenceInSeconds } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
-const route = useRoute()
-const router = useRouter()
-const authStore = useAuthStore()
-const projectsStore = useProjectsStore()
-const toast = useToast()
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const toast = useToast();
 
-const project = ref(null)
-const bids = ref([])
-const isLoading = ref(false)
-const isBidsLoading = ref(false)
-const error = ref(null)
-const showBidForm = ref(false)
-const isBidSubmitting = ref(false)
-const timeRemaining = ref(null)
-const countdownInterval = ref(null)
-const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
-const isClosingAuction = ref(false)
-const deletingAttachmentId = ref(null)
-const isUploadingAttachment = ref(false)
+const project = ref(null);
+const bids = ref([]);
+const isLoading = ref(false);
+const isBidsLoading = ref(false);
+const error = ref(null);
+const showBidForm = ref(false);
+const isBidSubmitting = ref(false);
+const timeRemaining = ref(null);
+const countdownInterval = ref(null);
+const bidSortBy = ref("score"); // score, price-low, price-high, date-new, date-old
+const isClosingAuction = ref(false);
+const deletingAttachmentId = ref(null);
+const isUploadingAttachment = ref(false);
 
 const bidForm = ref({
   amount: null,
-  proposal: '',
-  delivery_time: null
-})
+  proposal: "",
+  delivery_time: null,
+});
 
 const skillsArray = computed(() => {
-  if (!project.value?.skills) return []
-  return project.value.skills.split(',').map(s => s.trim()).filter(Boolean)
-})
+  if (!project.value?.skills) return [];
+  return project.value.skills
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+});
 
 const isProjectOwner = computed(() => {
-  return authStore.user?.id === project.value?.client_id
-})
+  return authStore.user?.id === project.value?.client_id;
+});
 
 const canSubmitBid = computed(() => {
-  return authStore.isProvider && project.value?.status === 'open' && !isProjectOwner.value
-})
-
-const hasDeadlinePassed = computed(() => {
-  if (!project.value?.deadline) return false
-  return new Date(project.value.deadline) < new Date()
-})
+  return (
+    authStore.isProvider &&
+    project.value?.status === "open" &&
+    !isProjectOwner.value
+  );
+});
 
 const formattedTimeRemaining = computed(() => {
-  if (!timeRemaining.value) return null
-  
-  const { days, hours, minutes, seconds, expired } = timeRemaining.value
-  
+  if (!timeRemaining.value) return null;
+
+  const { days, hours, minutes, seconds, expired } = timeRemaining.value;
+
   if (expired) {
-    return { text: 'Prazo encerrado', class: 'text-red-600' }
+    return { text: "Prazo encerrado", class: "text-red-600" };
   }
-  
+
   if (days > 0) {
-    return { 
-      text: `${days}d ${hours}h ${minutes}m`, 
-      class: days > 2 ? 'text-green-600' : 'text-yellow-600' 
-    }
+    return {
+      text: `${days}d ${hours}h ${minutes}m`,
+      class: days > 2 ? "text-green-600" : "text-yellow-600",
+    };
   }
-  
+
   if (hours > 0) {
-    return { 
-      text: `${hours}h ${minutes}m ${seconds}s`, 
-      class: hours > 6 ? 'text-yellow-600' : 'text-orange-600' 
-    }
+    return {
+      text: `${hours}h ${minutes}m ${seconds}s`,
+      class: hours > 6 ? "text-yellow-600" : "text-orange-600",
+    };
   }
-  
-  return { 
-    text: `${minutes}m ${seconds}s`, 
-    class: 'text-red-600 font-bold' 
-  }
-})
+
+  return {
+    text: `${minutes}m ${seconds}s`,
+    class: "text-red-600 font-bold",
+  };
+});
 
 const sortedBids = computed(() => {
-  if (!bids.value || bids.value.length === 0) return []
-  
-  const sorted = [...bids.value]
-  
+  if (!bids.value || bids.value.length === 0) return [];
+
+  const sorted = [...bids.value];
+
   switch (bidSortBy.value) {
-    case 'price-low':
-      return sorted.sort((a, b) => (a.amount || 0) - (b.amount || 0))
-    case 'price-high':
-      return sorted.sort((a, b) => (b.amount || 0) - (a.amount || 0))
-    case 'date-new':
-      return sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    case 'date-old':
-      return sorted.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-    case 'score':
+    case "price-low":
+      return sorted.sort((a, b) => (a.amount || 0) - (b.amount || 0));
+    case "price-high":
+      return sorted.sort((a, b) => (b.amount || 0) - (a.amount || 0));
+    case "date-new":
+      return sorted.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
+    case "date-old":
+      return sorted.sort(
+        (a, b) => new Date(a.created_at) - new Date(b.created_at),
+      );
+    case "score":
     default:
       // Sort by score (highest first), then by amount (lowest first)
       return sorted.sort((a, b) => {
-        const scoreA = a.score || 0
-        const scoreB = b.score || 0
+        const scoreA = a.score || 0;
+        const scoreB = b.score || 0;
         if (scoreB !== scoreA) {
-          return scoreB - scoreA
+          return scoreB - scoreA;
         }
-        return (a.amount || 0) - (b.amount || 0)
-      })
+        return (a.amount || 0) - (b.amount || 0);
+      });
   }
-})
+});
 
 const attachmentsList = computed(() => {
-  if (!project.value?.attachments) return []
-  return Array.isArray(project.value.attachments) ? project.value.attachments : []
-})
+  if (!project.value?.attachments) return [];
+  return Array.isArray(project.value.attachments)
+    ? project.value.attachments
+    : [];
+});
 
 const acceptedBid = computed(() => {
-  if (!bids.value || bids.value.length === 0) return null
-  return bids.value.find(bid => bid.status === 'accepted')
-})
+  if (!bids.value || bids.value.length === 0) return null;
+  return bids.value.find((bid) => bid.status === "accepted");
+});
 
 const formatDate = (date) => {
-  if (!date) return 'Data não disponível'
+  if (!date) return "Data não disponível";
   try {
-    return formatDistanceToNow(new Date(date), { 
+    return formatDistanceToNow(new Date(date), {
       addSuffix: true,
-      locale: ptBR 
-    })
+      locale: ptBR,
+    });
   } catch (error) {
-    return 'Data inválida'
+    return "Data inválida";
   }
-}
+};
 
 const formatDeadline = (date) => {
-  if (!date) return 'Não especificado'
+  if (!date) return "Não especificado";
   try {
-    return new Date(date).toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+    return new Date(date).toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   } catch (error) {
-    return 'Data inválida'
+    return "Data inválida";
   }
-}
+};
 
 const formatCurrency = (value) => {
-  if (!value && value !== 0) return 'A combinar'
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(value)
-}
+  if (!value && value !== 0) return "A combinar";
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+};
 
 const getCategoryLabel = (value) => {
-  const categories = projectService.getCategories()
-  const cat = categories.find(c => c.value === value)
-  return cat ? cat.label : value
-}
+  const categories = projectService.getCategories();
+  const cat = categories.find((c) => c.value === value);
+  return cat ? cat.label : value;
+};
 
 const getInitials = (name) => {
-  if (!name) return '?'
+  if (!name) return "?";
   return name
-    .split(' ')
-    .map(word => word[0])
-    .join('')
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
     .toUpperCase()
-    .substring(0, 2)
-}
+    .substring(0, 2);
+};
 
 const isImageAttachment = (attachment) => {
-  return Boolean(attachment?.mime_type && attachment.mime_type.startsWith('image/'))
-}
+  return Boolean(
+    attachment?.mime_type && attachment.mime_type.startsWith("image/"),
+  );
+};
 
 const formatAttachmentSize = (bytes) => {
-  if (!bytes && bytes !== 0) return ''
+  if (!bytes && bytes !== 0) return "";
   if (bytes < 1024 * 1024) {
-    return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / 1024).toFixed(1)} KB`;
   }
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
 
 const removeAttachment = async (attachmentId) => {
-  if (!project.value?.id || !attachmentId) return
-  const confirmed = window.confirm('Remover este anexo? Essa ação não pode ser desfeita.')
-  if (!confirmed) return
+  if (!project.value?.id || !attachmentId) return;
+  const confirmed = window.confirm(
+    "Remover este anexo? Essa ação não pode ser desfeita.",
+  );
+  if (!confirmed) return;
 
-  deletingAttachmentId.value = attachmentId
+  deletingAttachmentId.value = attachmentId;
   try {
-    const result = await projectService.deleteAttachment(project.value.id, attachmentId)
+    const result = await projectService.deleteAttachment(
+      project.value.id,
+      attachmentId,
+    );
     if (result.success) {
-      const filtered = attachmentsList.value.filter(item => item.id !== attachmentId)
-      project.value.attachments = filtered
-      toast.success('Anexo removido com sucesso')
+      const filtered = attachmentsList.value.filter(
+        (item) => item.id !== attachmentId,
+      );
+      project.value.attachments = filtered;
+      toast.success("Anexo removido com sucesso");
     } else {
-      toast.error(result.error || 'Erro ao remover anexo')
+      toast.error(result.error || "Erro ao remover anexo");
     }
   } catch (error) {
-    console.error('Erro ao remover anexo:', error)
-    toast.error('Erro ao remover anexo')
+    console.error("Erro ao remover anexo:", error);
+    toast.error("Erro ao remover anexo");
   } finally {
-    deletingAttachmentId.value = null
+    deletingAttachmentId.value = null;
   }
-}
+};
 
 const handleAttachmentUpload = async (event) => {
-  if (!project.value?.id) return
-  const files = Array.from(event.target?.files || [])
-  if (!files.length) return
+  if (!project.value?.id) return;
+  const files = Array.from(event.target?.files || []);
+  if (!files.length) return;
 
-  isUploadingAttachment.value = true
+  isUploadingAttachment.value = true;
   try {
-    let uploaded = 0
-    let failed = 0
+    let uploaded = 0;
+    let failed = 0;
     for (const file of files) {
       if (file.size > 5 * 1024 * 1024) {
-        failed++
-        toast.error(`${file.name} excede 5MB`)
-        continue
+        failed++;
+        toast.error(`${file.name} excede 5MB`);
+        continue;
       }
 
       try {
-        const response = await projectService.uploadAttachment(project.value.id, file)
+        const response = await projectService.uploadAttachment(
+          project.value.id,
+          file,
+        );
         if (response.success) {
-          uploaded++
-          const current = attachmentsList.value
-          project.value.attachments = [...current, response.data.attachment]
+          uploaded++;
+          const current = attachmentsList.value;
+          project.value.attachments = [...current, response.data.attachment];
         } else {
-          failed++
-          toast.error(response.error || `Erro ao enviar ${file.name}`)
+          failed++;
+          toast.error(response.error || `Erro ao enviar ${file.name}`);
         }
       } catch (error) {
-        failed++
-        console.error('Erro ao enviar anexo:', error)
-        toast.error(`Erro ao enviar ${file.name}`)
+        failed++;
+        console.error("Erro ao enviar anexo:", error);
+        toast.error(`Erro ao enviar ${file.name}`);
       }
     }
 
     if (uploaded) {
-      toast.success(`${uploaded} anexo(s) enviado(s) com sucesso`)
+      toast.success(`${uploaded} anexo(s) enviado(s) com sucesso`);
     }
     if (failed) {
-      toast.error(`${failed} anexo(s) falharam. Tente novamente.`)
+      toast.error(`${failed} anexo(s) falharam. Tente novamente.`);
     }
   } finally {
-    isUploadingAttachment.value = false
+    isUploadingAttachment.value = false;
     if (event.target) {
-      event.target.value = ''
+      event.target.value = "";
     }
   }
-}
+};
 
 const updateCountdown = () => {
   if (!project.value?.deadline) {
-    timeRemaining.value = null
-    return
+    timeRemaining.value = null;
+    return;
   }
-  
-  const deadline = new Date(project.value.deadline)
-  const now = new Date()
-  const secondsLeft = differenceInSeconds(deadline, now)
-  
+
+  const deadline = new Date(project.value.deadline);
+  const now = new Date();
+  const secondsLeft = differenceInSeconds(deadline, now);
+
   if (secondsLeft <= 0) {
     timeRemaining.value = {
       days: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
-      expired: true
-    }
+      expired: true,
+    };
     // Stop the countdown
     if (countdownInterval.value) {
-      clearInterval(countdownInterval.value)
-      countdownInterval.value = null
+      clearInterval(countdownInterval.value);
+      countdownInterval.value = null;
     }
-    return
+    return;
   }
-  
-  const days = Math.floor(secondsLeft / 86400)
-  const hours = Math.floor((secondsLeft % 86400) / 3600)
-  const minutes = Math.floor((secondsLeft % 3600) / 60)
-  const seconds = secondsLeft % 60
-  
+
+  const days = Math.floor(secondsLeft / 86400);
+  const hours = Math.floor((secondsLeft % 86400) / 3600);
+  const minutes = Math.floor((secondsLeft % 3600) / 60);
+  const seconds = secondsLeft % 60;
+
   timeRemaining.value = {
     days,
     hours,
     minutes,
     seconds,
-    expired: false
-  }
-}
+    expired: false,
+  };
+};
 
 const startCountdown = () => {
   // Clear any existing interval
   if (countdownInterval.value) {
-    clearInterval(countdownInterval.value)
+    clearInterval(countdownInterval.value);
   }
-  
+
   // Update immediately
-  updateCountdown()
-  
+  updateCountdown();
+
   // Update every second
-  countdownInterval.value = setInterval(updateCountdown, 1000)
-}
+  countdownInterval.value = setInterval(updateCountdown, 1000);
+};
 
 const loadProject = async () => {
-  isLoading.value = true
-  error.value = null
+  isLoading.value = true;
+  error.value = null;
 
   try {
-    const projectId = route.params.id
-    const result = await projectService.getProject(projectId)
+    const projectId = route.params.id;
+    const result = await projectService.getProject(projectId);
 
     if (result.success) {
-      project.value = result.data.project
+      project.value = result.data.project;
       // Start countdown if project is open and has a deadline
-      if (project.value.status === 'open' && project.value.deadline) {
-        startCountdown()
+      if (project.value.status === "open" && project.value.deadline) {
+        startCountdown();
       }
       // Load bids after project is loaded
-      await loadBids()
+      await loadBids();
     } else {
-      error.value = result.error
+      error.value = result.error;
     }
   } catch (err) {
-    console.error('Error loading project:', err)
-    error.value = 'Erro ao carregar projeto'
+    console.error("Error loading project:", err);
+    error.value = "Erro ao carregar projeto";
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const loadBids = async () => {
-  if (!project.value?.id) return
-  
-  isBidsLoading.value = true
-  
+  if (!project.value?.id) return;
+
+  isBidsLoading.value = true;
+
   try {
-    const result = await projectService.getProjectBids(project.value.id)
-    
+    const result = await projectService.getProjectBids(project.value.id);
+
     if (result.success) {
-      bids.value = result.data.bids || []
+      bids.value = result.data.bids || [];
       // Update bid count in project
       if (project.value) {
-        project.value.bid_count = bids.value.length
+        project.value.bid_count = bids.value.length;
       }
     } else {
-      console.error('Error loading bids:', result.error)
+      console.error("Error loading bids:", result.error);
     }
   } catch (err) {
-    console.error('Error loading bids:', err)
+    console.error("Error loading bids:", err);
   } finally {
-    isBidsLoading.value = false
+    isBidsLoading.value = false;
   }
-}
+};
 
 const submitBid = async () => {
   if (!authStore.isAuthenticated) {
-    toast.error('Você precisa fazer login para enviar uma proposta')
-    router.push('/login')
-    return
+    toast.error("Você precisa fazer login para enviar uma proposta");
+    router.push("/login");
+    return;
   }
 
   if (!authStore.isProvider) {
-    toast.error('Apenas prestadores podem enviar propostas')
-    return
+    toast.error("Apenas prestadores podem enviar propostas");
+    return;
   }
 
-  if (!bidForm.value.amount || !bidForm.value.proposal || !bidForm.value.delivery_time) {
-    toast.error('Por favor, preencha todos os campos')
-    return
+  if (
+    !bidForm.value.amount ||
+    !bidForm.value.proposal ||
+    !bidForm.value.delivery_time
+  ) {
+    toast.error("Por favor, preencha todos os campos");
+    return;
   }
 
   if (!bidForm.value.proposal.trim()) {
-    toast.error('Descrição da proposta é obrigatória')
-    return
+    toast.error("Descrição da proposta é obrigatória");
+    return;
   }
 
-  isBidSubmitting.value = true
+  isBidSubmitting.value = true;
 
   try {
     const bidData = {
       project_id: project.value.id,
       amount: bidForm.value.amount,
       proposal: bidForm.value.proposal,
-      delivery_time: bidForm.value.delivery_time
-    }
+      delivery_time: bidForm.value.delivery_time,
+    };
 
-    const result = await bidService.createBid(bidData)
-    
+    const result = await bidService.createBid(bidData);
+
     if (result.success) {
-      toast.success('Proposta enviada com sucesso!')
-      showBidForm.value = false
+      toast.success("Proposta enviada com sucesso!");
+      showBidForm.value = false;
       bidForm.value = {
         amount: null,
-        proposal: '',
-        delivery_time: null
-      }
+        proposal: "",
+        delivery_time: null,
+      };
       // Reload bids to show the new one
-      await loadBids()
+      await loadBids();
     } else {
-      toast.error(result.error || 'Erro ao enviar proposta')
+      toast.error(result.error || "Erro ao enviar proposta");
     }
   } catch (err) {
-    console.error('Error submitting bid:', err)
-    toast.error('Erro ao enviar proposta')
+    console.error("Error submitting bid:", err);
+    toast.error("Erro ao enviar proposta");
   } finally {
-    isBidSubmitting.value = false
+    isBidSubmitting.value = false;
   }
-}
+};
 
 const acceptBid = async (bidId) => {
-  if (!confirm('Tem certeza que deseja aceitar esta proposta? Isso encerrará o leilão.')) {
-    return
+  if (
+    !confirm(
+      "Tem certeza que deseja aceitar esta proposta? Isso encerrará o leilão.",
+    )
+  ) {
+    return;
   }
 
   try {
-    const result = await bidService.acceptBid(project.value.id, bidId)
-    
+    const result = await bidService.acceptBid(project.value.id, bidId);
+
     if (result.success) {
-      toast.success('Proposta aceita com sucesso!')
+      toast.success("Proposta aceita com sucesso!");
       // Reload project and bids
-      await loadProject()
+      await loadProject();
     } else {
-      toast.error(result.error || 'Erro ao aceitar proposta')
+      toast.error(result.error || "Erro ao aceitar proposta");
     }
   } catch (err) {
-    console.error('Error accepting bid:', err)
-    toast.error('Erro ao aceitar proposta')
+    console.error("Error accepting bid:", err);
+    toast.error("Erro ao aceitar proposta");
   }
-}
+};
 
 const rejectBid = async (bidId) => {
-  if (!confirm('Tem certeza que deseja rejeitar esta proposta?')) {
-    return
+  if (!confirm("Tem certeza que deseja rejeitar esta proposta?")) {
+    return;
   }
 
   try {
-    const result = await bidService.rejectBid(bidId)
-    
+    const result = await bidService.rejectBid(bidId);
+
     if (result.success) {
-      toast.success('Proposta rejeitada')
+      toast.success("Proposta rejeitada");
       // Reload bids
-      await loadBids()
+      await loadBids();
     } else {
-      toast.error(result.error || 'Erro ao rejeitar proposta')
+      toast.error(result.error || "Erro ao rejeitar proposta");
     }
   } catch (err) {
-    console.error('Error rejecting bid:', err)
-    toast.error('Erro ao rejeitar proposta')
+    console.error("Error rejecting bid:", err);
+    toast.error("Erro ao rejeitar proposta");
   }
-}
+};
 
 const closeAuction = async () => {
   if (bids.value.length === 0) {
-    toast.error('Não há propostas para selecionar um vencedor')
-    return
+    toast.error("Não há propostas para selecionar um vencedor");
+    return;
   }
 
-  const lowestBid = [...bids.value].sort((a, b) => (a.amount || 0) - (b.amount || 0))[0]
-  
-  const confirmMessage = `Encerrar o leilão agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat('pt-BR').format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`
-  
+  const lowestBid = [...bids.value].sort(
+    (a, b) => (a.amount || 0) - (b.amount || 0),
+  )[0];
+
+  const confirmMessage = `Encerrar o leilão agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat("pt-BR").format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`;
+
   if (!confirm(confirmMessage)) {
-    return
+    return;
   }
 
-  isClosingAuction.value = true
+  isClosingAuction.value = true;
 
   try {
-    const result = await projectService.closeAuction(project.value.id)
-    
+    const result = await projectService.closeAuction(project.value.id);
+
     if (result.success) {
-      toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
+      toast.success(
+        "🎉 Leilão encerrado com sucesso! O vencedor foi notificado.",
+      );
       // Reload project and bids to show updated status
-      await loadProject()
+      await loadProject();
     } else {
-      toast.error(result.error || 'Erro ao encerrar leilão')
+      toast.error(result.error || "Erro ao encerrar leilão");
     }
   } catch (err) {
-    console.error('Error closing auction:', err)
-    toast.error('Erro ao encerrar leilão')
+    console.error("Error closing auction:", err);
+    toast.error("Erro ao encerrar leilão");
   } finally {
-    isClosingAuction.value = false
+    isClosingAuction.value = false;
   }
-}
+};
 
 onMounted(() => {
-  loadProject()
-})
+  loadProject();
+});
 
 onUnmounted(() => {
   // Clean up countdown interval
   if (countdownInterval.value) {
-    clearInterval(countdownInterval.value)
+    clearInterval(countdownInterval.value);
   }
-})
+});
 </script>
