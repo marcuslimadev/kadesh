@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
 
 // Lazy load views
 const Home = () => import('../views/Home.vue')
