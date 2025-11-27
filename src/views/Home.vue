@@ -102,15 +102,6 @@
             </div>
             <span class="absolute top-0 right-0 bg-accent-500 text-primary-900 px-3 py-1 text-xs font-bold rounded-bl-xl">{{ category.label }}</span>
           </button>
-        </div></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-5">
-              <component :is="category.icon" class="h-8 w-8 text-accent-400 mb-3 animate-bounce-slow"></component>
-              <p class="text-xs text-gray-300 uppercase tracking-wider">{{ category.tagline }}</p>
-              <h3 class="text-white text-lg font-semibold">{{ category.title }}</h3>
-              <p class="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity">{{ category.description }}</p>
-            </div>
-            <span class="absolute top-0 right-0 bg-accent-500 text-primary-900 px-3 py-1 text-xs font-bold rounded-bl-xl">{{ category.label }}</span>
-          </button>
         </div>
       </div>
     </section>
