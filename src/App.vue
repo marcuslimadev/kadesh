@@ -15,7 +15,7 @@
     <template v-else>
       <NavBar v-if="showNavigation" />
       
-      <main :class="{ 'pt-16': showNavigation }">
+      <main :class="mainClasses">
         <router-view />
       </main>
       
@@ -41,6 +41,11 @@ const INITIALIZATION_FALLBACK_MS = 2000
 const showNavigation = computed(() => {
   const hideNavRoutes = ['login', 'register', 'forgot-password']
   return !hideNavRoutes.includes(route.name)
+})
+
+const mainClasses = computed(() => {
+  if (!showNavigation.value) return ''
+  return 'pt-16 md:pt-0 md:pl-64'
 })
 
 const finishInitialization = () => {
