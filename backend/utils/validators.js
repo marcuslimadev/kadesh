@@ -28,11 +28,12 @@ const validateProjectData = (data) => {
   
   if (data.deadline) {
     const deadline = new Date(data.deadline);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
     
-    if (deadline < today) {
-      errors.push('Prazo não pode ser no passado');
+    if (isNaN(deadline.getTime())) {
+      errors.push('Prazo invalido');
+    } else if (deadline <= now) {
+      errors.push('Prazo nao pode ser no passado');
     }
   }
   

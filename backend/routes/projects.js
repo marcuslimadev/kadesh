@@ -115,7 +115,12 @@ const ALLOWED_MIME_TYPES = [
   'image/png',
   'image/webp',
   'image/gif',
-  'application/pdf'
+  'application/pdf',
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/x-matroska',
+  'video/webm'
 ];
 
 const attachmentsDir = path.join(__dirname, '..', 'uploads', 'project-attachments');
@@ -164,16 +169,32 @@ router.get('/', async (req, res) => {
       status = 'open',
       limit = 20, 
       offset = 0,
-      search 
+      search,
+      page,
+      per_page
     } = req.query;
+
+    const effectiveLimit = per_page ? parseInt(per_page) : parseInt(limit);
+    const effectiveOffset = page ? (parseInt(page) - 1) * effectiveLimit : parseInt(offset);
+
+    const categoryMap = {
+      'desenvolvimento-web': 'Desenvolvimento Web',
+      'design': 'Design',
+      'marketing': 'Marketing',
+      'redacao': 'Reda��o',
+      'mobile': 'Mobile',
+      'consultoria': 'Consultoria',
+      'outros': 'Outros'
+    };
+    const normalizedCategory = categoryMap[category] || category;
 
     let query = `
       SELECT 
         p.*,
         u.name as client_name,
         u.email as client_email,
-          COALESCE(b_data.bid_count, 0) as bid_count,
-          b_data.lowest_bid_amount,
+        COALESCE(b_data.bid_count, 0) as bid_count,
+        b_data.lowest_bid_amount,
         COALESCE(attachment_data.attachments, '[]'::json) as attachments
       FROM projects p
       JOIN users u ON p.client_id = u.id
@@ -209,9 +230,9 @@ router.get('/', async (req, res) => {
       params.push(status);
     }
 
-    if (category) {
+    if (normalizedCategory) {
       query += ` AND p.category = $${++paramCount}`;
-      params.push(category);
+      params.push(normalizedCategory);
     }
 
     if (budget_min) {
@@ -233,15 +254,21 @@ router.get('/', async (req, res) => {
       ORDER BY p.created_at DESC
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
-    params.push(parseInt(limit), parseInt(offset));
+    params.push(effectiveLimit, effectiveOffset);
 
-    const result = await db.query(query, params);
+    const result = await db.query(
+      `SELECT *, COUNT(*) OVER() AS total_count FROM (${query}) sub`,
+      params
+    );
+
+    const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     res.json({
       projects: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      total,
+      limit: effectiveLimit,
+      offset: effectiveOffset,
+      total_pages: effectiveLimit ? Math.ceil(total / effectiveLimit) : 1
     });
 
   } catch (error) {

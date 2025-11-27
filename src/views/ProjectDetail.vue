@@ -96,7 +96,7 @@
                     type="file"
                     class="hidden"
                     multiple
-                    accept="image/*,.pdf"
+                    accept="image/*,video/*,.pdf"
                     @change="handleAttachmentUpload"
                   />
                   <label
@@ -590,7 +590,7 @@ const formatCurrency = (value) => {
 
 const getCategoryLabel = (value) => {
   const categories = projectService.getCategories()
-  const cat = categories.find(c => c.value === value)
+  const cat = categories.find(c => c.value === value || c.label === value)
   return cat ? cat.label : value
 }
 

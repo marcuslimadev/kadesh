@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 // Lazy load views
 const Home = () => import('../views/Home.vue')
@@ -207,28 +208,41 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, from, next) => {
-  // Frontend stores the JWT under the `kadesh_token` key (see src/stores/auth.js)
-  // so the navigation guard needs to look up the same key to accurately determine
-  // whether the user is authenticated. Otherwise, even users with a valid session
-  // would be redirected back to the login screen.
-  const token = localStorage.getItem('kadesh_token')
-  const adminToken = localStorage.getItem('adminToken')
-  const isAuthenticated = !!token
-  const isAdminAuthenticated = !!adminToken
+router.beforeEach(async (to, from, next) => {
+  const isBrowser = typeof window !== 'undefined'
+  const authStore = useAuthStore()
+  const token = isBrowser ? localStorage.getItem('kadesh_token') : null
+  const adminToken = isBrowser ? localStorage.getItem('adminToken') : null
+
+  const needsAuth = to.meta.requiresAuth
+  const needsAdmin = to.meta.requiresAdminAuth
+  const guestOnly = to.meta.guestOnly
 
   // Admin routes protection
-  if (to.meta.requiresAdminAuth && !isAdminAuthenticated) {
-    next({ name: 'admin-login' })
-  } else if (to.meta.requiresAuth && !isAuthenticated) {
-    // Redirect to login if route requires auth and user is not authenticated
-    next({ name: 'login', query: { redirect: to.fullPath } })
-  } else if (to.meta.guestOnly && isAuthenticated) {
-    // Redirect to dashboard if route is for guests only and user is authenticated
-    next({ name: 'dashboard' })
-  } else {
-    next()
+  if (needsAdmin && !adminToken) {
+    return next({ name: 'admin-login' })
   }
+
+  // Guard for authenticated routes
+  if (needsAuth) {
+    if (!token) {
+      return next({ name: 'login', query: { redirect: to.fullPath } })
+    }
+    // If user not hydrated, verify token with backend before proceeding
+    if (!authStore.user) {
+      const verified = await authStore.verifyToken()
+      if (!verified) {
+        return next({ name: 'login', query: { redirect: to.fullPath } })
+      }
+    }
+  }
+
+  // Guest-only routes redirect if already authenticated
+  if (guestOnly && (authStore.isAuthenticated || token)) {
+    return next({ name: 'dashboard' })
+  }
+
+  return next()
 })
 
 export default router

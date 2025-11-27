@@ -76,6 +76,7 @@ const viewMode = useViewModeStore()
 const showTooltip = ref(false)
 
 onMounted(() => {
+  if (typeof window === 'undefined') return
   const tooltipCount = parseInt(localStorage.getItem('kadesh_viewmode_tooltip_count') || '0')
   
   if (tooltipCount < 3) {
@@ -91,7 +92,9 @@ onMounted(() => {
 
 const dismissTooltip = () => {
   showTooltip.value = false
-  localStorage.setItem('kadesh_viewmode_tooltip_count', '999') // Não mostra mais
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('kadesh_viewmode_tooltip_count', '999') // Não mostra mais
+  }
 }
 </script>
 

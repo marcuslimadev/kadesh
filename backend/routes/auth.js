@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    // Tipo é 'client' no DB - usuários alternam entre perfis via switch frontend
+    // Novo modelo: perfil unificado, o switch do frontend decide a visão (cliente/prestador)
 
     // Validations
     if (!name || !email || !password) {
@@ -48,12 +48,12 @@ router.post('/register', async (req, res) => {
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // Create user with client type (frontend switch controls view mode)
+    // Create user with unified type (frontend switch controls view mode)
     const result = await db.query(
       `INSERT INTO users (name, email, password_hash, type, created_at, updated_at)
        VALUES ($1, $2, $3, $4, NOW(), NOW())
        RETURNING id, name, email, type, created_at`,
-      [name, email, passwordHash, 'client']
+      [name, email, passwordHash, 'unified']
     );
 
     const user = result.rows[0];
