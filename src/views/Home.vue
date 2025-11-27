@@ -7,12 +7,12 @@
           <div class="hero-copy">
             <div class="flex items-center gap-3">
               <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-xl border border-gold/40 shadow-sm object-cover" />
-              <p class="eyebrow">KADDESH • Marketplace premium</p>
+              <p class="eyebrow">KADDESH - Marketplace premium</p>
             </div>
-            <h1 class="hero-title">Leilões reversos com curadoria e segurança</h1>
-            <p class="hero-sub tagline">Kaddesh: Onde a excelência encontra a demanda.</p>
+            <h1 class="hero-title">Leiloes reversos com curadoria e seguranca</h1>
+            <p class="hero-sub tagline">Kaddesh: Onde a excelencia encontra a demanda.</p>
             <p class="hero-sub">
-              Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.
+              Conectamos contratantes e prestadores em um ambiente confiavel, com anexos, prazos em horas e vencedor automatico pelo menor lance elegivel.
             </p>
 
             <div class="hero-search">
@@ -59,7 +59,7 @@
               />
               <div class="hero-visual-overlay">
                 <p class="hero-visual-caption">Prazo em horas + anexos ativos</p>
-                <p class="hero-visual-highlight">Leilão ativo • menor lance define</p>
+                <p class="hero-visual-highlight">Leilao ativo - menor lance define</p>
               </div>
             </div>
           </div>
@@ -119,27 +119,44 @@
     </section>
 
     <!-- Acesso rápido (login/registro) -->
-    <section class="bg-gradient-to-br from-gray-50 via-white to-gray-100 py-16">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <section class="cta-section">
+      <div class="cta-shell">
+        <div class="cta-header">
+          <p class="cta-eyebrow">Entrar ou criar conta</p>
+          <h2 class="cta-heading">Kaddesh: Onde a excelencia encontra a demanda.</h2>
+          <p class="cta-subtext">Use sua conta para acessar o Lobby no modo Contratante ou Prestador e acompanhar os leiloes em tempo real.</p>
+        </div>
+
+        <div class="cta-grid">
           <div class="cta-card">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="cta-title">Já tem conta?</h3>
-              <span class="cta-badge">Acesso</span>
+            <div class="cta-card__top">
+              <div class="cta-icon">
+                <LockClosedIcon class="h-5 w-5" />
+              </div>
+              <div>
+                <h3 class="cta-title">Já tem conta?</h3>
+                <p class="cta-text">Acesse o Lobby no seu modo preferido.</p>
+              </div>
             </div>
-            <p class="cta-text">Entre para acessar o Lobby de acordo com seu perfil.</p>
             <button @click="goToLogin" class="cta-button primary">
-              Fazer login
+              <span>Fazer login</span>
+              <ArrowRightIcon class="h-5 w-5" />
             </button>
           </div>
-          <div class="cta-card">
-            <div class="flex items-center justify-between mb-3">
-              <h3 class="cta-title">Novo por aqui?</h3>
-              <span class="cta-badge alt">Cadastro</span>
+
+          <div class="cta-card alt">
+            <div class="cta-card__top">
+              <div class="cta-icon alt">
+                <UserPlusIcon class="h-5 w-5" />
+              </div>
+              <div>
+                <h3 class="cta-title">Novo por aqui?</h3>
+                <p class="cta-text">Crie sua conta para contratar ou prestar serviços.</p>
+              </div>
             </div>
-            <p class="cta-text">Crie sua conta para contratar ou prestar serviços.</p>
             <button @click="goToRegister" class="cta-button secondary">
-              Criar conta
+              <span>Criar conta</span>
+              <ArrowRightIcon class="h-5 w-5" />
             </button>
           </div>
         </div>
@@ -611,7 +628,9 @@ import {
   StarIcon,
   UsersIcon,
   MapPinIcon,
-  CalendarDaysIcon
+  CalendarDaysIcon,
+  LockClosedIcon,
+  UserPlusIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -1059,4 +1078,145 @@ onMounted(() => {
 .shadow-gold {
   box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
 }
+.cta-section {
+  background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 60%, #f4f0e8 100%);
+  padding: 3.5rem 1rem;
+}
+
+.cta-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cta-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.cta-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #d4af37;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.cta-heading {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-top: 0.35rem;
+}
+
+.cta-subtext {
+  color: #4a4a4a;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .cta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cta-card {
+  background: radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.18), rgba(26, 26, 26, 0) 45%), #ffffff;
+  border: 1px solid rgba(26, 26, 26, 0.06);
+  border-radius: 24px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cta-card.alt {
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #f5f5f5;
+}
+
+.cta-card__top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cta-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d4af37, #c49c2f);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  box-shadow: 0 10px 24px rgba(212, 175, 55, 0.35);
+}
+
+.cta-icon.alt {
+  background: linear-gradient(135deg, #3a8beb, #2d5da8);
+  color: #f5f5f5;
+  box-shadow: 0 10px 24px rgba(58, 139, 235, 0.35);
+}
+
+.cta-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: inherit;
+}
+
+.cta-text {
+  color: inherit;
+  opacity: 0.85;
+  font-size: 0.98rem;
+}
+
+.cta-button {
+  width: 100%;
+  border-radius: 14px;
+  padding: 0.95rem 1.1rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  border: none;
+}
+
+.cta-button.primary {
+  background: linear-gradient(135deg, #d4af37, #c49c2f);
+  color: #1a1a1a;
+  box-shadow: 0 16px 36px rgba(212, 175, 55, 0.32);
+}
+
+.cta-button.secondary {
+  background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+  color: #f5f5f5;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+}
 </style>
+
+
+
+
+
+
