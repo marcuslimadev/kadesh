@@ -25,12 +25,20 @@ let intervalId = null;
  */
 function sanitizeForDisplay(str, maxLength = 100) {
   if (!str || typeof str !== 'string') return '';
-  // Remove potential script tags and trim
-  return str
-    .replace(/<[^>]*>/g, '')
-    .replace(/[<>'"]/g, '')
-    .trim()
-    .substring(0, maxLength);
+  
+  let result = str;
+  
+  // Remove complete HTML tags
+  let previousResult;
+  do {
+    previousResult = result;
+    result = result.replace(/<[^>]*>/g, '');
+  } while (result !== previousResult);
+  
+  // Remove any remaining angle brackets and quotes
+  result = result.replace(/[<>'"]/g, '');
+  
+  return result.trim().substring(0, maxLength);
 }
 
 /**
