@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const auth = require('../middleware/auth');
+const { createWalletTransaction, getCurrentBalance } = require('../services/walletService');
 
 /**
  * GET /api/contracts
@@ -125,46 +126,70 @@ router.post('/', auth, async (req, res) => {
       return res.status(403).json({ success: false, message: 'Apenas o cliente pode criar o contrato' });
     }
 
-    // Check if contract already exists for this bid
-    const existing = await db.query(
-      'SELECT id FROM contracts WHERE bid_id = $1',
-      [bid_id]
-    );
+    const contractAmount = Number(bid.rows[0].amount);
 
-    if (existing.rows.length > 0) {
-      return res.status(409).json({
-        success: false,
-        message: 'Contrato já existe para este bid'
-      });
-    }
+    const contract = await db.transaction(async (client) => {
+      // Check if contract already exists for this bid
+      const existing = await client.query(
+        'SELECT id FROM contracts WHERE bid_id = $1 FOR UPDATE',
+        [bid_id]
+      );
 
-    // Create contract (status in_progress)
-    const contract = await db.query(
-      `INSERT INTO contracts (bid_id, project_id, client_id, provider_id, amount, status, start_date, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, 'in_progress', NOW(), NOW(), NOW())
-       RETURNING *`,
-      [
-        bid_id,
-        bid.rows[0].project_id,
-        bid.rows[0].client_id,
-        bid.rows[0].provider_id,
-        bid.rows[0].amount
-      ]
-    );
+      if (existing.rows.length > 0) {
+        const error = new Error('Contrato já existe para este bid');
+        error.status = 409;
+        throw error;
+      }
 
-    // Lock payment (optional - for future escrow implementation)
-    // TODO: Implement payment locking mechanism with Mercado Pago
+      const currentBalance = await getCurrentBalance(userId, client);
+      if (contractAmount > currentBalance) {
+        const error = new Error('Saldo insuficiente para bloquear o valor do contrato');
+        error.status = 400;
+        throw error;
+      }
+
+      // Create contract (status in_progress)
+      const contractResult = await client.query(
+        `INSERT INTO contracts (bid_id, project_id, client_id, provider_id, amount, status, start_date, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, 'in_progress', NOW(), NOW(), NOW())
+         RETURNING *`,
+        [
+          bid_id,
+          bid.rows[0].project_id,
+          bid.rows[0].client_id,
+          bid.rows[0].provider_id,
+          contractAmount
+        ]
+      );
+
+      await createWalletTransaction(userId, {
+        amount: -Math.abs(contractAmount),
+        type: 'escrow_hold',
+        status: 'processing',
+        description: `Valor reservado para contrato do projeto ${bid.rows[0].project_id}`,
+        referenceType: 'contract',
+        referenceId: contractResult.rows[0].id,
+        metadata: {
+          projectId: bid.rows[0].project_id,
+          bidId: bid_id,
+          amount: Math.abs(contractAmount)
+        }
+      }, client);
+
+      return contractResult.rows[0];
+    });
 
     res.status(201).json({
       success: true,
       message: 'Contrato criado com sucesso',
-      data: contract.rows[0]
+      data: contract
     });
   } catch (error) {
     console.error('[Contracts] Error creating contract:', error);
-    res.status(500).json({
+    const status = error.status || 500;
+    res.status(status).json({
       success: false,
-      message: 'Erro ao criar contrato',
+      message: error.status ? error.message : 'Erro ao criar contrato',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
@@ -237,27 +262,65 @@ router.put('/:id/accept-completion', auth, async (req, res) => {
       });
     }
 
-    // Set end_date (status already completed)
-    const updated = await db.query(
-      `UPDATE contracts SET end_date = NOW(), updated_at = NOW()
-       WHERE id = $1
-       RETURNING *`,
-      [id]
-    );
+    const contractData = contract.rows[0];
+    const contractAmount = Math.abs(Number(contractData.amount));
 
-    // Release payment to provider (TODO: implement payment release)
-    // await releasePaymentToProvider(contract.rows[0].provider_id, contract.rows[0].id);
+    const updated = await db.transaction(async (client) => {
+      const updatedContract = await client.query(
+        `UPDATE contracts SET end_date = NOW(), updated_at = NOW()
+         WHERE id = $1
+         RETURNING *`,
+        [id]
+      );
+
+      await createWalletTransaction(contractData.client_id, {
+        amount: 0,
+        type: 'escrow_release',
+        description: 'Pagamento liberado para o prestador',
+        referenceType: 'contract',
+        referenceId: contractData.id,
+        metadata: {
+          projectId: contractData.project_id,
+          providerId: contractData.provider_id,
+          amount: contractAmount
+        },
+        allowZeroAmount: true
+      }, client);
+
+      await createWalletTransaction(contractData.provider_id, {
+        amount: contractAmount,
+        type: 'payment_received',
+        description: `Pagamento recebido - contrato ${contractData.id}`,
+        referenceType: 'contract',
+        referenceId: contractData.id,
+        metadata: {
+          clientId: contractData.client_id,
+          projectId: contractData.project_id,
+          amount: contractAmount
+        }
+      }, client);
+
+      await client.query(
+        `UPDATE wallet_transactions
+         SET status = 'released'
+         WHERE user_id = $1 AND reference_type = 'contract' AND reference_id = $2 AND type = 'escrow_hold'`,
+        [contractData.client_id, contractData.id]
+      );
+
+      return updatedContract.rows[0];
+    });
 
     res.json({
       success: true,
       message: 'Contrato aceito, pagamento liberado',
-      data: updated.rows[0]
+      data: updated
     });
   } catch (error) {
     console.error('[Contracts] Error accepting contract:', error);
-    res.status(500).json({
+    const status = error.status || 500;
+    res.status(status).json({
       success: false,
-      message: 'Erro ao aceitar contrato',
+      message: error.status ? error.message : 'Erro ao aceitar contrato',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }

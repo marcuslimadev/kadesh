@@ -61,13 +61,14 @@ const createWalletTransaction = async (
     referenceType,
     referenceId,
     status = 'completed',
-    metadata = {}
+    metadata = {},
+    allowZeroAmount = false
   },
   client = null
 ) => {
   const numericAmount = Number(amount)
 
-  if (!Number.isFinite(numericAmount) || numericAmount === 0) {
+  if (!Number.isFinite(numericAmount) || (!allowZeroAmount && numericAmount === 0)) {
     const error = new Error('Valor inválido')
     error.status = 400
     throw error

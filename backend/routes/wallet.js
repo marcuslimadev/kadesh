@@ -18,10 +18,20 @@ router.get('/balance', auth, async (req, res) => {
 
     const escrowResult = await db.query(
       `SELECT
-        COALESCE(SUM(amount) FILTER (WHERE type = 'escrow_hold' AND status IN ('pending', 'completed')), 0) as hold,
-        COALESCE(SUM(amount) FILTER (WHERE type = 'escrow_release' AND status IN ('pending', 'completed')), 0) as release
+        COALESCE(SUM(
+          CASE
+            WHEN type = 'escrow_hold' AND status != 'released' THEN COALESCE((metadata ->> 'amount')::numeric, amount)
+            ELSE 0
+          END
+        ), 0) as hold,
+        COALESCE(SUM(
+          CASE
+            WHEN type = 'escrow_release' THEN COALESCE((metadata ->> 'amount')::numeric, amount)
+            ELSE 0
+          END
+        ), 0) as release
       FROM wallet_transactions
-      WHERE user_id = $1`,
+      WHERE user_id = $1 AND status NOT IN ('failed', 'cancelled')`,
       [userId]
     )
 
