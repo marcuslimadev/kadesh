@@ -45,7 +45,7 @@ const showNavigation = computed(() => {
 
 const mainClasses = computed(() => {
   if (!showNavigation.value) return ''
-  return 'pt-16 md:pt-0 md:pl-64 md:ml-64'
+  return 'pt-16 md:pt-0 md:pl-64'
 })
 
 const finishInitialization = () => {

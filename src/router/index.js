@@ -239,7 +239,8 @@ router.beforeEach(async (to, from, next) => {
 
     // Se autenticado e na home, redireciona conforme modo
     if (to.name === 'home') {
-      return next({ name: 'auction-lobby' })
+      const mode = viewMode.currentMode || 'contractor'
+      return next({ name: 'auction-lobby', query: { mode } })
     }
   }
 
