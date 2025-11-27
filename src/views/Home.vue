@@ -818,8 +818,6 @@ const getProgressBarWidth = value => {
   return `${safeValue}%`
 }
 
-const router = useRouter()
-
 const goToLogin = () => {
   router.push({ name: 'login', query: { redirect: '/lobby' } })
 }
