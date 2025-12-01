@@ -927,7 +927,7 @@ const handleCategoryRedirect = slug => {
 
 const handleApplyProject = projectId => {
   if (!authStore.isAuthenticated) {
-    toast?.info('Entre na sua conta para se candidatar a projetos.')
+    // toast?.info('Entre na sua conta para se candidatar a projetos.')
     router.push({ name: 'login', query: { redirect: `/projects/${projectId}` } })
     return
   }
@@ -938,7 +938,7 @@ const handleNewsletter = () => {
   if (!newsletterEmail.value.trim()) {
     return
   }
-  toast?.success('Obrigado! Você receberá nossas novidades em breve.')
+  // toast?.success('Obrigado! Você receberá nossas novidades em breve.')
   newsletterEmail.value = ''
 }
 

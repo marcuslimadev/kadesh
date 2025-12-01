@@ -81,19 +81,19 @@ api.interceptors.response.use(
           const authStore = useAuthStore()
           authStore.logout()
           if (!isSilent) {
-            toast?.error('Sessão expirada. Faça login novamente.')
+            // toast?.error('Sessão expirada. Faça login novamente.')
           }
           break
 
         case 403:
           if (!isSilent) {
-            toast?.error('Você não tem permissão para esta ação.')
+            // toast?.error('Você não tem permissão para esta ação.')
           }
           break
 
         case 404:
           if (!isSilent) {
-            toast?.error('Recurso não encontrado.')
+            // toast?.error('Recurso não encontrado.')
           }
           break
 
@@ -101,40 +101,40 @@ api.interceptors.response.use(
           // Validation errors
           if (!isSilent) {
             if (data.errors && Array.isArray(data.errors)) {
-              data.errors.forEach(err => toast?.error(err))
+              // data.errors.forEach(err => toast?.error(err))
             } else if (data.error) {
-              toast?.error(data.error)
+              // toast?.error(data.error)
             }
           }
           break
 
         case 429:
           if (!isSilent) {
-            toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
+            // toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
           }
           break
 
         case 500:
           if (!isSilent) {
-            toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
+            // toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
           }
           break
 
         default:
           if (!isSilent) {
-            toast?.error(data?.error || 'Ocorreu um erro inesperado.')
+            // toast?.error(data?.error || 'Ocorreu um erro inesperado.')
           }
       }
     } else if (error.code === 'ECONNABORTED') {
       if (!isSilent) {
-        toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
+        // toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
       }
     } else if (error.message === 'Network Error') {
       // Network errors são sempre silenciosos para não assustar o usuário na home
       console.warn('Network error - servidor pode estar indisponível')
     } else {
       if (!isSilent) {
-        toast?.error('Ocorreu um erro inesperado.')
+        // toast?.error('Ocorreu um erro inesperado.')
       }
     }
 

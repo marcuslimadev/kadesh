@@ -5,16 +5,17 @@ import api from '@/services/api'
 
 const VERIFY_TOKEN_TIMEOUT_MS = Number(import.meta.env.VITE_VERIFY_TOKEN_TIMEOUT) || 8000
 
-const getToast = () => {
-  if (typeof window === 'undefined') return null
-  // return useToast()
-}
+// Toast removido - usar feedback inline
+// const getToast = () => {
+//   if (typeof window === 'undefined') return null
+//   return useToast()
+// }
 
-const showToast = (type, message) => {
-  const toastInstance = getToast()
-  if (!toastInstance || !toastInstance[type]) return
-  toastInstance[type](message)
-}
+// const showToast = (type, message) => {
+//   const toastInstance = getToast()
+//   if (!toastInstance || !toastInstance[type]) return
+//   toastInstance[type](message)
+// }
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -54,7 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('kadesh_user', JSON.stringify(userData))
 
       console.log('[Auth] Login realizado com sucesso:', userData.email, userData.name)
-      showToast('success', `Bem-vindo, ${userData.name}!`)
+      // showToast('success', `Bem-vindo, ${userData.name}!`)
       return { success: true, user: userData }
 
     } catch (error) {
@@ -81,7 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
       localStorage.setItem('kadesh_token', userToken)
       localStorage.setItem('kadesh_user', JSON.stringify(newUser))
 
-      showToast('success', `Conta criada com sucesso! Bem-vindo, ${newUser.name}!`)
+      // showToast('success', `Conta criada com sucesso! Bem-vindo, ${newUser.name}!`)
       return { success: true, user: newUser }
 
     } catch (error) {
@@ -100,7 +101,7 @@ export const useAuthStore = defineStore('auth', () => {
     token.value = null
     localStorage.removeItem('kadesh_token')
     localStorage.removeItem('kadesh_user')
-    showToast('info', 'Logout realizado com sucesso!')
+    // showToast('info', 'Logout realizado com sucesso!')
   }
 
   const verifyToken = async () => {
@@ -148,7 +149,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = response.data.user
       localStorage.setItem('kadesh_user', JSON.stringify(response.data.user))
 
-      showToast('success', 'Perfil atualizado com sucesso!')
+      // showToast('success', 'Perfil atualizado com sucesso!')
       return { success: true, user: response.data.user }
 
     } catch (error) {
