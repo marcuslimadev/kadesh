@@ -8,6 +8,8 @@ const Tutorial = () => import('../views/Tutorial.vue')
 const AuctionLobby = () => import('../views/AuctionLobby.vue')
 const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
+const ForgotPassword = () => import('../views/ForgotPassword.vue')
+const ResetPassword = () => import('../views/ResetPassword.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
 const Projects = () => import('../views/Projects.vue')
 const ProjectDetail = () => import('../views/ProjectDetail.vue')
@@ -62,6 +64,18 @@ const routes = [
     path: '/register',
     name: 'register',
     component: Register,
+    meta: { requiresAuth: false, guestOnly: true }
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    component: ForgotPassword,
+    meta: { requiresAuth: false, guestOnly: true }
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: ResetPassword,
     meta: { requiresAuth: false, guestOnly: true }
   },
   {
