@@ -86,11 +86,7 @@
               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todas</option>
-              <option value="design">Design</option>
-              <option value="desenvolvimento">Desenvolvimento</option>
-              <option value="marketing">Marketing</option>
-              <option value="escrita">Escrita</option>
-              <option value="consultoria">Consultoria</option>
+              <option v-for="cat in categoryOptions" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
             </select>
           </div>
 
@@ -211,7 +207,7 @@
                       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                       </svg>
-                      {{ project.category || 'Geral' }}
+                      {{ getCategoryLabel(project.category) }}
                     </span>
                     <span class="flex items-center">
                       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -323,6 +319,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useViewModeStore } from '@/stores/viewModeStore'
+import projectService from '@/services/projectService'
 import api from '@/services/api'
 
 const viewModeStore = useViewModeStore()
@@ -406,6 +403,7 @@ const loading = ref(false)
 const projects = ref([])
 const currentPage = ref(1)
 const pageSize = ref(20)
+const categoryOptions = projectService.getCategories()
 
 const filters = ref({
   category: '',
@@ -474,8 +472,8 @@ const loadProjects = async () => {
   try {
     const endpoint = isContractorView.value ? '/api/projects/my-projects' : '/api/projects'
     const params = {
-      limit: pageSize.value,
-      offset: (currentPage.value - 1) * pageSize.value
+      per_page: pageSize.value,
+      page: currentPage.value
     }
 
     if (filters.value.status) {
@@ -522,6 +520,11 @@ const clearFilters = () => {
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR').format(value || 0)
+}
+
+const getCategoryLabel = (value) => {
+  const cat = categoryOptions.find(c => c.value === value || c.label === value)
+  return cat ? cat.label : (value || 'Geral')
 }
 
 const formatDate = (dateString) => {

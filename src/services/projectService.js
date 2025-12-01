@@ -1,4 +1,4 @@
-import api from "./api";
+import api from './api'
 
 export const projectService = {
   /**
@@ -6,17 +6,17 @@ export const projectService = {
    */
   async getProjects(params = {}) {
     try {
-      const response = await api.get("/api/projects", { params });
+      const response = await api.get('/api/projects', { params })
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      console.error('Error fetching projects:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao carregar projetos",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar projetos'
+      }
     }
   },
 
@@ -25,17 +25,17 @@ export const projectService = {
    */
   async getProject(id) {
     try {
-      const response = await api.get(`/api/projects/${id}`);
+      const response = await api.get(`/api/projects/${id}`)
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching project:", error);
+      console.error('Error fetching project:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao carregar projeto",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar projeto'
+      }
     }
   },
 
@@ -44,17 +44,17 @@ export const projectService = {
    */
   async createProject(projectData) {
     try {
-      const response = await api.post("/api/projects", projectData);
+      const response = await api.post('/api/projects', projectData)
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error creating project:", error);
+      console.error('Error creating project:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao criar projeto",
-      };
+        error: error.response?.data?.error || 'Erro ao criar projeto'
+      }
     }
   },
 
@@ -63,17 +63,17 @@ export const projectService = {
    */
   async updateProject(id, projectData) {
     try {
-      const response = await api.put(`/api/projects/${id}`, projectData);
+      const response = await api.put(`/api/projects/${id}`, projectData)
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error updating project:", error);
+      console.error('Error updating project:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao atualizar projeto",
-      };
+        error: error.response?.data?.error || 'Erro ao atualizar projeto'
+      }
     }
   },
 
@@ -82,16 +82,16 @@ export const projectService = {
    */
   async deleteProject(id) {
     try {
-      await api.delete(`/api/projects/${id}`);
+      await api.delete(`/api/projects/${id}`)
       return {
-        success: true,
-      };
+        success: true
+      }
     } catch (error) {
-      console.error("Error deleting project:", error);
+      console.error('Error deleting project:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao deletar projeto",
-      };
+        error: error.response?.data?.error || 'Erro ao deletar projeto'
+      }
     }
   },
 
@@ -100,19 +100,17 @@ export const projectService = {
    */
   async getProjectBids(projectId, params = {}) {
     try {
-      const response = await api.get(`/api/bids/project/${projectId}`, {
-        params,
-      });
+      const response = await api.get(`/api/bids/project/${projectId}`, { params })
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching project bids:", error);
+      console.error('Error fetching project bids:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao carregar propostas",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar propostas'
+      }
     }
   },
 
@@ -121,29 +119,29 @@ export const projectService = {
    */
   async uploadAttachment(projectId, file) {
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
+      const formData = new FormData()
+      formData.append('file', file)
+      
       const response = await api.post(
         `/api/projects/${projectId}/attachments`,
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
-      );
-
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error uploading attachment:", error);
+      console.error('Error uploading attachment:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao fazer upload do arquivo",
-      };
+        error: error.response?.data?.error || 'Erro ao fazer upload do arquivo'
+      }
     }
   },
 
@@ -152,16 +150,14 @@ export const projectService = {
    */
   async deleteAttachment(projectId, attachmentId) {
     try {
-      await api.delete(
-        `/api/projects/${projectId}/attachments/${attachmentId}`,
-      );
-      return { success: true };
+      await api.delete(`/api/projects/${projectId}/attachments/${attachmentId}`)
+      return { success: true }
     } catch (error) {
-      console.error("Error deleting attachment:", error);
+      console.error('Error deleting attachment:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao remover anexo",
-      };
+        error: error.response?.data?.error || 'Erro ao remover anexo'
+      }
     }
   },
 
@@ -170,17 +166,17 @@ export const projectService = {
    */
   async getMyProjects(params = {}) {
     try {
-      const response = await api.get("/api/projects/my-projects", { params });
+      const response = await api.get('/api/projects/my-projects', { params })
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching my projects:", error);
+      console.error('Error fetching my projects:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao carregar seus projetos",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar seus projetos'
+      }
     }
   },
 
@@ -189,21 +185,19 @@ export const projectService = {
    */
   async getFeaturedProjects() {
     try {
-      const response = await api.get("/api/projects", {
-        params: { featured: true, limit: 6 },
-      });
+      const response = await api.get('/api/projects', {
+        params: { featured: true, limit: 6 }
+      })
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching featured projects:", error);
+      console.error('Error fetching featured projects:', error)
       return {
         success: false,
-        error:
-          error.response?.data?.error ||
-          "Erro ao carregar projetos em destaque",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar projetos em destaque'
+      }
     }
   },
 
@@ -212,18 +206,14 @@ export const projectService = {
    */
   getCategories() {
     return [
-      { value: "web", label: "Desenvolvimento Web" },
-      { value: "mobile", label: "Desenvolvimento Mobile" },
-      { value: "design", label: "Design Gráfico" },
-      { value: "marketing", label: "Marketing Digital" },
-      { value: "writing", label: "Redação e Conteúdo" },
-      { value: "video", label: "Vídeo e Animação" },
-      { value: "audio", label: "Áudio e Música" },
-      { value: "translation", label: "Tradução" },
-      { value: "data", label: "Análise de Dados" },
-      { value: "consulting", label: "Consultoria" },
-      { value: "other", label: "Outros" },
-    ];
+      { value: 'desenvolvimento-web', label: 'Desenvolvimento Web' },
+      { value: 'design', label: 'Design' },
+      { value: 'marketing', label: 'Marketing' },
+      { value: 'redacao', label: 'Redação' },
+      { value: 'mobile', label: 'Mobile' },
+      { value: 'consultoria', label: 'Consultoria' },
+      { value: 'outros', label: 'Outros' }
+    ]
   },
 
   /**
@@ -231,19 +221,17 @@ export const projectService = {
    */
   async closeAuction(projectId) {
     try {
-      const response = await api.post(
-        `/api/projects/${projectId}/close-auction`,
-      );
+      const response = await api.post(`/api/projects/${projectId}/close-auction`)
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error closing auction:", error);
+      console.error('Error closing auction:', error)
       return {
         success: false,
-        error: error.response?.data?.error || "Erro ao encerrar leilão",
-      };
+        error: error.response?.data?.error || 'Erro ao encerrar leilão'
+      }
     }
   },
 
@@ -252,22 +240,21 @@ export const projectService = {
    */
   async getExpiringAuctions(hours = 24) {
     try {
-      const response = await api.get("/api/projects/auctions/expiring", {
-        params: { hours },
-      });
+      const response = await api.get('/api/projects/auctions/expiring', {
+        params: { hours }
+      })
       return {
         success: true,
-        data: response.data,
-      };
+        data: response.data
+      }
     } catch (error) {
-      console.error("Error fetching expiring auctions:", error);
+      console.error('Error fetching expiring auctions:', error)
       return {
         success: false,
-        error:
-          error.response?.data?.error || "Erro ao carregar leilões expirando",
-      };
+        error: error.response?.data?.error || 'Erro ao carregar leilões expirando'
+      }
     }
-  },
-};
+  }
+}
 
-export default projectService;
+export default projectService

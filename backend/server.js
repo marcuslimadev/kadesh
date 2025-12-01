@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+const db = require('./config/database');
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const bidRoutes = require('./routes/bids');
@@ -232,7 +233,6 @@ const io = new Server(server, {
 setIO(io);
 
 const jwt = require('jsonwebtoken');
-const db = require('./config/database');
 
 io.on('connection', async (socket) => {
   try {
@@ -269,12 +269,39 @@ io.on('connection', async (socket) => {
 // Start the auction scheduler
 const { startScheduler: startAuctionScheduler } = require('./services/auctionScheduler');
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Kadesh API running on port ${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
+async function ensureDeadlineColumn() {
+  try {
+    await db.query(`
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name = 'projects' AND column_name = 'deadline' AND data_type = 'date'
+        ) THEN
+          ALTER TABLE projects 
+            ALTER COLUMN deadline TYPE TIMESTAMPTZ 
+            USING deadline::timestamptz;
+        END IF;
+      END $$;
+    `);
+    console.log('✅ Migration check: projects.deadline is TIMESTAMPTZ');
+  } catch (error) {
+    console.error('⚠️ Failed to ensure TIMESTAMPTZ on projects.deadline:', error.message);
+  }
+}
+
+async function bootstrap() {
+  await ensureDeadlineColumn();
   
-  // Start auction scheduler after server is listening
-  startAuctionScheduler();
-});
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Kadesh API running on port ${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
+    
+    // Start auction scheduler after server is listening
+    startAuctionScheduler();
+  });
+}
+
+bootstrap();
 module.exports = app;

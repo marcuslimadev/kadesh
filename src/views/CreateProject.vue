@@ -192,7 +192,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                 type="file"
                 multiple
                 class="hidden"
-                accept="image/*,.pdf"
+                accept="image/*,video/*,.pdf"
                 @change="onAttachmentSelect"
               />
               <label

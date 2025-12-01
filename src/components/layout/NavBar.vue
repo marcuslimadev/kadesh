@@ -1,302 +1,185 @@
 <template>
-  <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-40 transition-all duration-500">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16 items-center">
-        <!-- Logo -->
-        <router-link to="/" class="flex items-center space-x-2 group">
-          <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent transition-all duration-500 group-hover:from-indigo-500 group-hover:to-purple-500">Kaddesh</span>
-        </router-link>
+  <!-- Mobile top bar -->
+  <header class="md:hidden sticky top-0 z-40 bg-dark text-offwhite flex items-center justify-between px-4 py-3 shadow-lg">
+    <div class="flex items-center gap-3">
+      <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+      <div>
+        <p class="text-sm text-gold font-semibold">KADDESH</p>
+        <p class="text-xs text-offwhite-muted">Marketplace premium</p>
+      </div>
+    </div>
+    <button
+      @click="mobileMenuOpen = !mobileMenuOpen"
+      class="p-2 rounded-md hover:bg-dark-80 transition"
+      aria-label="Abrir menu"
+    >
+      <svg class="h-6 w-6 text-offwhite" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </header>
 
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-6">
-          <router-link 
-            to="/lobby" 
-            v-if="isAuthenticated" 
-            class="text-gray-600 hover:text-blue-600 transition-all duration-300 font-medium px-3 py-2 rounded-lg hover:bg-blue-50"
-          >
-            🎯 Lobby
-          </router-link>
-          <router-link 
-            to="/tutorial" 
-            class="text-gray-600 hover:text-indigo-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-indigo-50"
-          >
-            Tutorial
-          </router-link>
-          
-          <template v-if="isAuthenticated">
-            <!-- Switch Ver Como -->
-            <ViewModeSwitch />
-            
-            <router-link 
-              to="/dashboard" 
-              class="text-gray-600 hover:text-purple-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-purple-50"
-            >
-              Dashboard
-            </router-link>
-
-            <!-- Menu específico para CONTRATANTE -->
-            <template v-if="viewMode.isContractor">
-              <router-link 
-                to="/projects" 
-                class="text-gray-600 hover:text-blue-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-blue-50 animate-fade-in"
-              >
-                Projetos
-              </router-link>
-              <router-link 
-                to="/my-projects" 
-                class="text-gray-600 hover:text-blue-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-blue-50 animate-fade-in"
-              >
-                Meus Projetos
-              </router-link>
-            </template>
-
-            <!-- Menu específico para PRESTADOR -->
-            <template v-if="viewMode.isProvider">
-              <router-link 
-                to="/my-bids" 
-                class="text-gray-600 hover:text-emerald-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-emerald-50 animate-fade-in"
-              >
-                Minhas Propostas
-              </router-link>
-              <router-link 
-                to="/contracts" 
-                class="text-gray-600 hover:text-teal-600 transition-all duration-500 px-3 py-2 rounded-lg hover:bg-teal-50 animate-fade-in"
-              >
-                Contratos
-              </router-link>
-            </template>
-
-            <!-- Comuns a ambos -->
-            <router-link 
-              to="/wallet" 
-              class="text-gray-600 hover:text-amber-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-amber-50"
-            >
-              Carteira
-            </router-link>
-            <router-link 
-              to="/receipts" 
-              class="text-gray-600 hover:text-pink-600 transition-all duration-300 px-3 py-2 rounded-lg hover:bg-pink-50"
-            >
-              Comprovantes
-            </router-link>
-            
-            <router-link to="/notifications" class="relative text-gray-700 hover:text-blue-600 transition">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-            </router-link>
-
-            <!-- User Menu -->
-            <div class="relative">
-              <button
-                @click="userMenuOpen = !userMenuOpen"
-                class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                  {{ userInitials }}
-                </div>
-                <span class="text-sm font-medium text-gray-700">{{ userName }}</span>
-                <svg :class="['w-4 h-4 transition', userMenuOpen ? 'rotate-180' : '']" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-              </button>
-
-              <!-- Dropdown menu -->
-              <div v-if="userMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                <div class="px-4 py-3 border-b border-gray-200">
-                  <p class="text-sm font-medium text-gray-900">{{ user?.name }}</p>
-                  <p class="text-xs text-gray-500">{{ user?.email }}</p>
-                </div>
-                <router-link
-                  to="/profile"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                  @click="userMenuOpen = false"
-                >
-                  Meu Perfil
-                </router-link>
-                <router-link
-                  to="/settings"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-                  @click="userMenuOpen = false"
-                >
-                  Configurações
-                </router-link>
-                <button
-                  @click="handleLogout"
-                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
-                >
-                  Sair
-                </button>
-              </div>
+  <!-- Mobile drawer -->
+  <transition name="fade">
+    <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-40 bg-black/50" @click.self="mobileMenuOpen = false">
+      <div class="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl p-4 overflow-y-auto">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+            <div>
+              <p class="text-sm font-semibold text-dark">KADDESH</p>
+              <p class="text-xs text-gray-500">Marketplace premium</p>
             </div>
-          </template>
-          
-          <template v-else>
-            <router-link
-              to="/login"
-              class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition"
-            >
-              Login
-            </router-link>
-            <router-link
-              to="/register"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition"
-            >
-              Cadastrar
-            </router-link>
-          </template>
+          </div>
+          <button @click="mobileMenuOpen = false" class="p-2 rounded hover:bg-gray-100">
+            <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        <!-- Mobile menu button -->
-        <button
-          @click="mobileMenuOpen = !mobileMenuOpen"
-          class="md:hidden p-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100"
-        >
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Mobile menu -->
-    <div v-if="mobileMenuOpen" class="md:hidden border-t border-gray-200">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <router-link
-          v-if="isAuthenticated"
-          to="/lobby"
-          class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium"
-          @click="mobileMenuOpen = false"
-        >
-          🎯 Lobby de Leilões
-        </router-link>
-        <router-link
-          to="/tutorial"
-          class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-          @click="mobileMenuOpen = false"
-        >
-          Tutorial
-        </router-link>
-        
-        <template v-if="isAuthenticated">
-          <router-link
-            to="/dashboard"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Dashboard
-          </router-link>
-          
-          <!-- Switch Ver Como Mobile -->
-          <div class="px-3 py-2">
-            <ViewModeSwitch />
+        <div class="mb-4" v-if="isAuthenticated">
+          <div class="sidebar-switch">
+            <ViewModeSwitch variant="sidebar" />
           </div>
+        </div>
 
-          <!-- Menu específico para CONTRATANTE -->
-          <template v-if="viewMode.isContractor">
-            <router-link
-              to="/projects"
-              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              @click="mobileMenuOpen = false"
-            >
-              Projetos
-            </router-link>
-            <router-link
-              to="/my-projects"
-              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              @click="mobileMenuOpen = false"
-            >
-              Meus Projetos
-            </router-link>
-          </template>
+        <div class="space-y-2">
+          <router-link
+            v-for="link in allLinks"
+            :key="link.to"
+            :to="link.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            @click="handleNavigate(link.to)"
+          >
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ link.label }}</span>
+          </router-link>
+        </div>
 
-          <!-- Menu específico para PRESTADOR -->
-          <template v-if="viewMode.isProvider">
-            <router-link
-              to="/my-bids"
-              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              @click="mobileMenuOpen = false"
-            >
-              Minhas Propostas
-            </router-link>
-            <router-link
-              to="/contracts"
-              class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-              @click="mobileMenuOpen = false"
-            >
-              Contratos
-            </router-link>
-          </template>
-
-          <!-- Comuns a ambos -->
+        <div v-if="isAuthenticated" class="mt-6 border-t pt-4 space-y-2">
           <router-link
-            to="/wallet"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
+            :to="profileLink.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            @click="handleNavigate(profileLink.to)"
           >
-            Carteira
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[profileLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ profileLink.label }}</span>
           </router-link>
           <router-link
-            to="/receipts"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
+            :to="settingsLink.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            @click="handleNavigate(settingsLink.to)"
           >
-            Comprovantes
+            <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[settingsLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ settingsLink.label }}</span>
           </router-link>
-          <router-link
-            to="/notifications"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Notificações
-          </router-link>
-          <!-- User info in mobile menu -->
-          <div class="px-3 py-2 border-b border-gray-200">
-            <p class="text-sm font-medium text-gray-900">{{ user?.name }}</p>
-            <p class="text-xs text-gray-500">{{ user?.email }}</p>
-          </div>
-          <router-link
-            to="/profile"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Meu Perfil
-          </router-link>
-          <router-link
-            to="/settings"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Configurações
-          </router-link>
-          <button
-            @click="handleLogout"
-            class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-red-50"
-          >
+          <button @click="handleLogout" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
+            </svg>
             Sair
           </button>
-        </template>
-        
-        <template v-else>
-          <router-link
-            to="/login"
-            class="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="mobileMenuOpen = false"
-          >
-            Login
-          </router-link>
-          <router-link
-            to="/register"
-            class="block px-3 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700"
-            @click="mobileMenuOpen = false"
-          >
-            Cadastrar
-          </router-link>
-        </template>
+        </div>
       </div>
     </div>
-  </nav>
+  </transition>
+
+  <!-- Desktop sidebar -->
+  <aside class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl">
+    <div class="p-6 border-b border-gold/20 flex items-center gap-3">
+      <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
+      <div>
+        <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
+        <p class="text-xs text-offwhite-muted">Marketplace premium</p>
+      </div>
+    </div>
+
+    <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
+      <div class="sidebar-switch">
+        <ViewModeSwitch variant="sidebar" />
+      </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+      <router-link
+        v-for="link in primaryLinks"
+        :key="link.to"
+        :to="link.to"
+        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+      >
+        <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>{{ link.label }}</span>
+      </router-link>
+      <div class="mt-4">
+        <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Acesso rápido</p>
+        <router-link
+          v-for="link in secondaryLinks"
+          :key="link.to"
+          :to="link.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ link.label }}</span>
+        </router-link>
+      </div>
+      <div class="mt-4" v-if="isAuthenticated">
+        <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Conta</p>
+        <router-link
+          :to="profileLink.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[profileLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ profileLink.label }}</span>
+        </router-link>
+        <router-link
+          :to="settingsLink.to"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        >
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[settingsLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ settingsLink.label }}</span>
+        </router-link>
+        <button @click="handleLogout" class="mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
+          </svg>
+          Sair
+        </button>
+      </div>
+    </nav>
+
+    <div class="p-4 border-t border-gold/20 text-sm">
+      <div v-if="isAuthenticated" class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gold text-dark rounded-full flex items-center justify-center font-bold">
+          {{ userInitials }}
+        </div>
+        <div>
+          <p class="font-semibold">{{ user?.name }}</p>
+          <p class="text-offwhite-muted text-xs">{{ user?.email }}</p>
+        </div>
+      </div>
+      <div v-else class="space-x-2">
+        <router-link to="/login" class="text-gold font-semibold hover:underline">Login</router-link>
+        <span class="text-offwhite-muted">/</span>
+        <router-link to="/register" class="text-gold font-semibold hover:underline">Cadastrar</router-link>
+      </div>
+    </div>
+  </aside>
 </template>
 
 <script setup>
@@ -311,40 +194,110 @@ const authStore = useAuthStore()
 const viewMode = useViewModeStore()
 
 const mobileMenuOpen = ref(false)
-const userMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const user = computed(() => authStore.user)
-const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
 const userInitials = computed(() => authStore.userInitials)
+
+const iconPaths = {
+  target: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 110 4 2 2 0 010-4z',
+  book: 'M4 6.5A2.5 2.5 0 016.5 4h9A2.5 2.5 0 0118 6.5v11a.5.5 0 01-.757.429L12 14.5l-5.243 3.429A.5.5 0 016 17.5v-11z',
+  dashboard: 'M4 13h6v8H4v-8zm0-10h6v8H4V3zm10 10h6v8h-6v-8zm0-10h6v8h-6V3z',
+  projects: 'M4 6h16M4 12h16M4 18h16',
+  bids: 'M12 6v2m0 8v2m0-6a2 2 0 100-4 2 2 0 000 4zm0 8c-4.418 0-8-2.686-8-6 0-1.657 1.343-3 3-3h10c1.657 0 3 1.343 3 3 0 3.314-3.582 6-8 6z',
+  contracts: 'M7 7h10M7 11h10M7 15h6m-1-10l-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7h-4z',
+  wallet: 'M4 7h16v10H4z M4 11h12',
+  receipts: 'M7 5h10v14l-2-1-2 1-2-1-2 1-2-1-2 1V5z M9 9h6m-6 4h6',
+  bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
+  profile: 'M12 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0',
+  settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z'
+}
+
+const baseLinks = [
+  { to: '/lobby', label: 'Lobby', icon: 'target', auth: true },
+  { to: '/tutorial', label: 'Tutorial', icon: 'book' },
+  { to: '/dashboard', label: 'Dashboard', icon: 'dashboard', auth: true }
+]
+
+const contractorLinks = [
+  { to: '/projects', label: 'Projetos', icon: 'projects' },
+  { to: '/my-projects', label: 'Meus Projetos', icon: 'projects' }
+]
+
+const providerLinks = [
+  { to: '/my-bids', label: 'Minhas Propostas', icon: 'bids' },
+  { to: '/contracts', label: 'Contratos', icon: 'contracts' }
+]
+
+const sharedLinks = [
+  { to: '/wallet', label: 'Carteira', icon: 'wallet' },
+  { to: '/receipts', label: 'Comprovantes', icon: 'receipts' },
+  { to: '/notifications', label: 'Notificações', icon: 'bell' }
+]
+
+const profileLink = { to: '/profile', label: 'Meu Perfil', icon: 'profile' }
+const settingsLink = { to: '/settings', label: 'Configurações', icon: 'settings' }
+
+const primaryLinks = computed(() => {
+  if (!isAuthenticated.value) return baseLinks.filter(l => !l.auth)
+  const links = [...baseLinks]
+  if (viewMode.isContractor) links.push(...contractorLinks)
+  if (viewMode.isProvider) links.push(...providerLinks)
+  return links
+})
+
+const secondaryLinks = computed(() => {
+  if (!isAuthenticated.value) return []
+  return sharedLinks
+})
+
+const allLinks = computed(() => {
+  const list = [...baseLinks]
+  if (isAuthenticated.value) {
+    if (viewMode.isContractor) list.push(...contractorLinks)
+    if (viewMode.isProvider) list.push(...providerLinks)
+    list.push(...sharedLinks)
+  }
+  return list
+})
+
+const handleNavigate = (to) => {
+  mobileMenuOpen.value = false
+  router.push(to)
+}
 
 const handleLogout = async () => {
   await authStore.logout()
   mobileMenuOpen.value = false
-  userMenuOpen.value = false
   router.push('/')
 }
 </script>
 
 <style scoped>
-/* Animação fade-in para menus que aparecem/desaparecem */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.bg-dark { background: #111; }
+.bg-dark-80 { background: rgba(17,17,17,0.85); }
+.text-offwhite { color: #f5f5f5; }
+.text-offwhite-muted { color: #cfcfcf; }
+.text-gold { color: #d4af37; }
+.border-gold\/20 { border-color: rgba(212,175,55,0.2); }
+.border-gold\/40 { border-color: rgba(212,175,55,0.4); }
+
+.sidebar-switch :deep(.view-mode-switch) {
+  display: block;
+  width: 100%;
+}
+.sidebar-switch :deep(button) {
+  background: #1b1b1b !important;
+  color: #f5f5f5 !important;
+  border: 1px solid rgba(212,175,55,0.25) !important;
+  width: 100%;
+  justify-content: center;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
 }
-
-/* Transições suaves para todos os elementos */
-a, button {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

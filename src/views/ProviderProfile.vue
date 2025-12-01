@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="min-h-screen bg-gray-50 py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8">
@@ -31,23 +31,23 @@
       </div>
 
       <div v-if="!isProvider" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-dashed border-gray-200">
-        <h2 class="text-2xl font-semibold text-gray-900">Perfil de fornecedor indisponível</h2>
+        <h2 class="text-2xl font-semibold text-gray-900">Perfil de fornecedor indisponivel</h2>
         <p class="mt-3 text-gray-600">
-          Esta fun��ǜo estǭ dispon��vel apenas para contas do tipo fornecedor. Altere o tipo de conta ou crie uma nova conta de fornecedor.
+          Esta funcao esta disponivel apenas para contas do tipo fornecedor. Altere o tipo de conta ou crie uma nova conta de fornecedor.
         </p>
       </div>
 
       <div v-else>
         <div v-if="isPageLoading" class="bg-white rounded-2xl shadow-sm p-12 text-center">
           <div class="inline-flex h-14 w-14 items-center justify-center rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
-          <p class="mt-4 text-gray-600">Carregando informa����es do perfil...</p>
+          <p class="mt-4 text-gray-600">Carregando informacoes do perfil...</p>
         </div>
 
         <div v-else-if="error" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-red-100">
           <svg class="w-14 h-14 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 5a7 7 0 00-7 7v1a7 7 0 0014 0v-1a7 7 0 00-7-7z" />
           </svg>
-          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Nǜo foi poss��vel carregar seu perfil</h2>
+          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Nao foi possivel carregar seu perfil</h2>
           <p class="mt-2 text-gray-600">{{ error }}</p>
           <button
             type="button"
@@ -74,7 +74,7 @@
                 </div>
                 <div>
                   <h2 class="text-xl font-semibold text-gray-900">{{ profile?.name }}</h2>
-                  <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um t��tulo profissional' }}</p>
+                  <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um titulo profissional' }}</p>
                   <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium" :class="availabilityClasses">
                     {{ availabilityCopy.label }}
                   </div>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
                   <p class="text-2xl font-semibold text-gray-900">{{ formatNumber(providerMeta.total_reviews) }}</p>
-                  <p class="text-xs text-gray-500">Avalia����es</p>
+                  <p class="text-xs text-gray-500">Avaliacoes</p>
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
                   <p class="text-2xl font-semibold text-gray-900">{{ providerMeta.rating ? providerMeta.rating.toFixed(1) : '—' }}</p>
@@ -98,7 +98,7 @@
 
               <dl class="mt-6 space-y-4 text-sm text-gray-600">
                 <div class="flex items-center justify-between">
-                  <dt>Or��amento/hora</dt>
+                  <dt>Orcamento/hora</dt>
                   <dd class="font-medium text-gray-900">
                     {{ providerMeta.hourly_rate ? formatCurrency(providerMeta.hourly_rate) : 'N/A' }}
                   </dd>
@@ -108,14 +108,14 @@
                   <dd class="font-medium text-gray-900">{{ providerMeta.response_time_hours || 24 }}h</dd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <dt>Experi��ncia</dt>
+                  <dt>Experiencia</dt>
                   <dd class="font-medium text-gray-900">{{ providerMeta.experience_years || 0 }} anos</dd>
                 </div>
               </dl>
             </section>
 
             <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">M��tricas recentes</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Metricas recentes</h3>
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
                   <div>
@@ -132,7 +132,7 @@
                     <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats?.active_contracts) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-green-50 text-green-700">
-                    {{ formatNumber(stats?.completed_contracts) }} conclu��dos
+                    {{ formatNumber(stats?.completed_contracts) }} concluidos
                   </span>
                 </div>
                 <div>
@@ -154,7 +154,7 @@
                 </span>
               </div>
               <div v-else class="text-sm text-gray-500">
-                Nenhuma habilidade cadastrada ainda. Utilize o formul��rio ao lado para adicionar suas compet��ncias principais.
+                Nenhuma habilidade cadastrada ainda. Utilize o formulario ao lado para adicionar suas competencias principais.
               </div>
             </section>
 

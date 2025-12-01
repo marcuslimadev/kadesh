@@ -11,6 +11,13 @@ const DEFAULT_API_TIMEOUT = 30000
 const resolveBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
   if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
+
+  // Em ambiente de desenvolvimento, falhar se nenhuma URL de API foi definida
+  if (import.meta.env.DEV) {
+    throw new Error('Defina VITE_API_URL para evitar chamadas involuntárias ao backend de produção')
+  }
+
+  // Fallback apenas para builds já configuradas em produção
   return DEFAULT_API_URL
 }
 

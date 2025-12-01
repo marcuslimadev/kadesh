@@ -8,13 +8,119 @@ const { validateProjectData } = require('../utils/validators');
 
 const router = express.Router();
 
+// Encerrar automaticamente projetos cujo prazo já venceu
+const closeExpiredProjects = async () => {
+  try {
+    const result = await db.query(`
+      SELECT id
+      FROM projects
+      WHERE status = 'open'
+        AND deadline IS NOT NULL
+        AND deadline <= NOW()
+    `);
+
+    if (result.rows.length === 0) return;
+
+    for (const row of result.rows) {
+      const projectId = row.id;
+
+      // Seleciona o menor lance pendente para o projeto
+      const bidsResult = await db.query(`
+        SELECT id
+        FROM bids
+        WHERE project_id = $1
+          AND status = 'pending'
+        ORDER BY amount ASC
+        LIMIT 1
+      `, [projectId]);
+
+      // Se não há lances pendentes, apenas fecha o projeto
+      if (bidsResult.rows.length === 0) {
+        await db.query(
+          'UPDATE projects SET status = $2, updated_at = NOW() WHERE id = $1',
+          [projectId, 'closed']
+        );
+        continue;
+      }
+
+      const winningBidId = bidsResult.rows[0].id;
+
+      // Reaproveita a lógica de aceitar proposta via transação
+      try {
+        await db.transaction(async (client) => {
+          const bidData = await client.query(`
+            SELECT 
+              b.*,
+              p.client_id
+            FROM bids b
+            JOIN projects p ON b.project_id = p.id
+            WHERE b.id = $1
+          `, [winningBidId]);
+
+          if (bidData.rows.length === 0) {
+            await client.query(
+              'UPDATE projects SET status = $2, updated_at = NOW() WHERE id = $1',
+              [projectId, 'closed']
+            );
+            return;
+          }
+
+          const bid = bidData.rows[0];
+
+          // Aceita o lance vencedor
+          await client.query(
+            'UPDATE bids SET status = $2, updated_at = NOW() WHERE id = $1',
+            [winningBidId, 'accepted']
+          );
+
+          // Rejeita os demais lances do projeto
+          await client.query(
+            'UPDATE bids SET status = $2, updated_at = NOW() WHERE project_id = $3 AND id != $1',
+            [winningBidId, 'rejected', projectId]
+          );
+
+          // Atualiza status do projeto para in_progress
+          await client.query(
+            'UPDATE projects SET status = $2, updated_at = NOW() WHERE id = $1',
+            [projectId, 'in_progress']
+          );
+
+          // Cria contrato para o vencedor
+          await client.query(`
+            INSERT INTO contracts (
+              project_id, client_id, provider_id, bid_id, amount,
+              status, start_date, created_at, updated_at
+            )
+            VALUES ($1, $2, $3, $4, $5, 'in_progress', NOW(), NOW(), NOW())
+          `, [
+            bid.project_id,
+            bid.client_id,
+            bid.provider_id,
+            winningBidId,
+            bid.amount
+          ]);
+        });
+      } catch (innerError) {
+        console.error('Erro ao encerrar leilão automaticamente para projeto', projectId, innerError);
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao buscar projetos expirados:', error);
+  }
+};
+
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_UPLOAD_SIZE, 10) || (5 * 1024 * 1024);
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/webp',
   'image/gif',
-  'application/pdf'
+  'application/pdf',
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/x-matroska',
+  'video/webm'
 ];
 
 const attachmentsDir = path.join(__dirname, '..', 'uploads', 'project-attachments');
@@ -55,6 +161,7 @@ const removeLocalFile = async (filePath) => {
 // Get all projects (with filters)
 router.get('/', async (req, res) => {
   try {
+    await closeExpiredProjects();
     const { 
       category, 
       budget_min, 
@@ -62,16 +169,32 @@ router.get('/', async (req, res) => {
       status = 'open',
       limit = 20, 
       offset = 0,
-      search 
+      search,
+      page,
+      per_page
     } = req.query;
+
+    const effectiveLimit = per_page ? parseInt(per_page) : parseInt(limit);
+    const effectiveOffset = page ? (parseInt(page) - 1) * effectiveLimit : parseInt(offset);
+
+    const categoryMap = {
+      'desenvolvimento-web': 'Desenvolvimento Web',
+      'design': 'Design',
+      'marketing': 'Marketing',
+      'redacao': 'Redação',
+      'mobile': 'Mobile',
+      'consultoria': 'Consultoria',
+      'outros': 'Outros'
+    };
+    const normalizedCategory = categoryMap[category] || category;
 
     let query = `
       SELECT 
         p.*,
         u.name as client_name,
         u.email as client_email,
-          COALESCE(b_data.bid_count, 0) as bid_count,
-          b_data.lowest_bid_amount,
+        COALESCE(b_data.bid_count, 0) as bid_count,
+        b_data.lowest_bid_amount,
         COALESCE(attachment_data.attachments, '[]'::json) as attachments
       FROM projects p
       JOIN users u ON p.client_id = u.id
@@ -107,9 +230,9 @@ router.get('/', async (req, res) => {
       params.push(status);
     }
 
-    if (category) {
+    if (normalizedCategory) {
       query += ` AND p.category = $${++paramCount}`;
-      params.push(category);
+      params.push(normalizedCategory);
     }
 
     if (budget_min) {
@@ -131,15 +254,21 @@ router.get('/', async (req, res) => {
       ORDER BY p.created_at DESC
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
-    params.push(parseInt(limit), parseInt(offset));
+    params.push(effectiveLimit, effectiveOffset);
 
-    const result = await db.query(query, params);
+    const result = await db.query(
+      `SELECT *, COUNT(*) OVER() AS total_count FROM (${query}) sub`,
+      params
+    );
+
+    const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     res.json({
       projects: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      total,
+      limit: effectiveLimit,
+      offset: effectiveOffset,
+      total_pages: effectiveLimit ? Math.ceil(total / effectiveLimit) : 1
     });
 
   } catch (error) {
@@ -349,6 +478,7 @@ router.delete('/:id/attachments/:attachmentId', auth, async (req, res) => {
 // Get project by ID - DEVE vir DEPOIS das rotas específicas
 router.get('/:id', async (req, res) => {
   try {
+    await closeExpiredProjects();
     const { id } = req.params;
 
     const result = await db.query(`
