@@ -123,6 +123,9 @@ router.post('/login', async (req, res) => {
     }
 
     const user = result.rows[0];
+    
+    // Check if user is admin (type = 'admin')
+    const isAdmin = user.type === 'admin';
 
     // Check if user is active
     if (user.status !== 'active') {
@@ -145,7 +148,8 @@ router.post('/login', async (req, res) => {
       {
         userId: user.id,
         email: user.email,
-        type: user.type
+        type: user.type,
+        isAdmin: isAdmin
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
@@ -165,7 +169,8 @@ router.post('/login', async (req, res) => {
         email: user.email,
         type: user.type,
         status: user.status,
-        created_at: user.created_at
+        created_at: user.created_at,
+        isAdmin: isAdmin
       },
       token
     });
@@ -196,6 +201,7 @@ router.get('/verify', auth, async (req, res) => {
     }
 
     const user = result.rows[0];
+    const isAdmin = user.type === 'admin';
 
     res.json({
       user: {
@@ -205,7 +211,8 @@ router.get('/verify', auth, async (req, res) => {
         type: user.type,
         status: user.status,
         created_at: user.created_at,
-        last_login: user.last_login
+        last_login: user.last_login,
+        isAdmin: isAdmin
       }
     });
 

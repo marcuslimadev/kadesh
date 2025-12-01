@@ -27,6 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!token.value && !!user.value)
   const isClient = computed(() => user.value?.type === 'client')
   const isProvider = computed(() => user.value?.type === 'provider' || user.value?.type === 'unified')
+  const isAdmin = computed(() => user.value?.isAdmin === true || user.value?.type === 'admin')
   const userInitials = computed(() => {
     if (!user.value?.name) return ''
     return user.value.name
@@ -195,6 +196,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     isClient,
     isProvider,
+    isAdmin,
     userInitials,
     
     // Actions

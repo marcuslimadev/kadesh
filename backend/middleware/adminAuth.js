@@ -15,17 +15,24 @@ const adminAuth = (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Check if it's an admin token (has adminId instead of userId)
-    if (!decoded.adminId) {
+    // Check if it's an admin token (has adminId) OR a regular user token with isAdmin flag
+    if (decoded.adminId) {
+      // Token from admin_users table (old login system)
+      req.admin = {
+        adminId: decoded.adminId,
+        role: decoded.role,
+        permissions: decoded.permissions || {}
+      };
+    } else if (decoded.isAdmin === true) {
+      // Token from users table with type='admin' (unified login)
+      req.admin = {
+        adminId: decoded.userId,
+        role: 'super_admin', // Users with type='admin' are super admins
+        permissions: {} // All permissions for super_admin
+      };
+    } else {
       return res.status(403).json({ error: 'Acesso negado: credenciais de administrador necessárias' });
     }
-
-    // Attach admin info to request
-    req.admin = {
-      adminId: decoded.adminId,
-      role: decoded.role,
-      permissions: decoded.permissions || {}
-    };
 
     next();
   } catch (error) {

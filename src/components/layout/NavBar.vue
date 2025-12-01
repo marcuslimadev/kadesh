@@ -76,6 +76,18 @@
         </div>
 
         <div v-if="isAuthenticated" class="mt-6 border-t pt-4 space-y-2">
+          <!-- Link de Admin no mobile (só aparece para admins) -->
+          <router-link
+            v-if="isAdmin"
+            :to="adminLink.to"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200"
+            @click="handleNavigate(adminLink.to)"
+          >
+            <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path :d="iconPaths[adminLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>{{ adminLink.label }}</span>
+          </router-link>
           <router-link
             :to="profileLink.to"
             :class="mobileLinkClasses(profileLink.to)"
@@ -194,6 +206,17 @@
       </div>
       <div class="mt-4" v-if="isAuthenticated">
         <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Conta</p>
+        <!-- Link de Admin (só aparece para admins) -->
+        <router-link
+          v-if="isAdmin"
+          :to="adminLink.to"
+          :class="desktopLinkClasses(adminLink.to)"
+        >
+          <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="iconPaths[adminLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="text-red-400">{{ adminLink.label }}</span>
+        </router-link>
         <router-link
           :to="profileLink.to"
           :class="desktopLinkClasses(profileLink.to)"
@@ -258,6 +281,7 @@ const sidebarStore = useSidebarStore()
 const mobileMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const isAdmin = computed(() => authStore.isAdmin)
 const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
 const isSidebarVisible = computed(() => sidebarStore.isVisible)
@@ -280,7 +304,8 @@ const iconPaths = {
   receipts: 'M7 5h10v14l-2-1-2 1-2-1-2 1-2-1-2 1V5z M9 9h6m-6 4h6',
   bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
   profile: 'M12 12a5 5 0 100-10 5 5 0 000 10zm-7 8a7 7 0 0114 0',
-  settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z'
+  settings: 'M10.325 4.317l1.09-.63a1 1 0 011.09 0l1.09.63a1 1 0 00.98 0l1.26-.73a1 1 0 011.5.86v1.26a1 1 0 00.29.7l.9.9a1 1 0 010 1.41l-.9.9a1 1 0 00-.29.71v1.26a1 1 0 01-1.5.86l-1.26-.73a1 1 0 00-.98 0l-1.09.63a1 1 0 01-1.09 0l-1.09-.63a1 1 0 00-.98 0l-1.26.73a1 1 0 01-1.5-.86v-1.26a1 1 0 00-.29-.7l-.9-.9a1 1 0 010-1.41l.9-.9a1 1 0 00.29-.71v-1.26a1 1 0 011.5-.86l1.26.73a1 1 0 00.98 0z',
+  admin: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
 }
 
 const baseLinks = [
@@ -307,6 +332,7 @@ const sharedLinks = [
 
 const profileLink = { to: '/profile', label: 'Meu Perfil', icon: 'profile' }
 const settingsLink = { to: '/settings', label: 'Configurações', icon: 'settings' }
+const adminLink = { to: '/admin/dashboard', label: 'Admin', icon: 'admin' }
 
 const primaryLinks = computed(() => {
   if (!isAuthenticated.value) return baseLinks.filter(l => !l.auth)
