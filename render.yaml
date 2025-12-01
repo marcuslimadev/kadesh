@@ -7,7 +7,7 @@ services:
     branch: main
     rootDir: backend
     buildCommand: npm ci --omit=dev
-    startCommand: npm start
+    startCommand: chmod +x start.sh && ./start.sh
     healthCheckPath: /health
     autoDeploy: true
     envVars:

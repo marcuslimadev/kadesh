@@ -12,17 +12,19 @@ async function runSeeds() {
   const client = await pool.connect();
   
   try {
-    console.log('🌱 Iniciando população de anúncios...\n');
+    console.log('🌱 Verificando anúncios no banco...\n');
     
     // Verificar se já existem anúncios
     const checkResult = await client.query('SELECT COUNT(*) FROM advertisements');
     const count = parseInt(checkResult.rows[0].count);
     
     if (count > 0) {
-      console.log(`⚠️  Já existem ${count} anúncios no banco.`);
-      console.log('   Para recriar, execute: DELETE FROM advertisements; antes de rodar este script.\n');
-      return;
+      console.log(`✅ Já existem ${count} anúncios no banco.`);
+      console.log('   Seed não executado (anúncios já foram criados).\n');
+      return; // Sair sem erro
     }
+    
+    console.log('📝 Criando anúncios iniciais...\n');
     
     // Ler arquivo SQL
     const sqlPath = path.join(__dirname, '001_seed_advertisements.sql');
@@ -49,9 +51,10 @@ async function runSeeds() {
     console.log(`\n📊 Total: ${totalResult.rows[0].count} anúncios criados\n`);
     
   } catch (error) {
-    console.error('❌ Erro ao popular anúncios:', error.message);
-    console.error(error);
-    process.exit(1);
+    // Não falhar o deploy por causa do seed
+    console.warn('⚠️  Aviso ao executar seed:', error.message);
+    console.warn('   Deploy continuará normalmente.\n');
+    // Não fazer process.exit(1) - continuar mesmo se falhar
   } finally {
     client.release();
     await pool.end();
