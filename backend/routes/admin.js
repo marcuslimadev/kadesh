@@ -643,6 +643,26 @@ router.post('/settings', adminAuth, async (req, res) => {
   }
 });
 
+// Run migrations manually
+router.post('/run-migrations', adminAuth, async (req, res) => {
+  try {
+    const { runMigrations } = require('../scripts/auto-migrate-module');
+    const result = await runMigrations();
+    
+    res.json({
+      success: true,
+      message: 'Migrações executadas com sucesso',
+      details: result
+    });
+  } catch (error) {
+    console.error('Run migrations error:', error);
+    res.status(500).json({ 
+      error: 'Erro ao executar migrações',
+      details: error.message
+    });
+  }
+});
+
 module.exports = router;
 
 // ===== DISPUTE MANAGEMENT =====

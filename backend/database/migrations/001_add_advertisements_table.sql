@@ -2,6 +2,9 @@
 -- Data: 2025-12-01
 -- Descrição: Cria tabela advertisements para gerenciamento de anúncios publicitários
 
+-- Garantir que a extensão UUID existe
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Advertisements table
 CREATE TABLE IF NOT EXISTS advertisements (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

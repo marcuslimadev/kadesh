@@ -39,7 +39,12 @@ router.get('/', async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.error('Erro ao buscar anúncios:', error);
-    res.status(500).json({ error: 'Erro ao buscar anúncios' });
+    // Retornar detalhes do erro para debug (remover em produção se necessário, mas útil agora)
+    res.status(500).json({ 
+      error: 'Erro ao buscar anúncios',
+      details: error.message,
+      code: error.code 
+    });
   }
 });
 
