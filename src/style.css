@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 * {
-	scroll-behavior: smooth;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        scroll-behavior: smooth;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button,
@@ -16,9 +16,46 @@ textarea {
 }
 
 @layer base {
-	body {
-		@apply bg-gray-50 text-gray-900;
-	}
+        :root {
+                --page-bg: #0c1021;
+                --surface: #0f172a;
+                --surface-alt: #111827;
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --accent: #d4af37;
+                --accent-strong: #f7e266;
+                --card-border: rgba(212, 175, 55, 0.24);
+                --muted-border: rgba(255, 255, 255, 0.06);
+        }
+
+        .theme-light {
+                --page-bg: #f8fafc;
+                --surface: #ffffff;
+                --surface-alt: #f1f5f9;
+                --text-primary: #0f172a;
+                --text-secondary: #334155;
+                --accent: #c084fc;
+                --accent-strong: #8b5cf6;
+                --card-border: rgba(99, 102, 241, 0.18);
+                --muted-border: rgba(15, 23, 42, 0.08);
+        }
+
+        .theme-dark {
+                --page-bg: #0c1021;
+                --surface: #0f172a;
+                --surface-alt: #111827;
+                --text-primary: #f8fafc;
+                --text-secondary: #cbd5e1;
+                --accent: #d4af37;
+                --accent-strong: #f7e266;
+                --card-border: rgba(212, 175, 55, 0.24);
+                --muted-border: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+                background: var(--page-bg);
+                color: var(--text-primary);
+        }
 }
 
 @layer components {
@@ -34,9 +71,11 @@ textarea {
 		@apply bg-primary-900 text-white hover:bg-primary-800 hover:shadow-lg;
 	}
 
-	.card {
-		@apply bg-white rounded-lg shadow-md p-6;
-	}
+        .card {
+                @apply rounded-lg shadow-md p-6;
+                background: var(--surface);
+                border: 1px solid var(--muted-border);
+        }
 
 	.input {
 		@apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-transparent;

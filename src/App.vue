@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="min-h-screen bg-gray-50">
+  <div id="app" :class="appClasses">
     <!-- Loading overlay -->
     <div 
       v-if="isInitializing" 
@@ -28,12 +28,14 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useThemeStore } from '@/stores/theme'
 import { useSidebarStore } from '@/stores/sidebarStore'
 import NavBar from '@/components/layout/NavBar.vue'
 import Footer from '@/components/layout/Footer.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 const sidebarStore = useSidebarStore()
 
 const isInitializing = ref(true)
@@ -41,17 +43,20 @@ const INITIALIZATION_FALLBACK_MS = 2000
 
 // Compute whether to show navigation
 const showNavigation = computed(() => {
-  const hideNavRoutes = ['login', 'register', 'forgot-password', 'home']
-  const isRoot = route.path === '/' || route.fullPath === '/#/' || route.fullPath === '#/'
+  const hideNavRoutes = ['login', 'register', 'forgot-password']
   if (!authStore.isAuthenticated) return false
-  if (isRoot) return false
   return !hideNavRoutes.includes(route.name)
 })
 
 const mainClasses = computed(() => {
-  if (!showNavigation.value) return ''
-  return sidebarStore.isVisible ? 'pt-16 md:pt-0 md:pl-64' : 'pt-16 md:pt-0'
+  if (!showNavigation.value) return 'app-main'
+  return sidebarStore.isVisible ? 'app-main pt-16 md:pt-0 md:pl-64' : 'app-main pt-16 md:pt-0'
 })
+
+const appClasses = computed(() => [
+  'min-h-screen app-shell',
+  themeStore.isDark ? 'theme-dark' : 'theme-light'
+])
 
 const finishInitialization = () => {
   if (!isInitializing.value) return
@@ -77,6 +82,8 @@ onMounted(() => {
       clearTimeout(fallbackTimer)
       finishInitialization()
     })
+
+  themeStore.applyTheme()
 })
 </script>
 
@@ -92,6 +99,20 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+.app-shell {
+  background: radial-gradient(circle at 10% 10%, rgba(212, 175, 55, 0.08), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(99, 102, 241, 0.12), transparent 30%),
+    var(--page-bg);
+  color: var(--text-primary);
+}
+
+.app-main {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, transparent 18%), var(--page-bg);
 }
 
 /* Custom toast styles */

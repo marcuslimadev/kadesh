@@ -1,13 +1,13 @@
 <template>
   <!-- Mobile top bar -->
-  <header class="md:hidden sticky top-0 z-40 bg-dark text-offwhite flex items-center justify-between px-4 py-3 shadow-lg">
-    <button type="button" class="flex items-center gap-3" @click="navigateHome">
+  <header class="md:hidden sticky top-0 z-40 bg-nav text-offwhite flex items-center justify-between px-4 py-3 shadow-lg">
+    <router-link to="/" class="flex items-center gap-3">
       <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
-      <div class="text-left">
+      <div>
         <p class="text-sm text-gold font-semibold">KADDESH</p>
-        <p class="text-xs text-offwhite-muted">Marketplace premium</p>
+        <p class="text-xs text-offwhite-muted">Service Bridge</p>
       </div>
-    </button>
+    </router-link>
     <button
       @click="mobileMenuOpen = !mobileMenuOpen"
       class="p-2 rounded-md hover:bg-dark-80 transition"
@@ -25,13 +25,13 @@
     <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-40 bg-black/50" @click.self="mobileMenuOpen = false">
       <div class="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl p-4 overflow-y-auto">
         <div class="flex items-center justify-between mb-4">
-          <button type="button" class="flex items-center gap-2 text-left" @click="navigateHome">
+          <router-link to="/" class="flex items-center gap-2">
             <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
             <div>
               <p class="text-sm font-semibold text-dark">KADDESH</p>
-              <p class="text-xs text-gray-500">Marketplace premium</p>
+              <p class="text-xs text-gray-500">Service Bridge</p>
             </div>
-          </button>
+          </router-link>
           <button @click="mobileMenuOpen = false" class="p-2 rounded hover:bg-gray-100">
             <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -45,12 +45,27 @@
           </div>
         </div>
 
+        <div class="mb-4">
+          <button
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-gold/30 text-dark"
+            @click="toggleTheme"
+          >
+            <span class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+              </svg>
+              <span class="font-semibold">{{ themeLabel }}</span>
+            </span>
+            <span class="text-xs font-semibold text-gray-500">{{ themeStore.isDark ? 'Escuro' : 'Claro' }}</span>
+          </button>
+        </div>
+
         <div class="space-y-2">
           <router-link
             v-for="link in allLinks"
             :key="link.to"
             :to="link.to"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            :class="mobileLinkClasses(link.to)"
             @click="handleNavigate(link.to)"
           >
             <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +78,7 @@
         <div v-if="isAuthenticated" class="mt-6 border-t pt-4 space-y-2">
           <router-link
             :to="profileLink.to"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            :class="mobileLinkClasses(profileLink.to)"
             @click="handleNavigate(profileLink.to)"
           >
             <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,7 +88,7 @@
           </router-link>
           <router-link
             :to="settingsLink.to"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-dark hover:bg-gray-100 transition"
+            :class="mobileLinkClasses(settingsLink.to)"
             @click="handleNavigate(settingsLink.to)"
           >
             <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,17 +122,17 @@
 
   <!-- Desktop sidebar -->
   <aside
-    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl transition-transform duration-200"
+    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-nav text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl transition-transform duration-200"
     :class="{ '-translate-x-full': !isSidebarVisible }"
   >
     <div class="p-6 border-b border-gold/20 flex items-center justify-between gap-3">
-      <button type="button" class="flex items-center gap-3 text-left" @click="navigateHome">
+      <router-link to="/" class="flex items-center gap-3">
         <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
         <div>
           <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
-          <p class="text-xs text-offwhite-muted">Marketplace premium</p>
+          <p class="text-xs text-offwhite-muted">Service Bridge</p>
         </div>
-      </button>
+      </router-link>
       <button
         v-if="isAuthenticated"
         @click="sidebarStore.hide"
@@ -136,12 +151,27 @@
       </div>
     </div>
 
+    <div class="p-4 border-b border-gold/20">
+      <button
+        class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-dark-80 border border-gold/40 text-offwhite hover:bg-dark-90"
+        @click="toggleTheme"
+      >
+        <span class="flex items-center gap-2">
+          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          </svg>
+          <span class="font-semibold">Tema {{ themeStore.isDark ? 'Escuro' : 'Claro' }}</span>
+        </span>
+        <span class="text-xs text-offwhite-muted">Alternar</span>
+      </button>
+    </div>
+
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
       <router-link
         v-for="link in primaryLinks"
         :key="link.to"
         :to="link.to"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+        :class="desktopLinkClasses(link.to)"
       >
         <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
@@ -154,7 +184,7 @@
           v-for="link in secondaryLinks"
           :key="link.to"
           :to="link.to"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+          :class="desktopLinkClasses(link.to)"
         >
           <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
@@ -166,7 +196,7 @@
         <p class="text-xs uppercase tracking-wide text-offwhite-muted px-2 mb-2">Conta</p>
         <router-link
           :to="profileLink.to"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+          :class="desktopLinkClasses(profileLink.to)"
         >
           <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path :d="iconPaths[profileLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
@@ -175,7 +205,7 @@
         </router-link>
         <router-link
           :to="settingsLink.to"
-          class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold text-offwhite hover:bg-dark-80 transition"
+          :class="desktopLinkClasses(settingsLink.to)"
         >
           <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path :d="iconPaths[settingsLink.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
@@ -215,12 +245,14 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
+import { useThemeStore } from '@/stores/theme'
 import { useSidebarStore } from '@/stores/sidebarStore'
 import ViewModeSwitch from '@/components/ViewModeSwitch.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const viewMode = useViewModeStore()
+const themeStore = useThemeStore()
 const sidebarStore = useSidebarStore()
 
 const mobileMenuOpen = ref(false)
@@ -229,6 +261,13 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
 const isSidebarVisible = computed(() => sidebarStore.isVisible)
+const activePath = computed(() => router.currentRoute.value.path)
+const themeLabel = computed(() => (themeStore.isDark ? 'Tema escuro' : 'Tema claro'))
+const themeIcon = computed(() =>
+  themeStore.isDark
+    ? 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z'
+    : 'M12 3v2m0 14v2m9-9h-2M5 12H3m14.364-7.364l-1.414 1.414M7.05 16.95l-1.414 1.414m0-12.728l1.414 1.414M16.95 16.95l1.414 1.414M12 7a5 5 0 100 10 5 5 0 000-10z'
+)
 
 const iconPaths = {
   target: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 110 4 2 2 0 010-4z',
@@ -292,14 +331,28 @@ const allLinks = computed(() => {
   return list
 })
 
+const isRouteActive = (to) => {
+  if (to === '/') return activePath.value === '/'
+  return activePath.value === to || activePath.value.startsWith(`${to}/`)
+}
+
+const desktopLinkClasses = (to) => [
+  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition border border-transparent',
+  isRouteActive(to)
+    ? 'bg-dark-80 text-gold border-gold/40 shadow'
+    : 'text-offwhite hover:bg-dark-80'
+]
+
+const mobileLinkClasses = (to) => [
+  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition',
+  isRouteActive(to)
+    ? 'bg-gold/10 text-dark border border-gold/40'
+    : 'text-dark hover:bg-gray-100'
+]
+
 const handleNavigate = (to) => {
   mobileMenuOpen.value = false
   router.push(to)
-}
-
-const navigateHome = () => {
-  mobileMenuOpen.value = false
-  router.push('/')
 }
 
 const handleLogout = async () => {
@@ -307,16 +360,27 @@ const handleLogout = async () => {
   mobileMenuOpen.value = false
   router.push('/')
 }
+
+const toggleTheme = () => {
+  themeStore.toggleTheme()
+}
 </script>
 
 <style scoped>
-.bg-dark { background: #111; }
-.bg-dark-80 { background: rgba(17,17,17,0.85); }
+.bg-dark { background: #0f172a; }
+.bg-dark-80 { background: rgba(15, 23, 42, 0.85); }
+.bg-dark-90 { background: rgba(15, 23, 42, 0.92); }
+.bg-nav { background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, #0b1224 100%); }
 .text-offwhite { color: #f5f5f5; }
 .text-offwhite-muted { color: #cfcfcf; }
 .text-gold { color: #d4af37; }
 .border-gold\/20 { border-color: rgba(212,175,55,0.2); }
 .border-gold\/40 { border-color: rgba(212,175,55,0.4); }
+
+.active {
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+}
 
 .sidebar-switch :deep(.view-mode-switch) {
   display: block;

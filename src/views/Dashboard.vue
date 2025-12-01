@@ -11,6 +11,13 @@
         </p>
       </div>
 
+      <div class="mb-6 px-4 py-3 rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-900 flex items-center gap-3">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-sm font-medium">Os gráficos do dashboard aparecem automaticamente assim que houver dados cadastrados nos seus projetos e propostas.</p>
+      </div>
+
       <!-- Quick Actions -->
       <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
         <router-link
