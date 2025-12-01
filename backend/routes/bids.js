@@ -9,7 +9,10 @@ const router = express.Router();
 router.get('/project/:projectId', async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { limit = 20, offset = 0 } = req.query;
+    const { limit = 20, offset = 0, page, per_page } = req.query;
+
+    const effectiveLimit = per_page ? parseInt(per_page) : parseInt(limit);
+    const effectiveOffset = page ? (parseInt(page) - 1) * effectiveLimit : parseInt(offset);
 
     // Check if project exists
     const projectCheck = await db.query(
@@ -24,29 +27,34 @@ router.get('/project/:projectId', async (req, res) => {
     }
 
     const result = await db.query(`
-      SELECT 
-        b.*,
-        u.name as provider_name,
-        u.avatar_url,
-        pp.rating,
-        pp.total_reviews,
-        pp.total_projects,
-        pp.response_time_hours
-      FROM bids b
-      JOIN users u ON b.provider_id = u.id
-      LEFT JOIN provider_profiles pp ON u.id = pp.user_id
-      WHERE b.project_id = $1 AND b.status != 'withdrawn'
-      ORDER BY 
-        CASE WHEN b.is_featured THEN 0 ELSE 1 END,
-        b.created_at DESC
-      LIMIT $2 OFFSET $3
-    `, [projectId, limit, offset]);
+      SELECT *, COUNT(*) OVER() AS total_count FROM (
+        SELECT 
+          b.*,
+          u.name as provider_name,
+          u.avatar_url,
+          pp.rating,
+          pp.total_reviews,
+          pp.total_projects,
+          pp.response_time_hours
+        FROM bids b
+        JOIN users u ON b.provider_id = u.id
+        LEFT JOIN provider_profiles pp ON u.id = pp.user_id
+        WHERE b.project_id = $1 AND b.status != 'withdrawn'
+        ORDER BY 
+          CASE WHEN b.is_featured THEN 0 ELSE 1 END,
+          b.created_at DESC
+        LIMIT $2 OFFSET $3
+      ) sub
+    `, [projectId, effectiveLimit, effectiveOffset]);
+
+    const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     res.json({
       bids: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      total,
+      limit: effectiveLimit,
+      offset: effectiveOffset,
+      total_pages: effectiveLimit ? Math.ceil(total / effectiveLimit) : 1
     });
 
   } catch (error) {
@@ -56,6 +64,60 @@ router.get('/project/:projectId', async (req, res) => {
     });
   }
 });
+
+// Handler para "minhas propostas" - DEVE vir ANTES de /:id
+const getMyBidsHandler = async (req, res) => {
+  try {
+    const { status, limit = 20, offset = 0 } = req.query;
+
+    let query = `
+      SELECT 
+        b.*,
+        p.title as project_title,
+        p.status as project_status,
+        p.budget as project_budget,
+        u.name as client_name
+      FROM bids b
+      JOIN projects p ON b.project_id = p.id
+      JOIN users u ON p.client_id = u.id
+      WHERE b.provider_id = $1
+    `;
+    
+    const params = [req.user.userId];
+    let paramCount = 1;
+
+    if (status && status !== 'all') {
+      query += ` AND b.status = $${++paramCount}`;
+      params.push(status);
+    }
+
+    query += `
+      ORDER BY b.created_at DESC
+      LIMIT $${++paramCount} OFFSET $${++paramCount}
+    `;
+    params.push(parseInt(limit), parseInt(offset));
+
+    const result = await db.query(query, params);
+
+    res.json({
+      bids: result.rows,
+      total: result.rowCount,
+      limit: parseInt(limit),
+      offset: parseInt(offset)
+    });
+
+  } catch (error) {
+    console.error('❌ [My Bids] Error:', error.message);
+    res.status(500).json({
+      error: 'Erro ao carregar propostas',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
+// Rotas específicas ANTES da rota genérica /:id
+router.get('/my-bids', auth, getMyBidsHandler);
+router.get('/user/my-bids', auth, getMyBidsHandler);
 
 // Create a bid
 router.post('/', auth, async (req, res) => {
@@ -107,13 +169,16 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    // Check if user is a provider
+    // Check if user is a provider (supports unified profile)
     const userResult = await db.query(
       'SELECT type FROM users WHERE id = $1',
       [req.user.userId]
     );
 
-    if (userResult.rows[0].type !== 'provider') {
+    const userType = userResult.rows[0]?.type;
+    const isProvider = userType === 'provider' || userType === 'unified';
+
+    if (!isProvider) {
       return res.status(403).json({
         error: 'Apenas prestadores de serviço podem fazer propostas'
       });
@@ -385,55 +450,6 @@ router.post('/:id/accept', auth, async (req, res) => {
 
   } catch (error) {
     console.error('Accept bid error:', error);
-    res.status(500).json({
-      error: 'Erro interno do servidor'
-    });
-  }
-});
-
-// Get user's bids
-router.get('/user/my-bids', auth, async (req, res) => {
-  try {
-    const { status, limit = 20, offset = 0 } = req.query;
-
-    let query = `
-      SELECT 
-        b.*,
-        p.title as project_title,
-        p.status as project_status,
-        p.budget as project_budget,
-        u.name as client_name
-      FROM bids b
-      JOIN projects p ON b.project_id = p.id
-      JOIN users u ON p.client_id = u.id
-      WHERE b.provider_id = $1
-    `;
-    
-    const params = [req.user.userId];
-    let paramCount = 1;
-
-    if (status && status !== 'all') {
-      query += ` AND b.status = $${++paramCount}`;
-      params.push(status);
-    }
-
-    query += `
-      ORDER BY b.created_at DESC
-      LIMIT $${++paramCount} OFFSET $${++paramCount}
-    `;
-    params.push(parseInt(limit), parseInt(offset));
-
-    const result = await db.query(query, params);
-
-    res.json({
-      bids: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
-    });
-
-  } catch (error) {
-    console.error('Get user bids error:', error);
     res.status(500).json({
       error: 'Erro interno do servidor'
     });

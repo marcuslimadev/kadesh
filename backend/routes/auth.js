@@ -10,7 +10,8 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, type = 'client' } = req.body;
+    const { name, email, password } = req.body;
+    // Novo modelo: perfil unificado, o switch do frontend decide a visão (cliente/prestador)
 
     // Validations
     if (!name || !email || !password) {
@@ -31,12 +32,6 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    if (!['client', 'provider'].includes(type)) {
-      return res.status(400).json({
-        error: 'Tipo de usuário inválido'
-      });
-    }
-
     // Check if user already exists
     const existingUser = await db.query(
       'SELECT id FROM users WHERE email = $1',
@@ -53,12 +48,12 @@ router.post('/register', async (req, res) => {
     const saltRounds = 12;
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    // Create user
+    // Create user with unified type (frontend switch controls view mode)
     const result = await db.query(
       `INSERT INTO users (name, email, password_hash, type, created_at, updated_at)
        VALUES ($1, $2, $3, $4, NOW(), NOW())
        RETURNING id, name, email, type, created_at`,
-      [name, email, passwordHash, type]
+      [name, email, passwordHash, 'unified']
     );
 
     const user = result.rows[0];
@@ -87,9 +82,11 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Register error:', error);
+    console.error('❌ [Register] Error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
-      error: 'Erro interno do servidor'
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });
@@ -174,9 +171,11 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('❌ [Register] Error:', error.message);
+    console.error('Stack:', error.stack);
     res.status(500).json({
-      error: 'Erro interno do servidor'
+      error: 'Erro interno do servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });

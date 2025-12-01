@@ -3,7 +3,7 @@
     <div class="max-w-md w-full space-y-8">
       <!-- Header -->
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-white mb-2">Kadesh Admin</h1>
+        <h1 class="text-4xl font-bold text-white mb-2">Kaddesh Admin</h1>
         <p class="text-blue-200">Painel de Administração</p>
       </div>
 
@@ -27,7 +27,7 @@
               required
               autocomplete="email"
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-              placeholder="admin@kadesh.local"
+              placeholder="admin@kaddesh.local"
             />
           </div>
 

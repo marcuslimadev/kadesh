@@ -3,8 +3,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
+const db = require('./config/database');
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const bidRoutes = require('./routes/bids');
@@ -13,9 +16,20 @@ const walletRoutes = require('./routes/wallet');
 const notificationRoutes = require('./routes/notifications');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payments');
+const contractRoutes = require('./routes/contracts');
+const reviewRoutes = require('./routes/reviews');
+const milestoneRoutes = require('./routes/milestones');
+const messageRoutes = require('./routes/messages');
+const receiptsRoutes = require('./routes/receipts');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// HTTP server + Socket.io
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const { setIO } = require('./utils/socket');
 
 // Security middleware
 app.use(helmet());
@@ -25,6 +39,7 @@ app.use(compression());
 // Add a safe fallback list that includes common dev hosts and the Render frontend
 const defaultFrontends = [
   'http://localhost:3000',
+  'http://localhost:3001',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'https://kadesh-frontend.onrender.com',
@@ -78,6 +93,10 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+const uploadsBaseDir = path.join(__dirname, 'uploads');
+fs.mkdirSync(uploadsBaseDir, { recursive: true });
+app.use('/uploads', express.static(uploadsBaseDir));
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({
@@ -97,13 +116,18 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/contracts', contractRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/milestones', milestoneRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/receipts', receiptsRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
-const db = require('./config/database');
+// db já será importado abaixo para socket.io, não precisa duplicar aqui
 
-// Alias: GET /api/dashboard/stats -> GET /api/users/dashboard/stats
-app.get('/api/dashboard/stats', auth, async (req, res) => {
+// Alias: GET /api/dashboard/stats and /api/users/dashboard/stats
+async function userDashboardStatsHandler(req, res) {
   try {
     const userId = req.user.userId;
     const userType = req.user.type;
@@ -165,7 +189,10 @@ app.get('/api/dashboard/stats', auth, async (req, res) => {
       error: 'Erro ao carregar estatísticas'
     });
   }
-});
+}
+
+app.get('/api/dashboard/stats', auth, userDashboardStatsHandler);
+app.get('/api/users/dashboard/stats', auth, userDashboardStatsHandler);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -194,10 +221,87 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Kadesh API running on port ${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
+// Setup Socket.io
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET','POST']
+  }
 });
 
+setIO(io);
+
+const jwt = require('jsonwebtoken');
+
+io.on('connection', async (socket) => {
+  try {
+    const { token } = socket.handshake.auth || socket.handshake.query || {};
+    if (!token) {
+      socket.disconnect(true);
+      return;
+    }
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    socket.data.user = user;
+
+    socket.on('join:contract', async (contractId) => {
+      try {
+        const { userId } = socket.data.user;
+        const result = await db.query(
+          'SELECT 1 FROM contracts WHERE id = $1 AND (client_id = $2 OR provider_id = $2) LIMIT 1',
+          [contractId, userId]
+        );
+        if (result.rows.length === 0) return;
+        socket.join(`contract:${contractId}`);
+      } catch {}
+    });
+
+    socket.on('typing', (payload) => {
+      const { contract_id } = payload || {};
+      if (!contract_id) return;
+      socket.to(`contract:${contract_id}`).emit('typing', { from: socket.data.user.userId, at: Date.now() });
+    });
+  } catch (err) {
+    socket.disconnect(true);
+  }
+});
+
+// Start the auction scheduler
+const { startScheduler: startAuctionScheduler } = require('./services/auctionScheduler');
+
+async function ensureDeadlineColumn() {
+  try {
+    await db.query(`
+      DO $$
+      BEGIN
+        IF EXISTS (
+          SELECT 1 FROM information_schema.columns 
+          WHERE table_name = 'projects' AND column_name = 'deadline' AND data_type = 'date'
+        ) THEN
+          ALTER TABLE projects 
+            ALTER COLUMN deadline TYPE TIMESTAMPTZ 
+            USING deadline::timestamptz;
+        END IF;
+      END $$;
+    `);
+    console.log('✅ Migration check: projects.deadline is TIMESTAMPTZ');
+  } catch (error) {
+    console.error('⚠️ Failed to ensure TIMESTAMPTZ on projects.deadline:', error.message);
+  }
+}
+
+async function bootstrap() {
+  await ensureDeadlineColumn();
+  
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Kadesh API running on port ${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+    console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
+    
+    // Start auction scheduler after server is listening
+    startAuctionScheduler();
+  });
+}
+
+bootstrap();
 module.exports = app;

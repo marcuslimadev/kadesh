@@ -324,7 +324,7 @@
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Ex.: Depósito para projeto Landing Page"
               />
-              <p class="mt-1 text-xs text-gray-500">Esse texto aparece no comprovante interno da Kadesh.</p>
+              <p class="mt-1 text-xs text-gray-500">Esse texto aparece no comprovante interno da Kaddesh.</p>
             </div>
 
             <p v-if="depositError" class="text-sm text-red-600">{{ depositError }}</p>

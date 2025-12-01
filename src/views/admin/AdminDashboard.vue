@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Kadesh Admin</h1>
+            <h1 class="text-2xl font-bold text-blue-600">Kaddesh Admin</h1>
             <div class="hidden md:ml-10 md:flex md:space-x-4">
               <router-link
                 to="/admin/dashboard"
@@ -31,6 +31,12 @@
                 class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
               >
                 Pagamentos
+              </router-link>
+              <router-link
+                to="/admin/disputes"
+                class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
+              >
+                Disputas
               </router-link>
               <router-link
                 to="/admin/settings"
@@ -66,7 +72,7 @@
         <!-- Welcome Section -->
         <div class="mb-8">
           <h2 class="text-3xl font-bold text-gray-900">Dashboard Administrativo</h2>
-          <p class="mt-2 text-gray-600">Visão geral da plataforma Kadesh</p>
+          <p class="mt-2 text-gray-600">Visão geral da plataforma Kaddesh</p>
         </div>
 
         <!-- Stats Grid -->
@@ -88,7 +94,7 @@
               </div>
             </div>
             <div class="mt-4 text-xs text-gray-600">
-              <span class="font-medium">{{ stats.users?.clients || 0 }}</span> Clientes • 
+              <span class="font-medium">{{ stats.users?.clients || 0 }}</span> Contratantes • 
               <span class="font-medium">{{ stats.users?.providers || 0 }}</span> Fornecedores
             </div>
           </div>
@@ -180,7 +186,7 @@
                   class="px-2 py-1 text-xs font-medium rounded-full"
                   :class="user.type === 'client' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'"
                 >
-                  {{ user.type === 'client' ? 'Cliente' : 'Fornecedor' }}
+                  {{ user.type === 'client' ? 'Contratante' : 'Prestador' }}
                 </span>
               </div>
             </div>

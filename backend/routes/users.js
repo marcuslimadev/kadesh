@@ -5,6 +5,28 @@ const { sanitizeInput } = require('../utils/validators');
 
 const router = express.Router();
 
+// Ensure preferences table exists (idempotent)
+let preferencesTableEnsured = false;
+async function ensurePreferencesTable() {
+  if (preferencesTableEnsured) return;
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS user_preferences (
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        email_notifications BOOLEAN DEFAULT TRUE,
+        email_marketing BOOLEAN DEFAULT FALSE,
+        email_weekly BOOLEAN DEFAULT TRUE,
+        profile_public VARCHAR(16) DEFAULT 'public',
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `);
+    preferencesTableEnsured = true;
+  } catch (err) {
+    console.error('Error ensuring user_preferences table:', err);
+  }
+}
+
 // Get user profile
 router.get('/profile', auth, async (req, res) => {
   try {
@@ -421,3 +443,96 @@ router.get('/dashboard/stats', auth, async (req, res) => {
 });
 
 module.exports = router;
+
+// =============================
+// Additional endpoints
+// =============================
+
+// Get user preferences
+router.get('/preferences', auth, async (req, res) => {
+  try {
+    await ensurePreferencesTable();
+    const { rows } = await db.query(
+      'SELECT email_notifications, email_marketing, email_weekly, profile_public FROM user_preferences WHERE user_id = $1',
+      [req.user.userId]
+    );
+
+    const defaults = {
+      email_notifications: true,
+      email_marketing: false,
+      email_weekly: true,
+      profile_public: 'public'
+    };
+
+    res.json({ preferences: rows[0] || defaults });
+  } catch (error) {
+    console.error('Get preferences error:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Update user preferences
+router.put('/preferences', auth, async (req, res) => {
+  try {
+    await ensurePreferencesTable();
+    const { emailNotifications, emailMarketing, emailWeekly, profilePublic } = req.body;
+
+    const prefs = {
+      email_notifications: typeof emailNotifications === 'boolean' ? emailNotifications : null,
+      email_marketing: typeof emailMarketing === 'boolean' ? emailMarketing : null,
+      email_weekly: typeof emailWeekly === 'boolean' ? emailWeekly : null,
+      profile_public: profilePublic === 'public' || profilePublic === 'private' ? profilePublic : null
+    };
+
+    // Upsert
+    const result = await db.query(`
+      INSERT INTO user_preferences (user_id, email_notifications, email_marketing, email_weekly, profile_public, created_at, updated_at)
+      VALUES ($1, COALESCE($2, TRUE), COALESCE($3, FALSE), COALESCE($4, TRUE), COALESCE($5, 'public'), NOW(), NOW())
+      ON CONFLICT (user_id)
+      DO UPDATE SET
+        email_notifications = COALESCE(EXCLUDED.email_notifications, user_preferences.email_notifications),
+        email_marketing = COALESCE(EXCLUDED.email_marketing, user_preferences.email_marketing),
+        email_weekly = COALESCE(EXCLUDED.email_weekly, user_preferences.email_weekly),
+        profile_public = COALESCE(EXCLUDED.profile_public, user_preferences.profile_public),
+        updated_at = NOW()
+      RETURNING email_notifications, email_marketing, email_weekly, profile_public;
+    `, [req.user.userId, prefs.email_notifications, prefs.email_marketing, prefs.email_weekly, prefs.profile_public]);
+
+    res.json({ message: 'Preferências atualizadas', preferences: result.rows[0] });
+  } catch (error) {
+    console.error('Update preferences error:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+// Delete account (soft delete)
+router.delete('/profile', auth, async (req, res) => {
+  try {
+    // Mark user as deleted and scrub non-essential PII fields
+    const result = await db.query(`
+      UPDATE users SET
+        status = 'inactive',
+        name = CONCAT('Deleted User ', id::text),
+        phone = NULL,
+        bio = NULL,
+        website = NULL,
+        location = NULL,
+        updated_at = NOW()
+      WHERE id = $1
+      RETURNING id, status;
+    `, [req.user.userId]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    // Also clear preferences if exist
+    await ensurePreferencesTable();
+    await db.query('DELETE FROM user_preferences WHERE user_id = $1', [req.user.userId]);
+
+    res.json({ message: 'Conta deletada com sucesso' });
+  } catch (error) {
+    console.error('Delete account error:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});

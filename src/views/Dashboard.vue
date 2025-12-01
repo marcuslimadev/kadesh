@@ -11,6 +11,71 @@
         </p>
       </div>
 
+      <!-- Quick Actions -->
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
+        <router-link
+          to="/lobby"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 text-blue-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="text-sm font-semibold">🎯 Lobby</span>
+        </router-link>
+
+        <router-link
+          v-if="viewMode.isContractor"
+          to="/projects/create"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-blue-300 via-blue-200 to-indigo-200 text-blue-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="text-sm font-semibold">Novo Projeto</span>
+        </router-link>
+
+        <router-link
+          v-if="viewMode.isProvider"
+          to="/my-bids"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-emerald-300 via-teal-200 to-cyan-200 text-emerald-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <span class="text-sm font-semibold">Minhas Propostas</span>
+        </router-link>
+
+        <router-link
+          to="/wallet"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-200 via-yellow-200 to-orange-200 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+          </svg>
+          <span class="text-sm font-semibold">Carteira</span>
+        </router-link>
+
+        <router-link
+          to="/receipts"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-pink-200 via-rose-200 to-red-200 text-pink-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm font-semibold">Comprovantes</span>
+        </router-link>
+
+        <router-link
+          to="/contracts"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-violet-200 via-purple-200 to-fuchsia-200 text-violet-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span class="text-sm font-semibold">Contratos</span>
+        </router-link>
+      </div>
+
       <!-- Loading State -->
       <div v-if="isLoading" class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -24,7 +89,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm font-medium text-gray-600">
-                  {{ isClient ? 'Projetos Criados' : 'Projetos Ganhos' }}
+                  {{ viewMode.isContractor ? 'Projetos Criados' : 'Projetos Ganhos' }}
                 </p>
                 <p class="text-3xl font-bold text-gray-900 mt-2">
                   {{ stats.total_projects || 0 }}
@@ -252,12 +317,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import api from '@/services/api'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 
 const authStore = useAuthStore()
+const viewMode = useViewModeStore()
 
 const isLoading = ref(false)
 const stats = ref({})
@@ -265,7 +332,6 @@ const recentProjects = ref([])
 const recentNotifications = ref([])
 
 const userName = computed(() => authStore.user?.name?.split(' ')[0] || 'Usuário')
-const isClient = computed(() => authStore.isClient)
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -285,7 +351,9 @@ const loadDashboardData = async () => {
   try {
     // Load stats
     const statsResponse = await api.get('/api/dashboard/stats')
-    if (statsResponse.data) {
+    if (statsResponse.data?.stats) {
+      stats.value = statsResponse.data.stats
+    } else if (statsResponse.data) {
       stats.value = statsResponse.data
     }
 
@@ -326,3 +394,27 @@ onMounted(() => {
   loadDashboardData()
 })
 </script>
+
+<style scoped>
+/* Animação de fade-in para elementos que aparecem/desaparecem */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.7s ease-out forwards;
+}
+
+/* Transições suaves globais */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>

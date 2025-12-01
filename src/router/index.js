@@ -1,7 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useViewModeStore } from '@/stores/viewModeStore'
 
 // Lazy load views
 const Home = () => import('../views/Home.vue')
+const Tutorial = () => import('../views/Tutorial.vue')
+const AuctionLobby = () => import('../views/AuctionLobby.vue')
 const Login = () => import('../views/Login.vue')
 const Register = () => import('../views/Register.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -11,8 +15,13 @@ const CreateProject = () => import('../views/CreateProject.vue')
 const MyProjects = () => import('../views/MyProjects.vue')
 const MyBids = () => import('../views/MyBids.vue')
 const ProviderProfile = () => import('../views/ProviderProfile.vue')
+const PublicProviderProfile = () => import('../views/PublicProviderProfile.vue')
 const Wallet = () => import('../views/Wallet.vue')
+const Receipts = () => import('../views/Receipts.vue')
 const Notifications = () => import('../views/Notifications.vue')
+const Settings = () => import('../views/Settings.vue')
+const Contracts = () => import('../views/Contracts.vue')
+const ContractDetail = () => import('../views/ContractDetail.vue')
 
 // Admin views
 const AdminLogin = () => import('../views/admin/AdminLogin.vue')
@@ -21,6 +30,7 @@ const AdminUsers = () => import('../views/admin/AdminUsers.vue')
 const AdminProjects = () => import('../views/admin/AdminProjects.vue')
 const AdminPayments = () => import('../views/admin/AdminPayments.vue')
 const AdminSettings = () => import('../views/admin/AdminSettings.vue')
+const AdminDisputes = () => import('../views/admin/AdminDisputes.vue')
 
 const routes = [
   {
@@ -28,6 +38,18 @@ const routes = [
     name: 'home',
     component: Home,
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/tutorial',
+    name: 'tutorial',
+    component: Tutorial,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/lobby',
+    name: 'auction-lobby',
+    component: AuctionLobby,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -84,9 +106,39 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/provider/:id',
+    name: 'public-provider-profile',
+    component: PublicProviderProfile,
+    meta: { requiresAuth: false }
+  },
+  {
     path: '/wallet',
     name: 'wallet',
     component: Wallet,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/receipts',
+    name: 'receipts',
+    component: Receipts,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contracts',
+    name: 'contracts',
+    component: Contracts,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contracts/:id',
+    name: 'contract-detail',
+    component: ContractDetail,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
     meta: { requiresAuth: true }
   },
   {
@@ -127,6 +179,12 @@ const routes = [
     meta: { requiresAdminAuth: true }
   },
   {
+    path: '/admin/disputes',
+    name: 'admin-disputes',
+    component: AdminDisputes,
+    meta: { requiresAdminAuth: true }
+  },
+  {
     path: '/admin/settings',
     name: 'admin-settings',
     component: AdminSettings,
@@ -139,7 +197,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -151,28 +209,48 @@ const router = createRouter({
 })
 
 // Navigation guards
-router.beforeEach((to, from, next) => {
-  // Frontend stores the JWT under the `kadesh_token` key (see src/stores/auth.js)
-  // so the navigation guard needs to look up the same key to accurately determine
-  // whether the user is authenticated. Otherwise, even users with a valid session
-  // would be redirected back to the login screen.
-  const token = localStorage.getItem('kadesh_token')
-  const adminToken = localStorage.getItem('adminToken')
-  const isAuthenticated = !!token
-  const isAdminAuthenticated = !!adminToken
+router.beforeEach(async (to, from, next) => {
+  const isBrowser = typeof window !== 'undefined'
+  const authStore = useAuthStore()
+  const viewMode = useViewModeStore()
+  const token = isBrowser ? localStorage.getItem('kadesh_token') : null
+  const adminToken = isBrowser ? localStorage.getItem('adminToken') : null
+
+  const needsAuth = to.meta.requiresAuth
+  const needsAdmin = to.meta.requiresAdminAuth
+  const guestOnly = to.meta.guestOnly
 
   // Admin routes protection
-  if (to.meta.requiresAdminAuth && !isAdminAuthenticated) {
-    next({ name: 'admin-login' })
-  } else if (to.meta.requiresAuth && !isAuthenticated) {
-    // Redirect to login if route requires auth and user is not authenticated
-    next({ name: 'login', query: { redirect: to.fullPath } })
-  } else if (to.meta.guestOnly && isAuthenticated) {
-    // Redirect to dashboard if route is for guests only and user is authenticated
-    next({ name: 'dashboard' })
-  } else {
-    next()
+  if (needsAdmin && !adminToken) {
+    return next({ name: 'admin-login' })
   }
+
+  // Guard for authenticated routes
+  if (needsAuth) {
+    if (!token) {
+      return next({ name: 'login', query: { redirect: to.fullPath } })
+    }
+    // If user not hydrated, verify token with backend before proceeding
+    if (!authStore.user) {
+      const verified = await authStore.verifyToken()
+      if (!verified) {
+        return next({ name: 'login', query: { redirect: to.fullPath } })
+      }
+    }
+  }
+
+  // Se autenticado e tentando acessar a home pública, manda para o Lobby conforme modo
+  if (to.name === 'home' && (authStore.isAuthenticated || token)) {
+    const mode = viewMode.currentMode || 'contractor'
+    return next({ name: 'auction-lobby', query: { mode } })
+  }
+
+  // Guest-only routes redirect if already authenticated
+  if (guestOnly && (authStore.isAuthenticated || token)) {
+    return next({ name: 'dashboard' })
+  }
+
+  return next()
 })
 
 export default router

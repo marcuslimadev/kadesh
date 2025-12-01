@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
-        <h1 class="text-4xl font-bold text-primary-600">Kadesh</h1>
+        <h1 class="text-4xl font-bold text-primary-600">Kaddesh</h1>
       </router-link>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Entre na sua conta
@@ -195,9 +195,8 @@ const handleLogin = async () => {
     const result = await authStore.login(form.email, form.password)
 
     if (result.success) {
-      // Redirect based on user type
-      const redirectPath = result.user.type === 'client' ? '/dashboard' : '/dashboard'
-      router.push(redirectPath)
+      // Redirecionar para o Lobby de Leilões após login
+      router.push('/lobby')
     } else {
       errors.general = result.error
     }
