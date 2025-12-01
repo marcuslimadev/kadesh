@@ -404,6 +404,11 @@ async function saveAdvertisement() {
   } catch (err) {
     console.error('Erro ao salvar anúncio:', err)
     error.value = 'Erro ao salvar anúncio: ' + (err.response?.data?.error || err.message)
+  } finally {
+    saving.value = false
+  }
+}
+
 async function toggleAdvertisement(id) {
   try {
     error.value = null
