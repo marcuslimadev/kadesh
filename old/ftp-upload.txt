@@ -1,9 +1,0 @@
-open kaddeshsolucoes.com.br
-marcus
-%CFt!~}G_ho,,aCz
-cd /kadesh
-binary
-prompt
-lcd producao
-mput *
-quit
