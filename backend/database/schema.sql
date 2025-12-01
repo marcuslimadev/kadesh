@@ -369,6 +369,28 @@ INSERT INTO system_settings (key, value, description, is_public) VALUES
 INSERT INTO admin_users (username, email, password_hash, name, role) VALUES
 ('admin', 'admin@kadesh.local', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LeJrlN4j3QhVl.8WO', 'Administrator', 'super_admin');
 
+-- Advertisements table
+CREATE TABLE advertisements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    link_url VARCHAR(500),
+    image_url VARCHAR(500),
+    position VARCHAR(10) DEFAULT 'left', -- 'left' or 'right'
+    slot INTEGER DEFAULT 1, -- 1 or 2 (order in the rail)
+    is_active BOOLEAN DEFAULT TRUE,
+    click_count INTEGER DEFAULT 0,
+    impression_count INTEGER DEFAULT 0,
+    start_date TIMESTAMP WITH TIME ZONE,
+    end_date TIMESTAMP WITH TIME ZONE,
+    created_by UUID REFERENCES admin_users(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Index for active ads by position
+CREATE INDEX idx_advertisements_active ON advertisements(is_active, position, slot) WHERE is_active = TRUE;
+
 COMMENT ON TABLE users IS 'Main users table for clients and providers';
 COMMENT ON TABLE provider_profiles IS 'Extended profile information for providers';
 COMMENT ON TABLE projects IS 'Projects posted by clients';
@@ -380,3 +402,4 @@ COMMENT ON TABLE reviews IS 'Reviews and ratings between users';
 COMMENT ON TABLE messages IS 'Messages between users';
 COMMENT ON TABLE notifications IS 'System notifications for users';
 COMMENT ON TABLE admin_users IS 'Administrative users for platform management';
+COMMENT ON TABLE advertisements IS 'Advertisement banners for AdRail component';

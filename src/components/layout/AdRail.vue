@@ -1,6 +1,6 @@
 <template>
   <aside
-    v-if="!hidden"
+    v-if="!hidden && slots.length > 0"
     :class="[
       'hidden xl:flex flex-col gap-4 w-60',
       position === 'left' ? 'xl:mr-8 xl:pr-4' : 'xl:ml-8 xl:pl-4'
@@ -17,19 +17,30 @@
     </div>
     <div
       v-for="slot in slots"
-      :key="slot.title"
+      :key="slot.id"
       class="ad-card"
     >
-      <p class="ad-eyebrow">{{ slot.label }}</p>
+      <p class="ad-eyebrow">Patrocinado</p>
       <h4 class="ad-title">{{ slot.title }}</h4>
       <p class="ad-sub">{{ slot.description }}</p>
-      <button class="ad-cta" type="button">Quero anunciar</button>
+      <a
+        v-if="slot.link_url"
+        :href="slot.link_url"
+        target="_blank"
+        rel="noopener"
+        class="ad-cta"
+        @click="trackClick(slot.id)"
+      >
+        Saiba mais
+      </a>
+      <button v-else class="ad-cta" type="button">Quero anunciar</button>
     </div>
   </aside>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import axios from 'axios'
 
 const props = defineProps({
   position: {
@@ -39,20 +50,33 @@ const props = defineProps({
 })
 
 const hidden = ref(false)
+const slots = ref([])
 const position = computed(() => (props.position === 'right' ? 'right' : 'left'))
 
-const slots = [
-  {
-    label: 'Patrocinado',
-    title: 'Espaço reservado',
-    description: 'Reserve um banner premium e destaque sua marca para contratantes e prestadores.'
-  },
-  {
-    label: 'Destaque',
-    title: 'Campanhas 360º',
-    description: 'Ative ações especiais com lead tracking direto no Service Bridge.'
+async function loadAdvertisements() {
+  try {
+    const response = await axios.get('/api/advertisements', {
+      params: { position: position.value }
+    })
+    slots.value = response.data
+  } catch (error) {
+    console.error('Erro ao carregar anúncios:', error)
+    // Manter vazio se houver erro
+    slots.value = []
   }
-]
+}
+
+async function trackClick(adId) {
+  try {
+    await axios.post(`/api/advertisements/${adId}/click`)
+  } catch (error) {
+    console.error('Erro ao registrar clique:', error)
+  }
+}
+
+onMounted(() => {
+  loadAdvertisements()
+})
 </script>
 
 <style scoped>

@@ -723,9 +723,9 @@ watch(filters, () => {
 
 .card {
   background: var(--surface);
-  border: 1px solid var(--muted-border);
-  border-radius: 18px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.18);
+  border: 2px solid var(--card-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .hero-eyebrow {
@@ -745,17 +745,19 @@ watch(filters, () => {
 }
 
 .tag {
-  background: rgba(212, 175, 55, 0.12);
-  color: var(--text-primary);
-  padding: 6px 12px;
+  background: var(--surface);
+  color: var(--accent);
+  padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid var(--card-border);
+  border: 2px solid var(--accent);
   font-weight: 600;
+  font-size: 13px;
 }
 
 .stat-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(17, 24, 39, 0.65));
-  border: 1px solid var(--card-border);
+  background: var(--surface);
+  border: 2px solid var(--card-border);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
 }
 
 .text-muted {
@@ -775,26 +777,28 @@ watch(filters, () => {
 }
 
 .action-tile {
-  border: 1px solid var(--muted-border);
-  border-radius: 14px;
-  padding: 14px;
+  border: 2px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: center;
-  background: var(--surface-alt);
+  background: var(--surface);
   color: var(--text-primary);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
 }
 
 .action-tile.primary {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.14), rgba(12, 18, 36, 0.9));
-  border-color: var(--card-border);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
 }
 
 .action-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.25);
+  border-color: var(--accent);
 }
 
 .cta-link {
@@ -802,20 +806,34 @@ watch(filters, () => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 2px solid var(--accent);
   color: var(--text-primary);
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.18), rgba(15, 23, 42, 0.8));
+  background: var(--surface);
   font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.cta-link:hover {
+  background: var(--accent);
+  color: #0f172a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
 }
 
 .cta-outline {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--muted-border);
-  background: var(--surface-alt);
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 2px solid var(--card-border);
+  background: var(--surface);
   color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.cta-outline:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 }
 
 .cta-ghost {
@@ -836,11 +854,18 @@ watch(filters, () => {
 
 .filter-input {
   width: 100%;
-  background: var(--surface-alt);
-  border: 1px solid var(--muted-border);
-  padding: 10px 12px;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 2px solid var(--card-border);
+  padding: 10px 14px;
+  border-radius: 10px;
   color: var(--text-primary);
+  transition: border-color 0.2s ease;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
 .pending-chip {
@@ -853,18 +878,32 @@ watch(filters, () => {
 }
 
 .project-card {
-  border: 1px solid var(--muted-border);
+  border: 2px solid var(--card-border);
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.2);
+  transform: translateY(-2px);
 }
 
 .pagination-button {
   display: inline-flex;
   align-items: center;
-  padding: 8px 12px;
-  border: 1px solid var(--muted-border);
+  padding: 10px 16px;
+  border: 2px solid var(--card-border);
   font-size: 14px;
   font-weight: 600;
   background: var(--surface);
   color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #0f172a;
 }
 
 .pagination-button:disabled {
@@ -874,12 +913,12 @@ watch(filters, () => {
 .pagination-current {
   display: inline-flex;
   align-items: center;
-  padding: 8px 14px;
-  border: 1px solid var(--muted-border);
+  padding: 10px 20px;
+  border: 2px solid var(--accent);
   font-size: 14px;
-  font-weight: 600;
-  background: var(--surface-alt);
-  color: var(--text-primary);
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--accent);
 }
 
 .modal-overlay {

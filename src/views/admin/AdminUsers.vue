@@ -1,53 +1,50 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <!-- Include the same navigation as AdminDashboard -->
-    <nav class="bg-white shadow-lg border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Kaddesh Admin</h1>
-            <div class="hidden md:ml-10 md:flex md:space-x-4">
-              <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Dashboard</router-link>
-              <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100" :class="{ 'bg-gray-100': $route.path === '/admin/users' }">Usuários</router-link>
-              <router-link to="/admin/projects" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Projetos</router-link>
-              <router-link to="/admin/payments" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Pagamentos</router-link>
-              <router-link to="/admin/disputes" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Disputas</router-link>
-              <router-link to="/admin/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Configurações</router-link>
-            </div>
-          </div>
-          <div class="flex items-center">
-            <span class="text-sm text-gray-600 mr-4">{{ adminUser?.name }}</span>
-            <button @click="handleLogout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium">Sair</button>
-          </div>
-        </div>
+  <AdminLayout>
+    <!-- Page Header -->
+    <template #header>
+      <div>
+        <h1 class="admin-heading-1">Gerenciar Usuários</h1>
+        <p class="admin-text-secondary mt-2">Visualize e gerencie todos os usuários da plataforma</p>
       </div>
-    </nav>
+    </template>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="mb-6">
-        <h2 class="text-3xl font-bold text-gray-900">Gerenciar Usuários</h2>
-        <p class="mt-2 text-gray-600">Visualize e gerencie todos os usuários da plataforma</p>
-      </div>
+    <!-- Success Message -->
+    <div v-if="successMessage" class="admin-alert admin-alert-success mb-6">
+      <p>{{ successMessage }}</p>
+      <button @click="successMessage = ''" class="admin-alert-close">×</button>
+    </div>
 
-      <!-- Filters -->
-      <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+    <!-- Error Message -->
+    <div v-if="errorMessage" class="admin-alert admin-alert-danger mb-6">
+      <p>{{ errorMessage }}</p>
+      <button @click="errorMessage = ''" class="admin-alert-close">×</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="admin-card mb-6">
+      <div class="admin-card-body">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Buscar</label>
-            <input v-model="filters.search" @input="fetchUsers" type="text" placeholder="Nome ou email..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+          <div class="admin-form-group">
+            <label class="admin-form-label">Buscar</label>
+            <input
+              v-model="filters.search"
+              @input="fetchUsers"
+              type="text"
+              class="admin-form-input"
+              placeholder="Nome ou email..."
+            />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
-            <select v-model="filters.type" @change="fetchUsers" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Tipo</label>
+            <select v-model="filters.type" @change="fetchUsers" class="admin-form-select">
               <option value="">Todos</option>
               <option value="client">Contratantes</option>
               <option value="provider">Fornecedores</option>
             </select>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-            <select v-model="filters.status" @change="fetchUsers" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Status</label>
+            <select v-model="filters.status" @change="fetchUsers" class="admin-form-select">
               <option value="">Todos</option>
               <option value="active">Ativo</option>
               <option value="inactive">Inativo</option>
@@ -55,89 +52,231 @@
             </select>
           </div>
           <div class="flex items-end">
-            <button @click="resetFilters" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium">Limpar Filtros</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Users Table -->
-      <div class="bg-white rounded-xl shadow-md overflow-hidden">
-        <div v-if="loading" class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-        <div v-else>
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Usuário</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Localização</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cadastro</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div>
-                    <div class="text-sm font-medium text-gray-900">{{ user.name }}</div>
-                    <div class="text-sm text-gray-500">{{ user.email }}</div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 py-1 text-xs font-medium rounded-full" :class="user.type === 'client' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'">
-                    {{ user.type === 'client' ? 'Contratante' : 'Prestador' }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 py-1 text-xs font-medium rounded-full" :class="getStatusClass(user.status)">
-                    {{ getStatusLabel(user.status) }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.location || '-' }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(user.created_at) }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <button @click="viewUser(user.id)" class="text-blue-600 hover:text-blue-800 mr-3">Ver</button>
-                  <button @click="toggleUserStatus(user)" class="text-yellow-600 hover:text-yellow-800 mr-3">
-                    {{ user.status === 'active' ? 'Suspender' : 'Ativar' }}
-                  </button>
-                  <button @click="deleteUser(user.id)" class="text-red-600 hover:text-red-800">Excluir</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- Pagination -->
-          <div v-if="pagination.pages > 1" class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
-            <div class="text-sm text-gray-700">
-              Página {{ pagination.page }} de {{ pagination.pages }} ({{ pagination.total }} usuários)
-            </div>
-            <div class="flex space-x-2">
-              <button @click="changePage(pagination.page - 1)" :disabled="pagination.page === 1" class="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">Anterior</button>
-              <button @click="changePage(pagination.page + 1)" :disabled="pagination.page === pagination.pages" class="px-4 py-2 bg-white border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">Próxima</button>
-            </div>
+            <button @click="resetFilters" class="admin-btn admin-btn-outline w-full">
+              Limpar Filtros
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Users Table -->
+    <div class="admin-card">
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-12">
+        <div class="admin-spinner-lg"></div>
+        <p class="mt-4 admin-text-secondary">Carregando usuários...</p>
+      </div>
+
+      <!-- Table Content -->
+      <div v-else class="admin-table-container">
+        <table class="admin-table">
+          <thead class="admin-table-head">
+            <tr>
+              <th class="admin-table-th">Usuário</th>
+              <th class="admin-table-th">Tipo</th>
+              <th class="admin-table-th">Status</th>
+              <th class="admin-table-th">Localização</th>
+              <th class="admin-table-th">Cadastro</th>
+              <th class="admin-table-th">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="admin-table-body">
+            <tr v-for="user in users" :key="user.id" class="admin-table-row">
+              <td class="admin-table-td">
+                <div>
+                  <div class="font-medium admin-text-primary">{{ user.name }}</div>
+                  <div class="admin-text-xs admin-text-secondary">{{ user.email }}</div>
+                </div>
+              </td>
+              <td class="admin-table-td">
+                <span
+                  class="admin-badge"
+                  :class="user.type === 'client' ? 'admin-badge-primary' : 'admin-badge-success'"
+                >
+                  {{ user.type === 'client' ? 'Contratante' : 'Prestador' }}
+                </span>
+              </td>
+              <td class="admin-table-td">
+                <span class="admin-badge" :class="getStatusBadgeClass(user.status)">
+                  {{ getStatusLabel(user.status) }}
+                </span>
+              </td>
+              <td class="admin-table-td admin-text-secondary">
+                {{ user.location || '-' }}
+              </td>
+              <td class="admin-table-td admin-text-secondary">
+                {{ formatDate(user.created_at) }}
+              </td>
+              <td class="admin-table-td">
+                <div class="flex gap-2">
+                  <button
+                    @click="viewUser(user.id)"
+                    class="admin-btn admin-btn-sm admin-btn-outline"
+                    title="Ver detalhes"
+                  >
+                    Ver
+                  </button>
+                  <button
+                    @click="showPromoteModal(user)"
+                    class="admin-btn admin-btn-sm admin-btn-warning"
+                    title="Promover a administrador"
+                  >
+                    Promover
+                  </button>
+                  <button
+                    @click="openToggleStatusModal(user)"
+                    class="admin-btn admin-btn-sm admin-btn-secondary"
+                    :title="user.status === 'active' ? 'Suspender usuário' : 'Ativar usuário'"
+                  >
+                    {{ user.status === 'active' ? 'Suspender' : 'Ativar' }}
+                  </button>
+                  <button
+                    @click="openDeleteModal(user)"
+                    class="admin-btn admin-btn-sm admin-btn-danger"
+                    title="Excluir usuário"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Empty State -->
+        <div v-if="users.length === 0" class="text-center py-12">
+          <p class="admin-text-secondary">Nenhum usuário encontrado</p>
+        </div>
+
+        <!-- Pagination -->
+        <div
+          v-if="pagination.pages > 1"
+          class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200"
+        >
+          <div class="admin-text-sm admin-text-secondary">
+            Página {{ pagination.page }} de {{ pagination.pages }} ({{ pagination.total }} usuários)
+          </div>
+          <div class="flex gap-2">
+            <button
+              @click="changePage(pagination.page - 1)"
+              :disabled="pagination.page === 1"
+              class="admin-btn admin-btn-sm admin-btn-outline"
+            >
+              Anterior
+            </button>
+            <button
+              @click="changePage(pagination.page + 1)"
+              :disabled="pagination.page === pagination.pages"
+              class="admin-btn admin-btn-sm admin-btn-outline"
+            >
+              Próxima
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promote to Admin Modal -->
+    <ConfirmationModal
+      :show="showPromote"
+      type="warning"
+      title="Promover Usuário a Administrador"
+      :message="`Você está prestes a promover ${selectedUser?.name} a administrador. Preencha os dados de acesso administrativo:`"
+      warningMessage="O usuário terá acesso total ao painel administrativo."
+      confirmText="Promover"
+      cancelText="Cancelar"
+      :fields="promoteFields"
+      :loading="promoting"
+      @confirm="handlePromote"
+      @cancel="closePromoteModal"
+    />
+
+    <!-- Toggle Status Modal -->
+    <ConfirmationModal
+      :show="showToggleStatus"
+      :type="selectedUser?.status === 'active' ? 'warning' : 'info'"
+      :title="selectedUser?.status === 'active' ? 'Suspender Usuário' : 'Ativar Usuário'"
+      :message="`Tem certeza que deseja ${selectedUser?.status === 'active' ? 'suspender' : 'ativar'} o usuário ${selectedUser?.name}?`"
+      :confirmText="selectedUser?.status === 'active' ? 'Suspender' : 'Ativar'"
+      cancelText="Cancelar"
+      :loading="togglingStatus"
+      @confirm="handleToggleStatus"
+      @cancel="closeToggleStatusModal"
+    />
+
+    <!-- Delete User Modal -->
+    <ConfirmationModal
+      :show="showDelete"
+      type="danger"
+      title="Excluir Usuário"
+      :message="`Tem certeza que deseja excluir o usuário ${selectedUser?.name}?`"
+      warningMessage="Esta ação não pode ser desfeita. Todos os dados do usuário serão permanentemente removidos."
+      confirmText="Sim, excluir"
+      cancelText="Cancelar"
+      :loading="deleting"
+      @confirm="handleDelete"
+      @cancel="closeDeleteModal"
+    />
+  </AdminLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { useToast } from 'vue-toastification'
+import AdminLayout from '@/components/admin/AdminLayout.vue'
+import ConfirmationModal from '@/components/admin/ConfirmationModal.vue'
 
 const router = useRouter()
-const toast = useToast()
 
 const loading = ref(true)
 const users = ref([])
-const adminUser = ref(null)
 const filters = ref({ search: '', type: '', status: '' })
 const pagination = ref({ page: 1, limit: 20, total: 0, pages: 0 })
+
+// Success/Error messages
+const successMessage = ref('')
+const errorMessage = ref('')
+
+// Promote Modal
+const showPromote = ref(false)
+const selectedUser = ref(null)
+const promoting = ref(false)
+const promoteFields = ref([
+  {
+    name: 'username',
+    label: 'Nome de usuário (admin)',
+    type: 'text',
+    placeholder: 'Digite o username do admin',
+    required: true
+  },
+  {
+    name: 'password',
+    label: 'Senha',
+    type: 'password',
+    placeholder: 'Digite a senha',
+    required: true
+  },
+  {
+    name: 'role',
+    label: 'Nível de Acesso',
+    type: 'select',
+    required: true,
+    options: [
+      { value: 'admin', label: 'Administrador' },
+      { value: 'super_admin', label: 'Super Admin' }
+    ]
+  }
+])
+
+// Toggle Status Modal
+const showToggleStatus = ref(false)
+const togglingStatus = ref(false)
+
+// Delete Modal
+const showDelete = ref(false)
+const deleting = ref(false)
 
 const fetchUsers = async () => {
   try {
@@ -159,7 +298,7 @@ const fetchUsers = async () => {
     if (error.response?.status === 401) {
       router.push('/admin/login')
     } else {
-      toast.error('Erro ao carregar usuários')
+      errorMessage.value = 'Erro ao carregar usuários'
     }
   } finally {
     loading.value = false
@@ -177,14 +316,14 @@ const changePage = (page) => {
   fetchUsers()
 }
 
-const getStatusClass = (status) => {
+const getStatusBadgeClass = (status) => {
   const classes = {
-    active: 'bg-green-100 text-green-800',
-    inactive: 'bg-gray-100 text-gray-800',
-    suspended: 'bg-red-100 text-red-800',
-    pending: 'bg-yellow-100 text-yellow-800'
+    active: 'admin-badge-success',
+    inactive: 'admin-badge-neutral',
+    suspended: 'admin-badge-danger',
+    pending: 'admin-badge-warning'
   }
-  return classes[status] || 'bg-gray-100 text-gray-800'
+  return classes[status] || 'admin-badge-neutral'
 }
 
 const getStatusLabel = (status) => {
@@ -200,52 +339,138 @@ const viewUser = (id) => {
   router.push(`/admin/users/${id}`)
 }
 
-const toggleUserStatus = async (user) => {
+// Promote to Admin
+const showPromoteModal = (user) => {
+  selectedUser.value = user
+  showPromote.value = true
+}
+
+const closePromoteModal = () => {
+  showPromote.value = false
+  selectedUser.value = null
+}
+
+const handlePromote = async (formData) => {
   try {
-    const newStatus = user.status === 'active' ? 'suspended' : 'active'
+    promoting.value = true
     const token = localStorage.getItem('adminToken')
     
-    await axios.patch(`${import.meta.env.VITE_API_URL}/api/admin/users/${user.id}/status`, { status: newStatus }, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/promote`,
+      formData,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    )
 
-    toast.success('Status atualizado com sucesso')
+    if (response.data.success) {
+      successMessage.value = `${selectedUser.value.name} foi promovido a administrador com sucesso!`
+      closePromoteModal()
+      fetchUsers()
+      
+      // Auto-dismiss success message after 5s
+      setTimeout(() => {
+        successMessage.value = ''
+      }, 5000)
+    }
+  } catch (error) {
+    console.error('Error promoting user:', error)
+    if (error.response?.data?.message) {
+      errorMessage.value = error.response.data.message
+    } else {
+      errorMessage.value = 'Erro ao promover usuário a administrador'
+    }
+  } finally {
+    promoting.value = false
+  }
+}
+
+// Toggle Status
+const openToggleStatusModal = (user) => {
+  selectedUser.value = user
+  showToggleStatus.value = true
+}
+
+const closeToggleStatusModal = () => {
+  showToggleStatus.value = false
+  selectedUser.value = null
+}
+
+const handleToggleStatus = async () => {
+  try {
+    togglingStatus.value = true
+    const newStatus = selectedUser.value.status === 'active' ? 'suspended' : 'active'
+    const token = localStorage.getItem('adminToken')
+    
+    await axios.patch(
+      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/status`,
+      { status: newStatus },
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    )
+
+    successMessage.value = 'Status atualizado com sucesso'
+    closeToggleStatusModal()
     fetchUsers()
+    
+    // Auto-dismiss success message after 3s
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (error) {
     console.error('Error updating user status:', error)
-    toast.error('Erro ao atualizar status')
+    errorMessage.value = 'Erro ao atualizar status do usuário'
+  } finally {
+    togglingStatus.value = false
   }
 }
 
-const deleteUser = async (id) => {
-  if (!confirm('Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.')) return
+// Delete User
+const openDeleteModal = (user) => {
+  selectedUser.value = user
+  showDelete.value = true
+}
 
+const closeDeleteModal = () => {
+  showDelete.value = false
+  selectedUser.value = null
+}
+
+const handleDelete = async () => {
   try {
+    deleting.value = true
     const token = localStorage.getItem('adminToken')
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/admin/users/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    
+    await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}`,
+      {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+    )
 
-    toast.success('Usuário excluído com sucesso')
+    successMessage.value = 'Usuário excluído com sucesso'
+    closeDeleteModal()
     fetchUsers()
+    
+    // Auto-dismiss success message after 3s
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 3000)
   } catch (error) {
     console.error('Error deleting user:', error)
-    toast.error('Erro ao excluir usuário')
+    errorMessage.value = 'Erro ao excluir usuário'
+  } finally {
+    deleting.value = false
   }
-}
-
-const handleLogout = () => {
-  localStorage.removeItem('adminToken')
-  localStorage.removeItem('adminUser')
-  toast.success('Logout realizado com sucesso')
-  router.push('/admin/login')
 }
 
 onMounted(() => {
-  const storedAdmin = localStorage.getItem('adminUser')
-  if (storedAdmin) {
-    adminUser.value = JSON.parse(storedAdmin)
-  }
   fetchUsers()
 })
 </script>
+
+<style scoped>
+@import '@/assets/admin-design-system.css';
+</style>
+

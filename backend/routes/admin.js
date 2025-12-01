@@ -332,6 +332,50 @@ router.delete('/users/:id', adminAuth, async (req, res) => {
   }
 });
 
+// Promote user to admin
+router.post('/users/:id/promote', adminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, password, role = 'admin' } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ error: 'Username e password são obrigatórios' });
+    }
+
+    // Verificar se usuário existe
+    const userCheck = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+    if (userCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+
+    const user = userCheck.rows[0];
+
+    // Hash da senha
+    const bcrypt = require('bcrypt');
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Criar admin_user
+    const result = await db.query(
+      `INSERT INTO admin_users (username, password, name, email, role)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, username, name, email, role, created_at`,
+      [username, hashedPassword, user.name, user.email, role]
+    );
+
+    res.json({
+      success: true,
+      data: result.rows[0],
+      message: `${user.name} foi promovido a administrador`
+    });
+  } catch (error) {
+    if (error.code === '23505') {
+      return res.status(409).json({ error: 'Username já existe' });
+    }
+    console.error('Promote user error:', error);
+    res.status(500).json({ error: 'Erro ao promover usuário' });
+  }
+});
+
 // ===== PROJECT MANAGEMENT =====
 
 // Get all projects with filters
