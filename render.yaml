@@ -49,6 +49,10 @@ services:
     publishDir: dist
     autoDeploy: true
     # Auto-deploy habilitado para atualizações contínuas
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: NPM_CONFIG_PRODUCTION
         value: "false"
