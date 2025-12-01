@@ -647,18 +647,19 @@ router.post('/settings', adminAuth, async (req, res) => {
 router.post('/run-migrations', adminAuth, async (req, res) => {
   try {
     const { runMigrations } = require('../scripts/auto-migrate-module');
-    const result = await runMigrations();
+    const logs = await runMigrations();
     
     res.json({
       success: true,
       message: 'Migrações executadas com sucesso',
-      details: result
+      logs: logs
     });
   } catch (error) {
     console.error('Run migrations error:', error);
     res.status(500).json({ 
       error: 'Erro ao executar migrações',
-      details: error.message
+      details: error.message,
+      logs: [error.message]
     });
   }
 });
