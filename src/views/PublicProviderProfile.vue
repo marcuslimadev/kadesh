@@ -119,14 +119,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { StarIcon, CheckCircleIcon, CurrencyDollarIcon } from '@heroicons/vue/24/solid'
 import ReviewList from '@/components/review/ReviewList.vue'
 import api from '@/services/api'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const providerId = ref(route.params.id)
 const provider = ref(null)
@@ -168,7 +168,7 @@ const loadProvider = async () => {
     }
   } catch (error) {
     console.error('Error loading provider:', error)
-    toast.error('Erro ao carregar perfil do prestador')
+    // toast.error('Erro ao carregar perfil do prestador')
     provider.value = null
   } finally {
     loading.value = false

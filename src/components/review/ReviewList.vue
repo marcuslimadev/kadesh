@@ -115,7 +115,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { StarIcon } from '@heroicons/vue/24/solid'
 import api from '@/services/api'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const props = defineProps({
   userId: {
@@ -124,7 +124,7 @@ const props = defineProps({
   }
 })
 
-const toast = useToast()
+// const toast = useToast()
 const reviews = ref([])
 const loading = ref(false)
 const stats = ref(null)
@@ -167,7 +167,7 @@ const loadReviews = async (append = false) => {
     }
   } catch (error) {
     console.error('Error loading reviews:', error)
-    toast.error('Erro ao carregar avaliações')
+    // toast.error('Erro ao carregar avaliações')
   } finally {
     loading.value = false
   }

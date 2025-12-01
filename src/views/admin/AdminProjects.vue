@@ -33,15 +33,15 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const handleLogout = () => {
   localStorage.removeItem('adminToken')
   localStorage.removeItem('adminUser')
-  toast.success('Logout realizado com sucesso')
+    // toast.success('Logout realizado com sucesso')
   router.push('/admin/login')
 }
 </script>

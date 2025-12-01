@@ -87,7 +87,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import api from '@/services/api'
 
 const props = defineProps({
@@ -105,7 +105,7 @@ const props = defineProps({
   }
 })
 
-const toast = useToast()
+// const toast = useToast()
 const loading = ref(false)
 const form = ref({
   title: '',
@@ -122,7 +122,7 @@ const createMilestone = async () => {
       ...form.value
     })
 
-    toast.success('Milestone criado com sucesso!')
+    // toast.success('Milestone criado com sucesso!')
     
     // Reset form
     form.value = {
@@ -137,7 +137,7 @@ const createMilestone = async () => {
     }
   } catch (error) {
     console.error('Error creating milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao criar milestone')
+    // toast.error(error.response?.data?.error || 'Erro ao criar milestone')
   } finally {
     loading.value = false
   }

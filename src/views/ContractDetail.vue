@@ -113,13 +113,13 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import api from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import MilestoneList from '@/components/milestone/MilestoneList.vue'
 import ChatBox from '@/components/chat/ChatBox.vue'
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 const auth = useAuthStore()
 
 const id = route.params.id
@@ -154,10 +154,10 @@ async function markComplete(){
   actionLoading.value = true
   try {
     await api.put(`/api/contracts/${id}/mark-complete`)
-    toast.success('Contrato marcado como completo')
+    // toast.success('Contrato marcado como completo')
     fetchContract()
   } catch(e){
-    toast.error('Erro ao marcar como completo')
+    // toast.error('Erro ao marcar como completo')
   } finally {
     actionLoading.value = false
   }
@@ -167,10 +167,10 @@ async function acceptCompletion(){
   actionLoading.value = true
   try {
     await api.put(`/api/contracts/${id}/accept-completion`)
-    toast.success('Entrega aceita, pagamento será liberado')
+    // toast.success('Entrega aceita, pagamento será liberado')
     fetchContract()
   } catch(e){
-    toast.error('Erro ao aceitar entrega')
+    // toast.error('Erro ao aceitar entrega')
   } finally {
     actionLoading.value = false
   }
@@ -181,10 +181,10 @@ async function openDispute(){
   if (!reason) return
   try {
     await api.put(`/api/contracts/${id}/dispute`, { reason })
-    toast.success('Disputa registrada')
+    // toast.success('Disputa registrada')
     fetchContract()
   } catch(e){
-    toast.error('Erro ao abrir disputa')
+    // toast.error('Erro ao abrir disputa')
   }
 }
 
@@ -193,10 +193,10 @@ async function cancelContract(){
   if (!reason) return
   try {
     await api.put(`/api/contracts/${id}/cancel`, { reason })
-    toast.success('Contrato cancelado')
+    // toast.success('Contrato cancelado')
     router.push({ name: 'contracts' })
   } catch(e){
-    toast.error('Erro ao cancelar')
+    // toast.error('Erro ao cancelar')
   }
 }
 
@@ -210,12 +210,12 @@ async function submitReview(){
       rating: review.value.rating,
       comment: review.value.comment
     })
-    toast.success('Avaliação enviada')
+    // toast.success('Avaliação enviada')
   } catch(e){
     if (e?.response?.status === 409) {
-      toast.info('Você já avaliou este contrato')
+    // toast.info('Você já avaliou este contrato')
     } else {
-      toast.error('Erro ao enviar avaliação')
+    // toast.error('Erro ao enviar avaliação')
     }
   } finally {
     reviewLoading.value = false

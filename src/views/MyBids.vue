@@ -242,12 +242,12 @@ import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import bidService from '@/services/bidService'
 import projectService from '@/services/projectService'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 const authStore = useAuthStore()
-const toast = useToast()
+// const toast = useToast()
 
 const bids = ref([])
 const isLoading = ref(false)
@@ -367,18 +367,18 @@ const withdrawBid = async (bidId) => {
     const result = await bidService.withdrawBid(bidId)
     
     if (result.success) {
-      toast.success('Proposta retirada com sucesso')
+    // toast.success('Proposta retirada com sucesso')
       // Update bid status locally
       const bid = bids.value.find(b => b.id === bidId)
       if (bid) {
         bid.status = 'withdrawn'
       }
     } else {
-      toast.error(result.error || 'Erro ao retirar proposta')
+    // toast.error(result.error || 'Erro ao retirar proposta')
     }
   } catch (err) {
     console.error('Error withdrawing bid:', err)
-    toast.error('Erro ao retirar proposta')
+    // toast.error('Erro ao retirar proposta')
   }
 }
 

@@ -109,7 +109,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import api from '@/services/api'
 
 const props = defineProps({
@@ -129,7 +129,7 @@ const props = defineProps({
 
 const emit = defineEmits(['updated'])
 
-const toast = useToast()
+// const toast = useToast()
 const loading = ref(false)
 const showRejectDialog = ref(false)
 const rejectionReason = ref('')
@@ -168,11 +168,11 @@ const submitMilestone = async () => {
   loading.value = true
   try {
     await api.put(`/api/milestones/${props.milestone.id}/submit`)
-    toast.success('Milestone enviado para aprovação!')
+    // toast.success('Milestone enviado para aprovação!')
     emit('updated')
   } catch (error) {
     console.error('Error submitting milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao enviar milestone')
+    // toast.error(error.response?.data?.error || 'Erro ao enviar milestone')
   } finally {
     loading.value = false
   }
@@ -182,11 +182,11 @@ const approveMilestone = async () => {
   loading.value = true
   try {
     await api.put(`/api/milestones/${props.milestone.id}/approve`)
-    toast.success('Milestone aprovado!')
+    // toast.success('Milestone aprovado!')
     emit('updated')
   } catch (error) {
     console.error('Error approving milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao aprovar milestone')
+    // toast.error(error.response?.data?.error || 'Erro ao aprovar milestone')
   } finally {
     loading.value = false
   }
@@ -198,13 +198,13 @@ const rejectMilestone = async () => {
     await api.put(`/api/milestones/${props.milestone.id}/reject`, {
       rejection_reason: rejectionReason.value
     })
-    toast.success('Milestone rejeitado')
+    // toast.success('Milestone rejeitado')
     showRejectDialog.value = false
     rejectionReason.value = ''
     emit('updated')
   } catch (error) {
     console.error('Error rejecting milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao rejeitar milestone')
+    // toast.error(error.response?.data?.error || 'Erro ao rejeitar milestone')
   } finally {
     loading.value = false
   }
@@ -218,11 +218,11 @@ const releaseMilestone = async () => {
   loading.value = true
   try {
     await api.put(`/api/milestones/${props.milestone.id}/release`)
-    toast.success('Pagamento liberado com sucesso!')
+    // toast.success('Pagamento liberado com sucesso!')
     emit('updated')
   } catch (error) {
     console.error('Error releasing milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao liberar pagamento')
+    // toast.error(error.response?.data?.error || 'Erro ao liberar pagamento')
   } finally {
     loading.value = false
   }
@@ -236,11 +236,11 @@ const deleteMilestone = async () => {
   loading.value = true
   try {
     await api.delete(`/api/milestones/${props.milestone.id}`)
-    toast.success('Milestone excluído')
+    // toast.success('Milestone excluído')
     emit('updated')
   } catch (error) {
     console.error('Error deleting milestone:', error)
-    toast.error(error.response?.data?.error || 'Erro ao excluir milestone')
+    // toast.error(error.response?.data?.error || 'Erro ao excluir milestone')
   } finally {
     loading.value = false
   }

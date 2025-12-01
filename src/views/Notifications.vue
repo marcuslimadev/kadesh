@@ -186,12 +186,12 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/ui/Pagination.vue'
 import notificationService from '@/services/notificationService'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const notifications = ref([])
 const isLoading = ref(false)
@@ -347,13 +347,13 @@ const markAsRead = async (notificationId) => {
       if (notification) {
         notification.is_read = true
       }
-      toast.success('Notificação marcada como lida')
+    // toast.success('Notificação marcada como lida')
     } else {
-      toast.error(result.error || 'Erro ao marcar notificação como lida')
+    // toast.error(result.error || 'Erro ao marcar notificação como lida')
     }
   } catch (err) {
     console.error('Error marking notification as read:', err)
-    toast.error('Erro ao marcar notificação como lida')
+    // toast.error('Erro ao marcar notificação como lida')
   }
 }
 
@@ -365,13 +365,13 @@ const markAllAsRead = async () => {
       notifications.value.forEach(n => {
         n.is_read = true
       })
-      toast.success('Todas as notificações foram marcadas como lidas')
+    // toast.success('Todas as notificações foram marcadas como lidas')
     } else {
-      toast.error(result.error || 'Erro ao marcar notificações como lidas')
+    // toast.error(result.error || 'Erro ao marcar notificações como lidas')
     }
   } catch (err) {
     console.error('Error marking all notifications as read:', err)
-    toast.error('Erro ao marcar notificações como lidas')
+    // toast.error('Erro ao marcar notificações como lidas')
   }
 }
 
@@ -388,13 +388,13 @@ const deleteNotification = async (notificationId) => {
       if (index !== -1) {
         notifications.value.splice(index, 1)
       }
-      toast.success('Notificação excluída')
+    // toast.success('Notificação excluída')
     } else {
-      toast.error(result.error || 'Erro ao excluir notificação')
+    // toast.error(result.error || 'Erro ao excluir notificação')
     }
   } catch (err) {
     console.error('Error deleting notification:', err)
-    toast.error('Erro ao excluir notificação')
+    // toast.error('Erro ao excluir notificação')
   }
 }
 

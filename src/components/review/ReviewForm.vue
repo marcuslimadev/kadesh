@@ -68,7 +68,7 @@
 <script setup>
 import { ref } from 'vue'
 import { StarIcon } from '@heroicons/vue/24/solid'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import api from '@/services/api'
 
 const props = defineProps({
@@ -94,7 +94,7 @@ const props = defineProps({
   }
 })
 
-const toast = useToast()
+// const toast = useToast()
 const rating = ref(0)
 const comment = ref('')
 const loading = ref(false)
@@ -109,7 +109,7 @@ const ratingLabels = [
 
 const submitReview = async () => {
   if (!rating.value) {
-    toast.warning('Selecione uma nota')
+    // toast.warning('Selecione uma nota')
     return
   }
 
@@ -122,7 +122,7 @@ const submitReview = async () => {
       comment: comment.value || null
     })
 
-    toast.success('Avaliação enviada com sucesso!')
+    // toast.success('Avaliação enviada com sucesso!')
     
     if (props.onSuccess) {
       props.onSuccess()
@@ -133,7 +133,7 @@ const submitReview = async () => {
     comment.value = ''
   } catch (error) {
     console.error('Error submitting review:', error)
-    toast.error(error.response?.data?.message || 'Erro ao enviar avaliação')
+    // toast.error(error.response?.data?.message || 'Erro ao enviar avaliação')
   } finally {
     loading.value = false
   }

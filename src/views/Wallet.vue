@@ -451,9 +451,9 @@ import { ref, computed, onMounted, watch } from 'vue'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import walletService from '@/services/walletService'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
-const toast = useToast()
+// const toast = useToast()
 
 const transactions = ref([])
 const isLoading = ref(false)
@@ -692,7 +692,7 @@ const handleDeposit = async () => {
 
     if (result.success) {
       const checkoutUrl = result.data?.data?.checkout_url
-      toast.success('Checkout seguro criado! Finalize o pagamento no Mercado Pago.')
+    // toast.success('Checkout seguro criado! Finalize o pagamento no Mercado Pago.')
       closeDepositModal()
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank', 'noopener')
@@ -732,7 +732,7 @@ const handleWithdraw = async () => {
     )
 
     if (result.success) {
-      toast.success('Solicitação de saque registrada!')
+    // toast.success('Solicitação de saque registrada!')
       closeWithdrawModal()
       await loadTransactions()
     } else {
@@ -764,7 +764,7 @@ const loadPendingDeposits = async () => {
 
 const openCheckoutLink = (url) => {
   if (!url) {
-    toast.error('Link de checkout indisponível')
+    // toast.error('Link de checkout indisponível')
     return
   }
   window.open(url, '_blank', 'noopener')
@@ -772,16 +772,16 @@ const openCheckoutLink = (url) => {
 
 const copyCheckoutLink = async (url) => {
   if (!url) {
-    toast.error('Link não encontrado')
+    // toast.error('Link não encontrado')
     return
   }
 
   try {
     await navigator.clipboard.writeText(url)
-    toast.success('Link copiado!')
+    // toast.success('Link copiado!')
   } catch (error) {
     console.error('Clipboard error:', error)
-    toast.error('Não foi possível copiar o link')
+    // toast.error('Não foi possível copiar o link')
   }
 }
 

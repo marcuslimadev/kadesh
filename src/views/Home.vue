@@ -716,7 +716,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
 import AdRail from '@/components/layout/AdRail.vue'
 import api from '@/services/api'
@@ -740,7 +740,7 @@ import {
 
 const router = useRouter()
 const authStore = useAuthStore()
-const toast = typeof window !== 'undefined' ? useToast() : null
+// const toast = typeof window !== 'undefined' ? useToast() : null
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 

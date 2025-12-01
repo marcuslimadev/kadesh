@@ -438,7 +438,7 @@ import StatusBadge from '@/components/ui/StatusBadge.vue'
 import BidCard from '@/components/project/BidCard.vue'
 import projectService from '@/services/projectService'
 import bidService from '@/services/bidService'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { formatDistanceToNow, differenceInSeconds } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
@@ -446,7 +446,7 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const projectsStore = useProjectsStore()
-const toast = useToast()
+// const toast = useToast()
 
 const project = ref(null)
 const bids = ref([])
@@ -627,13 +627,13 @@ const removeAttachment = async (attachmentId) => {
     if (result.success) {
       const filtered = attachmentsList.value.filter(item => item.id !== attachmentId)
       project.value.attachments = filtered
-      toast.success('Anexo removido com sucesso')
+    // toast.success('Anexo removido com sucesso')
     } else {
-      toast.error(result.error || 'Erro ao remover anexo')
+    // toast.error(result.error || 'Erro ao remover anexo')
     }
   } catch (error) {
     console.error('Erro ao remover anexo:', error)
-    toast.error('Erro ao remover anexo')
+    // toast.error('Erro ao remover anexo')
   } finally {
     deletingAttachmentId.value = null
   }
@@ -651,7 +651,7 @@ const handleAttachmentUpload = async (event) => {
     for (const file of files) {
       if (file.size > 5 * 1024 * 1024) {
         failed++
-        toast.error(`${file.name} excede 5MB`)
+    // toast.error(`${file.name} excede 5MB`)
         continue
       }
 
@@ -663,20 +663,20 @@ const handleAttachmentUpload = async (event) => {
           project.value.attachments = [...current, response.data.attachment]
         } else {
           failed++
-          toast.error(response.error || `Erro ao enviar ${file.name}`)
+    // toast.error(response.error || `Erro ao enviar ${file.name}`)
         }
       } catch (error) {
         failed++
         console.error('Erro ao enviar anexo:', error)
-        toast.error(`Erro ao enviar ${file.name}`)
+    // toast.error(`Erro ao enviar ${file.name}`)
       }
     }
 
     if (uploaded) {
-      toast.success(`${uploaded} anexo(s) enviado(s) com sucesso`)
+    // toast.success(`${uploaded} anexo(s) enviado(s) com sucesso`)
     }
     if (failed) {
-      toast.error(`${failed} anexo(s) falharam. Tente novamente.`)
+    // toast.error(`${failed} anexo(s) falharam. Tente novamente.`)
     }
   } finally {
     isUploadingAttachment.value = false
@@ -792,23 +792,23 @@ const loadBids = async () => {
 
 const submitBid = async () => {
   if (!authStore.isAuthenticated) {
-    toast.error('Você precisa fazer login para enviar uma proposta')
+    // toast.error('Você precisa fazer login para enviar uma proposta')
     router.push('/login')
     return
   }
 
   if (!authStore.isProvider) {
-    toast.error('Apenas prestadores podem enviar propostas')
+    // toast.error('Apenas prestadores podem enviar propostas')
     return
   }
 
   if (!bidForm.value.amount || !bidForm.value.proposal || !bidForm.value.delivery_time) {
-    toast.error('Por favor, preencha todos os campos')
+    // toast.error('Por favor, preencha todos os campos')
     return
   }
 
   if (!bidForm.value.proposal.trim()) {
-    toast.error('Descrição da proposta é obrigatória')
+    // toast.error('Descrição da proposta é obrigatória')
     return
   }
 
@@ -825,7 +825,7 @@ const submitBid = async () => {
     const result = await bidService.createBid(bidData)
     
     if (result.success) {
-      toast.success('Proposta enviada com sucesso!')
+    // toast.success('Proposta enviada com sucesso!')
       showBidForm.value = false
       bidForm.value = {
         amount: null,
@@ -835,11 +835,11 @@ const submitBid = async () => {
       // Reload bids to show the new one
       await loadBids()
     } else {
-      toast.error(result.error || 'Erro ao enviar proposta')
+    // toast.error(result.error || 'Erro ao enviar proposta')
     }
   } catch (err) {
     console.error('Error submitting bid:', err)
-    toast.error('Erro ao enviar proposta')
+    // toast.error('Erro ao enviar proposta')
   } finally {
     isBidSubmitting.value = false
   }
@@ -854,15 +854,15 @@ const acceptBid = async (bidId) => {
     const result = await bidService.acceptBid(project.value.id, bidId)
     
     if (result.success) {
-      toast.success('Proposta aceita com sucesso!')
+    // toast.success('Proposta aceita com sucesso!')
       // Reload project and bids
       await loadProject()
     } else {
-      toast.error(result.error || 'Erro ao aceitar proposta')
+    // toast.error(result.error || 'Erro ao aceitar proposta')
     }
   } catch (err) {
     console.error('Error accepting bid:', err)
-    toast.error('Erro ao aceitar proposta')
+    // toast.error('Erro ao aceitar proposta')
   }
 }
 
@@ -875,21 +875,21 @@ const rejectBid = async (bidId) => {
     const result = await bidService.rejectBid(bidId)
     
     if (result.success) {
-      toast.success('Proposta rejeitada')
+    // toast.success('Proposta rejeitada')
       // Reload bids
       await loadBids()
     } else {
-      toast.error(result.error || 'Erro ao rejeitar proposta')
+    // toast.error(result.error || 'Erro ao rejeitar proposta')
     }
   } catch (err) {
     console.error('Error rejecting bid:', err)
-    toast.error('Erro ao rejeitar proposta')
+    // toast.error('Erro ao rejeitar proposta')
   }
 }
 
 const closeAuction = async () => {
   if (bids.value.length === 0) {
-    toast.error('Não há propostas para selecionar um vencedor')
+    // toast.error('Não há propostas para selecionar um vencedor')
     return
   }
 
@@ -907,15 +907,15 @@ const closeAuction = async () => {
     const result = await projectService.closeAuction(project.value.id)
     
     if (result.success) {
-      toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
+    // toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
       // Reload project and bids to show updated status
       await loadProject()
     } else {
-      toast.error(result.error || 'Erro ao encerrar leilão')
+    // toast.error(result.error || 'Erro ao encerrar leilão')
     }
   } catch (err) {
     console.error('Error closing auction:', err)
-    toast.error('Erro ao encerrar leilão')
+    // toast.error('Erro ao encerrar leilão')
   } finally {
     isClosingAuction.value = false
   }

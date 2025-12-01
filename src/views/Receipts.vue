@@ -188,12 +188,12 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import api from '@/services/api'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const toast = useToast()
+// const toast = useToast()
 
 const activeTab = ref('contracts')
 const loading = ref(false)
@@ -212,7 +212,7 @@ const loadContracts = async () => {
     contracts.value = response.data.contracts || response.data || []
   } catch (error) {
     console.error('Erro ao carregar contratos:', error)
-    toast.error('Erro ao carregar contratos')
+    // toast.error('Erro ao carregar contratos')
   } finally {
     loading.value = false
   }
@@ -225,7 +225,7 @@ const loadTransactions = async () => {
     transactions.value = response.data.transactions || response.data || []
   } catch (error) {
     console.error('Erro ao carregar transações:', error)
-    toast.error('Erro ao carregar transações')
+    // toast.error('Erro ao carregar transações')
   } finally {
     loading.value = false
   }
@@ -256,10 +256,10 @@ const generateReceipt = async (item, type) => {
     link.remove()
     window.URL.revokeObjectURL(url)
 
-    toast.success('Comprovante gerado com sucesso!')
+    // toast.success('Comprovante gerado com sucesso!')
   } catch (error) {
     console.error('Erro ao gerar comprovante:', error)
-    toast.error('Erro ao gerar comprovante. Tente novamente.')
+    // toast.error('Erro ao gerar comprovante. Tente novamente.')
   } finally {
     generatingId.value = null
   }

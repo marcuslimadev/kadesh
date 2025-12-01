@@ -140,10 +140,10 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const loading = ref(true)
 const disputes = ref([])
@@ -181,7 +181,7 @@ const fetchDisputes = async () => {
   } catch (error) {
     console.error('Error fetching disputes:', error)
     if (error.response?.status === 401) router.push('/admin/login')
-    toast.error('Erro ao carregar disputas')
+    // toast.error('Erro ao carregar disputas')
   } finally {
     loading.value = false
   }
@@ -201,7 +201,7 @@ const viewDetails = async (contractId) => {
     }
   } catch (error) {
     console.error('Error fetching dispute detail:', error)
-    toast.error('Erro ao carregar detalhes')
+    // toast.error('Erro ao carregar detalhes')
   } finally {
     detailLoading.value = false
   }
@@ -222,12 +222,12 @@ const resolve = async (action) => {
       { action, notes: resolutionNotes.value },
       { headers: { Authorization: `Bearer ${token}` } }
     )
-    toast.success('Disputa resolvida com sucesso')
+    // toast.success('Disputa resolvida com sucesso')
     closeModal()
     fetchDisputes()
   } catch (error) {
     console.error('Error resolving dispute:', error)
-    toast.error(error.response?.data?.error || 'Erro ao resolver disputa')
+    // toast.error(error.response?.data?.error || 'Erro ao resolver disputa')
   } finally {
     resolving.value = false
   }
@@ -236,7 +236,7 @@ const resolve = async (action) => {
 const handleLogout = () => {
   localStorage.removeItem('adminToken')
   localStorage.removeItem('adminUser')
-  toast.success('Logout realizado com sucesso')
+    // toast.success('Logout realizado com sucesso')
   router.push('/admin/login')
 }
 

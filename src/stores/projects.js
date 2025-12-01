@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
-const toast = useToast()
+// const toast = useToast()
 
 export const useProjectsStore = defineStore('projects', () => {
   // State
@@ -90,7 +90,7 @@ export const useProjectsStore = defineStore('projects', () => {
       projects.value.unshift(newProject)
       userProjects.value.unshift(newProject)
 
-      toast.success('Projeto criado com sucesso!')
+  // toast.success('Projeto criado com sucesso!')
       return { success: true, project: newProject }
     } catch (error) {
       console.error('Create project error:', error)
@@ -125,7 +125,7 @@ export const useProjectsStore = defineStore('projects', () => {
         currentProject.value = updatedProject
       }
 
-      toast.success('Projeto atualizado com sucesso!')
+  // toast.success('Projeto atualizado com sucesso!')
       return { success: true, project: updatedProject }
     } catch (error) {
       console.error('Update project error:', error)
@@ -151,7 +151,7 @@ export const useProjectsStore = defineStore('projects', () => {
         currentProject.value = null
       }
 
-      toast.success('Projeto deletado com sucesso!')
+  // toast.success('Projeto deletado com sucesso!')
       return { success: true }
     } catch (error) {
       console.error('Delete project error:', error)

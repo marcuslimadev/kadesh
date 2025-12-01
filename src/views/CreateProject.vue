@@ -543,11 +543,11 @@ Preferência por design clean e profissional, com cores azul e branco."
 <script setup>
 import { ref, reactive, computed, watch, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import projectService from '@/services/projectService'
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 // Load categories from shared service
 const categories = projectService.getCategories()
@@ -693,13 +693,13 @@ const addFilesFromInput = (fileList) => {
   const availableSlots = MAX_ATTACHMENTS - attachments.value.length
 
   if (availableSlots <= 0) {
-    toast.warning(`Você pode anexar no máximo ${MAX_ATTACHMENTS} arquivos`)
+    // toast.warning(`Você pode anexar no máximo ${MAX_ATTACHMENTS} arquivos`)
     return
   }
 
   files.slice(0, availableSlots).forEach(file => {
     if (file.size > MAX_FILE_SIZE) {
-      toast.error(`${file.name} excede ${MAX_FILE_SIZE_MB}MB`)
+    // toast.error(`${file.name} excede ${MAX_FILE_SIZE_MB}MB`)
       return
     }
 
@@ -713,7 +713,7 @@ const addFilesFromInput = (fileList) => {
   })
 
   if (files.length > availableSlots) {
-    toast.info(`Limitamos os anexos aos ${MAX_ATTACHMENTS} permitidos`)
+    // toast.info(`Limitamos os anexos aos ${MAX_ATTACHMENTS} permitidos`)
   }
 }
 
@@ -764,11 +764,11 @@ const uploadSelectedAttachments = async (projectId) => {
         uploaded++
       } else {
         failed++
-        toast.error(response.error || `Erro ao enviar ${attachment.file.name}`)
+    // toast.error(response.error || `Erro ao enviar ${attachment.file.name}`)
       }
     } catch (error) {
       failed++
-      toast.error(`Erro ao enviar ${attachment.file.name}`)
+    // toast.error(`Erro ao enviar ${attachment.file.name}`)
     }
   }
 
@@ -838,7 +838,7 @@ const buildDeadlineISO = () => {
 
 const handleSubmit = async () => {
   if (!validateForm()) {
-    toast.error('Por favor, corrija os erros antes de continuar')
+    // toast.error('Por favor, corrija os erros antes de continuar')
     return
   }
 
@@ -863,23 +863,23 @@ const handleSubmit = async () => {
       const attachmentSummary = await uploadSelectedAttachments(projectId)
 
       if (attachmentSummary.uploaded) {
-        toast.success(`🎉 Projeto criado e ${attachmentSummary.uploaded} anexo(s) enviados com sucesso!`)
+    // toast.success(`🎉 Projeto criado e ${attachmentSummary.uploaded} anexo(s) enviados com sucesso!`)
       } else {
-        toast.success('🎉 Projeto criado com sucesso! Agora você receberá propostas de profissionais qualificados.')
+    // toast.success('🎉 Projeto criado com sucesso! Agora você receberá propostas de profissionais qualificados.')
       }
 
       if (attachmentSummary.failed) {
-        toast.error(`${attachmentSummary.failed} anexo(s) não puderam ser enviados. Você pode tentar novamente na página do projeto.`)
+    // toast.error(`${attachmentSummary.failed} anexo(s) não puderam ser enviados. Você pode tentar novamente na página do projeto.`)
       }
 
       router.push(`/projects/${projectId}`)
     } else {
       errors.general = result.error
-      toast.error(result.error)
+    // toast.error(result.error)
     }
   } catch (error) {
     errors.general = 'Erro ao criar projeto. Tente novamente.'
-    toast.error('Erro ao criar projeto. Tente novamente.')
+    // toast.error('Erro ao criar projeto. Tente novamente.')
   } finally {
     isSubmitting.value = false
   }

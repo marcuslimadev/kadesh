@@ -376,7 +376,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { useViewModeStore } from '@/stores/viewModeStore'
 import projectService from '@/services/projectService'
 import api from '@/services/api'
@@ -384,7 +384,7 @@ import AdRail from '@/components/layout/AdRail.vue'
 
 const viewModeStore = useViewModeStore()
 const { currentMode } = storeToRefs(viewModeStore)
-const toast = useToast()
+// const toast = useToast()
 
 const isContractorView = computed(() => currentMode.value === 'contractor')
 const isProviderView = computed(() => currentMode.value === 'provider')
@@ -684,11 +684,11 @@ const closeCategoryModal = () => {
 
 const submitCategoryRequest = () => {
   if (!newCategory.value.name) {
-    toast.error('Informe um nome para a categoria antes de enviar.')
+    // toast.error('Informe um nome para a categoria antes de enviar.')
     return
   }
   pendingCategories.value.push({ ...newCategory.value, created_at: new Date() })
-  toast.success('Categoria enviada para análise do administrador.')
+    // toast.success('Categoria enviada para análise do administrador.')
   closeCategoryModal()
 }
 

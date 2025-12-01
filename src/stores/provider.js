@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import providerService from '@/services/providerService'
 import { useAuthStore } from '@/stores/auth'
 
-const toast = useToast()
+// const toast = useToast()
 
 export const useProviderStore = defineStore('provider', () => {
   const profile = ref(null)
@@ -63,14 +63,14 @@ export const useProviderStore = defineStore('provider', () => {
         authStore.user = result.data
         localStorage.setItem('kadesh_user', JSON.stringify(result.data))
 
-        toast.success('Perfil atualizado com sucesso!')
+  // toast.success('Perfil atualizado com sucesso!')
       } else if (result.error) {
-        toast.error(result.error)
+  // toast.error(result.error)
       }
       return result
     } catch (error) {
       console.error('Provider store save error:', error)
-      toast.error('Erro ao salvar perfil')
+  // toast.error('Erro ao salvar perfil')
       return {
         success: false,
         error: 'Erro ao salvar perfil'

@@ -285,11 +285,11 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const toast = useToast()
+// const toast = useToast()
 
 const user = computed(() => authStore.user)
 const activeTab = ref('profile')
@@ -326,9 +326,9 @@ const updateProfile = async () => {
   isSaving.value = true
   try {
     await authStore.updateProfile(profileForm.value)
-    toast.success('Perfil atualizado com sucesso!')
+    // toast.success('Perfil atualizado com sucesso!')
   } catch (error) {
-    toast.error('Erro ao atualizar perfil')
+    // toast.error('Erro ao atualizar perfil')
     console.error(error)
   } finally {
     isSaving.value = false
@@ -343,9 +343,9 @@ const savePrivacySettings = async () => {
       emailWeekly: privacySettings.value.emailWeekly,
       profilePublic: privacySettings.value.profilePublic
     })
-    toast.success('Preferências de privacidade salvas!')
+    // toast.success('Preferências de privacidade salvas!')
   } catch (error) {
-    toast.error('Erro ao salvar preferências de privacidade')
+    // toast.error('Erro ao salvar preferências de privacidade')
   }
 }
 
@@ -355,9 +355,9 @@ const savePreferences = async () => {
       language: preferences.value.language,
       timezone: preferences.value.timezone
     })
-    toast.success('Preferências salvas!')
+    // toast.success('Preferências salvas!')
   } catch (error) {
-    toast.error('Erro ao salvar preferências')
+    // toast.error('Erro ao salvar preferências')
   }
 }
 
@@ -365,10 +365,10 @@ const deleteAccount = async () => {
   try {
     await api.delete('/api/users/profile')
     authStore.logout()
-    toast.success('Conta deletada com sucesso')
+    // toast.success('Conta deletada com sucesso')
     router.push('/')
   } catch (error) {
-    toast.error('Erro ao deletar conta')
+    // toast.error('Erro ao deletar conta')
   } finally {
     showDeleteModal.value = false
   }

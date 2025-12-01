@@ -92,10 +92,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const form = ref({
   email: '',
@@ -120,7 +120,7 @@ const handleLogin = async () => {
       localStorage.setItem('adminToken', response.data.token)
       localStorage.setItem('adminUser', JSON.stringify(response.data.admin))
       
-      toast.success('Login realizado com sucesso!')
+    // toast.success('Login realizado com sucesso!')
       
       // Redirect to admin dashboard
       router.push('/admin/dashboard')

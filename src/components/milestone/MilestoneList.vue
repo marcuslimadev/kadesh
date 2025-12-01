@@ -56,7 +56,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
 import MilestoneForm from './MilestoneForm.vue'
@@ -78,7 +78,7 @@ const props = defineProps({
 })
 
 const authStore = useAuthStore()
-const toast = useToast()
+// const toast = useToast()
 const loading = ref(true)
 const milestones = ref([])
 const showForm = ref(false)
@@ -95,7 +95,7 @@ const loadMilestones = async () => {
     escrowInfo.value = response.data.escrow_info || null
   } catch (error) {
     console.error('Error loading milestones:', error)
-    toast.error('Erro ao carregar milestones')
+    // toast.error('Erro ao carregar milestones')
   } finally {
     loading.value = false
   }

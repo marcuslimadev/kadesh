@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/services/api'
-import { useToast } from 'vue-toastification'
+// import { useToast } from 'vue-toastification'
 
 const VERIFY_TOKEN_TIMEOUT_MS = Number(import.meta.env.VITE_VERIFY_TOKEN_TIMEOUT) || 8000
 
 const getToast = () => {
   if (typeof window === 'undefined') return null
-  return useToast()
+  // return useToast()
 }
 
 const showToast = (type, message) => {
