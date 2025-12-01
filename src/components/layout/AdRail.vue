@@ -58,7 +58,7 @@
 
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/services/api'
 
 const props = defineProps({
   position: {
@@ -113,7 +113,7 @@ const mockAdvertisements = {
 
 async function loadAdvertisements() {
   try {
-    const response = await axios.get('/api/advertisements', {
+    const response = await api.get('/api/advertisements', {
       params: { position: position.value }
     })
     slots.value = response.data
@@ -126,7 +126,7 @@ async function loadAdvertisements() {
 
 async function trackClick(adId) {
   try {
-    await axios.post(`/api/advertisements/${adId}/click`)
+    await api.post(`/api/advertisements/${adId}/click`)
   } catch (error) {
     console.error('Erro ao registrar clique:', error)
   }

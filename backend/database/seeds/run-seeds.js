@@ -46,6 +46,26 @@ async function runSeeds() {
     result.rows.forEach(row => {
       console.log(`   ${row.position}: ${row.total} anúncios`);
     });
+
+    // --- SEED SYSTEM SETTINGS (Mercado Pago) ---
+    console.log('\n⚙️  Verificando configurações do sistema...');
+    const settingsToEnsure = [
+      { key: 'mp_access_token', value: '', description: 'Mercado Pago Access Token (Backend)', is_public: false },
+      { key: 'mp_public_key', value: '', description: 'Mercado Pago Public Key (Frontend)', is_public: true },
+      { key: 'mp_environment', value: 'sandbox', description: 'Mercado Pago Environment (sandbox/production)', is_public: true }
+    ];
+
+    for (const setting of settingsToEnsure) {
+      const checkSetting = await client.query('SELECT key FROM system_settings WHERE key = $1', [setting.key]);
+      if (checkSetting.rows.length === 0) {
+        await client.query(
+          'INSERT INTO system_settings (key, value, description, is_public) VALUES ($1, $2, $3, $4)',
+          [setting.key, setting.value, setting.description, setting.is_public]
+        );
+        console.log(`   + Configuração criada: ${setting.key}`);
+      }
+    }
+    console.log('✅ Configurações verificadas.');
     
     const totalResult = await client.query('SELECT COUNT(*) FROM advertisements');
     console.log(`\n📊 Total: ${totalResult.rows[0].count} anúncios criados\n`);

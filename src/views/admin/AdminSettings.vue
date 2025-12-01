@@ -248,9 +248,9 @@ const fetchSettings = async () => {
       settings.value = response.data.data
       
       // Carregar configs do MP
-      const mpPubKey = settings.value.find(s => s.key === 'mercadopago_public_key')
-      const mpAccToken = settings.value.find(s => s.key === 'mercadopago_access_token')
-      const mpEnv = settings.value.find(s => s.key === 'mercadopago_environment')
+      const mpPubKey = settings.value.find(s => s.key === 'mp_public_key')
+      const mpAccToken = settings.value.find(s => s.key === 'mp_access_token')
+      const mpEnv = settings.value.find(s => s.key === 'mp_environment')
       
       if (mpPubKey) mpPublicKey.value = mpPubKey.value
       if (mpAccToken) mpAccessToken.value = mpAccToken.value
@@ -278,9 +278,9 @@ const saveMercadoPago = async () => {
     
     // Salvar as 3 configurações
     const updates = [
-      { key: 'mercadopago_public_key', value: mpPublicKey.value, description: 'Chave pública do Mercado Pago', is_public: false },
-      { key: 'mercadopago_access_token', value: mpAccessToken.value, description: 'Access Token do Mercado Pago', is_public: false },
-      { key: 'mercadopago_environment', value: mpEnvironment.value, description: 'Ambiente do Mercado Pago (sandbox/production)', is_public: false }
+      { key: 'mp_public_key', value: mpPublicKey.value, description: 'Chave pública do Mercado Pago', is_public: true },
+      { key: 'mp_access_token', value: mpAccessToken.value, description: 'Access Token do Mercado Pago', is_public: false },
+      { key: 'mp_environment', value: mpEnvironment.value, description: 'Ambiente do Mercado Pago (sandbox/production)', is_public: true }
     ]
 
     for (const update of updates) {
