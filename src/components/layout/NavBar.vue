@@ -1,13 +1,13 @@
 <template>
   <!-- Mobile top bar -->
   <header class="md:hidden sticky top-0 z-40 bg-dark text-offwhite flex items-center justify-between px-4 py-3 shadow-lg">
-    <div class="flex items-center gap-3">
+    <button type="button" class="flex items-center gap-3" @click="navigateHome">
       <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
-      <div>
+      <div class="text-left">
         <p class="text-sm text-gold font-semibold">KADDESH</p>
         <p class="text-xs text-offwhite-muted">Marketplace premium</p>
       </div>
-    </div>
+    </button>
     <button
       @click="mobileMenuOpen = !mobileMenuOpen"
       class="p-2 rounded-md hover:bg-dark-80 transition"
@@ -25,13 +25,13 @@
     <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-40 bg-black/50" @click.self="mobileMenuOpen = false">
       <div class="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl p-4 overflow-y-auto">
         <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2">
+          <button type="button" class="flex items-center gap-2 text-left" @click="navigateHome">
             <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
             <div>
               <p class="text-sm font-semibold text-dark">KADDESH</p>
               <p class="text-xs text-gray-500">Marketplace premium</p>
             </div>
-          </div>
+          </button>
           <button @click="mobileMenuOpen = false" class="p-2 rounded hover:bg-gray-100">
             <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -94,13 +94,13 @@
 
   <!-- Desktop sidebar -->
   <aside class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl">
-    <div class="p-6 border-b border-gold/20 flex items-center gap-3">
+    <button type="button" class="p-6 border-b border-gold/20 flex items-center gap-3 text-left w-full" @click="navigateHome">
       <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
       <div>
         <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
         <p class="text-xs text-offwhite-muted">Marketplace premium</p>
       </div>
-    </div>
+    </button>
 
     <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
       <div class="sidebar-switch">
@@ -264,6 +264,11 @@ const allLinks = computed(() => {
 const handleNavigate = (to) => {
   mobileMenuOpen.value = false
   router.push(to)
+}
+
+const navigateHome = () => {
+  mobileMenuOpen.value = false
+  router.push('/')
 }
 
 const handleLogout = async () => {
