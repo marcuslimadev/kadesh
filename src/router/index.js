@@ -239,12 +239,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // Se autenticado e tentando acessar a home pública, manda para o Lobby conforme modo
-  if (to.name === 'home' && (authStore.isAuthenticated || token)) {
-    const mode = viewMode.currentMode || 'contractor'
-    return next({ name: 'auction-lobby', query: { mode } })
-  }
-
   // Guest-only routes redirect if already authenticated
   if (guestOnly && (authStore.isAuthenticated || token)) {
     return next({ name: 'dashboard' })

@@ -1,5 +1,7 @@
 <template>
     <div class="home-shell overflow-hidden">
+    <AdRail position="left" />
+    <AdRail position="right" />
     <!-- Hero -->
     <section class="hero-section">
       <div class="hero-container">
@@ -7,7 +9,7 @@
           <div class="hero-copy">
             <div class="flex items-center gap-3">
               <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-xl border border-gold/40 shadow-sm object-cover" />
-              <p class="eyebrow">KADDESH - Marketplace premium</p>
+              <p class="eyebrow">KADDESH - Service Bridge</p>
             </div>
             <h1 class="hero-title">Leiloes reversos com curadoria e seguranca</h1>
             <p class="hero-sub tagline">Kaddesh: Onde a excelencia encontra a demanda.</p>
@@ -614,6 +616,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
+import AdRail from '@/components/layout/AdRail.vue'
 import api from '@/services/api'
 import {
   MagnifyingGlassIcon,
