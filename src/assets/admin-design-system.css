@@ -1,82 +1,95 @@
 /* ============================================
-   KADESH ADMIN DESIGN SYSTEM
-   Sistema de design consistente para painel admin
+   KADESH DESIGN SYSTEM
+   Sistema de design baseado na identidade visual
+   Paleta: Preto Grafite + Dourado Metálico + Off-White + Azul Royal
    ============================================ */
 
 /* ============================================
-   1. CSS VARIABLES (Tema Claro)
+   1. CSS VARIABLES - KADDESH BRAND
    ============================================ */
 :root {
-  /* Colors - Primary */
-  --admin-primary: #3b82f6;
-  --admin-primary-dark: #2563eb;
-  --admin-primary-light: #60a5fa;
-  --admin-primary-bg: #eff6ff;
+  /* Brand Colors - Primárias */
+  --kaddesh-black: #1A1A1A;        /* Preto Grafite - Fundo principal */
+  --kaddesh-gold: #D4AF37;         /* Dourado Metálico - Destaques premium */
+  --kaddesh-gold-dark: #B8941F;    /* Dourado escuro - Hover states */
+  --kaddesh-gold-light: #E5C158;   /* Dourado claro - Sutis highlights */
+  
+  /* Brand Colors - Neutras */
+  --kaddesh-off-white: #F5F5F5;    /* Off-White - Fundos secundários */
+  --kaddesh-white: #FFFFFF;        /* Branco puro - Texto sobre preto */
+  
+  /* Brand Colors - Secundária (Azul Royal) */
+  --kaddesh-blue: #3A8BEB;         /* Azul Profundo - CTAs secundários */
+  --kaddesh-blue-dark: #2563EB;    /* Azul escuro - Hover */
+  --kaddesh-blue-light: #60A5FA;   /* Azul claro - Highlights */
 
-  /* Colors - Secondary */
-  --admin-secondary: #6366f1;
-  --admin-secondary-dark: #4f46e5;
-  --admin-secondary-light: #818cf8;
-
-  /* Colors - Success */
+  /* Semantic Colors (mantendo funcionalidades) */
   --admin-success: #10b981;
   --admin-success-dark: #059669;
   --admin-success-light: #34d399;
   --admin-success-bg: #d1fae5;
 
-  /* Colors - Warning */
   --admin-warning: #f59e0b;
   --admin-warning-dark: #d97706;
   --admin-warning-light: #fbbf24;
   --admin-warning-bg: #fef3c7;
 
-  /* Colors - Danger */
   --admin-danger: #ef4444;
   --admin-danger-dark: #dc2626;
   --admin-danger-light: #f87171;
   --admin-danger-bg: #fee2e2;
 
-  /* Colors - Info */
   --admin-info: #06b6d4;
   --admin-info-dark: #0891b2;
   --admin-info-light: #22d3ee;
   --admin-info-bg: #cffafe;
 
-  /* Neutrals */
-  --admin-gray-50: #f9fafb;
-  --admin-gray-100: #f3f4f6;
-  --admin-gray-200: #e5e7eb;
-  --admin-gray-300: #d1d5db;
-  --admin-gray-400: #9ca3af;
-  --admin-gray-500: #6b7280;
-  --admin-gray-600: #4b5563;
-  --admin-gray-700: #374151;
-  --admin-gray-800: #1f2937;
-  --admin-gray-900: #111827;
+  /* Grayscale (baseado no preto grafite) */
+  --admin-gray-50: #F5F5F5;   /* = off-white */
+  --admin-gray-100: #E5E5E5;
+  --admin-gray-200: #CCCCCC;
+  --admin-gray-300: #B3B3B3;
+  --admin-gray-400: #999999;
+  --admin-gray-500: #808080;
+  --admin-gray-600: #666666;
+  --admin-gray-700: #4D4D4D;
+  --admin-gray-800: #333333;
+  --admin-gray-900: #1A1A1A;   /* = kaddesh-black */
 
-  /* Backgrounds */
-  --admin-bg-page: #f9fafb;
-  --admin-bg-card: #ffffff;
-  --admin-bg-sidebar: #1f2937;
-  --admin-bg-navbar: #ffffff;
+  /* Mapeamento de cores principais para uso semântico */
+  --admin-primary: var(--kaddesh-gold);
+  --admin-primary-dark: var(--kaddesh-gold-dark);
+  --admin-primary-light: var(--kaddesh-gold-light);
+  --admin-primary-bg: rgba(212, 175, 55, 0.1);
 
-  /* Text */
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-text-muted: #9ca3af;
-  --admin-text-inverse: #ffffff;
+  --admin-secondary: var(--kaddesh-blue);
+  --admin-secondary-dark: var(--kaddesh-blue-dark);
+  --admin-secondary-light: var(--kaddesh-blue-light);
 
-  /* Borders */
-  --admin-border: #e5e7eb;
-  --admin-border-hover: #d1d5db;
-  --admin-border-focus: #3b82f6;
+  /* Backgrounds - Tema Escuro Premium */
+  --admin-bg-page: var(--kaddesh-black);
+  --admin-bg-card: #252525;
+  --admin-bg-sidebar: #0F0F0F;
+  --admin-bg-navbar: var(--kaddesh-black);
 
-  /* Shadows */
-  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --admin-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --admin-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --admin-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /* Text - Invertido para tema escuro */
+  --admin-text-primary: var(--kaddesh-white);
+  --admin-text-secondary: #CCCCCC;
+  --admin-text-muted: #999999;
+  --admin-text-inverse: var(--kaddesh-black);
+
+  /* Borders - Dourados sutis */
+  --admin-border: rgba(212, 175, 55, 0.2);
+  --admin-border-hover: rgba(212, 175, 55, 0.4);
+  --admin-border-focus: var(--kaddesh-gold);
+
+  /* Shadows - Mais sutis para tema escuro */
+  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --admin-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --admin-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --admin-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --admin-shadow-gold: 0 4px 12px rgba(212, 175, 55, 0.3);
 
   /* Spacing */
   --admin-spacing-xs: 0.25rem;   /* 4px */
@@ -98,43 +111,57 @@
   --admin-transition-fast: all 0.15s ease;
   --admin-transition-slow: all 0.3s ease;
 
-  /* Public Pages Colors (Landing/Home) */
-  --public-primary: #2563eb;
-  --public-primary-dark: #1d4ed8;
-  --public-accent: #3b82f6;
-  --public-accent-light: #60a5fa;
-  --public-bg-hero: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  --public-bg-section: #ffffff;
-  --public-bg-alt: #f8fafc;
-  --public-text: #0f172a;
-  --public-text-light: #64748b;
+  /* Public Pages Colors (adaptadas ao tema Kaddesh) */
+  --public-primary: var(--kaddesh-gold);
+  --public-primary-dark: var(--kaddesh-gold-dark);
+  --public-accent: var(--kaddesh-blue);
+  --public-accent-light: var(--kaddesh-blue-light);
+  --public-bg-hero: linear-gradient(135deg, #1A1A1A 0%, #0F0F0F 100%);
+  --public-bg-section: var(--kaddesh-off-white);
+  --public-bg-alt: #FFFFFF;
+  --public-text: var(--kaddesh-black);
+  --public-text-light: #666666;
+
+  /* Typography - Fontes Kaddesh */
+  --font-heading: 'Montserrat', 'Oswald', sans-serif;  /* Títulos */
+  --font-body: 'Open Sans', 'Lato', sans-serif;       /* Corpo de texto */
+  --font-ui: 'Open Sans', sans-serif;                 /* Interface */
 }
 
 /* ============================================
-   2. RESET & BASE STYLES
+   2. IMPORTAÇÃO DE FONTES GOOGLE
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap');
+
+/* ============================================
+   3. RESET & BASE STYLES
    ============================================ */
 .admin-layout * {
   box-sizing: border-box;
 }
 
 .admin-layout {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   color: var(--admin-text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
+  background-color: var(--admin-bg-page);
 }
 
 /* ============================================
-   3. TYPOGRAPHY
+   4. TYPOGRAPHY
    ============================================ */
 .admin-heading-1 {
+  font-family: var(--font-heading);
   font-size: 2.25rem;
   font-weight: 800;
   color: var(--admin-text-primary);
   line-height: 1.2;
   margin: 0 0 var(--admin-spacing-lg);
+  letter-spacing: -0.02em;
 }
 
 .admin-heading-2 {
+  font-family: var(--font-heading);
   font-size: 1.875rem;
   font-weight: 700;
   color: var(--admin-text-primary);
@@ -143,14 +170,17 @@
 }
 
 .admin-heading-3 {
+  font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--admin-text-primary);
   line-height: 1.4;
   margin: 0 0 var(--admin-spacing-md);
+  letter-spacing: -0.01em;
 }
 
 .admin-heading-4 {
+  font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--admin-text-primary);
@@ -159,6 +189,7 @@
 }
 
 .admin-text-large {
+  font-family: var(--font-body);
   font-size: 1.125rem;
   color: var(--admin-text-primary);
 }
