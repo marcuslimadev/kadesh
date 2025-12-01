@@ -9,7 +9,10 @@ const router = express.Router();
 router.get('/project/:projectId', async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { limit = 20, offset = 0 } = req.query;
+    const { limit = 20, offset = 0, page, per_page } = req.query;
+
+    const effectiveLimit = per_page ? parseInt(per_page) : parseInt(limit);
+    const effectiveOffset = page ? (parseInt(page) - 1) * effectiveLimit : parseInt(offset);
 
     // Check if project exists
     const projectCheck = await db.query(
@@ -24,29 +27,34 @@ router.get('/project/:projectId', async (req, res) => {
     }
 
     const result = await db.query(`
-      SELECT 
-        b.*,
-        u.name as provider_name,
-        u.avatar_url,
-        pp.rating,
-        pp.total_reviews,
-        pp.total_projects,
-        pp.response_time_hours
-      FROM bids b
-      JOIN users u ON b.provider_id = u.id
-      LEFT JOIN provider_profiles pp ON u.id = pp.user_id
-      WHERE b.project_id = $1 AND b.status != 'withdrawn'
-      ORDER BY 
-        CASE WHEN b.is_featured THEN 0 ELSE 1 END,
-        b.created_at DESC
-      LIMIT $2 OFFSET $3
-    `, [projectId, limit, offset]);
+      SELECT *, COUNT(*) OVER() AS total_count FROM (
+        SELECT 
+          b.*,
+          u.name as provider_name,
+          u.avatar_url,
+          pp.rating,
+          pp.total_reviews,
+          pp.total_projects,
+          pp.response_time_hours
+        FROM bids b
+        JOIN users u ON b.provider_id = u.id
+        LEFT JOIN provider_profiles pp ON u.id = pp.user_id
+        WHERE b.project_id = $1 AND b.status != 'withdrawn'
+        ORDER BY 
+          CASE WHEN b.is_featured THEN 0 ELSE 1 END,
+          b.created_at DESC
+        LIMIT $2 OFFSET $3
+      ) sub
+    `, [projectId, effectiveLimit, effectiveOffset]);
+
+    const total = result.rows.length > 0 ? parseInt(result.rows[0].total_count) : 0;
 
     res.json({
       bids: result.rows,
-      total: result.rowCount,
-      limit: parseInt(limit),
-      offset: parseInt(offset)
+      total,
+      limit: effectiveLimit,
+      offset: effectiveOffset,
+      total_pages: effectiveLimit ? Math.ceil(total / effectiveLimit) : 1
     });
 
   } catch (error) {
@@ -161,13 +169,16 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    // Check if user is a provider
+    // Check if user is a provider (supports unified profile)
     const userResult = await db.query(
       'SELECT type FROM users WHERE id = $1',
       [req.user.userId]
     );
 
-    if (userResult.rows[0].type !== 'provider') {
+    const userType = userResult.rows[0]?.type;
+    const isProvider = userType === 'provider' || userType === 'unified';
+
+    if (!isProvider) {
       return res.status(403).json({
         error: 'Apenas prestadores de serviço podem fazer propostas'
       });

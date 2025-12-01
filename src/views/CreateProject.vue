@@ -177,6 +177,70 @@ Preferência por design clean e profissional, com cores azul e branco."
                 💡 Informe tecnologias específicas, critérios de aceitação ou integrações necessárias
               </p>
             </div>
+
+            <!-- Attachments -->
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">
+                Anexos (Opcional)
+              </label>
+              <input
+                id="projectAttachments"
+                type="file"
+                multiple
+                class="hidden"
+                accept="image/*,video/*,.pdf"
+                @change="onAttachmentSelect"
+              />
+              <label
+                for="projectAttachments"
+                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
+              >
+                <svg class="w-10 h-10 text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M4 12l2.293 2.293a1 1 0 001.414 0L12 10l4.293 4.293a1 1 0 001.414 0L20 12M12 4v6" />
+                </svg>
+                <p class="text-sm font-medium text-gray-900">
+                  Clique ou arraste arquivos para enviar
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Aceitamos imagens e PDFs. Máximo de {{ MAX_ATTACHMENTS }} arquivos.
+                </p>
+              </label>
+              <div class="mt-2 text-sm text-gray-500 flex flex-wrap items-center justify-between gap-2">
+                <span>Formatos aceitos: JPG, PNG, WEBP e PDF (até {{ MAX_FILE_SIZE_MB }} MB)</span>
+                <span class="font-medium text-gray-700">{{ attachments.length }} / {{ MAX_ATTACHMENTS }} anexos</span>
+              </div>
+
+              <div v-if="attachments.length" class="mt-4 grid gap-4 sm:grid-cols-2">
+                <div
+                  v-for="item in attachments"
+                  :key="item.id"
+                  class="flex items-center gap-4 p-3 border-2 border-gray-200 rounded-xl bg-gray-50"
+                >
+                  <div class="w-16 h-16 rounded-lg bg-white flex items-center justify-center overflow-hidden">
+                    <img
+                      v-if="item.preview"
+                      :src="item.preview"
+                      :alt="item.file.name"
+                      class="object-cover w-full h-full"
+                    />
+                    <svg v-else class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate">{{ item.file.name }}</p>
+                    <p class="text-xs text-gray-500">{{ formatFileSize(item.file.size) }}</p>
+                    <button
+                      type="button"
+                      class="mt-2 text-xs font-semibold text-red-600 hover:text-red-800"
+                      @click="removeAttachment(item.id)"
+                    >
+                      Remover
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Step 3: Orçamento e Prazo -->
@@ -225,25 +289,45 @@ Preferência por design clean e profissional, com cores azul e branco."
 
               <!-- Deadline -->
               <div>
-                <label for="deadline" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
                   Prazo de Entrega
                 </label>
-                <input
-                  id="deadline"
-                  v-model="form.deadline"
-                  type="date"
-                  :min="minDate"
-                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                  :class="{ 'border-red-500 focus:ring-red-500': errors.deadline }"
-                />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <input
+                      id="deadline"
+                      v-model="form.deadline"
+                      type="date"
+                      :min="minDate"
+                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      :class="{ 'border-red-500 focus:ring-red-500': errors.deadline }"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      id="deadlineTime"
+                      v-model="form.deadlineTime"
+                      type="time"
+                      :disabled="!form.deadline"
+                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-100 disabled:text-gray-400"
+                      :class="{ 'border-red-500 focus:ring-red-500': errors.deadlineTime }"
+                    />
+                  </div>
+                </div>
                 <p v-if="errors.deadline" class="mt-2 text-sm text-red-600 flex items-center">
                   <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                   </svg>
                   {{ errors.deadline }}
                 </p>
+                <p v-else-if="errors.deadlineTime" class="mt-2 text-sm text-red-600 flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                  </svg>
+                  {{ errors.deadlineTime }}
+                </p>
                 <p v-else class="mt-2 text-sm text-gray-500">
-                  💡 Prazo flexível? Deixe em branco para receber mais propostas
+                  💡 Informe data e hora para que o contador do lobby funcione com precisão. Prazo flexível? Deixe em branco.
                 </p>
               </div>
             </div>
@@ -457,7 +541,7 @@ Preferência por design clean e profissional, com cores azul e branco."
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import projectService from '@/services/projectService'
@@ -477,6 +561,7 @@ const form = reactive({
   category: '',
   budget: '',
   deadline: '',
+  deadlineTime: '',
   requirements: '',
   skills_required: [],
   priority: 3
@@ -488,11 +573,16 @@ const errors = reactive({
   category: '',
   budget: '',
   deadline: '',
+  deadlineTime: '',
   general: ''
 })
 
 const skillInput = ref('')
 const isSubmitting = ref(false)
+const attachments = ref([])
+const MAX_ATTACHMENTS = 3
+const MAX_FILE_SIZE = 5 * 1024 * 1024
+const MAX_FILE_SIZE_MB = Math.round(MAX_FILE_SIZE / (1024 * 1024))
 
 const priorities = [
   { value: 1, label: 'Urgente', icon: '🔥', color: 'text-red-500' },
@@ -511,6 +601,17 @@ const minDate = computed(() => {
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)
   return tomorrow.toISOString().split('T')[0]
+})
+
+watch(() => form.deadline, (value) => {
+  if (!value) {
+    form.deadlineTime = ''
+    return
+  }
+
+  if (!form.deadlineTime) {
+    form.deadlineTime = '12:00'
+  }
 })
 
 const nextStep = () => {
@@ -542,6 +643,12 @@ const nextStep = () => {
       return
     }
     errors.budget = ''
+
+    if (form.deadline && !form.deadlineTime) {
+      errors.deadlineTime = 'Informe a hora limite para o prazo'
+      return
+    }
+    errors.deadlineTime = ''
   }
   
   if (currentStep.value < 4) {
@@ -572,6 +679,106 @@ const addSuggestedSkill = (skill) => {
 const removeSkill = (index) => {
   form.skills_required.splice(index, 1)
 }
+
+const generateAttachmentId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return `att-${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
+const addFilesFromInput = (fileList) => {
+  if (!fileList || fileList.length === 0) return
+  const files = Array.from(fileList)
+  const availableSlots = MAX_ATTACHMENTS - attachments.value.length
+
+  if (availableSlots <= 0) {
+    toast.warning(`Você pode anexar no máximo ${MAX_ATTACHMENTS} arquivos`)
+    return
+  }
+
+  files.slice(0, availableSlots).forEach(file => {
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(`${file.name} excede ${MAX_FILE_SIZE_MB}MB`)
+      return
+    }
+
+    attachments.value.push({
+      id: generateAttachmentId(),
+      file,
+      preview: file.type.startsWith('image/') && typeof URL !== 'undefined'
+        ? URL.createObjectURL(file)
+        : null
+    })
+  })
+
+  if (files.length > availableSlots) {
+    toast.info(`Limitamos os anexos aos ${MAX_ATTACHMENTS} permitidos`)
+  }
+}
+
+const onAttachmentSelect = (event) => {
+  addFilesFromInput(event.target.files)
+  event.target.value = ''
+}
+
+const removeAttachment = (id) => {
+  const index = attachments.value.findIndex(item => item.id === id)
+  if (index === -1) return
+
+  const [removed] = attachments.value.splice(index, 1)
+  if (removed?.preview && typeof URL !== 'undefined') {
+    URL.revokeObjectURL(removed.preview)
+  }
+}
+
+const clearAllAttachments = () => {
+  attachments.value.forEach(item => {
+    if (item.preview && typeof URL !== 'undefined') {
+      URL.revokeObjectURL(item.preview)
+    }
+  })
+  attachments.value = []
+}
+
+const formatFileSize = (bytes) => {
+  if (!bytes && bytes !== 0) return ''
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+const uploadSelectedAttachments = async (projectId) => {
+  if (!projectId || attachments.value.length === 0) {
+    return { uploaded: 0, failed: 0 }
+  }
+
+  let uploaded = 0
+  let failed = 0
+
+  for (const attachment of attachments.value) {
+    try {
+      const response = await projectService.uploadAttachment(projectId, attachment.file)
+      if (response.success) {
+        uploaded++
+      } else {
+        failed++
+        toast.error(response.error || `Erro ao enviar ${attachment.file.name}`)
+      }
+    } catch (error) {
+      failed++
+      toast.error(`Erro ao enviar ${attachment.file.name}`)
+    }
+  }
+
+  clearAllAttachments()
+  return { uploaded, failed }
+}
+
+onBeforeUnmount(() => {
+  clearAllAttachments()
+})
 
 const validateForm = () => {
   let isValid = true
@@ -609,7 +816,24 @@ const validateForm = () => {
     isValid = false
   }
 
+  if (form.deadline && !form.deadlineTime) {
+    errors.deadlineTime = 'Informe a hora limite para o prazo'
+    isValid = false
+  }
+
   return isValid
+}
+
+const buildDeadlineISO = () => {
+  if (!form.deadline) return null
+  const time = form.deadlineTime || '23:59'
+  const isoCandidate = `${form.deadline}T${time}:00`
+  const parsed = new Date(isoCandidate)
+  if (Number.isNaN(parsed.getTime())) {
+    errors.deadline = 'Prazo inválido'
+    return null
+  }
+  return parsed.toISOString()
 }
 
 const handleSubmit = async () => {
@@ -626,7 +850,7 @@ const handleSubmit = async () => {
       description: form.description.trim(),
       category: form.category,
       budget: parseFloat(form.budget),
-      deadline: form.deadline || null,
+      deadline: buildDeadlineISO(),
       requirements: form.requirements.trim() || null,
       skills_required: form.skills_required,
       priority: form.priority
@@ -635,8 +859,20 @@ const handleSubmit = async () => {
     const result = await projectService.createProject(projectData)
 
     if (result.success) {
-      toast.success('🎉 Projeto criado com sucesso! Agora você receberá propostas de profissionais qualificados.')
-      router.push(`/projects/${result.data.project.id}`)
+      const projectId = result.data.project.id
+      const attachmentSummary = await uploadSelectedAttachments(projectId)
+
+      if (attachmentSummary.uploaded) {
+        toast.success(`🎉 Projeto criado e ${attachmentSummary.uploaded} anexo(s) enviados com sucesso!`)
+      } else {
+        toast.success('🎉 Projeto criado com sucesso! Agora você receberá propostas de profissionais qualificados.')
+      }
+
+      if (attachmentSummary.failed) {
+        toast.error(`${attachmentSummary.failed} anexo(s) não puderam ser enviados. Você pode tentar novamente na página do projeto.`)
+      }
+
+      router.push(`/projects/${projectId}`)
     } else {
       errors.general = result.error
       toast.error(result.error)

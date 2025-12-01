@@ -1,9 +1,20 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
+const STORAGE_KEY = 'kadesh_view_mode'
+
+const getInitialMode = () => {
+  if (typeof window === 'undefined') return 'contractor'
+  try {
+    return localStorage.getItem(STORAGE_KEY) || 'contractor'
+  } catch {
+    return 'contractor'
+  }
+}
+
 export const useViewModeStore = defineStore('viewMode', () => {
   // Estado: 'contractor' (Contratante) ou 'provider' (Prestador)
-  const currentMode = ref(localStorage.getItem('kadesh_view_mode') || 'contractor')
+  const currentMode = ref(getInitialMode())
   
   // Getters
   const isContractor = computed(() => currentMode.value === 'contractor')
@@ -14,7 +25,7 @@ export const useViewModeStore = defineStore('viewMode', () => {
   })
   
   const modeIcon = computed(() => {
-    return currentMode.value === 'contractor' ? '👔' : '⚙️'
+    return currentMode.value === 'contractor' ? 'C' : 'P'
   })
   
   const modeColor = computed(() => {
@@ -22,28 +33,30 @@ export const useViewModeStore = defineStore('viewMode', () => {
   })
   
   // Actions
-  function setMode(mode) {
+  const persist = (mode) => {
+    if (typeof window === 'undefined') return
+    try {
+      localStorage.setItem(STORAGE_KEY, mode)
+    } catch {}
+  }
+
+  const setMode = (mode) => {
     if (mode !== 'contractor' && mode !== 'provider') {
       console.error('Modo inválido. Use "contractor" ou "provider"')
       return
     }
     
     currentMode.value = mode
-    localStorage.setItem('kadesh_view_mode', mode)
+    persist(mode)
   }
   
-  function toggleMode() {
+  const toggleMode = () => {
     const newMode = currentMode.value === 'contractor' ? 'provider' : 'contractor'
     setMode(newMode)
   }
   
-  function setContractorMode() {
-    setMode('contractor')
-  }
-  
-  function setProviderMode() {
-    setMode('provider')
-  }
+  const setContractorMode = () => setMode('contractor')
+  const setProviderMode = () => setMode('provider')
   
   return {
     // State

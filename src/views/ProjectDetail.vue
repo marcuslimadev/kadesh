@@ -86,6 +86,92 @@
               <p class="text-gray-700 whitespace-pre-line">{{ project.requirements }}</p>
             </div>
 
+            <!-- Attachments -->
+            <div class="mt-6">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-lg font-semibold text-gray-900">Arquivos Anexados</h2>
+                <div v-if="isProjectOwner" class="flex items-center gap-2">
+                  <input
+                    id="detailAttachmentUpload"
+                    type="file"
+                    class="hidden"
+                    multiple
+                    accept="image/*,video/*,.pdf"
+                    @change="handleAttachmentUpload"
+                  />
+                  <label
+                    for="detailAttachmentUpload"
+                    class="inline-flex items-center px-3 py-2 rounded-lg border border-blue-200 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 cursor-pointer disabled:opacity-50"
+                    :class="{ 'pointer-events-none opacity-60': isUploadingAttachment }"
+                  >
+                    <svg
+                      class="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ isUploadingAttachment ? 'Enviando...' : 'Adicionar Anexos' }}
+                  </label>
+                  <p class="text-xs text-gray-500">Máx. 5MB por arquivo</p>
+                </div>
+              </div>
+
+              <div v-if="attachmentsList.length" class="grid gap-4 md:grid-cols-2">
+                <div
+                  v-for="attachment in attachmentsList"
+                  :key="attachment.id"
+                  class="flex items-center gap-4 p-4 border rounded-xl hover:border-primary-300 hover:bg-primary-50 transition"
+                >
+                  <div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                    <img
+                      v-if="isImageAttachment(attachment)"
+                      :src="attachment.file_url"
+                      :alt="attachment.original_name"
+                      class="object-cover w-full h-full"
+                    />
+                    <svg v-else class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
+                    </svg>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">{{ attachment.original_name }}</p>
+                    <p class="text-xs text-gray-500">
+                      {{ attachment.mime_type || 'Arquivo' }}
+                      <span v-if="attachment.file_size">
+                        · {{ formatAttachmentSize(attachment.file_size) }}
+                      </span>
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                      <a
+                        :href="attachment.file_url"
+                        target="_blank"
+                        rel="noopener"
+                        class="text-xs font-semibold text-blue-600 hover:text-blue-800"
+                      >
+                        Baixar / Abrir
+                      </a>
+                      <button
+                        v-if="isProjectOwner"
+                        type="button"
+                        class="text-xs font-semibold text-red-600 hover:text-red-800 disabled:opacity-50"
+                        :disabled="deletingAttachmentId === attachment.id"
+                        @click="removeAttachment(attachment.id)"
+                      >
+                        {{ deletingAttachmentId === attachment.id ? 'Removendo...' : 'Remover' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else class="p-4 border border-dashed rounded-xl text-sm text-gray-500 bg-gray-50">
+                Nenhum anexo enviado até o momento.
+                <span v-if="isProjectOwner" class="text-gray-700 font-medium">Use o botão acima para subir arquivos de referência.</span>
+              </div>
+            </div>
+
             <!-- Skills -->
             <div v-if="project.skills" class="mt-6">
               <h2 class="text-lg font-semibold text-gray-900 mb-3">Habilidades Necessárias</h2>
@@ -300,11 +386,41 @@
                 Editar Projeto
               </button>
               <button
+                v-if="project.status === 'open' && bids.length > 0"
+                @click="closeAuction"
+                :disabled="isClosingAuction"
+                class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilão e Selecionar Vencedor' }}
+              </button>
+              <p v-if="project.status === 'open' && bids.length > 0" class="text-xs text-gray-500 text-center">
+                O vencedor será o lance de menor valor
+              </p>
+              <button
                 v-if="project.status === 'open'"
                 class="w-full px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 transition-colors"
               >
                 Cancelar Projeto
               </button>
+            </div>
+          </div>
+
+          <!-- Auction Winner Banner -->
+          <div v-if="project.status === 'in_progress' && acceptedBid" class="bg-white rounded-lg shadow-md p-6 border-2 border-green-500">
+            <div class="flex items-center space-x-2 mb-3">
+              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 class="text-lg font-semibold text-green-800">Vencedor do Leilão</h3>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-semibold">
+                {{ getInitials(acceptedBid.provider_name) }}
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">{{ acceptedBid.provider_name }}</p>
+                <p class="text-sm text-green-600 font-semibold">{{ formatCurrency(acceptedBid.amount) }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -342,6 +458,9 @@ const isBidSubmitting = ref(false)
 const timeRemaining = ref(null)
 const countdownInterval = ref(null)
 const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-old
+const isClosingAuction = ref(false)
+const deletingAttachmentId = ref(null)
+const isUploadingAttachment = ref(false)
 
 const bidForm = ref({
   amount: null,
@@ -424,6 +543,16 @@ const sortedBids = computed(() => {
   }
 })
 
+const attachmentsList = computed(() => {
+  if (!project.value?.attachments) return []
+  return Array.isArray(project.value.attachments) ? project.value.attachments : []
+})
+
+const acceptedBid = computed(() => {
+  if (!bids.value || bids.value.length === 0) return null
+  return bids.value.find(bid => bid.status === 'accepted')
+})
+
 const formatDate = (date) => {
   if (!date) return 'Data não disponível'
   try {
@@ -439,10 +568,12 @@ const formatDate = (date) => {
 const formatDeadline = (date) => {
   if (!date) return 'Não especificado'
   try {
-    return new Date(date).toLocaleDateString('pt-BR', {
+    return new Date(date).toLocaleString('pt-BR', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     })
   } catch (error) {
     return 'Data inválida'
@@ -459,7 +590,7 @@ const formatCurrency = (value) => {
 
 const getCategoryLabel = (value) => {
   const categories = projectService.getCategories()
-  const cat = categories.find(c => c.value === value)
+  const cat = categories.find(c => c.value === value || c.label === value)
   return cat ? cat.label : value
 }
 
@@ -471,6 +602,88 @@ const getInitials = (name) => {
     .join('')
     .toUpperCase()
     .substring(0, 2)
+}
+
+const isImageAttachment = (attachment) => {
+  return Boolean(attachment?.mime_type && attachment.mime_type.startsWith('image/'))
+}
+
+const formatAttachmentSize = (bytes) => {
+  if (!bytes && bytes !== 0) return ''
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+const removeAttachment = async (attachmentId) => {
+  if (!project.value?.id || !attachmentId) return
+  const confirmed = window.confirm('Remover este anexo? Essa ação não pode ser desfeita.')
+  if (!confirmed) return
+
+  deletingAttachmentId.value = attachmentId
+  try {
+    const result = await projectService.deleteAttachment(project.value.id, attachmentId)
+    if (result.success) {
+      const filtered = attachmentsList.value.filter(item => item.id !== attachmentId)
+      project.value.attachments = filtered
+      toast.success('Anexo removido com sucesso')
+    } else {
+      toast.error(result.error || 'Erro ao remover anexo')
+    }
+  } catch (error) {
+    console.error('Erro ao remover anexo:', error)
+    toast.error('Erro ao remover anexo')
+  } finally {
+    deletingAttachmentId.value = null
+  }
+}
+
+const handleAttachmentUpload = async (event) => {
+  if (!project.value?.id) return
+  const files = Array.from(event.target?.files || [])
+  if (!files.length) return
+
+  isUploadingAttachment.value = true
+  try {
+    let uploaded = 0
+    let failed = 0
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        failed++
+        toast.error(`${file.name} excede 5MB`)
+        continue
+      }
+
+      try {
+        const response = await projectService.uploadAttachment(project.value.id, file)
+        if (response.success) {
+          uploaded++
+          const current = attachmentsList.value
+          project.value.attachments = [...current, response.data.attachment]
+        } else {
+          failed++
+          toast.error(response.error || `Erro ao enviar ${file.name}`)
+        }
+      } catch (error) {
+        failed++
+        console.error('Erro ao enviar anexo:', error)
+        toast.error(`Erro ao enviar ${file.name}`)
+      }
+    }
+
+    if (uploaded) {
+      toast.success(`${uploaded} anexo(s) enviado(s) com sucesso`)
+    }
+    if (failed) {
+      toast.error(`${failed} anexo(s) falharam. Tente novamente.`)
+    }
+  } finally {
+    isUploadingAttachment.value = false
+    if (event.target) {
+      event.target.value = ''
+    }
+  }
 }
 
 const updateCountdown = () => {
@@ -594,8 +807,8 @@ const submitBid = async () => {
     return
   }
 
-  if (bidForm.value.proposal.trim().length < 20) {
-    toast.error('Descrição da proposta deve ter pelo menos 20 caracteres')
+  if (!bidForm.value.proposal.trim()) {
+    toast.error('Descrição da proposta é obrigatória')
     return
   }
 
@@ -671,6 +884,40 @@ const rejectBid = async (bidId) => {
   } catch (err) {
     console.error('Error rejecting bid:', err)
     toast.error('Erro ao rejeitar proposta')
+  }
+}
+
+const closeAuction = async () => {
+  if (bids.value.length === 0) {
+    toast.error('Não há propostas para selecionar um vencedor')
+    return
+  }
+
+  const lowestBid = [...bids.value].sort((a, b) => (a.amount || 0) - (b.amount || 0))[0]
+  
+  const confirmMessage = `Encerrar o leilão agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat('pt-BR').format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`
+  
+  if (!confirm(confirmMessage)) {
+    return
+  }
+
+  isClosingAuction.value = true
+
+  try {
+    const result = await projectService.closeAuction(project.value.id)
+    
+    if (result.success) {
+      toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
+      // Reload project and bids to show updated status
+      await loadProject()
+    } else {
+      toast.error(result.error || 'Erro ao encerrar leilão')
+    }
+  } catch (err) {
+    console.error('Error closing auction:', err)
+    toast.error('Erro ao encerrar leilão')
+  } finally {
+    isClosingAuction.value = false
   }
 }
 

@@ -64,7 +64,7 @@ CREATE TABLE projects (
     category VARCHAR(100) NOT NULL,
     budget DECIMAL(10,2) NOT NULL,
     budget_type VARCHAR(20) DEFAULT 'fixed', -- 'fixed' or 'hourly'
-    deadline DATE,
+    deadline TIMESTAMPTZ, -- data + hora limite do leilao
     requirements TEXT,
     skills_required TEXT[],
     status project_status DEFAULT 'open',
