@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/database');
-const { adminAuth } = require('../middleware/auth');
+const adminAuth = require('../middleware/adminAuth');
 
 // GET /api/advertisements - Lista anúncios públicos (ativos)
 router.get('/', async (req, res) => {
