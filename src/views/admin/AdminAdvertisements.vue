@@ -436,11 +436,6 @@ async function deleteAdvertisement(id) {
     console.error('Erro ao deletar anúncio:', err)
     error.value = 'Erro ao deletar anúncio.'
   }
-}   await loadAdvertisements()
-  } catch (error) {
-    console.error('Erro ao deletar anúncio:', error)
-    alert('Erro ao deletar anúncio')
-  }
 }
 
 function formatDate(dateString) {
