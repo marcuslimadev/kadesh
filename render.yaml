@@ -48,6 +48,7 @@ services:
     buildCommand: npm ci && npm run build
     publishDir: dist
     autoDeploy: true
+    # Auto-deploy habilitado para atualizações contínuas
     envVars:
       - key: NPM_CONFIG_PRODUCTION
         value: "false"
