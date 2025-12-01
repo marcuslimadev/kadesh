@@ -6,6 +6,7 @@ import Toast from 'vue-toastification'
 
 // Import global styles
 import './style.css'
+import './assets/admin-design-system.css'
 import 'vue-toastification/dist/index.css'
 
 // Create app

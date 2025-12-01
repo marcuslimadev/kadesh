@@ -97,6 +97,17 @@
   --admin-transition: all 0.2s ease;
   --admin-transition-fast: all 0.15s ease;
   --admin-transition-slow: all 0.3s ease;
+
+  /* Public Pages Colors (Landing/Home) */
+  --public-primary: #2563eb;
+  --public-primary-dark: #1d4ed8;
+  --public-accent: #3b82f6;
+  --public-accent-light: #60a5fa;
+  --public-bg-hero: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --public-bg-section: #ffffff;
+  --public-bg-alt: #f8fafc;
+  --public-text: #0f172a;
+  --public-text-light: #64748b;
 }
 
 /* ============================================
@@ -663,4 +674,425 @@
 
 .admin-stat-change.negative {
   color: var(--admin-danger);
+}
+
+/* ============================================
+   13. PUBLIC PAGES COMPONENTS
+   ============================================ */
+
+/* Hero Section */
+.public-hero {
+  background: var(--public-bg-hero);
+  color: white;
+  padding: 5rem 1.5rem;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+}
+
+.public-hero__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .public-hero__container {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+.public-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--admin-radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.public-hero__logo {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--admin-radius);
+  object-fit: cover;
+}
+
+.public-hero__title {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.public-hero__title-highlight {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.public-hero__subtitle {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+/* Search Bar */
+.public-search {
+  background: white;
+  border-radius: var(--admin-radius-lg);
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  box-shadow: var(--admin-shadow-xl);
+  max-width: 700px;
+}
+
+.public-search__input {
+  flex: 1;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  color: var(--admin-text-primary);
+}
+
+.public-search__input::placeholder {
+  color: var(--admin-text-secondary);
+}
+
+.public-search__icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--admin-text-secondary);
+}
+
+.public-search__button {
+  padding: 0.875rem 1.5rem;
+  background: var(--public-primary);
+  color: white;
+  border: none;
+  border-radius: var(--admin-radius);
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--admin-transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.public-search__button:hover {
+  background: var(--public-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Stats */
+.public-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.public-stat {
+  text-align: center;
+}
+
+.public-stat__value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--public-accent-light);
+  line-height: 1;
+}
+
+.public-stat__label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+}
+
+/* Hero Visual */
+.public-hero__visual {
+  position: relative;
+}
+
+.public-hero-image {
+  width: 100%;
+  border-radius: var(--admin-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--admin-shadow-xl);
+}
+
+.public-hero-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.public-hero-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.public-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--admin-radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--admin-text-primary);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.public-badge svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--public-accent);
+}
+
+/* Section Header */
+.public-section {
+  padding: 5rem 1.5rem;
+  background: var(--public-bg-section);
+}
+
+.public-section--alt {
+  background: var(--public-bg-alt);
+}
+
+.public-section__container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.public-section__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.public-section__badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--admin-primary-bg);
+  color: var(--public-primary);
+  border-radius: var(--admin-radius-full);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.public-section__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--public-text);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.public-section__subtitle {
+  font-size: 1.125rem;
+  color: var(--public-text-light);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Category Cards */
+.public-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.public-category {
+  position: relative;
+  background: white;
+  border-radius: var(--admin-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--admin-shadow);
+  transition: var(--admin-transition);
+  cursor: pointer;
+  border: 1px solid var(--admin-border);
+}
+
+.public-category:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.public-category__image {
+  height: 180px;
+  overflow: hidden;
+  background: var(--admin-gray-100);
+}
+
+.public-category__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.public-category:hover .public-category__image img {
+  transform: scale(1.05);
+}
+
+.public-category__content {
+  padding: 1.5rem;
+}
+
+.public-category__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--public-accent);
+  margin-bottom: 1rem;
+}
+
+.public-category__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--public-text);
+  margin-bottom: 0.5rem;
+}
+
+.public-category__description {
+  font-size: 0.875rem;
+  color: var(--public-text-light);
+  line-height: 1.6;
+}
+
+.public-category__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--public-accent);
+  color: white;
+  border-radius: var(--admin-radius);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* CTA Cards */
+.public-cta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.public-cta-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  text-align: center;
+  transition: var(--admin-transition);
+  border: 2px solid transparent;
+}
+
+.public-cta-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--admin-shadow-xl);
+  border-color: var(--public-accent-light);
+}
+
+.public-cta-card--highlight {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border: 2px solid var(--public-accent-light);
+}
+
+.public-cta-card__icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--admin-primary-bg);
+  color: var(--public-primary);
+}
+
+.public-cta-card__icon--gradient {
+  background: linear-gradient(135deg, var(--public-accent), var(--public-primary));
+  color: white;
+}
+
+.public-cta-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--public-text);
+  margin-bottom: 0.75rem;
+}
+
+.public-cta-card__text {
+  color: var(--public-text-light);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.public-cta-card__button {
+  width: 100%;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: var(--admin-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--admin-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.public-cta-card__button--primary {
+  background: var(--public-primary);
+  color: white;
+}
+
+.public-cta-card__button--primary:hover {
+  background: var(--public-primary-dark);
+  transform: translateY(-2px);
+}
+
+.public-cta-card__button--gradient {
+  background: linear-gradient(135deg, var(--public-accent), var(--public-primary));
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.public-cta-card__button--gradient:hover {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
 }
