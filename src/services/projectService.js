@@ -146,6 +146,22 @@ export const projectService = {
   },
 
   /**
+   * Delete project attachment
+   */
+  async deleteAttachment(projectId, attachmentId) {
+    try {
+      await api.delete(`/api/projects/${projectId}/attachments/${attachmentId}`)
+      return { success: true }
+    } catch (error) {
+      console.error('Error deleting attachment:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao remover anexo'
+      }
+    }
+  },
+
+  /**
    * Get my projects (as client)
    */
   async getMyProjects(params = {}) {
@@ -190,18 +206,54 @@ export const projectService = {
    */
   getCategories() {
     return [
-      { value: 'web', label: 'Desenvolvimento Web' },
-      { value: 'mobile', label: 'Desenvolvimento Mobile' },
-      { value: 'design', label: 'Design Gráfico' },
-      { value: 'marketing', label: 'Marketing Digital' },
-      { value: 'writing', label: 'Redação e Conteúdo' },
-      { value: 'video', label: 'Vídeo e Animação' },
-      { value: 'audio', label: 'Áudio e Música' },
-      { value: 'translation', label: 'Tradução' },
-      { value: 'data', label: 'Análise de Dados' },
-      { value: 'consulting', label: 'Consultoria' },
-      { value: 'other', label: 'Outros' }
+      { value: 'desenvolvimento-web', label: 'Desenvolvimento Web' },
+      { value: 'design', label: 'Design' },
+      { value: 'marketing', label: 'Marketing' },
+      { value: 'redacao', label: 'Redação' },
+      { value: 'mobile', label: 'Mobile' },
+      { value: 'consultoria', label: 'Consultoria' },
+      { value: 'outros', label: 'Outros' }
     ]
+  },
+
+  /**
+   * Close auction and select winner
+   */
+  async closeAuction(projectId) {
+    try {
+      const response = await api.post(`/api/projects/${projectId}/close-auction`)
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error closing auction:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao encerrar leilão'
+      }
+    }
+  },
+
+  /**
+   * Get auctions expiring soon
+   */
+  async getExpiringAuctions(hours = 24) {
+    try {
+      const response = await api.get('/api/projects/auctions/expiring', {
+        params: { hours }
+      })
+      return {
+        success: true,
+        data: response.data
+      }
+    } catch (error) {
+      console.error('Error fetching expiring auctions:', error)
+      return {
+        success: false,
+        error: error.response?.data?.error || 'Erro ao carregar leilões expirando'
+      }
+    }
   }
 }
 

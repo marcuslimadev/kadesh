@@ -1,44 +1,39 @@
 <template>
-  <div class="bg-white text-gray-900 overflow-hidden">
+    <div class="home-shell overflow-hidden">
     <!-- Hero -->
-    <section class="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 overflow-hidden">
-      <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute w-96 h-96 bg-accent-500/10 rounded-full blur-3xl -top-48 -left-48 animate-blob"></div>
-        <div class="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl -bottom-48 -right-48 animate-blob animation-delay-2000"></div>
-        <div class="absolute inset-0 opacity-5 bg-grid-pattern animate-grid-scroll"></div>
-      </div>
-
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div class="space-y-6 animate-slide-in-left">
-            <p class="text-accent-400 font-semibold uppercase tracking-[0.3em] text-xs sm:text-sm">Plataforma completa de serviços profissionais</p>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              Seja você um <span class="bg-gradient-to-r from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent animate-gradient-text">Kaddesh</span>
-            </h1>
-            <p class="text-xl text-accent-100 font-semibold">Melhores profissionais ou talentos</p>
-            <p class="text-lg text-gray-200">
-              Reunimos talentos verificados, leilões seguros e ferramentas para que Contratantes e Prestadores negociem com transparência.
+    <section class="hero-section">
+      <div class="hero-container">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <div class="flex items-center gap-3">
+              <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-xl border border-gold/40 shadow-sm object-cover" />
+              <p class="eyebrow">KADDESH - Marketplace premium</p>
+            </div>
+            <h1 class="hero-title">Leiloes reversos com curadoria e seguranca</h1>
+            <p class="hero-sub tagline">Kaddesh: Onde a excelencia encontra a demanda.</p>
+            <p class="hero-sub">
+              Conectamos contratantes e prestadores em um ambiente confiavel, com anexos, prazos em horas e vencedor automatico pelo menor lance elegivel.
             </p>
 
-            <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-4 animate-fade-in-up">
+            <div class="hero-search">
               <div class="flex flex-col md:flex-row gap-3">
                 <div class="flex-1">
                   <label class="sr-only" for="searchKeyword">Pesquise por palavra-chave</label>
                   <div class="relative group">
-                    <MagnifyingGlassIcon class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-accent-500" />
+                    <MagnifyingGlassIcon class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-offwhite-muted group-focus-within:text-gold" />
                     <input
                       id="searchKeyword"
                       v-model="searchKeyword"
                       type="text"
-                      placeholder="Desenvolvedor, branding, social media..."
-                      class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                      placeholder="Desenvolvimento web, branding, social media..."
+                      class="search-input"
                     />
                   </div>
                 </div>
                 <button
                   type="button"
                   @click="handleSearch"
-                  class="bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-primary-900 px-8 py-3 rounded-xl font-bold whitespace-nowrap flex items-center justify-center gap-2"
+                  class="cta-primary"
                 >
                   Procurar agora
                   <ArrowRightIcon class="h-5 w-5" />
@@ -46,41 +41,33 @@
               </div>
             </div>
 
-            <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-6">
-              <div v-for="stat in heroStats" :key="stat.label" class="bg-white/10 rounded-2xl p-4 border border-white/10">
-                <dt class="text-sm text-gray-300">{{ stat.label }}</dt>
-                <dd class="text-3xl font-bold text-white">{{ stat.value }}</dd>
+            <dl class="hero-stats">
+              <div v-for="stat in heroStats" :key="stat.label" class="hero-stat-card">
+                <dt class="hero-stat-label">{{ stat.label }}</dt>
+                <dd class="hero-stat-value">{{ stat.value }}</dd>
               </div>
             </dl>
-            <div class="w-full flex justify-center">
-              <router-link to="/tutorial" class="btn btn-accent px-6 py-3 rounded-xl font-bold text-primary-900 shadow-lg hover:bg-accent-600 transition-all">
-                Como usar a plataforma (Tutorial)
-              </router-link>
-            </div>
           </div>
 
-          <div class="relative animate-slide-in-right">
-            <div class="absolute -inset-4 bg-gradient-to-r from-accent-500/20 to-blue-500/20 rounded-3xl blur-3xl animate-pulse-slow"></div>
-            <img
-              src="/assets/images/hero-handshake.avif"
-              alt="Profissionais fechando parceria"
-              class="relative rounded-3xl shadow-3xl w-full object-cover"
-            />
-            <div class="absolute -bottom-8 -right-6 bg-white rounded-2xl shadow-xl p-4 w-48 animate-float hidden sm:block">
-              <p class="text-xs text-gray-500">Escrow liberado ─ 12:32</p>
-              <p class="font-semibold text-primary-900">Projeto Branding Premium</p>
-              <p class="text-sm text-green-600 font-bold">R$ 8.400,00</p>
+          <div class="hero-visual">
+            <div class="hero-visual-glow"></div>
+            <div class="hero-visual-card">
+              <img
+                src="/assets/images/hero-handshake.avif"
+                alt="Profissionais fechando parceria"
+                class="hero-visual-image"
+              />
+              <div class="hero-visual-overlay">
+                <p class="hero-visual-caption">Prazo em horas + anexos ativos</p>
+                <p class="hero-visual-highlight">Leilao ativo - menor lance define</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="absolute bottom-0 left-0 right-0 text-gray-50">
-        <svg class="w-full h-20" viewBox="0 0 1440 74" fill="currentColor" preserveAspectRatio="none">
-          <path d="M0 74L60 61.8C120 49.7 240 25.3 360 16.5C480 7.7 600 14.3 720 24.7C840 35 960 49 1080 53.2C1200 57.3 1320 51.7 1380 48.8L1440 46V74H1380C1320 74 1200 74 1080 74C960 74 840 74 720 74C600 74 480 74 360 74C240 74 120 74 60 74H0Z" />
-        </svg>
-      </div>
     </section>
 
+    <!-- Categorias -->
     <!-- Categorias -->
     <section class="bg-gradient-to-b from-gray-50 to-white py-20 relative">
       <div class="absolute top-16 left-12 w-20 h-20 bg-accent-500/10 rounded-full blur-3xl animate-float"></div>
@@ -106,7 +93,19 @@
             class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-accent-500 animate-fade-in-up"
             :style="{ animationDelay: category.delay }"
           >
-            <img :src="category.image" :alt="category.title" class="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div class="h-56 w-full overflow-hidden">
+              <img
+                v-if="category.image"
+                :src="category.image"
+                :alt="category.title"
+                class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div
+                v-else
+                class="h-full w-full transition-transform duration-700 group-hover:scale-105"
+                :style="{ background: category.gradient || 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)' }"
+              ></div>
+            </div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-5">
               <component :is="category.icon" class="h-8 w-8 text-accent-400 mb-3 animate-bounce-slow"></component>
               <p class="text-xs text-gray-300 uppercase tracking-wider">{{ category.tagline }}</p>
@@ -115,6 +114,51 @@
             </div>
             <span class="absolute top-0 right-0 bg-accent-500 text-primary-900 px-3 py-1 text-xs font-bold rounded-bl-xl">{{ category.label }}</span>
           </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acesso rápido (login/registro) -->
+    <section class="cta-section">
+      <div class="cta-shell">
+        <div class="cta-header">
+          <p class="cta-eyebrow">Entrar ou criar conta</p>
+          <h2 class="cta-heading">Kaddesh: Onde a excelencia encontra a demanda.</h2>
+          <p class="cta-subtext">Use sua conta para acessar o Lobby no modo Contratante ou Prestador e acompanhar os leiloes em tempo real.</p>
+        </div>
+
+        <div class="cta-grid">
+          <div class="cta-card">
+            <div class="cta-card__top">
+              <div class="cta-icon">
+                <LockClosedIcon class="h-5 w-5" />
+              </div>
+              <div>
+                <h3 class="cta-title">Já tem conta?</h3>
+                <p class="cta-text">Acesse o Lobby no seu modo preferido.</p>
+              </div>
+            </div>
+            <button @click="goToLogin" class="cta-button primary">
+              <span>Fazer login</span>
+              <ArrowRightIcon class="h-5 w-5" />
+            </button>
+          </div>
+
+          <div class="cta-card alt">
+            <div class="cta-card__top">
+              <div class="cta-icon alt">
+                <UserPlusIcon class="h-5 w-5" />
+              </div>
+              <div>
+                <h3 class="cta-title">Novo por aqui?</h3>
+                <p class="cta-text">Crie sua conta para contratar ou prestar serviços.</p>
+              </div>
+            </div>
+            <button @click="goToRegister" class="cta-button secondary">
+              <span>Criar conta</span>
+              <ArrowRightIcon class="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -147,9 +191,13 @@
             </li>
           </ul>
 
-          <div class="flex flex-wrap gap-4">
-            <img src="/assets/images/appstore.png" alt="Download App Store" class="h-14 object-contain" />
-            <img src="/assets/images/playstore.png" alt="Download Google Play" class="h-14 object-contain" />
+          <div class="flex flex-wrap gap-3">
+            <button class="px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition" @click="goToLogin">
+              Entrar
+            </button>
+            <button class="px-4 py-3 rounded-xl bg-dark-80 border border-gold/30 text-offwhite font-semibold hover:border-gold/50 transition" @click="goToRegister">
+              Criar conta
+            </button>
           </div>
         </div>
 
@@ -196,49 +244,60 @@
           </div>
         </div>
 
-        <div v-else-if="featuredProjects.length" class="space-y-6">
+                <div v-else-if="featuredProjects.length" class="space-y-6">
           <article
             v-for="project in featuredProjects"
             :key="project.id"
             class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-2xl transition-shadow"
           >
             <div class="flex flex-col lg:flex-row gap-6">
-              <div class="flex-1 flex gap-4">
-                <div class="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center">
-                  <img src="/assets/images/project-placeholder.png" alt="Projeto" class="w-full h-full object-cover rounded-2xl" />
-                </div>
-                <div>
-                  <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-2">
-                    <span class="px-3 py-1 bg-accent-100 text-primary-900 rounded-full text-xs font-bold">⚡ Destaque</span>
-                    <span>Postado {{ formatDate(project.created_at) }}</span>
-                    <span class="flex items-center gap-1"><UsersIcon class="h-4 w-4" /> {{ project.bids_count || 0 }} propostas</span>
-                  </div>
-                  <h3 class="text-2xl font-semibold text-primary-900">{{ project.title }}</h3>
-                  <p class="text-gray-600 mt-2">{{ project.description }}</p>
-                  <div class="flex flex-wrap gap-4 text-sm text-gray-600 mt-4">
-                    <span class="flex items-center gap-1"><CalendarDaysIcon class="h-4 w-4 text-accent-500" /> {{ formatTimeLeft(project.bidding_ends_at) }}</span>
-                    <span class="flex items-center gap-1"><MapPinIcon class="h-4 w-4 text-accent-500" /> Remoto</span>
-                  </div>
-                </div>
+              <div class="w-full lg:w-48 h-32 bg-gray-100 rounded-2xl overflow-hidden flex-shrink-0">
+                <img
+                  v-if="getHeroImage(project)"
+                  :src="getHeroImage(project)"
+                  :alt="project.title"
+                  class="w-full h-full object-cover"
+                />
+                <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Sem imagem</div>
               </div>
-              <div class="lg:w-64 flex flex-col justify-between">
-                <div>
-                  <p class="text-sm text-gray-500">Budget estimado</p>
-                  <p class="text-3xl font-bold text-green-600">R$ {{ formatBudget(project.max_budget) }}</p>
+              <div class="flex-1 space-y-3">
+                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                  <span class="px-3 py-1 bg-accent-100 text-primary-900 rounded-full text-xs font-bold">Destaque</span>
+                  <span>Postado {{ formatDate(project.created_at) }}</span>
+                  <span class="flex items-center gap-1"><UsersIcon class="h-4 w-4" /> {{ project.bid_count || 0 }} propostas</span>
+                  <span class="flex items-center gap-1"><CalendarDaysIcon class="h-4 w-4 text-accent-500" /> Termina em {{ formatTimeLeft(project.deadline) }}</span>
+                </div>
+                <div class="flex items-start justify-between gap-4">
+                  <div class="space-y-1">
+                    <h3 class="text-2xl font-semibold text-primary-900">{{ project.title }}</h3>
+                    <p class="text-sm text-gray-600 line-clamp-3">{{ project.description }}</p>
+                    <div class="flex flex-wrap gap-3 text-sm text-gray-600 pt-1">
+                      <span class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-gray-700">
+                        <MapPinIcon class="h-4 w-4 text-accent-500" /> Remoto
+                      </span>
+                      <span class="inline-flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-gray-700">
+                        <CalendarDaysIcon class="h-4 w-4 text-accent-500" /> Prazo {{ formatDateShort(project.deadline) }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-xs text-gray-500">Orçamento</p>
+                    <p class="text-2xl font-bold text-green-600">R$ {{ formatBudget(project.budget) }}</p>
+                    <p v-if="project.lowest_bid_amount" class="text-xs text-gray-500 mt-1">Menor lance: R$ {{ formatBudget(project.lowest_bid_amount) }}</p>
+                  </div>
                 </div>
                 <button
                   type="button"
                   @click="handleApplyProject(project.id)"
-                  class="btn btn-primary w-full mt-4"
+                  class="btn btn-primary w-full sm:w-auto"
                 >
-                  Inscreva-se agora
+                  Ver leilão
                 </button>
               </div>
             </div>
           </article>
         </div>
-
-        <div v-else class="text-center py-12 text-gray-500">
+<div v-else class="text-center py-12 text-gray-500">
           <p class="text-lg">Nenhum projeto disponível no momento. Cadastre-se para ser notificado.</p>
         </div>
       </div>
@@ -569,7 +628,9 @@ import {
   StarIcon,
   UsersIcon,
   MapPinIcon,
-  CalendarDaysIcon
+  CalendarDaysIcon,
+  LockClosedIcon,
+  UserPlusIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -628,47 +689,59 @@ const categories = [
   },
   {
     id: 2,
-    title: 'Marketing Digital',
-    description: 'Growth, mídia paga e social',
-    label: 'Trending',
-    tagline: 'Performance',
-    slug: 'marketing-digital',
-    image: '/assets/images/category-marketing.jpg',
-    icon: MegaphoneIcon,
-    delay: '100ms'
+    title: 'Design',
+    description: 'Identidade visual e UX/UI',
+    label: 'Creative',
+    tagline: 'Interface e marca',
+    slug: 'design',
+    image: '/assets/images/category-design-real.jpg',
+    icon: PaintBrushIcon,
+    delay: '120ms'
   },
   {
     id: 3,
-    title: 'Design & Branding',
-    description: 'Identidade visual e UX/UI',
-    label: 'Creative',
-    tagline: 'Estética e produto',
-    slug: 'design-branding',
-    image: '/assets/images/category-design-real.jpg',
-    icon: PaintBrushIcon,
+    title: 'Marketing',
+    description: 'Growth, mídia paga e social',
+    label: 'Trending',
+    tagline: 'Performance',
+    slug: 'marketing',
+    image: '/assets/images/category-marketing.jpg',
+    icon: MegaphoneIcon,
     delay: '200ms'
   },
   {
     id: 4,
-    title: 'Tecnologia & Dados',
-    description: 'IA, integrações e automações',
-    label: 'Hot',
-    tagline: 'SaaS • AI',
-    slug: 'tecnologia-dados',
+    title: 'Redação',
+    description: 'Conteúdo, roteiros e scripts',
+    label: 'Conteúdo',
+    tagline: 'Copy e roteiro',
+    slug: 'redacao',
     image: '/assets/images/category-email-real.jpg',
     icon: CpuChipIcon,
-    delay: '300ms'
+    delay: '280ms'
   },
   {
     id: 5,
-    title: 'Consultoria de Negócios',
+    title: 'Consultoria',
     description: 'Plano de crescimento e processos',
     label: 'Premium',
     tagline: 'Estratégia',
-    slug: 'consultoria-negocios',
+    slug: 'consultoria',
     image: '/assets/images/hero-business.jpg',
     icon: BriefcaseIcon,
-    delay: '400ms'
+    delay: '360ms'
+  },
+  {
+    id: 6,
+    title: 'Outros',
+    description: 'Projetos especiais e sob demanda',
+    label: 'Sob medida',
+    tagline: 'Personalizado',
+    slug: 'outros',
+    image: '/assets/images/category-obras-real.jpg',
+    gradient: 'linear-gradient(180deg, #2f3f55 0%, #0f1625 100%)',
+    icon: BriefcaseIcon,
+    delay: '440ms'
   }
 ]
 
@@ -694,7 +767,7 @@ const fetchFeaturedProjects = async () => {
   loadingProjects.value = true
   try {
     const { data } = await api.get('/api/projects', {
-      params: { status: 'open', limit: 4 },
+      params: { status: 'open', per_page: 4, page: 1 },
       silent: true // Não mostrar toast de erro
     })
 
@@ -759,9 +832,11 @@ const formatTimeLeft = endsAt => {
   const diff = end - now
   if (diff <= 0) return 'Encerrado'
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  if (days > 0) return `${days} dias restantes`
+  if (days > 0) return `${days}d`
   const hours = Math.floor(diff / (1000 * 60 * 60))
-  return `${hours} horas restantes`
+  if (hours > 0) return `${hours}h`
+  const minutes = Math.floor(diff / (1000 * 60))
+  return `${minutes}min`
 }
 
 const formatBudget = value => {
@@ -770,12 +845,378 @@ const formatBudget = value => {
   return numeric.toFixed(2).replace('.', ',')
 }
 
+const formatDateShort = date => {
+  if (!date) return 'Sem prazo'
+  try {
+    return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+  } catch {
+    return 'Sem prazo'
+  }
+}
+
+const getHeroImage = project => {
+  const attachments = Array.isArray(project.attachments) ? project.attachments : []
+  const firstImage = attachments.find(att => (att.mime_type || '').startsWith('image/') || /\.(jpg|jpeg|png|webp)$/i.test(att.original_name || ''))
+  return firstImage?.file_url || null
+}
+
 const getProgressBarWidth = value => {
   const safeValue = Math.min(Math.max(Number(value) || 0, 0), 100)
   return `${safeValue}%`
+}
+
+const goToLogin = () => {
+  router.push({ name: 'login', query: { redirect: '/lobby' } })
+}
+
+const goToRegister = () => {
+  router.push({ name: 'register' })
 }
 
 onMounted(() => {
   fetchFeaturedProjects()
 })
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Lato:wght@400;500;600&display=swap');
+
+.home-shell {
+  background: #f5f5f5;
+  color: #1a1a1a;
+  font-family: 'Lato', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.hero-section {
+  background: #1a1a1a;
+  color: #f5f5f5;
+  position: relative;
+}
+
+.hero-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 4rem 1rem 3rem;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hero-container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.eyebrow {
+  color: #d4af37;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.hero-title {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #d4af37;
+}
+
+.hero-sub {
+  color: #e5e5e5;
+  font-size: 1.05rem;
+  max-width: 680px;
+}
+.hero-sub.tagline {
+  font-weight: 700;
+  color: #d4af37;
+}
+
+.hero-search {
+  background: rgba(245, 245, 245, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
+
+.search-input::placeholder {
+  color: #b8b8b8;
+}
+
+.cta-primary {
+  background: #d4af37;
+  color: #1a1a1a;
+  padding: 0.9rem 1.4rem;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cta-primary:hover {
+  background: #c49c2f;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.hero-stat-card {
+  background: rgba(245, 245, 245, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.hero-stat-label {
+  color: #cfcfcf;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.hero-stat-value {
+  color: #d4af37;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.hero-visual {
+  position: relative;
+}
+
+.hero-visual-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 28px;
+  background: rgba(212, 175, 55, 0.12);
+  filter: blur(32px);
+}
+
+.hero-visual-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #0f0f0f;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.hero-visual-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+  display: block;
+}
+
+.hero-visual-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.hero-visual-caption {
+  color: #cfcfcf;
+  font-size: 0.85rem;
+}
+
+.hero-visual-highlight {
+  color: #d4af37;
+  font-weight: 700;
+  margin-top: 0.35rem;
+}
+
+.text-gold {
+  color: #d4af37;
+}
+
+.text-offwhite-muted {
+  color: #d0d0d0;
+}
+
+.bg-dark {
+  background: #111111;
+}
+
+.bg-dark-80 {
+  background: rgba(17, 17, 17, 0.85);
+}
+
+.shadow-gold {
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.35);
+}
+.cta-section {
+  background: linear-gradient(180deg, #f8f8f8 0%, #ffffff 60%, #f4f0e8 100%);
+  padding: 3.5rem 1rem;
+}
+
+.cta-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.cta-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.cta-eyebrow {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #d4af37;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.cta-heading {
+  font-family: 'Montserrat', 'Lato', sans-serif;
+  font-size: clamp(1.9rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-top: 0.35rem;
+}
+
+.cta-subtext {
+  color: #4a4a4a;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.cta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .cta-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cta-card {
+  background: radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.18), rgba(26, 26, 26, 0) 45%), #ffffff;
+  border: 1px solid rgba(26, 26, 26, 0.06);
+  border-radius: 24px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cta-card.alt {
+  background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #f5f5f5;
+}
+
+.cta-card__top {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.cta-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d4af37, #c49c2f);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  box-shadow: 0 10px 24px rgba(212, 175, 55, 0.35);
+}
+
+.cta-icon.alt {
+  background: linear-gradient(135deg, #3a8beb, #2d5da8);
+  color: #f5f5f5;
+  box-shadow: 0 10px 24px rgba(58, 139, 235, 0.35);
+}
+
+.cta-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: inherit;
+}
+
+.cta-text {
+  color: inherit;
+  opacity: 0.85;
+  font-size: 0.98rem;
+}
+
+.cta-button {
+  width: 100%;
+  border-radius: 14px;
+  padding: 0.95rem 1.1rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  border: none;
+}
+
+.cta-button.primary {
+  background: linear-gradient(135deg, #d4af37, #c49c2f);
+  color: #1a1a1a;
+  box-shadow: 0 16px 36px rgba(212, 175, 55, 0.32);
+}
+
+.cta-button.secondary {
+  background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+  color: #f5f5f5;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+}
+</style>
+
+
+
+
+
+

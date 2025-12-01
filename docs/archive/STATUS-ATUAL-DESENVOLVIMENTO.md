@@ -6,6 +6,20 @@
 
 ---
 
+## 🆕 Atualização - 27 de Novembro de 2025
+
+### ✅ Entregas deste ciclo
+- Upload seguro de anexos diretamente no fluxo de criação do projeto (limite de 3 arquivos com feedback imediato).
+- Persistência dos anexos no backend com validação de tamanho/tipo e endpoint dedicado `/api/projects/:id/attachments`.
+- Cartões do Lobby exibindo miniatura quando há imagem anexada e identificando o total de arquivos.
+- Lobby também mostra número total de propostas e menor lance atual por projeto, dando visibilidade rápida ao estado do leilão.
+
+### ⏳ Pontos pendentes / próximos passos
+- Permitir gestão pós-publicação dos anexos (excluir/substituir diretamente na página do projeto).
+- Ajustar o Lobby para destacar diferenças entre modos contratante/prestador (indicadores exclusivos e filtros salvos).
+- Automatizar a seleção do vencedor quando o leilão expira, usando menor lance + prazo como critérios.
+- Registrar em vídeo curto ou GIF o novo fluxo de anexos e a criação de projetos para apoiar onboarding.
+
 ## ✅ Sistema de Leilão - COMPLETAMENTE IMPLEMENTADO
 
 ### Funcionalidades do Sistema de Leilão

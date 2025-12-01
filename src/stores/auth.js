@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters
   const isAuthenticated = computed(() => !!token.value && !!user.value)
   const isClient = computed(() => user.value?.type === 'client')
-  const isProvider = computed(() => user.value?.type === 'provider')
+  const isProvider = computed(() => user.value?.type === 'provider' || user.value?.type === 'unified')
   const userInitials = computed(() => {
     if (!user.value?.name) return ''
     return user.value.name

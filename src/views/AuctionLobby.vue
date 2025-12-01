@@ -3,8 +3,22 @@
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">🎯 Lobby de Leilões Reversos</h1>
-        <p class="text-gray-600">Acompanhe todas as propostas e disputas em tempo real - Lance menor vence!</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ lobbyTitle }}</h1>
+        <p class="text-gray-600">{{ lobbyDescription }}</p>
+      </div>
+
+      <!-- Mode-specific highlights -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div
+          v-for="highlight in lobbyHighlights"
+          :key="highlight.label"
+          class="bg-white rounded-xl shadow p-4 border-l-4"
+          :class="highlight.border"
+        >
+          <p class="text-sm text-gray-500">{{ highlight.label }}</p>
+          <p class="text-2xl font-bold text-gray-900">{{ highlight.value }}</p>
+          <span class="text-xs font-semibold" :class="highlight.text">{{ highlight.caption }}</span>
+        </div>
       </div>
 
       <!-- Quick Actions -->
@@ -20,7 +34,7 @@
         </router-link>
 
         <router-link
-          v-if="user?.type === 'client'"
+          v-if="isContractorView"
           to="/projects/create"
           class="flex items-center justify-center p-4 bg-blue-600 text-white rounded-lg shadow hover:shadow-md transition"
         >
@@ -28,6 +42,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           <span class="text-sm font-medium">Novo Projeto</span>
+        </router-link>
+        <router-link
+          v-else
+          to="/projects"
+          class="flex items-center justify-center p-4 bg-blue-600 text-white rounded-lg shadow hover:shadow-md transition"
+        >
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span class="text-sm font-medium">Explorar Projetos</span>
         </router-link>
 
         <router-link
@@ -62,11 +86,7 @@
               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todas</option>
-              <option value="design">Design</option>
-              <option value="desenvolvimento">Desenvolvimento</option>
-              <option value="marketing">Marketing</option>
-              <option value="escrita">Escrita</option>
-              <option value="consultoria">Consultoria</option>
+              <option v-for="cat in categoryOptions" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
             </select>
           </div>
 
@@ -141,228 +161,128 @@
         <p class="text-gray-600">Nenhum projeto encontrado com os filtros atuais</p>
       </div>
 
-      <div v-else class="space-y-6">
-        <!-- Auction Card for each project -->
+      <div v-else class="space-y-4">
         <div
           v-for="project in filteredProjects"
           :key="project.id"
-          class="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden"
+          class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6"
         >
-          <!-- Countdown Timer Banner -->
-          <div 
-            v-if="project.status === 'open' && project.deadline"
-            class="px-6 py-3 flex items-center justify-between"
-            :class="getCountdownBannerClass(project)"
-          >
-            <div class="flex items-center space-x-3">
-              <div class="flex items-center justify-center w-10 h-10 rounded-full bg-white/20">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div class="text-white">
-                <p class="font-semibold">{{ getCountdownStatus(project) }}</p>
-                <p class="text-sm text-white/80">Envie sua proposta antes do prazo</p>
-              </div>
-            </div>
-            <div class="text-right text-white">
-              <p class="text-sm opacity-80">Tempo restante</p>
-              <p class="text-2xl font-bold font-mono">{{ getCountdownDisplay(project) }}</p>
-            </div>
-          </div>
-
-          <!-- Deadline passed banner -->
-          <div 
-            v-else-if="project.status === 'open' && !project.deadline"
-            class="px-6 py-3 bg-gray-500 flex items-center justify-between"
-          >
-            <div class="flex items-center space-x-3 text-white">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span class="font-medium">Sem prazo definido</span>
-            </div>
-          </div>
-
-          <div class="p-6">
-            <div class="flex flex-col lg:flex-row gap-6">
-              <!-- Project Image/Thumbnail -->
-              <div class="lg:w-48 flex-shrink-0">
-                <div v-if="project.attachments && project.attachments.length > 0" class="aspect-video lg:aspect-square rounded-lg overflow-hidden bg-gray-100">
-                  <img 
-                    :src="project.attachments[0].file_url" 
-                    :alt="project.title"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-                <div v-else class="aspect-video lg:aspect-square rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                  <svg class="w-16 h-16 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <div class="grid gap-6 md:grid-cols-[160px_1fr]">
+            <div class="relative">
+              <div
+                class="h-40 w-full rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  v-if="getCoverImage(project)"
+                  :src="getCoverImage(project)"
+                  :alt="project.title"
+                  class="object-cover w-full h-full"
+                />
+                <div v-else class="text-center px-4">
+                  <svg class="w-10 h-10 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
                   </svg>
+                  <p class="text-xs text-gray-500 mt-2">Sem anexos enviados</p>
                 </div>
               </div>
+              <div
+                v-if="attachmentCount(project)"
+                class="absolute top-2 left-2 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-gray-700 shadow"
+              >
+                {{ attachmentCount(project) }} {{ attachmentCount(project) === 1 ? 'arquivo' : 'arquivos' }}
+              </div>
+            </div>
 
-              <!-- Project Info -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between mb-3">
-                  <div>
-                    <router-link
-                      :to="`/projects/${project.id}`"
-                      class="text-xl font-bold text-gray-900 hover:text-blue-600 transition"
+            <div>
+              <div class="flex flex-wrap gap-4 items-start justify-between">
+                <div class="flex-1 min-w-[220px]">
+                  <router-link
+                    :to="`/projects/${project.id}`"
+                    class="text-xl font-semibold text-gray-900 hover:text-blue-600"
+                  >
+                    {{ project.title }}
+                  </router-link>
+                  <div class="flex flex-wrap items-center gap-3 mt-2 text-sm text-gray-500">
+                    <span class="flex items-center">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                      {{ getCategoryLabel(project.category) }}
+                    </span>
+                    <span class="flex items-center">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {{ formatDate(project.created_at) }}
+                    </span>
+                    <span v-if="project.deadline" class="flex items-center text-orange-600">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l3 3" />
+                      </svg>
+                      Prazo: {{ formatDeadline(project.deadline) }}
+                    </span>
+                    <span
+                      v-if="getDeadlineBadge(project)"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
+                      :class="getDeadlineBadge(project).class"
                     >
-                      {{ project.title }}
-                    </router-link>
-                    <div class="flex items-center gap-3 mt-2 text-sm text-gray-500">
-                      <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                        </svg>
-                        {{ project.category || 'Geral' }}
-                      </span>
-                      <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        {{ project.client_name || 'Contratante' }}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <div class="text-sm text-gray-500">Orçamento máximo</div>
-                    <div class="text-2xl font-bold text-blue-600">
-                      R$ {{ formatCurrency(project.budget) }}
-                    </div>
-                  </div>
-                </div>
-
-                <p class="text-gray-700 mb-4 line-clamp-2">{{ project.description }}</p>
-
-                <!-- Bids Summary -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-4">
-                  <div class="flex items-center justify-between mb-3">
-                    <h3 class="font-semibold text-gray-900">
-                      📊 Resumo das Propostas ({{ project.bids?.length || project.bid_count || 0 }})
-                    </h3>
-                    <span 
-                      :class="[
-                        'px-3 py-1 rounded-full text-xs font-medium',
-                        project.status === 'open' ? 'bg-green-100 text-green-800' :
-                        project.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
-                        project.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                        'bg-gray-100 text-gray-800'
-                      ]"
-                    >
-                      {{ getStatusLabel(project.status) }}
+                      <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l3 3" />
+                      </svg>
+                      {{ getDeadlineBadge(project).text }}
                     </span>
                   </div>
+                </div>
 
-                  <!-- Bid List - Sorted by lowest price (winner first) -->
-                  <div v-if="project.bids && project.bids.length > 0" class="space-y-2">
-                    <div 
-                      v-for="(bid, index) in getSortedBids(project.bids).slice(0, 3)" 
-                      :key="bid.id"
-                      :class="[
-                        'flex items-center justify-between p-3 rounded-lg transition',
-                        index === 0 ? 'bg-green-50 border-2 border-green-300' : 'bg-white border border-gray-200'
-                      ]"
-                    >
-                      <div class="flex items-center space-x-3">
-                        <!-- Ranking Badge -->
-                        <div :class="[
-                          'w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm',
-                          index === 0 ? 'bg-green-500 text-white' : 
-                          index === 1 ? 'bg-gray-400 text-white' : 
-                          'bg-gray-300 text-gray-600'
-                        ]">
-                          {{ index === 0 ? '🏆' : index + 1 }}
-                        </div>
-                        <div>
-                          <p class="font-medium text-gray-900">{{ bid.provider_name }}</p>
-                          <div class="flex items-center text-xs text-gray-500">
-                            <svg class="w-3 h-3 mr-1 text-yellow-500 fill-current" viewBox="0 0 20 20">
-                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                            </svg>
-                            <span>{{ formatRating(bid.rating) }}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="text-right">
-                        <p :class="[
-                          'font-bold',
-                          index === 0 ? 'text-green-600 text-lg' : 'text-gray-900'
-                        ]">
-                          R$ {{ formatCurrency(bid.amount) }}
-                        </p>
-                        <p class="text-xs text-gray-500">{{ bid.delivery_time }} dias</p>
-                      </div>
-                    </div>
-                    
-                    <!-- Show more bids link -->
-                    <div v-if="project.bids.length > 3" class="text-center pt-2">
-                      <router-link 
-                        :to="`/projects/${project.id}`"
-                        class="text-sm text-blue-600 hover:text-blue-800"
-                      >
-                        Ver todas as {{ project.bids.length }} propostas →
-                      </router-link>
-                    </div>
+                <div class="text-right">
+                  <p class="text-xs uppercase tracking-wide text-gray-500">Orçamento Máx.</p>
+                  <div class="text-2xl font-bold text-blue-600">R$ {{ formatCurrency(project.budget) }}</div>
+                  <div
+                    :class="[
+                      'inline-block px-3 py-1 rounded-full text-xs font-medium mt-2',
+                      project.status === 'open' ? 'bg-green-100 text-green-800' :
+                      project.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    ]"
+                  >
+                    {{ getStatusLabel(project.status) }}
                   </div>
+                </div>
+              </div>
 
-                  <!-- No bids yet -->
-                  <div v-else class="text-center py-4 text-gray-500">
-                    <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <p class="text-gray-700 my-4 line-clamp-2">{{ project.description }}</p>
+
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-4 text-sm">
+                  <div class="flex items-center text-gray-500">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <p>Nenhuma proposta ainda. Seja o primeiro!</p>
+                    <span>{{ project.client_name || 'Contratante' }}</span>
                   </div>
-                </div>
-
-                <!-- Winner Display (for completed auctions) -->
-                <div 
-                  v-if="project.status === 'in_progress' && project.winner"
-                  class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg p-4 text-white mb-4"
-                >
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-2xl">
-                        🏆
-                      </div>
-                      <div>
-                        <p class="font-bold text-lg">Vencedor do Leilão</p>
-                        <p class="text-white/90">{{ project.winner.provider_name }}</p>
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <p class="text-white/80 text-sm">Lance vencedor</p>
-                      <p class="text-2xl font-bold">R$ {{ formatCurrency(project.winner.amount) }}</p>
-                    </div>
+                  <div class="flex items-center text-blue-600 font-medium">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                    </svg>
+                    {{ getBidCount(project) }} {{ getBidCount(project) === 1 ? 'proposta' : 'propostas' }}
                   </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center text-sm text-gray-500">
+                  <div
+                    v-if="getBidCount(project) && getLowestBid(project)
+                    "
+                    class="flex items-center text-emerald-600 font-medium"
+                  >
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <span>Criado {{ formatDate(project.created_at) }}</span>
-                  </div>
-                  <div class="flex gap-2">
-                    <router-link
-                      :to="`/projects/${project.id}`"
-                      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition"
-                    >
-                      Ver Detalhes
-                    </router-link>
-                    <button
-                      v-if="project.status === 'open' && user?.type === 'provider'"
-                      @click="goToBid(project.id)"
-                      class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium transition"
-                    >
-                      Dar Lance
-                    </button>
+                    Menor lance: R$ {{ formatCurrency(getLowestBid(project)) }}
                   </div>
                 </div>
+                <router-link
+                  :to="`/projects/${project.id}`"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+                >
+                  Ver Detalhes
+                </router-link>
               </div>
             </div>
           </div>
@@ -375,19 +295,19 @@
           <button
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
           >
-            ← Anterior
+            Anterior
           </button>
-          <span class="relative inline-flex items-center px-6 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+          <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
             Página {{ currentPage }}
           </span>
           <button
             @click="currentPage++"
             :disabled="filteredProjects.length < pageSize"
-            class="relative inline-flex items-center px-4 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
           >
-            Próxima →
+            Próxima
           </button>
         </nav>
       </div>
@@ -396,20 +316,94 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import { ref, computed, onMounted, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useViewModeStore } from '@/stores/viewModeStore'
+import projectService from '@/services/projectService'
 import api from '@/services/api'
 
-const router = useRouter()
-const authStore = useAuthStore()
-const user = computed(() => authStore.user)
+const viewModeStore = useViewModeStore()
+const { currentMode } = storeToRefs(viewModeStore)
+
+const isContractorView = computed(() => currentMode.value === 'contractor')
+const isProviderView = computed(() => currentMode.value === 'provider')
+
+const lobbyTitle = computed(() =>
+  isContractorView.value ? '🎯 Lobby do Contratante' : '⚙️ Lobby do Prestador'
+)
+
+const lobbyDescription = computed(() =>
+  isContractorView.value
+    ? 'Gerencie seus leilões, monitore os lances e acompanhe o vencedor em tempo real.'
+    : 'Descubra projetos em aberto, acompanhe disputas e envie lances competitivos instantaneamente.'
+)
+
+const lobbyHighlights = computed(() => {
+  const total = projects.value.length
+  const openCount = projects.value.filter(p => p.status === 'open').length
+  const highPriority = projects.value.filter(p => (p.priority || 3) <= 2).length
+
+  if (isContractorView.value) {
+    return [
+      {
+        label: 'Projetos ativos',
+        value: total,
+        caption: 'publicados por você',
+        border: 'border-blue-200',
+        text: 'text-blue-600'
+      },
+      {
+        label: 'Aceitando propostas',
+        value: openCount,
+        caption: 'leilões abertos agora',
+        border: 'border-green-200',
+        text: 'text-green-600'
+      },
+      {
+        label: 'Prioridade alta',
+        value: highPriority,
+        caption: 'precisam de atenção',
+        border: 'border-amber-200',
+        text: 'text-amber-600'
+      }
+    ]
+  }
+
+  return [
+    {
+      label: 'Projetos disponíveis',
+      value: openCount,
+      caption: 'aceitando novos lances',
+      border: 'border-green-200',
+      text: 'text-green-600'
+    },
+    {
+      label: 'Novos hoje',
+      value: projects.value.filter(p => {
+        const created = new Date(p.created_at)
+        const now = new Date()
+        const diff = now - created
+        return diff <= 24 * 60 * 60 * 1000
+      }).length,
+      caption: 'oportunidades frescas',
+      border: 'border-blue-200',
+      text: 'text-blue-600'
+    },
+    {
+      label: 'Alta prioridade',
+      value: highPriority,
+      caption: 'pagam melhor',
+      border: 'border-purple-200',
+      text: 'text-purple-600'
+    }
+  ]
+})
 
 const loading = ref(false)
 const projects = ref([])
 const currentPage = ref(1)
 const pageSize = ref(20)
-const currentTimestamp = ref(Date.now()) // Reactive timestamp for countdown updates
+const categoryOptions = projectService.getCategories()
 
 const filters = ref({
   category: '',
@@ -417,6 +411,43 @@ const filters = ref({
   deadline: '',
   status: ''
 })
+
+const FILTER_STORAGE_KEYS = {
+  contractor: 'kadesh_lobby_filters_contractor',
+  provider: 'kadesh_lobby_filters_provider'
+}
+
+const getStorageKey = () => {
+  return currentMode.value === 'contractor'
+    ? FILTER_STORAGE_KEYS.contractor
+    : FILTER_STORAGE_KEYS.provider
+}
+
+const restoreFiltersForMode = () => {
+  if (typeof window === 'undefined') return
+  try {
+    const raw = localStorage.getItem(getStorageKey())
+    if (!raw) return
+    const saved = JSON.parse(raw)
+    filters.value = {
+      category: saved.category || '',
+      budget: saved.budget || '',
+      deadline: saved.deadline || '',
+      status: saved.status || ''
+    }
+  } catch (error) {
+    console.warn('Não foi possível restaurar filtros do lobby:', error)
+  }
+}
+
+const persistFilters = () => {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(getStorageKey(), JSON.stringify(filters.value))
+  } catch (error) {
+    console.warn('Não foi possível salvar filtros do lobby:', error)
+  }
+}
 
 const filteredProjects = computed(() => {
   let result = projects.value
@@ -439,40 +470,34 @@ const filteredProjects = computed(() => {
 const loadProjects = async () => {
   loading.value = true
   try {
-    const response = await api.get('/api/projects', {
-      params: {
-        page: currentPage.value,
-        limit: pageSize.value
-      }
-    })
-    const projectList = response.data.projects || response.data
-    
-    // Load bids for each project to display in the auction cards
-    // TODO: Optimize this by creating a batch endpoint or including top bids in the main project response
-    // This creates N+1 queries but ensures accurate bid data for the auction display
-    const projectsWithBids = await Promise.all(
-      projectList.map(async (project) => {
-        // Only fetch bids for open projects that need countdown/bid display
-        if (project.status !== 'open') {
-          return { ...project, bids: [] }
-        }
-        try {
-          const bidsResponse = await api.get(`/api/bids/project/${project.id}`, {
-            params: { limit: 5 } // Only fetch top 5 bids for display
-          })
-          return {
-            ...project,
-            bids: bidsResponse.data.bids || []
-          }
-        } catch (error) {
-          return { ...project, bids: [] }
-        }
-      })
-    )
-    
-    projects.value = projectsWithBids
+    const endpoint = isContractorView.value ? '/api/projects/my-projects' : '/api/projects'
+    const params = {
+      per_page: pageSize.value,
+      page: currentPage.value
+    }
+
+    if (filters.value.status) {
+      params.status = filters.value.status
+    } else if (isProviderView.value) {
+      params.status = 'open'
+    }
+
+    if (filters.value.category) {
+      params.category = filters.value.category
+    }
+
+    if (filters.value.budget) {
+      params.budget_max = filters.value.budget
+    }
+
+    const response = await api.get(endpoint, { params })
+    const payload = Array.isArray(response.data)
+      ? response.data
+      : response.data?.projects || []
+    projects.value = payload
   } catch (error) {
     console.error('Erro ao carregar projetos:', error)
+    projects.value = []
   } finally {
     loading.value = false
   }
@@ -493,70 +518,13 @@ const clearFilters = () => {
   applyFilters()
 }
 
-const goToBid = (projectId) => {
-  router.push(`/projects/${projectId}`)
-}
-
-// Sort bids by lowest amount (reverse auction - lowest wins)
-const getSortedBids = (bids) => {
-  if (!bids || bids.length === 0) return []
-  return [...bids].sort((a, b) => (a.amount || 0) - (b.amount || 0))
-}
-
-// Countdown helpers - uses reactive timestamp for efficient updates
-const getTimeRemaining = (deadline) => {
-  if (!deadline) return null
-  
-  // Use reactive timestamp to trigger recalculation
-  const now = new Date(currentTimestamp.value)
-  const deadlineDate = new Date(deadline)
-  const diff = deadlineDate - now
-  
-  if (diff <= 0) {
-    return { expired: true, days: 0, hours: 0, minutes: 0, seconds: 0 }
-  }
-  
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-  
-  return { expired: false, days, hours, minutes, seconds }
-}
-
-const getCountdownDisplay = (project) => {
-  const time = getTimeRemaining(project.deadline)
-  if (!time) return '--:--:--'
-  if (time.expired) return 'Encerrado'
-  
-  if (time.days > 0) {
-    return `${time.days}d ${String(time.hours).padStart(2, '0')}h ${String(time.minutes).padStart(2, '0')}m`
-  }
-  
-  return `${String(time.hours).padStart(2, '0')}:${String(time.minutes).padStart(2, '0')}:${String(time.seconds).padStart(2, '0')}`
-}
-
-const getCountdownStatus = (project) => {
-  const time = getTimeRemaining(project.deadline)
-  if (!time) return 'Leilão Aberto'
-  if (time.expired) return 'Leilão Encerrado'
-  if (time.days > 2) return 'Leilão Ativo'
-  if (time.days > 0) return 'Terminando em breve'
-  if (time.hours > 6) return 'Últimas horas!'
-  return 'Encerrando agora!'
-}
-
-const getCountdownBannerClass = (project) => {
-  const time = getTimeRemaining(project.deadline)
-  if (!time || time.expired) return 'bg-gray-500'
-  if (time.days > 2) return 'bg-gradient-to-r from-green-500 to-emerald-600'
-  if (time.days > 0) return 'bg-gradient-to-r from-yellow-500 to-orange-500'
-  if (time.hours > 6) return 'bg-gradient-to-r from-orange-500 to-red-500'
-  return 'bg-gradient-to-r from-red-500 to-red-700'
-}
-
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR').format(value || 0)
+}
+
+const getCategoryLabel = (value) => {
+  const cat = categoryOptions.find(c => c.value === value || c.label === value)
+  return cat ? cat.label : (value || 'Geral')
 }
 
 const formatDate = (dateString) => {
@@ -565,11 +533,15 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('pt-BR')
 }
 
-const formatRating = (rating) => {
-  if (!rating && rating !== 0) return 'Novo'
-  const parsed = Number(rating)
-  if (Number.isNaN(parsed)) return 'Novo'
-  return parsed.toFixed(1)
+const formatDeadline = (dateString) => {
+  if (!dateString) return 'Sem prazo'
+  const date = new Date(dateString)
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 const getStatusLabel = (status) => {
@@ -582,26 +554,83 @@ const getStatusLabel = (status) => {
   return labels[status] || status
 }
 
-// Update countdowns every second by updating the reactive timestamp
-let countdownTimer = null
+const normalizeAttachments = (project) => {
+  if (!project) return []
+  if (Array.isArray(project.attachments)) return project.attachments
+  return []
+}
 
-const startCountdownTimer = () => {
-  countdownTimer = setInterval(() => {
-    // Update only the timestamp to trigger countdown recalculation
-    currentTimestamp.value = Date.now()
-  }, 1000)
+const attachmentCount = (project) => normalizeAttachments(project).length
+
+const getCoverImage = (project) => {
+  const list = normalizeAttachments(project)
+  const firstImage = list.find(item => item?.mime_type?.startsWith('image/'))
+  return firstImage?.file_url || null
+}
+
+const getBidCount = (project) => {
+  if (!project) return 0
+  return project.bid_count ?? project.bids_count ?? 0
+}
+
+const getLowestBid = (project) => {
+  if (!project) return null
+  const value = project.lowest_bid_amount ?? null
+  return typeof value === 'number' ? value : (value ? parseFloat(value) : null)
+}
+
+const getDeadlineBadge = (project) => {
+  if (!project?.deadline) return null
+  const deadline = new Date(project.deadline)
+  if (Number.isNaN(deadline.getTime())) return null
+  const now = new Date()
+  const diffMs = deadline - now
+  if (diffMs <= 0) {
+    return {
+      text: 'Prazo encerrado',
+      class: 'bg-red-100 text-red-700'
+    }
+  }
+
+  const totalMinutes = Math.floor(diffMs / (1000 * 60))
+  const days = Math.floor(totalMinutes / (60 * 24))
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60)
+  const minutes = totalMinutes % 60
+
+  let label = ''
+  if (days > 0) {
+    label = `${days}d ${hours}h`
+  } else if (hours > 0) {
+    label = `${hours}h ${minutes}m`
+  } else {
+    label = `${minutes}m`
+  }
+
+  let badgeClass = 'bg-green-100 text-green-700'
+  if (days <= 2) badgeClass = 'bg-amber-100 text-amber-700'
+  if (hours < 6 && days === 0) badgeClass = 'bg-orange-100 text-orange-700'
+  if (hours === 0 && days === 0) badgeClass = 'bg-red-100 text-red-700'
+
+  return {
+    text: `Termina em ${label}`,
+    class: badgeClass
+  }
 }
 
 onMounted(() => {
+  restoreFiltersForMode()
   loadProjects()
-  startCountdownTimer()
 })
 
-onUnmounted(() => {
-  if (countdownTimer) {
-    clearInterval(countdownTimer)
-  }
+watch(currentMode, () => {
+  restoreFiltersForMode()
+  currentPage.value = 1
+  loadProjects()
 })
+
+watch(filters, () => {
+  persistFilters()
+}, { deep: true })
 </script>
 
 <style scoped>
