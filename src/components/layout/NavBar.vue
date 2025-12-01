@@ -92,14 +92,40 @@
     </div>
   </transition>
 
+  <!-- Desktop sidebar toggle button -->
+  <button
+    v-if="!isSidebarVisible && isAuthenticated"
+    @click="sidebarStore.show"
+    class="hidden md:flex fixed top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-dark text-offwhite border border-gold/30 rounded-lg shadow-lg hover:bg-dark-80 transition"
+    aria-label="Mostrar menu lateral"
+  >
+    <svg class="h-4 w-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
+    </svg>
+    <span class="text-sm font-semibold">Mostrar menu</span>
+  </button>
+
   <!-- Desktop sidebar -->
-  <aside class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl">
-    <div class="p-6 border-b border-gold/20 flex items-center gap-3">
+  <aside
+    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-dark text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl transition-transform duration-200"
+    :class="{ '-translate-x-full': !isSidebarVisible }"
+  >
+    <div class="p-6 border-b border-gold/20 flex items-center justify-between gap-3">
       <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
       <div>
         <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
         <p class="text-xs text-offwhite-muted">Marketplace premium</p>
       </div>
+      <button
+        v-if="isAuthenticated"
+        @click="sidebarStore.hide"
+        class="p-2 rounded-lg hover:bg-dark-80 transition text-offwhite-muted"
+        aria-label="Ocultar menu lateral"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
     </div>
 
     <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
@@ -187,17 +213,20 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
+import { useSidebarStore } from '@/stores/sidebarStore'
 import ViewModeSwitch from '@/components/ViewModeSwitch.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const viewMode = useViewModeStore()
+const sidebarStore = useSidebarStore()
 
 const mobileMenuOpen = ref(false)
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
+const isSidebarVisible = computed(() => sidebarStore.isVisible)
 
 const iconPaths = {
   target: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 110 4 2 2 0 010-4z',

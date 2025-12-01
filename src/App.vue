@@ -28,11 +28,13 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useSidebarStore } from '@/stores/sidebarStore'
 import NavBar from '@/components/layout/NavBar.vue'
 import Footer from '@/components/layout/Footer.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
+const sidebarStore = useSidebarStore()
 
 const isInitializing = ref(true)
 const INITIALIZATION_FALLBACK_MS = 2000
@@ -48,7 +50,7 @@ const showNavigation = computed(() => {
 
 const mainClasses = computed(() => {
   if (!showNavigation.value) return ''
-  return 'pt-16 md:pt-0 md:pl-64'
+  return sidebarStore.isVisible ? 'pt-16 md:pt-0 md:pl-64' : 'pt-16 md:pt-0'
 })
 
 const finishInitialization = () => {
