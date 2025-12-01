@@ -239,4 +239,127 @@ router.post('/logout', auth, async (req, res) => {
   }
 });
 
+// Forgot password - request reset
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || !validateEmail(email)) {
+      return res.status(400).json({ error: 'Email inválido' });
+    }
+
+    // Check if user exists
+    const result = await db.query(
+      'SELECT id, name, email FROM users WHERE email = $1',
+      [email]
+    );
+
+    // Always return success to prevent email enumeration
+    if (result.rows.length === 0) {
+      return res.json({ 
+        success: true, 
+        message: 'Se o email existir, você receberá instruções para redefinir sua senha.' 
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Generate reset token (valid for 1 hour)
+    const resetToken = jwt.sign(
+      { userId: user.id, purpose: 'password_reset' },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Store token in database (optional - for extra security)
+    await db.query(
+      `UPDATE users SET 
+        password_reset_token = $1, 
+        password_reset_expires = NOW() + INTERVAL '1 hour',
+        updated_at = NOW()
+       WHERE id = $2`,
+      [resetToken, user.id]
+    );
+
+    // In production, send email here
+    // For now, log the reset link
+    const resetLink = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    console.log(`[Password Reset] Link para ${email}: ${resetLink}`);
+
+    res.json({ 
+      success: true, 
+      message: 'Se o email existir, você receberá instruções para redefinir sua senha.',
+      // DEV ONLY - remove in production:
+      devResetLink: process.env.NODE_ENV !== 'production' ? resetLink : undefined
+    });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ error: 'Erro ao processar solicitação' });
+  }
+});
+
+// Reset password - with token
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({ error: 'Token e nova senha são obrigatórios' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'Senha deve ter pelo menos 6 caracteres' });
+    }
+
+    // Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(400).json({ error: 'Token inválido ou expirado' });
+    }
+
+    if (decoded.purpose !== 'password_reset') {
+      return res.status(400).json({ error: 'Token inválido' });
+    }
+
+    // Check if token matches stored token
+    const result = await db.query(
+      `SELECT id, email FROM users 
+       WHERE id = $1 
+       AND password_reset_token = $2 
+       AND password_reset_expires > NOW()`,
+      [decoded.userId, token]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: 'Token inválido ou expirado' });
+    }
+
+    // Hash new password
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+
+    // Update password and clear reset token
+    await db.query(
+      `UPDATE users SET 
+        password_hash = $1, 
+        password_reset_token = NULL, 
+        password_reset_expires = NULL,
+        updated_at = NOW()
+       WHERE id = $2`,
+      [passwordHash, decoded.userId]
+    );
+
+    res.json({ 
+      success: true, 
+      message: 'Senha alterada com sucesso! Você já pode fazer login.' 
+    });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Erro ao redefinir senha' });
+  }
+});
+
 module.exports = router;
