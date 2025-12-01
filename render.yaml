@@ -6,7 +6,7 @@ services:
     region: oregon
     branch: main
     rootDir: backend
-    buildCommand: npm install --production
+    buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /health
     autoDeploy: true
