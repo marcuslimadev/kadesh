@@ -45,9 +45,8 @@ services:
     plan: free
     region: oregon
     branch: main
-    rootDir: /
     buildCommand: npm ci && npm run build
-    publishPath: dist
+    publishDir: dist
     autoDeploy: true
     envVars:
       - key: NPM_CONFIG_PRODUCTION
