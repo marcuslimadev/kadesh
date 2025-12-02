@@ -50,7 +50,7 @@
               <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Projeto</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contratante</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fornecedor</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prestador</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Atualização</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
@@ -105,7 +105,7 @@
               <div class="font-medium text-gray-900">{{ disputeDetail?.contract?.client_name }} <span class="text-xs text-gray-500">({{ disputeDetail?.contract?.client_email }})</span></div>
             </div>
             <div class="bg-gray-50 rounded-lg p-4">
-              <div class="text-xs text-gray-500 mb-1">Fornecedor</div>
+              <div class="text-xs text-gray-500 mb-1">Prestador</div>
               <div class="font-medium text-gray-900">{{ disputeDetail?.contract?.provider_name }} <span class="text-xs text-gray-500">({{ disputeDetail?.contract?.provider_email }})</span></div>
             </div>
           </div>

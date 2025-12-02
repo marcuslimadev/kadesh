@@ -37,7 +37,7 @@
                 <p class="font-medium text-gray-900">{{ c.client_name }}</p>
               </div>
               <div>
-                <p class="text-gray-500">Fornecedor</p>
+                <p class="text-gray-500">Prestador</p>
                 <p class="font-medium text-gray-900">{{ c.provider_name }}</p>
               </div>
               <div>

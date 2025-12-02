@@ -4,7 +4,7 @@
       <div class="mb-8">
         <p class="text-sm font-medium text-primary-600 uppercase tracking-wide">Perfil profissional</p>
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <h1 class="text-3xl font-bold text-gray-900">Meu Perfil de Fornecedor</h1>
+          <h1 class="text-3xl font-bold text-gray-900">Meu Perfil de Prestador</h1>
           <div class="flex items-center gap-3">
             <button
               type="button"
@@ -31,9 +31,9 @@
       </div>
 
       <div v-if="!isProvider" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-dashed border-gray-200">
-        <h2 class="text-2xl font-semibold text-gray-900">Perfil de fornecedor indisponivel</h2>
+        <h2 class="text-2xl font-semibold text-gray-900">Perfil de prestador indisponível</h2>
         <p class="mt-3 text-gray-600">
-          Esta funcao esta disponivel apenas para contas do tipo fornecedor. Altere o tipo de conta ou crie uma nova conta de fornecedor.
+          Esta função está disponível apenas para contas do tipo prestador. Altere o tipo de conta ou crie uma nova conta de prestador.
         </p>
       </div>
 

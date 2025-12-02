@@ -36,7 +36,7 @@
           </div>
           <div class="admin-stat-footer">
             <span class="font-medium">{{ stats.users?.clients || 0 }}</span> Contratantes • 
-            <span class="font-medium">{{ stats.users?.providers || 0 }}</span> Fornecedores
+            <span class="font-medium">{{ stats.users?.providers || 0 }}</span> Prestadores
           </div>
         </div>
 

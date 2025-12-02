@@ -39,7 +39,7 @@
             <select v-model="filters.type" @change="fetchUsers" class="admin-form-select">
               <option value="">Todos</option>
               <option value="client">Contratantes</option>
-              <option value="provider">Fornecedores</option>
+              <option value="provider">Prestadores</option>
             </select>
           </div>
           <div class="admin-form-group">

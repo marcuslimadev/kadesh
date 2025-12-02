@@ -72,7 +72,7 @@ export const providerService = {
       console.error('Error searching providers:', error)
       return {
         success: false,
-        error: error.response?.data?.error || 'Erro ao buscar fornecedores'
+        error: error.response?.data?.error || 'Erro ao buscar prestadores'
       }
     }
   }

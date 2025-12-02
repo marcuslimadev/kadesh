@@ -24,7 +24,7 @@
               <p class="font-medium text-gray-900">{{ contract.client_name }} ({{ contract.client_email }})</p>
             </div>
             <div>
-              <p class="text-sm text-gray-500">Fornecedor</p>
+              <p class="text-sm text-gray-500">Prestador</p>
               <p class="font-medium text-gray-900">{{ contract.provider_name }} ({{ contract.provider_email }})</p>
             </div>
             <div>
