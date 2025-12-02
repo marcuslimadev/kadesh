@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 // const toast = typeof window !== 'undefined' ? useToast() : null
 
 const DEFAULT_API_URL = 'https://kadesh-2.onrender.com'
-const DEFAULT_API_TIMEOUT = 30000
+const DEFAULT_API_TIMEOUT = 60000 // 60s to handle Render cold starts
 
 const resolveBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
@@ -141,6 +141,39 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+// Wake up function - pings the server to wake it from cold start
+// Use before critical operations or on app load
+let isWakingUp = false
+let wakeUpPromise = null
+
+export const wakeUpServer = async () => {
+  // Avoid multiple simultaneous wake up calls
+  if (isWakingUp) {
+    return wakeUpPromise
+  }
+  
+  isWakingUp = true
+  wakeUpPromise = (async () => {
+    try {
+      // Simple health check endpoint
+      await api.get('/api/health', { 
+        timeout: 70000, // Extra time for cold start
+        _silent: true 
+      })
+      console.log('[API] Server is awake')
+      return true
+    } catch (error) {
+      console.warn('[API] Wake up failed:', error.message)
+      return false
+    } finally {
+      isWakingUp = false
+      wakeUpPromise = null
+    }
+  })()
+  
+  return wakeUpPromise
+}
 
 export default api
 

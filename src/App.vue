@@ -30,6 +30,7 @@ import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
 import { useSidebarStore } from '@/stores/sidebarStore'
+import { wakeUpServer } from '@/services/api'
 import NavBar from '@/components/layout/NavBar.vue'
 import Footer from '@/components/layout/Footer.vue'
 
@@ -66,6 +67,11 @@ const finishInitialization = () => {
 // Initialize app
 onMounted(() => {
   const fallbackTimer = setTimeout(finishInitialization, INITIALIZATION_FALLBACK_MS)
+
+  // Wake up the server early (handles Render cold start)
+  wakeUpServer().catch(() => {
+    // Silently ignore wake up failures
+  })
 
   if (!authStore.token) {
     clearTimeout(fallbackTimer)

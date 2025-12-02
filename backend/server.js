@@ -98,8 +98,17 @@ const uploadsBaseDir = path.join(__dirname, 'uploads');
 fs.mkdirSync(uploadsBaseDir, { recursive: true });
 app.use('/uploads', express.static(uploadsBaseDir));
 
-// Health check
+// Health check (root and API paths for flexibility)
 app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    version: '1.0.0'
+  });
+});
+
+app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
