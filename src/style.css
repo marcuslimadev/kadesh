@@ -34,9 +34,9 @@ textarea {
                 --surface-alt: #f1f5f9;
                 --text-primary: #0f172a;
                 --text-secondary: #334155;
-                --accent: #c084fc;
-                --accent-strong: #8b5cf6;
-                --card-border: rgba(99, 102, 241, 0.18);
+                --accent: #d4af37;
+                --accent-strong: #b8960c;
+                --card-border: rgba(212, 175, 55, 0.24);
                 --muted-border: rgba(15, 23, 42, 0.08);
         }
 
