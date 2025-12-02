@@ -15,7 +15,7 @@
           viewMode.isContractor
             ? isSidebar
               ? 'bg-gold text-dark shadow-gold'
-              : 'bg-gradient-to-r from-blue-300 via-blue-200 to-indigo-300 text-blue-900 shadow-lg scale-105'
+              : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900 shadow-lg scale-105'
             : isSidebar
               ? 'text-offwhite bg-dark-80 border border-gold/25 hover:border-gold/40'
               : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50/80'
@@ -33,7 +33,7 @@
           viewMode.isProvider
             ? isSidebar
               ? 'bg-gold text-dark shadow-gold'
-              : 'bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 text-emerald-900 shadow-lg scale-105'
+              : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900 shadow-lg scale-105'
             : isSidebar
               ? 'text-offwhite bg-dark-80 border border-gold/25 hover:border-gold/40'
               : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50/80'
@@ -51,8 +51,8 @@
         :class="[
           'flex items-center gap-2.5 px-5 py-3 rounded-full font-bold shadow-xl transition-all duration-700 ease-in-out transform hover:scale-105 backdrop-blur-sm',
           viewMode.isContractor
-            ? 'bg-gradient-to-r from-blue-300 via-blue-200 to-indigo-300 text-blue-900'
-            : 'bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 text-emerald-900'
+            ? 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900'
+            : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900'
         ]"
       >
         <span class="text-xl transition-transform duration-500">{{ viewMode.modeIcon }}</span>

@@ -593,12 +593,12 @@
     </section>
 
     <!-- Comunidade -->
-    <section class="bg-gradient-to-br from-purple-50 to-pink-50 py-20">
+    <section class="bg-gradient-to-br from-amber-50 to-yellow-50 py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <p class="text-sm text-purple-600 font-semibold uppercase tracking-wide">🤝 Junte-se a Nós</p>
+          <p class="text-sm text-amber-600 font-semibold uppercase tracking-wide">🤝 Junte-se a Nós</p>
           <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
-            Nossa <span class="bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">Comunidade</span>
+            Nossa <span class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Comunidade</span>
           </h2>
           <p class="text-gray-700 text-lg max-w-3xl mx-auto">
             Conecte-se com outros profissionais, compartilhe experiências e cresça junto com a comunidade Kaddesh.
@@ -607,43 +607,43 @@
 
         <div class="grid md:grid-cols-3 gap-8">
           <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
               </svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Chat da Comunidade</h3>
             <p class="text-gray-600 mb-4">Converse com outros membros, tire dúvidas e faça networking.</p>
-            <button class="text-purple-600 font-semibold hover:underline">Em breve</button>
+            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
           </div>
 
           <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Blog & Artigos</h3>
             <p class="text-gray-600 mb-4">Conteúdo exclusivo sobre freelancing, gestão e produtividade.</p>
-            <button class="text-blue-600 font-semibold hover:underline">Em breve</button>
+            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
           </div>
 
           <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
               </svg>
             </div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">Eventos & Webinars</h3>
             <p class="text-gray-600 mb-4">Participe de lives, workshops e eventos exclusivos.</p>
-            <button class="text-pink-600 font-semibold hover:underline">Em breve</button>
+            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
           </div>
         </div>
 
         <div class="mt-12 text-center bg-white rounded-2xl p-8 shadow-lg">
           <h3 class="text-2xl font-bold text-gray-900 mb-4">💬 Sugestões e Feedback</h3>
           <p class="text-gray-600 mb-6">Sua opinião é muito importante! Ajude-nos a melhorar a plataforma.</p>
-          <button class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-bold hover:shadow-lg transition">
+          <button class="px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg transition">
             Enviar Sugestão
           </button>
         </div>

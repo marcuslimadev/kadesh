@@ -77,14 +77,14 @@
               </router-link>
 
               <router-link to="/wallet" class="action-tile">
-                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
                 <span>Carteira</span>
               </router-link>
 
               <router-link to="/contracts" class="action-tile">
-                <svg class="w-6 h-6 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span>Contratos</span>
@@ -297,7 +297,7 @@
                     </div>
                     <div
                       v-if="getBidCount(project) && getLowestBid(project)"
-                      class="flex items-center text-emerald-300 font-medium"
+                      class="flex items-center text-gold font-medium"
                     >
                       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -410,13 +410,13 @@ const lobbyHighlights = computed(() => {
         label: 'Projetos ativos',
         value: total,
         caption: 'publicados por você',
-        text: 'text-blue-300'
+        text: 'text-amber-400'
       },
       {
         label: 'Aceitando propostas',
         value: openCount,
         caption: 'leilões abertos agora',
-        text: 'text-emerald-300'
+        text: 'text-amber-400'
       },
       {
         label: 'Prioridade alta',
@@ -432,7 +432,7 @@ const lobbyHighlights = computed(() => {
       label: 'Projetos disponíveis',
       value: openCount,
       caption: 'aceitando novos lances',
-      text: 'text-emerald-300'
+      text: 'text-amber-400'
     },
     {
       label: 'Novos hoje',
@@ -443,13 +443,13 @@ const lobbyHighlights = computed(() => {
         return diff <= 24 * 60 * 60 * 1000
       }).length,
       caption: 'oportunidades frescas',
-      text: 'text-blue-300'
+      text: 'text-amber-400'
     },
     {
       label: 'Alta prioridade',
       value: highPriority,
       caption: 'pagam melhor',
-      text: 'text-purple-300'
+      text: 'text-amber-400'
     }
   ]
 })

@@ -11,7 +11,7 @@
         </p>
       </div>
 
-      <div class="mb-6 px-4 py-3 rounded-xl border border-indigo-100 bg-indigo-50 text-indigo-900 flex items-center gap-3">
+      <div class="mb-6 px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 flex items-center gap-3">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -22,7 +22,7 @@
       <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
         <router-link
           to="/lobby"
-          class="flex items-center justify-center p-4 bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-200 text-blue-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-200 via-yellow-100 to-amber-200 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -33,7 +33,7 @@
         <router-link
           v-if="viewMode.isContractor"
           to="/projects/create"
-          class="flex items-center justify-center p-4 bg-gradient-to-br from-blue-300 via-blue-200 to-indigo-200 text-blue-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-300 via-yellow-200 to-amber-200 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -44,7 +44,7 @@
         <router-link
           v-if="viewMode.isProvider"
           to="/my-bids"
-          class="flex items-center justify-center p-4 bg-gradient-to-br from-emerald-300 via-teal-200 to-cyan-200 text-emerald-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-300 via-yellow-200 to-amber-200 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-700 transform hover:scale-105 animate-fade-in"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -64,7 +64,7 @@
 
         <router-link
           to="/receipts"
-          class="flex items-center justify-center p-4 bg-gradient-to-br from-pink-200 via-rose-200 to-red-200 text-pink-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-100 via-yellow-100 to-amber-100 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -74,7 +74,7 @@
 
         <router-link
           to="/contracts"
-          class="flex items-center justify-center p-4 bg-gradient-to-br from-violet-200 via-purple-200 to-fuchsia-200 text-violet-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
+          class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-100 via-yellow-100 to-amber-100 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
