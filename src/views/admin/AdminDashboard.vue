@@ -187,7 +187,7 @@ const formatCurrency = (value) => {
 
 const fetchDashboardStats = async () => {
   try {
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/admin/stats/dashboard`,

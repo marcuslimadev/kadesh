@@ -281,7 +281,7 @@ const deleting = ref(false)
 const fetchUsers = async () => {
   try {
     loading.value = true
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const params = { page: pagination.value.page, limit: pagination.value.limit, ...filters.value }
     
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
@@ -353,7 +353,7 @@ const closePromoteModal = () => {
 const handlePromote = async (formData) => {
   try {
     promoting.value = true
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/promote`,
@@ -400,7 +400,7 @@ const handleToggleStatus = async () => {
   try {
     togglingStatus.value = true
     const newStatus = selectedUser.value.status === 'active' ? 'suspended' : 'active'
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
     await axios.patch(
       `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/status`,
@@ -440,7 +440,7 @@ const closeDeleteModal = () => {
 const handleDelete = async () => {
   try {
     deleting.value = true
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
     await axios.delete(
       `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}`,

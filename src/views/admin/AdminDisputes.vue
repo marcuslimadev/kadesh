@@ -168,7 +168,7 @@ const formatDateTime = (date) => {
 const fetchDisputes = async () => {
   try {
     loading.value = true
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const params = {}
     if (filters.value.status) params.status = filters.value.status
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/disputes`, {
@@ -192,7 +192,7 @@ const viewDetails = async (contractId) => {
     showModal.value = true
     detailLoading.value = true
     resolutionNotes.value = ''
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/disputes/${contractId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -216,7 +216,7 @@ const resolve = async (action) => {
   if (!disputeDetail.value?.contract?.id) return
   try {
     resolving.value = true
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     await axios.post(
       `${import.meta.env.VITE_API_URL}/api/admin/disputes/${disputeDetail.value.contract.id}/resolve`,
       { action, notes: resolutionNotes.value },

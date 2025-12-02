@@ -260,7 +260,7 @@ const mpEnvironment = ref('sandbox')
 const fetchSettings = async () => {
   try {
     error.value = null
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/settings`, {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -295,7 +295,7 @@ const saveMercadoPago = async () => {
     error.value = null
     successMessage.value = null
 
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
     // Salvar as 3 configurações
     const updates = [
@@ -370,7 +370,7 @@ const runMigrations = async () => {
     error.value = null
     successMessage.value = null
 
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/admin/run-migrations`,
       {},
@@ -393,7 +393,7 @@ const runMigrations = async () => {
 const updateSetting = async (setting) => {
   try {
     error.value = null
-    const token = localStorage.getItem('adminToken')
+    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     await axios.put(
       `${import.meta.env.VITE_API_URL}/api/admin/settings/${setting.key}`,
       { value: setting.value },
