@@ -40,14 +40,14 @@
       <div v-else>
         <div v-if="isPageLoading" class="bg-white rounded-2xl shadow-sm p-12 text-center">
           <div class="inline-flex h-14 w-14 items-center justify-center rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
-          <p class="mt-4 text-gray-600">Carregando informacoes do perfil...</p>
+          <p class="mt-4 text-gray-600">Carregando informações do perfil...</p>
         </div>
 
         <div v-else-if="error" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-red-100">
           <svg class="w-14 h-14 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 5a7 7 0 00-7 7v1a7 7 0 0014 0v-1a7 7 0 00-7-7z" />
           </svg>
-          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Nao foi possivel carregar seu perfil</h2>
+          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Não foi possível carregar seu perfil</h2>
           <p class="mt-2 text-gray-600">{{ error }}</p>
           <button
             type="button"
@@ -74,7 +74,7 @@
                 </div>
                 <div>
                   <h2 class="text-xl font-semibold text-gray-900">{{ profile?.name }}</h2>
-                  <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um titulo profissional' }}</p>
+                  <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um título profissional' }}</p>
                   <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium" :class="availabilityClasses">
                     {{ availabilityCopy.label }}
                   </div>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
                   <p class="text-2xl font-semibold text-gray-900">{{ formatNumber(providerMeta.total_reviews) }}</p>
-                  <p class="text-xs text-gray-500">Avaliacoes</p>
+                  <p class="text-xs text-gray-500">Avaliações</p>
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
                   <p class="text-2xl font-semibold text-gray-900">{{ providerMeta.rating ? providerMeta.rating.toFixed(1) : '—' }}</p>
@@ -98,7 +98,7 @@
 
               <dl class="mt-6 space-y-4 text-sm text-gray-600">
                 <div class="flex items-center justify-between">
-                  <dt>Orcamento/hora</dt>
+                  <dt>Orçamento/hora</dt>
                   <dd class="font-medium text-gray-900">
                     {{ providerMeta.hourly_rate ? formatCurrency(providerMeta.hourly_rate) : 'N/A' }}
                   </dd>
@@ -108,14 +108,14 @@
                   <dd class="font-medium text-gray-900">{{ providerMeta.response_time_hours || 24 }}h</dd>
                 </div>
                 <div class="flex items-center justify-between">
-                  <dt>Experiencia</dt>
+                  <dt>Experiência</dt>
                   <dd class="font-medium text-gray-900">{{ providerMeta.experience_years || 0 }} anos</dd>
                 </div>
               </dl>
             </section>
 
             <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Metricas recentes</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-4">Métricas recentes</h3>
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
                   <div>
@@ -132,7 +132,7 @@
                     <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats?.active_contracts) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-green-50 text-green-700">
-                    {{ formatNumber(stats?.completed_contracts) }} concluidos
+                    {{ formatNumber(stats?.completed_contracts) }} concluídos
                   </span>
                 </div>
                 <div>
@@ -154,7 +154,7 @@
                 </span>
               </div>
               <div v-else class="text-sm text-gray-500">
-                Nenhuma habilidade cadastrada ainda. Utilize o formulario ao lado para adicionar suas competencias principais.
+                Nenhuma habilidade cadastrada ainda. Utilize o formulário ao lado para adicionar suas competências principais.
               </div>
             </section>
 
@@ -216,11 +216,11 @@
               <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header class="flex items-start justify-between">
                   <div>
-                    <h2 class="text-xl font-semibold text-gray-900">Informa����es gerais</h2>
-                    <p class="text-sm text-gray-500">Essas informa����es sǜo exibidas na parte superior do seu perfil.</p>
+                    <h2 class="text-xl font-semibold text-gray-900">Informações gerais</h2>
+                    <p class="text-sm text-gray-500">Essas informações são exibidas na parte superior do seu perfil.</p>
                   </div>
                   <span v-if="hasChanges" class="text-xs font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
-                    Poss��i altera����es nǜo salvas
+                    Possui alterações não salvas
                   </span>
                 </header>
 
@@ -231,12 +231,12 @@
                       v-model="form.name"
                       type="text"
                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      placeholder="Como aparecer�� no perfil"
+                      placeholder="Como aparecerá no perfil"
                     />
                     <p v-if="validationErrors.name" class="mt-1 text-sm text-red-600">{{ validationErrors.name }}</p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">T��tulo profissional</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Título profissional</label>
                     <input
                       v-model="form.title"
                       type="text"
@@ -253,18 +253,18 @@
                     v-model="form.bio"
                     rows="4"
                     class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Conte aos contratantes sobre sua experi��ncia, abordagem e diferenciais."
+                    placeholder="Conte aos contratantes sobre sua experiência, abordagem e diferenciais."
                   ></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Localiza��ǜo</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Localização</label>
                     <input
                       v-model="form.location"
                       type="text"
                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                      placeholder="Cidade, pa��s"
+                      placeholder="Cidade, país"
                     />
                   </div>
                   <div>
@@ -294,7 +294,7 @@
 
               <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header>
-                  <h2 class="text-xl font-semibold text-gray-900">Informa����es profissionais</h2>
+                  <h2 class="text-xl font-semibold text-gray-900">Informações profissionais</h2>
                   <p class="text-sm text-gray-500">Defina disponibilidade, valores e habilidades principais.</p>
                 </header>
 
@@ -323,7 +323,7 @@
                     <p v-if="validationErrors.hourly_rate" class="mt-1 text-sm text-red-600">{{ validationErrors.hourly_rate }}</p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Experi��ncia (anos)</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Experiência (anos)</label>
                     <input
                       v-model.number="form.experience_years"
                       type="number"
@@ -340,7 +340,7 @@
                     v-model="skillsInput"
                     type="text"
                     class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Separe as habilidades por v��rgula. Ex.: Vue, Node.js, PostgreSQL"
+                    placeholder="Separe as habilidades por vírgula. Ex.: Vue, Node.js, PostgreSQL"
                     @blur="syncSkillsFromInput"
                   />
                   <p class="mt-1 text-xs text-gray-500">Exibiremos as habilidades individualmente no perfil.</p>
@@ -349,7 +349,7 @@
 
               <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header>
-                  <h2 class="text-xl font-semibold text-gray-900">Portf��lio & links</h2>
+                  <h2 class="text-xl font-semibold text-gray-900">Portfólio & links</h2>
                   <p class="text-sm text-gray-500">Compartilhe seus projetos e perfis profissionais.</p>
                 </header>
 
@@ -392,7 +392,7 @@
                   @click="resetForm"
                   class="w-full md:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
                 >
-                  Descartar altera����es
+                  Descartar alterações
                 </button>
                 <button
                   type="submit"
@@ -473,14 +473,14 @@ const validationErrors = ref({})
 const isHydrating = ref(false)
 
 const availabilityOptions = [
-  { value: 'available', label: 'Dispon��vel' },
+  { value: 'available', label: 'Disponível' },
   { value: 'limited', label: 'Com agenda limitada' },
-  { value: 'unavailable', label: 'Nǜo dispon��vel' }
+  { value: 'unavailable', label: 'Não disponível' }
 ]
 
 const languageOptions = [
-  { value: 'pt-BR', label: 'Portugu��s (Brasil)' },
-  { value: 'en-US', label: 'Ingl��s' },
+  { value: 'pt-BR', label: 'Português (Brasil)' },
+  { value: 'en-US', label: 'Inglês' },
   { value: 'es-ES', label: 'Espanhol' }
 ]
 
@@ -492,7 +492,7 @@ const timezoneOptions = [
 ]
 
 const portfolioFields = [
-  { model: 'portfolio_url', label: 'Portf��lio', placeholder: 'https://meuportfolio.com' },
+  { model: 'portfolio_url', label: 'Portfólio', placeholder: 'https://meuportfolio.com' },
   { model: 'github_url', label: 'GitHub', placeholder: 'https://github.com/usuario' },
   { model: 'linkedin_url', label: 'LinkedIn', placeholder: 'https://linkedin.com/in/usuario' }
 ]
@@ -534,9 +534,9 @@ const socialLinks = computed(() => {
   const links = []
   if (form.value.portfolio_url || providerMeta.value.portfolio_url) {
     links.push({
-      label: 'Portf��lio',
+      label: 'Portfólio',
       href: form.value.portfolio_url || providerMeta.value.portfolio_url,
-      text: 'Ver portf��lio',
+      text: 'Ver portfólio',
       type: 'portfolio'
     })
   }
@@ -633,7 +633,7 @@ const loadData = async () => {
   }
 
   if (!statsResult.success && !error.value) {
-    error.value = statsResult.error || 'Erro ao carregar mǸtricas'
+    error.value = statsResult.error || 'Erro ao carregar métricas'
   }
 
   isPageLoading.value = false
@@ -643,11 +643,11 @@ const validateForm = () => {
   const errors = {}
 
   if (!form.value.name) {
-    errors.name = 'Nome Ǹ obrigat��rio'
+    errors.name = 'Nome é obrigatório'
   }
 
   if (!form.value.title) {
-    errors.title = 'Informe um t��tulo profissional'
+    errors.title = 'Informe um título profissional'
   }
 
   if (form.value.hourly_rate && form.value.hourly_rate < 0) {

@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
     );
 
     const avgRatingResult = await db.query(
-      'SELECT AVG(rating) as avg_rating FROM reviews WHERE reviewed_user_id = $1',
+      'SELECT AVG(rating) as avg_rating FROM reviews WHERE reviewed_id = $1',
       [user_id]
     );
 
