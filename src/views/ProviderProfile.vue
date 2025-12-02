@@ -500,7 +500,8 @@ const portfolioFields = [
 const profile = computed(() => providerStore.profile)
 const providerMeta = computed(() => profile.value?.provider_profile || {})
 const stats = computed(() => providerStore.stats)
-const isProvider = computed(() => authStore.isProvider)
+// Com perfil unificado, todos os usuários autenticados podem acessar o perfil de prestador
+const isProvider = computed(() => authStore.isAuthenticated)
 const userInitials = computed(() => authStore.userInitials)
 const isSaving = computed(() => providerStore.isSaving)
 
