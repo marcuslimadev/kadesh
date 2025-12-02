@@ -1,45 +1,45 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-6">
-        <router-link to="/contracts" class="text-sm text-gray-600 hover:text-gray-900">← Voltar</router-link>
-        <h1 class="text-2xl font-bold text-gray-900 mt-2">Contrato #{{ contract?.id }}</h1>
-        <p class="text-gray-600">{{ contract?.project_title }}</p>
+        <router-link to="/contracts" class="text-sm text-body hover:text-heading">← Voltar</router-link>
+        <h1 class="text-2xl font-bold text-heading mt-2">Contrato #{{ contract?.id }}</h1>
+        <p class="text-body">{{ contract?.project_title }}</p>
       </div>
 
-      <div v-if="loading" class="bg-white rounded-lg p-12 text-center shadow-sm">
+      <div v-if="loading" class="bg-surface rounded-lg p-12 text-center shadow-sm">
         <div class="inline-flex h-12 w-12 items-center justify-center rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
-        <p class="mt-3 text-gray-600">Carregando contrato...</p>
+        <p class="mt-3 text-body">Carregando contrato...</p>
       </div>
 
-      <div v-else-if="!contract" class="bg-white rounded-lg p-10 text-center shadow-sm">
-        <p class="text-gray-600">Contrato não encontrado.</p>
+      <div v-else-if="!contract" class="bg-surface rounded-lg p-10 text-center shadow-sm">
+        <p class="text-body">Contrato não encontrado.</p>
       </div>
 
       <div v-else class="space-y-6">
-        <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+        <section class="bg-surface rounded-lg p-6 shadow-sm border border-gray-100">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p class="text-sm text-gray-500">Contratante</p>
-              <p class="font-medium text-gray-900">{{ contract.client_name }} ({{ contract.client_email }})</p>
+              <p class="font-medium text-heading">{{ contract.client_name }} ({{ contract.client_email }})</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Prestador</p>
-              <p class="font-medium text-gray-900">{{ contract.provider_name }} ({{ contract.provider_email }})</p>
+              <p class="font-medium text-heading">{{ contract.provider_name }} ({{ contract.provider_email }})</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Status</p>
-              <p class="font-medium text-gray-900">{{ formatStatus(contract.status) }}</p>
+              <p class="font-medium text-heading">{{ formatStatus(contract.status) }}</p>
             </div>
             <div>
               <p class="text-sm text-gray-500">Criado em</p>
-              <p class="font-medium text-gray-900">{{ formatDate(contract.created_at) }}</p>
+              <p class="font-medium text-heading">{{ formatDate(contract.created_at) }}</p>
             </div>
           </div>
         </section>
 
-        <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Ações</h2>
+        <section class="bg-surface rounded-lg p-6 shadow-sm border border-gray-100">
+          <h2 class="text-lg font-semibold text-heading mb-4">Ações</h2>
           <div class="flex flex-wrap gap-3">
             <button
               v-if="canMarkComplete"
@@ -75,7 +75,7 @@
         </section>
 
         <!-- Chat -->
-        <section class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+        <section class="bg-surface rounded-lg p-6 shadow-sm border border-gray-100">
           <ChatBox :contract-id="contract.id" />
         </section>
 
@@ -88,11 +88,11 @@
           />
         </section>
 
-        <section v-if="contract.status === 'accepted'" class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Avaliar parceiro</h2>
+        <section v-if="contract.status === 'accepted'" class="bg-surface rounded-lg p-6 shadow-sm border border-gray-100">
+          <h2 class="text-lg font-semibold text-heading mb-4">Avaliar parceiro</h2>
           <div class="space-y-4">
             <div class="flex items-center gap-2">
-              <label class="text-sm text-gray-700">Nota:</label>
+              <label class="text-sm text-body">Nota:</label>
               <select v-model.number="review.rating" class="px-3 py-2 border rounded-lg">
                 <option :value="n" v-for="n in 5" :key="n">{{ n }}</option>
               </select>

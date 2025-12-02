@@ -56,6 +56,26 @@ textarea {
                 background: var(--page-bg);
                 color: var(--text-primary);
         }
+
+        /* Theme-aware utility classes */
+        .bg-page {
+                background: var(--page-bg) !important;
+        }
+        .bg-surface {
+                background: var(--surface) !important;
+        }
+        .bg-surface-alt {
+                background: var(--surface-alt) !important;
+        }
+        .text-heading {
+                color: var(--text-primary) !important;
+        }
+        .text-body {
+                color: var(--text-secondary) !important;
+        }
+        .border-theme {
+                border-color: var(--card-border) !important;
+        }
 }
 
 @layer components {

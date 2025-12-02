@@ -1,12 +1,12 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">Notificações</h1>
-            <p class="mt-2 text-gray-600">Acompanhe todas as atualizações importantes</p>
+            <h1 class="text-3xl font-bold text-heading">Notificações</h1>
+            <p class="mt-2 text-body">Acompanhe todas as atualizações importantes</p>
           </div>
           <button
             v-if="unreadCount > 0"
@@ -19,10 +19,10 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <div class="bg-surface rounded-lg shadow p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+            <label class="block text-sm font-medium text-body mb-2">Tipo</label>
             <select
               v-model="filters.type"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -37,7 +37,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -49,7 +49,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -73,15 +73,15 @@
       <!-- Notifications List -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p class="mt-4 text-gray-600">Carregando notificações...</p>
+        <p class="mt-4 text-body">Carregando notificações...</p>
       </div>
 
-      <div v-else-if="error" class="bg-white rounded-lg shadow p-8 text-center">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Erro ao carregar notificações</h3>
-        <p class="mt-2 text-sm text-gray-600">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar notificações</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadNotifications"
           class="mt-6 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
@@ -90,12 +90,12 @@
         </button>
       </div>
 
-      <div v-else-if="filteredNotifications.length === 0" class="bg-white rounded-lg shadow p-12 text-center">
+      <div v-else-if="filteredNotifications.length === 0" class="bg-surface rounded-lg shadow p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Nenhuma notificação encontrada</h3>
-        <p class="mt-2 text-sm text-gray-600">
+        <h3 class="mt-4 text-lg font-medium text-heading">Nenhuma notificação encontrada</h3>
+        <p class="mt-2 text-sm text-body">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você está em dia! Não há notificações no momento.' }}
         </p>
       </div>
@@ -106,7 +106,7 @@
           :key="notification.id"
           @click="handleNotificationClick(notification)"
           :class="[
-            'bg-white rounded-lg shadow hover:shadow-md transition-all cursor-pointer',
+            'bg-surface rounded-lg shadow hover:shadow-md transition-all cursor-pointer',
             notification.is_read ? 'opacity-75' : 'border-l-4 border-primary-500'
           ]"
         >
@@ -123,8 +123,8 @@
               <div class="ml-4 flex-1">
                 <div class="flex items-start justify-between">
                   <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">{{ notification.title }}</p>
-                    <p class="mt-1 text-sm text-gray-600">{{ notification.message }}</p>
+                    <p class="text-sm font-medium text-heading">{{ notification.title }}</p>
+                    <p class="mt-1 text-sm text-body">{{ notification.message }}</p>
                   </div>
                   <span v-if="!notification.is_read" class="ml-2 w-2 h-2 bg-primary-500 rounded-full flex-shrink-0"></span>
                 </div>
@@ -147,7 +147,7 @@
                 <button
                   v-if="!notification.is_read"
                   @click.stop="markAsRead(notification.id)"
-                  class="p-2 text-gray-400 hover:text-gray-600"
+                  class="p-2 text-gray-400 hover:text-body"
                   title="Marcar como lida"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -301,9 +301,9 @@ const getNotificationIconClass = (type) => {
     bid: 'bg-green-100 text-green-600',
     payment: 'bg-purple-100 text-purple-600',
     message: 'bg-yellow-100 text-yellow-600',
-    system: 'bg-gray-100 text-gray-600'
+    system: 'bg-gray-100 text-body'
   }
-  return classes[type] || 'bg-gray-100 text-gray-600'
+  return classes[type] || 'bg-gray-100 text-body'
 }
 
 const getNotificationIcon = (type) => {

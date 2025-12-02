@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">📄 Comprovantes de Pagamento</h1>
-        <p class="text-gray-600">Gere comprovantes em PDF (modelo RPA) das suas transações</p>
+        <h1 class="text-3xl font-bold text-heading mb-2">📄 Comprovantes de Pagamento</h1>
+        <p class="text-body">Gere comprovantes em PDF (modelo RPA) das suas transações</p>
       </div>
 
       <!-- Tabs -->
-      <div class="bg-white rounded-lg shadow-sm mb-6">
+      <div class="bg-surface rounded-lg shadow-sm mb-6">
         <div class="border-b border-gray-200">
           <nav class="flex -mb-px">
             <button
@@ -17,7 +17,7 @@
                 'py-4 px-6 border-b-2 font-medium text-sm transition',
                 activeTab === 'contracts'
                   ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
               ]"
             >
               Contratos Finalizados
@@ -28,7 +28,7 @@
                 'py-4 px-6 border-b-2 font-medium text-sm transition',
                 activeTab === 'transactions'
                   ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
               ]"
             >
               Transações de Carteira
@@ -41,25 +41,25 @@
       <div v-if="activeTab === 'contracts'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p class="mt-4 text-gray-600">Carregando...</p>
+          <p class="mt-4 text-body">Carregando...</p>
         </div>
 
-        <div v-else-if="contracts.length === 0" class="bg-white rounded-lg shadow-sm p-12 text-center">
+        <div v-else-if="contracts.length === 0" class="bg-surface rounded-lg shadow-sm p-12 text-center">
           <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p class="text-gray-600">Nenhum contrato finalizado ainda</p>
+          <p class="text-body">Nenhum contrato finalizado ainda</p>
         </div>
 
         <div v-else class="space-y-4">
           <div
             v-for="contract in contracts"
             :key="contract.id"
-            class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition"
+            class="bg-surface rounded-lg shadow-sm p-6 hover:shadow-md transition"
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-gray-900">{{ contract.project_title }}</h3>
+                <h3 class="text-lg font-semibold text-heading">{{ contract.project_title }}</h3>
                 <p class="text-sm text-gray-500 mt-1">Contrato #{{ contract.id }}</p>
                 <p class="text-sm text-gray-500">
                   {{ isClient ? 'Prestador' : 'Contratante' }}: {{ contract.other_party_name }}
@@ -92,7 +92,7 @@
               </button>
               <button
                 @click="viewContract(contract.id)"
-                class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200"
+                class="px-4 py-2 bg-gray-100 text-body rounded-md hover:bg-gray-200"
               >
                 Ver Detalhes
               </button>
@@ -105,29 +105,29 @@
       <div v-if="activeTab === 'transactions'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p class="mt-4 text-gray-600">Carregando...</p>
+          <p class="mt-4 text-body">Carregando...</p>
         </div>
 
-        <div v-else-if="transactions.length === 0" class="bg-white rounded-lg shadow-sm p-12 text-center">
+        <div v-else-if="transactions.length === 0" class="bg-surface rounded-lg shadow-sm p-12 text-center">
           <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          <p class="text-gray-600">Nenhuma transação registrada</p>
+          <p class="text-body">Nenhuma transação registrada</p>
         </div>
 
         <div v-else class="space-y-4">
           <div
             v-for="transaction in transactions"
             :key="transaction.id"
-            class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition"
+            class="bg-surface rounded-lg shadow-sm p-6 hover:shadow-md transition"
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-gray-900">
+                <h3 class="text-lg font-semibold text-heading">
                   {{ getTransactionTitle(transaction.type) }}
                 </h3>
                 <p class="text-sm text-gray-500 mt-1">Transação #{{ transaction.id }}</p>
-                <p class="text-sm text-gray-600 mt-2">{{ transaction.description }}</p>
+                <p class="text-sm text-body mt-2">{{ transaction.description }}</p>
               </div>
               <div class="text-right">
                 <p :class="[
@@ -168,11 +168,11 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h4 class="font-semibold text-gray-900 mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
-            <p class="text-sm text-gray-700 mb-2">
+            <h4 class="font-semibold text-heading mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
+            <p class="text-sm text-body mb-2">
               Os comprovantes gerados seguem o modelo RPA, ideal para prestadores de serviço autônomos.
             </p>
-            <ul class="text-sm text-gray-600 space-y-1 list-disc list-inside">
+            <ul class="text-sm text-body space-y-1 list-disc list-inside">
               <li>Inclui dados completos: Contratante, Prestador, valor, data e descrição do serviço</li>
               <li>Útil para declaração de IR e contabilidade</li>
               <li>Para emissão de NF-e, entre em contato com o Contratante/Prestador via chat</li>

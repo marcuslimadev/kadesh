@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Loading State -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p class="mt-4 text-gray-600">Carregando projeto...</p>
+        <p class="mt-4 text-body">Carregando projeto...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-white rounded-lg shadow-md p-8 text-center">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow-md p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Erro ao carregar projeto</h3>
-        <p class="mt-2 text-sm text-gray-600">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar projeto</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <div class="mt-6">
           <router-link
             to="/projects"
@@ -29,10 +29,10 @@
         <!-- Main Content -->
         <div class="lg:col-span-2 space-y-6">
           <!-- Project Header -->
-          <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="bg-surface rounded-lg shadow-md p-6">
             <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ project.title }}</h1>
+                <h1 class="text-3xl font-bold text-heading mb-2">{{ project.title }}</h1>
                 <div class="flex items-center gap-4 text-sm text-gray-500">
                   <span class="flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,12 +54,12 @@
             <!-- Budget and Deadline -->
             <div class="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-6">
               <div>
-                <p class="text-sm text-gray-600 mb-1">Orçamento</p>
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(project.budget) }}</p>
+                <p class="text-sm text-body mb-1">Orçamento</p>
+                <p class="text-2xl font-bold text-heading">{{ formatCurrency(project.budget) }}</p>
               </div>
               <div>
-                <p class="text-sm text-gray-600 mb-1">Prazo de Entrega</p>
-                <p class="text-lg font-semibold text-gray-900">{{ formatDeadline(project.deadline) }}</p>
+                <p class="text-sm text-body mb-1">Prazo de Entrega</p>
+                <p class="text-lg font-semibold text-heading">{{ formatDeadline(project.deadline) }}</p>
                 <!-- Countdown Timer -->
                 <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
                   <div class="flex items-center space-x-2">
@@ -76,20 +76,20 @@
 
             <!-- Description -->
             <div>
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Descrição</h2>
-              <p class="text-gray-700 whitespace-pre-line">{{ project.description }}</p>
+              <h2 class="text-lg font-semibold text-heading mb-3">Descrição</h2>
+              <p class="text-body whitespace-pre-line">{{ project.description }}</p>
             </div>
 
             <!-- Requirements -->
             <div v-if="project.requirements" class="mt-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Requisitos</h2>
-              <p class="text-gray-700 whitespace-pre-line">{{ project.requirements }}</p>
+              <h2 class="text-lg font-semibold text-heading mb-3">Requisitos</h2>
+              <p class="text-body whitespace-pre-line">{{ project.requirements }}</p>
             </div>
 
             <!-- Attachments -->
             <div class="mt-6">
               <div class="flex items-center justify-between mb-3">
-                <h2 class="text-lg font-semibold text-gray-900">Arquivos Anexados</h2>
+                <h2 class="text-lg font-semibold text-heading">Arquivos Anexados</h2>
                 <div v-if="isProjectOwner" class="flex items-center gap-2">
                   <input
                     id="detailAttachmentUpload"
@@ -136,7 +136,7 @@
                     </svg>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-gray-900 truncate">{{ attachment.original_name }}</p>
+                    <p class="text-sm font-semibold text-heading truncate">{{ attachment.original_name }}</p>
                     <p class="text-xs text-gray-500">
                       {{ attachment.mime_type || 'Arquivo' }}
                       <span v-if="attachment.file_size">
@@ -168,13 +168,13 @@
 
               <div v-else class="p-4 border border-dashed rounded-xl text-sm text-gray-500 bg-gray-50">
                 Nenhum anexo enviado até o momento.
-                <span v-if="isProjectOwner" class="text-gray-700 font-medium">Use o botão acima para subir arquivos de referência.</span>
+                <span v-if="isProjectOwner" class="text-body font-medium">Use o botão acima para subir arquivos de referência.</span>
               </div>
             </div>
 
             <!-- Skills -->
             <div v-if="project.skills" class="mt-6">
-              <h2 class="text-lg font-semibold text-gray-900 mb-3">Habilidades Necessárias</h2>
+              <h2 class="text-lg font-semibold text-heading mb-3">Habilidades Necessárias</h2>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="skill in skillsArray"
@@ -188,7 +188,7 @@
           </div>
 
           <!-- Bids Section -->
-          <div class="bg-white rounded-lg shadow-md p-6">
+          <div class="bg-surface rounded-lg shadow-md p-6">
             <!-- Auction Timer Banner -->
             <div v-if="project.status === 'open' && formattedTimeRemaining && !formattedTimeRemaining.expired" 
                  class="mb-4 p-4 rounded-lg border-2"
@@ -212,12 +212,12 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-gray-900">Leilão Ativo</p>
-                    <p class="text-sm text-gray-600">Envie sua proposta antes do prazo</p>
+                    <p class="font-semibold text-heading">Leilão Ativo</p>
+                    <p class="text-sm text-body">Envie sua proposta antes do prazo</p>
                   </div>
                 </div>
                 <div class="text-right">
-                  <p class="text-sm text-gray-600">Tempo restante</p>
+                  <p class="text-sm text-body">Tempo restante</p>
                   <p class="text-2xl font-bold" :class="formattedTimeRemaining.class">
                     {{ formattedTimeRemaining.text }}
                   </p>
@@ -226,7 +226,7 @@
             </div>
 
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-gray-900">
+              <h2 class="text-lg font-semibold text-heading">
                 Propostas ({{ bids.length }})
               </h2>
               <div class="flex items-center gap-3">
@@ -258,10 +258,10 @@
 
             <!-- Bid Form -->
             <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h3 class="font-medium text-gray-900 mb-4">Nova Proposta</h3>
+              <h3 class="font-medium text-heading mb-4">Nova Proposta</h3>
               <form @submit.prevent="submitBid" class="space-y-4">
                 <div>
-                  <label for="bidAmount" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label for="bidAmount" class="block text-sm font-medium text-body mb-1">
                     Valor da Proposta (R$) *
                   </label>
                   <input
@@ -276,7 +276,7 @@
                   />
                 </div>
                 <div>
-                  <label for="bidDescription" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label for="bidDescription" class="block text-sm font-medium text-body mb-1">
                     Descrição da Proposta *
                   </label>
                   <textarea
@@ -289,7 +289,7 @@
                   ></textarea>
                 </div>
                 <div>
-                  <label for="bidDeliveryTime" class="block text-sm font-medium text-gray-700 mb-1">
+                  <label for="bidDeliveryTime" class="block text-sm font-medium text-body mb-1">
                     Tempo de Entrega (dias) *
                   </label>
                   <input
@@ -315,7 +315,7 @@
             <!-- Bids Loading State -->
             <div v-if="isBidsLoading" class="text-center py-8">
               <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-              <p class="mt-2 text-gray-600 text-sm">Carregando propostas...</p>
+              <p class="mt-2 text-body text-sm">Carregando propostas...</p>
             </div>
 
             <!-- Bids List -->
@@ -344,44 +344,44 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1 space-y-6">
           <!-- Client Info -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Contratante</h3>
+          <div class="bg-surface rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-heading mb-4">Contratante</h3>
             <div class="flex items-center mb-4">
               <div class="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-lg font-semibold mr-3">
                 {{ getInitials(project.client_name) }}
               </div>
               <div>
-                <p class="font-medium text-gray-900">{{ project.client_name }}</p>
+                <p class="font-medium text-heading">{{ project.client_name }}</p>
                 <p class="text-sm text-gray-500">Contratante</p>
               </div>
             </div>
           </div>
 
           <!-- Project Stats -->
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Estatísticas</h3>
+          <div class="bg-surface rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-heading mb-4">Estatísticas</h3>
             <div class="space-y-3">
               <div class="flex justify-between">
-                <span class="text-sm text-gray-600">Propostas</span>
-                <span class="text-sm font-medium text-gray-900">{{ project.bid_count || 0 }}</span>
+                <span class="text-sm text-body">Propostas</span>
+                <span class="text-sm font-medium text-heading">{{ project.bid_count || 0 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm text-gray-600">Orçamento Médio</span>
-                <span class="text-sm font-medium text-gray-900">{{ formatCurrency(project.budget) }}</span>
+                <span class="text-sm text-body">Orçamento Médio</span>
+                <span class="text-sm font-medium text-heading">{{ formatCurrency(project.budget) }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm text-gray-600">Status</span>
+                <span class="text-sm text-body">Status</span>
                 <StatusBadge :status="project.status" />
               </div>
             </div>
           </div>
 
           <!-- Actions (for project owner) -->
-          <div v-if="authStore.user?.id === project.client_id" class="bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações</h3>
+          <div v-if="authStore.user?.id === project.client_id" class="bg-surface rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-heading mb-4">Ações</h3>
             <div class="space-y-3">
               <button
-                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-body bg-surface hover:bg-gray-50 transition-colors"
               >
                 Editar Projeto
               </button>
@@ -389,7 +389,7 @@
                 v-if="project.status === 'open' && bids.length > 0"
                 @click="closeAuction"
                 :disabled="isClosingAuction"
-                class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-white hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-surface hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilão e Selecionar Vencedor' }}
               </button>
@@ -398,7 +398,7 @@
               </p>
               <button
                 v-if="project.status === 'open'"
-                class="w-full px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-white hover:bg-red-50 transition-colors"
+                class="w-full px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-surface hover:bg-red-50 transition-colors"
               >
                 Cancelar Projeto
               </button>
@@ -406,7 +406,7 @@
           </div>
 
           <!-- Auction Winner Banner -->
-          <div v-if="project.status === 'in_progress' && acceptedBid" class="bg-white rounded-lg shadow-md p-6 border-2 border-green-500">
+          <div v-if="project.status === 'in_progress' && acceptedBid" class="bg-surface rounded-lg shadow-md p-6 border-2 border-green-500">
             <div class="flex items-center space-x-2 mb-3">
               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -418,7 +418,7 @@
                 {{ getInitials(acceptedBid.provider_name) }}
               </div>
               <div>
-                <p class="font-medium text-gray-900">{{ acceptedBid.provider_name }}</p>
+                <p class="font-medium text-heading">{{ acceptedBid.provider_name }}</p>
                 <p class="text-sm text-green-600 font-semibold">{{ formatCurrency(acceptedBid.amount) }}</p>
               </div>
             </div>

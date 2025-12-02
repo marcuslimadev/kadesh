@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Minhas Propostas</h1>
-        <p class="mt-2 text-gray-600">Acompanhe todas as suas propostas enviadas</p>
+        <h1 class="text-3xl font-bold text-heading">Minhas Propostas</h1>
+        <p class="mt-2 text-body">Acompanhe todas as suas propostas enviadas</p>
       </div>
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,13 +17,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.total }}</p>
-              <p class="text-sm text-gray-600">Total</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.total }}</p>
+              <p class="text-sm text-body">Total</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,13 +31,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.pending }}</p>
-              <p class="text-sm text-gray-600">Pendentes</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.pending }}</p>
+              <p class="text-sm text-body">Pendentes</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,13 +45,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.accepted }}</p>
-              <p class="text-sm text-gray-600">Aceitas</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.accepted }}</p>
+              <p class="text-sm text-body">Aceitas</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,18 +59,18 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.rejected }}</p>
-              <p class="text-sm text-gray-600">Rejeitadas</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.rejected }}</p>
+              <p class="text-sm text-body">Rejeitadas</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <div class="bg-surface rounded-lg shadow p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -84,7 +84,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+            <label class="block text-sm font-medium text-body mb-2">Categoria</label>
             <select
               v-model="filters.category"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -97,7 +97,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -123,15 +123,15 @@
       <!-- Bids List -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p class="mt-4 text-gray-600">Carregando propostas...</p>
+        <p class="mt-4 text-body">Carregando propostas...</p>
       </div>
 
-      <div v-else-if="error" class="bg-white rounded-lg shadow p-8 text-center">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Erro ao carregar propostas</h3>
-        <p class="mt-2 text-sm text-gray-600">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar propostas</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadBids"
           class="mt-6 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
@@ -140,12 +140,12 @@
         </button>
       </div>
 
-      <div v-else-if="filteredBids.length === 0" class="bg-white rounded-lg shadow p-12 text-center">
+      <div v-else-if="filteredBids.length === 0" class="bg-surface rounded-lg shadow p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Nenhuma proposta encontrada</h3>
-        <p class="mt-2 text-sm text-gray-600">
+        <h3 class="mt-4 text-lg font-medium text-heading">Nenhuma proposta encontrada</h3>
+        <p class="mt-2 text-sm text-body">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você ainda não enviou nenhuma proposta.' }}
         </p>
         <div class="mt-6">
@@ -162,25 +162,25 @@
         <div
           v-for="bid in filteredBids"
           :key="bid.id"
-          class="bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+          class="bg-surface rounded-lg shadow hover:shadow-md transition-shadow"
         >
           <div class="p-6">
             <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
                 <div class="flex items-center gap-3 mb-2">
-                  <h3 class="text-xl font-semibold text-gray-900">{{ bid.project_title }}</h3>
+                  <h3 class="text-xl font-semibold text-heading">{{ bid.project_title }}</h3>
                   <StatusBadge :status="bid.status" />
                 </div>
                 <p class="text-sm text-gray-500 mb-3">{{ getCategoryLabel(bid.project_category) }}</p>
               </div>
               <div class="text-right">
-                <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(bid.amount) }}</p>
+                <p class="text-2xl font-bold text-heading">{{ formatCurrency(bid.amount) }}</p>
                 <p class="text-sm text-gray-500">Sua proposta</p>
               </div>
             </div>
             
             <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <p class="text-sm text-gray-700">{{ bid.description }}</p>
+              <p class="text-sm text-body">{{ bid.description }}</p>
             </div>
             
             <div class="flex items-center gap-6 text-sm text-gray-500 mb-4">
@@ -207,14 +207,14 @@
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
               <router-link
                 :to="`/projects/${bid.project_id}`"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                class="px-4 py-2 text-sm font-medium text-body bg-surface border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Ver Projeto
               </router-link>
               <button
                 v-if="bid.status === 'pending'"
                 @click="withdrawBid(bid.id)"
-                class="px-4 py-2 text-sm font-medium text-red-700 bg-white border border-red-300 rounded-md hover:bg-red-50"
+                class="px-4 py-2 text-sm font-medium text-red-700 bg-surface border border-red-300 rounded-md hover:bg-red-50"
               >
                 Retirar Proposta
               </button>

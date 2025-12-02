@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-page">
     <!-- Loading State -->
     <div v-if="loading" class="max-w-5xl mx-auto px-4 py-8">
       <div class="animate-pulse space-y-6">
@@ -12,7 +12,7 @@
     <!-- Profile Content -->
     <div v-else-if="provider" class="max-w-5xl mx-auto px-4 py-8 space-y-6">
       <!-- Header Card -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div class="bg-surface rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div class="h-32 bg-gradient-to-r from-primary-500 to-accent-500"></div>
         <div class="px-8 pb-8">
           <div class="flex flex-col md:flex-row items-start md:items-end gap-6 -mt-16">
@@ -33,10 +33,10 @@
 
             <!-- Info -->
             <div class="flex-1 mt-4">
-              <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ provider.name }}</h1>
-              <p v-if="profile?.title" class="text-lg text-gray-600 mb-3">{{ profile.title }}</p>
+              <h1 class="text-3xl font-bold text-heading mb-2">{{ provider.name }}</h1>
+              <p v-if="profile?.title" class="text-lg text-body mb-3">{{ profile.title }}</p>
               
-              <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+              <div class="flex flex-wrap gap-4 text-sm text-body">
                 <div v-if="stats.rating > 0" class="flex items-center gap-1">
                   <StarIcon class="w-5 h-5 text-yellow-400 fill-yellow-400" />
                   <span class="font-semibold">{{ stats.rating.toFixed(1) }}</span>
@@ -67,14 +67,14 @@
       </div>
 
       <!-- Bio -->
-      <div v-if="profile?.bio" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Sobre</h2>
-        <p class="text-gray-700 whitespace-pre-wrap">{{ profile.bio }}</p>
+      <div v-if="profile?.bio" class="bg-surface rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-heading mb-4">Sobre</h2>
+        <p class="text-body whitespace-pre-wrap">{{ profile.bio }}</p>
       </div>
 
       <!-- Skills -->
-      <div v-if="profile?.skills?.length" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Habilidades</h2>
+      <div v-if="profile?.skills?.length" class="bg-surface rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-heading mb-4">Habilidades</h2>
         <div class="flex flex-wrap gap-2">
           <span
             v-for="skill in profile.skills"
@@ -87,8 +87,8 @@
       </div>
 
       <!-- Portfolio (se houver) -->
-      <div v-if="profile?.portfolio_url" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-4">Portfólio</h2>
+      <div v-if="profile?.portfolio_url" class="bg-surface rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-heading mb-4">Portfólio</h2>
         <a
           :href="profile.portfolio_url"
           target="_blank"
@@ -99,16 +99,16 @@
       </div>
 
       <!-- Reviews -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h2 class="text-xl font-bold text-gray-900 mb-6">Avaliações</h2>
+      <div class="bg-surface rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-bold text-heading mb-6">Avaliações</h2>
         <ReviewList :userId="providerId" />
       </div>
     </div>
 
     <!-- Error State -->
     <div v-else class="max-w-5xl mx-auto px-4 py-16 text-center">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Perfil não encontrado</h2>
-      <p class="text-gray-600 mb-6">Este prestador não existe ou foi removido.</p>
+      <h2 class="text-2xl font-bold text-heading mb-2">Perfil não encontrado</h2>
+      <p class="text-body mb-6">Este prestador não existe ou foi removido.</p>
       <router-link to="/projects" class="text-primary-600 hover:text-primary-700 font-medium">
         Ver projetos
       </router-link>

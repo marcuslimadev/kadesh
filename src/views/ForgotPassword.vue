@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
         <h1 class="text-4xl font-bold text-primary-600">Kaddesh</h1>
       </router-link>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
         Recuperar senha
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+      <p class="mt-2 text-center text-sm text-body">
         Lembrou a senha?
         <router-link to="/login" class="font-medium text-primary-600 hover:text-primary-500">
           Voltar ao login
@@ -16,7 +16,7 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-surface py-8 px-4 shadow sm:rounded-lg sm:px-10">
         
         <!-- Success message -->
         <div v-if="success" class="rounded-md bg-green-50 p-4 mb-6">
@@ -33,7 +33,7 @@
         <form v-if="!success" @submit.prevent="handleSubmit" class="space-y-6">
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">
+            <label for="email" class="block text-sm font-medium text-body">
               Email
             </label>
             <div class="mt-1">

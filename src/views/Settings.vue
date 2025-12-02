@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Configurações</h1>
-        <p class="text-gray-600 mt-2">Gerencie suas informações e preferências</p>
+        <h1 class="text-3xl font-bold text-heading">Configurações</h1>
+        <p class="text-body mt-2">Gerencie suas informações e preferências</p>
       </div>
 
       <!-- Settings Tabs -->
-      <div class="bg-white rounded-lg shadow-sm">
+      <div class="bg-surface rounded-lg shadow-sm">
         <div class="border-b border-gray-200">
           <div class="flex">
             <button
@@ -19,7 +19,7 @@
                 'px-4 py-3 font-medium text-sm border-b-2 transition-colors',
                 activeTab === tab.id
                   ? 'border-primary-600 text-primary-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
+                  : 'border-transparent text-body hover:text-heading'
               ]"
             >
               {{ tab.label }}
@@ -29,12 +29,12 @@
 
         <!-- Profile Settings -->
         <div v-if="activeTab === 'profile'" class="p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-6">Informações Pessoais</h2>
+          <h2 class="text-lg font-semibold text-heading mb-6">Informações Pessoais</h2>
           
           <form @submit.prevent="updateProfile" class="space-y-6">
             <!-- Name -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Nome Completo
               </label>
               <input
@@ -47,21 +47,21 @@
 
             <!-- Email (read-only) -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Email
               </label>
               <input
                 type="email"
                 :value="user?.email"
                 disabled
-                class="w-full px-4 py-2 border border-gray-300 bg-gray-100 rounded-lg text-gray-600"
+                class="w-full px-4 py-2 border border-gray-300 bg-gray-100 rounded-lg text-body"
               />
               <p class="text-sm text-gray-500 mt-1">O email não pode ser alterado</p>
             </div>
 
             <!-- Phone -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Telefone
               </label>
               <input
@@ -74,7 +74,7 @@
 
             <!-- Bio -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Bio / Descrição
               </label>
               <textarea
@@ -87,7 +87,7 @@
 
             <!-- Location -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Localização
               </label>
               <input
@@ -100,7 +100,7 @@
 
             <!-- Website -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-body mb-1">
                 Website / Portfolio
               </label>
               <input
@@ -126,12 +126,12 @@
 
         <!-- Privacy & Security -->
         <div v-if="activeTab === 'privacy'" class="p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-6">Privacidade e Segurança</h2>
+          <h2 class="text-lg font-semibold text-heading mb-6">Privacidade e Segurança</h2>
           
           <div class="space-y-6">
             <!-- Email Preferences -->
             <div class="border-b border-gray-200 pb-6">
-              <h3 class="font-medium text-gray-900 mb-4">Preferências de Email</h3>
+              <h3 class="font-medium text-heading mb-4">Preferências de Email</h3>
               <div class="space-y-3">
                 <label class="flex items-center">
                   <input
@@ -139,7 +139,7 @@
                     type="checkbox"
                     class="w-4 h-4 text-primary-600 rounded"
                   />
-                  <span class="ml-3 text-sm text-gray-700">Receber notificações por email</span>
+                  <span class="ml-3 text-sm text-body">Receber notificações por email</span>
                 </label>
                 <label class="flex items-center">
                   <input
@@ -147,7 +147,7 @@
                     type="checkbox"
                     class="w-4 h-4 text-primary-600 rounded"
                   />
-                  <span class="ml-3 text-sm text-gray-700">Receber promoções e novidades</span>
+                  <span class="ml-3 text-sm text-body">Receber promoções e novidades</span>
                 </label>
                 <label class="flex items-center">
                   <input
@@ -155,14 +155,14 @@
                     type="checkbox"
                     class="w-4 h-4 text-primary-600 rounded"
                   />
-                  <span class="ml-3 text-sm text-gray-700">Resumo semanal de atividades</span>
+                  <span class="ml-3 text-sm text-body">Resumo semanal de atividades</span>
                 </label>
               </div>
             </div>
 
             <!-- Profile Visibility -->
             <div class="border-b border-gray-200 pb-6">
-              <h3 class="font-medium text-gray-900 mb-4">Visibilidade do Perfil</h3>
+              <h3 class="font-medium text-heading mb-4">Visibilidade do Perfil</h3>
               <div class="space-y-3">
                 <label class="flex items-center">
                   <input
@@ -171,7 +171,7 @@
                     value="public"
                     class="w-4 h-4 text-primary-600"
                   />
-                  <span class="ml-3 text-sm text-gray-700">Perfil público (visível para todos)</span>
+                  <span class="ml-3 text-sm text-body">Perfil público (visível para todos)</span>
                 </label>
                 <label class="flex items-center">
                   <input
@@ -180,7 +180,7 @@
                     value="private"
                     class="w-4 h-4 text-primary-600"
                   />
-                  <span class="ml-3 text-sm text-gray-700">Perfil privado (apenas para conexões)</span>
+                  <span class="ml-3 text-sm text-body">Perfil privado (apenas para conexões)</span>
                 </label>
               </div>
             </div>
@@ -210,12 +210,12 @@
 
         <!-- Preferences -->
         <div v-if="activeTab === 'preferences'" class="p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-6">Preferências</h2>
+          <h2 class="text-lg font-semibold text-heading mb-6">Preferências</h2>
           
           <div class="space-y-6">
             <!-- Language -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Idioma</label>
+              <label class="block text-sm font-medium text-body mb-2">Idioma</label>
               <select
                 v-model="preferences.language"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
@@ -228,7 +228,7 @@
 
             <!-- Timezone -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Fuso Horário</label>
+              <label class="block text-sm font-medium text-body mb-2">Fuso Horário</label>
               <select
                 v-model="preferences.timezone"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
@@ -256,9 +256,9 @@
 
     <!-- Delete Account Modal -->
     <div v-if="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 max-w-sm">
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Deletar Conta</h3>
-        <p class="text-gray-600 mb-4">
+      <div class="bg-surface rounded-lg p-6 max-w-sm">
+        <h3 class="text-lg font-semibold text-heading mb-2">Deletar Conta</h3>
+        <p class="text-body mb-4">
           Tem certeza? Esta ação é irreversível e todos os seus dados serão permanentemente deletados.
         </p>
         <div class="flex gap-3">

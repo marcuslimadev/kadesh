@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50 to-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
+  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center group">
         <h1 class="text-4xl font-bold bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent transition-all duration-500 group-hover:from-amber-600 group-hover:to-amber-700">Kaddesh</h1>
       </router-link>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
         Crie sua conta
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+      <p class="mt-2 text-center text-sm text-body">
         Já tem uma conta?
         <router-link to="/login" class="font-medium text-amber-600 hover:text-amber-700 transition-colors duration-300">
           Faça login
@@ -16,7 +16,7 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
+      <div class="bg-surface/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
         <!-- Info Box -->
         <div class="mb-6 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border border-amber-200 rounded-xl p-4 shadow-sm">
           <div class="flex items-start">
@@ -36,7 +36,7 @@
         <form @submit.prevent="handleRegister" class="space-y-6">
           <!-- Name -->
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">
+            <label for="name" class="block text-sm font-medium text-body">
               Nome completo
             </label>
             <div class="mt-1">
@@ -58,7 +58,7 @@
 
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">
+            <label for="email" class="block text-sm font-medium text-body">
               Email
             </label>
             <div class="mt-1">
@@ -80,7 +80,7 @@
 
           <!-- Password -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
+            <label for="password" class="block text-sm font-medium text-body">
               Senha
             </label>
             <div class="mt-1 relative">
@@ -138,7 +138,7 @@
 
           <!-- Confirm Password -->
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+            <label for="confirmPassword" class="block text-sm font-medium text-body">
               Confirmar senha
             </label>
             <div class="mt-1">
@@ -169,7 +169,7 @@
               />
             </div>
             <div class="ml-3 text-sm">
-              <label for="terms" class="font-medium text-gray-700">
+              <label for="terms" class="font-medium text-body">
                 Aceito os
                 <a href="#" class="text-primary-600 hover:text-primary-500">termos de uso</a>
                 e a

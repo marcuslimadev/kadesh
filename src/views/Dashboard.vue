@@ -1,17 +1,17 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        <h1 class="text-3xl font-bold text-heading mb-2">
           Olá, {{ userName }}! 👋
         </h1>
-        <p class="text-gray-600">
+        <p class="text-body">
           Bem-vindo ao seu painel de controle
         </p>
       </div>
 
-      <div class="mb-6 px-4 py-3 rounded-xl border border-amber-200 bg-amber-50 text-amber-900 flex items-center gap-3">
+      <div class="mb-6 px-4 py-3 rounded-xl border border-theme bg-surface text-heading flex items-center gap-3">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -92,13 +92,13 @@
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <!-- Total Projects -->
-          <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="bg-surface rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm font-medium text-gray-600">
+                <p class="text-sm font-medium text-body">
                   {{ viewMode.isContractor ? 'Projetos Criados' : 'Projetos Ganhos' }}
                 </p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
+                <p class="text-3xl font-bold text-heading mt-2">
                   {{ stats.total_projects || 0 }}
                 </p>
               </div>
@@ -116,13 +116,13 @@
           </div>
 
           <!-- Bids/Proposals -->
-          <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="bg-surface rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm font-medium text-gray-600">
+                <p class="text-sm font-medium text-body">
                   {{ isClient ? 'Propostas Recebidas' : 'Propostas Enviadas' }}
                 </p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
+                <p class="text-3xl font-bold text-heading mt-2">
                   {{ stats.total_bids || 0 }}
                 </p>
               </div>
@@ -140,13 +140,13 @@
           </div>
 
           <!-- Earnings/Spent -->
-          <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="bg-surface rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm font-medium text-gray-600">
+                <p class="text-sm font-medium text-body">
                   {{ isClient ? 'Total Investido' : 'Total Ganho' }}
                 </p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
+                <p class="text-3xl font-bold text-heading mt-2">
                   {{ formatCurrency(stats.total_amount || 0) }}
                 </p>
               </div>
@@ -164,13 +164,13 @@
           </div>
 
           <!-- Rating (Provider only) / Success Rate -->
-          <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="bg-surface rounded-lg shadow-sm p-6">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-sm font-medium text-gray-600">
+                <p class="text-sm font-medium text-body">
                   {{ isClient ? 'Taxa de Sucesso' : 'Avaliação' }}
                 </p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">
+                <p class="text-3xl font-bold text-heading mt-2">
                   {{ isClient ? (stats.success_rate || 0) + '%' : (stats.rating || 0).toFixed(1) }}
                 </p>
               </div>
@@ -191,10 +191,10 @@
         <!-- Recent Activity Section -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <!-- Recent Projects -->
-          <div class="bg-white rounded-lg shadow-sm">
+          <div class="bg-surface rounded-lg shadow-sm">
             <div class="px-6 py-4 border-b border-gray-200">
               <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900">
+                <h2 class="text-lg font-semibold text-heading">
                   {{ isClient ? 'Meus Projetos Recentes' : 'Projetos em Andamento' }}
                 </h2>
                 <router-link
@@ -215,7 +215,7 @@
                   <div class="flex-1 min-w-0">
                     <router-link
                       :to="`/projects/${project.id}`"
-                      class="text-sm font-medium text-gray-900 hover:text-primary-600"
+                      class="text-sm font-medium text-heading hover:text-primary-600"
                     >
                       {{ project.title }}
                     </router-link>
@@ -236,10 +236,10 @@
           </div>
 
           <!-- Recent Notifications -->
-          <div class="bg-white rounded-lg shadow-sm">
+          <div class="bg-surface rounded-lg shadow-sm">
             <div class="px-6 py-4 border-b border-gray-200">
               <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-900">
+                <h2 class="text-lg font-semibold text-heading">
                   Notificações Recentes
                 </h2>
                 <router-link
@@ -265,7 +265,7 @@
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm text-gray-900">{{ notification.message }}</p>
+                    <p class="text-sm text-heading">{{ notification.message }}</p>
                     <p class="text-xs text-gray-500 mt-1">{{ formatDate(notification.created_at) }}</p>
                   </div>
                 </div>
@@ -281,8 +281,8 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="mt-8 bg-white rounded-lg shadow-sm p-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h2>
+        <div class="mt-8 bg-surface rounded-lg shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-heading mb-4">Ações Rápidas</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <router-link
               v-if="isClient"
@@ -292,7 +292,7 @@
               <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
-              <span class="ml-3 text-sm font-medium text-gray-700">Criar Novo Projeto</span>
+              <span class="ml-3 text-sm font-medium text-body">Criar Novo Projeto</span>
             </router-link>
 
             <router-link
@@ -302,7 +302,7 @@
               <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span class="ml-3 text-sm font-medium text-gray-700">Explorar Projetos</span>
+              <span class="ml-3 text-sm font-medium text-body">Explorar Projetos</span>
             </router-link>
 
             <router-link
@@ -312,7 +312,7 @@
               <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
-              <span class="ml-3 text-sm font-medium text-gray-700">Ver Carteira</span>
+              <span class="ml-3 text-sm font-medium text-body">Ver Carteira</span>
             </router-link>
           </div>
         </div>

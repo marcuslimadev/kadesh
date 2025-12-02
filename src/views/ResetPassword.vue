@@ -1,16 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
         <h1 class="text-4xl font-bold text-primary-600">Kaddesh</h1>
       </router-link>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
         Redefinir senha
       </h2>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-surface py-8 px-4 shadow sm:rounded-lg sm:px-10">
         
         <!-- Success message -->
         <div v-if="success" class="text-center">
@@ -54,7 +54,7 @@
         <form v-else @submit.prevent="handleSubmit" class="space-y-6">
           <!-- New Password -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">
+            <label for="password" class="block text-sm font-medium text-body">
               Nova senha
             </label>
             <div class="mt-1 relative">
@@ -85,7 +85,7 @@
 
           <!-- Confirm Password -->
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700">
+            <label for="confirmPassword" class="block text-sm font-medium text-body">
               Confirmar nova senha
             </label>
             <div class="mt-1">

@@ -1,15 +1,15 @@
-﻿<template>
-  <div class="min-h-screen bg-gray-50 py-10">
+<template>
+  <div class="min-h-screen bg-page py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8">
         <p class="text-sm font-medium text-primary-600 uppercase tracking-wide">Perfil profissional</p>
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <h1 class="text-3xl font-bold text-gray-900">Meu Perfil de Prestador</h1>
+          <h1 class="text-3xl font-bold text-heading">Meu Perfil de Prestador</h1>
           <div class="flex items-center gap-3">
             <button
               type="button"
               @click="loadData"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-body hover:bg-gray-100 transition-colors"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9M20 20v-5h-.581m-15.357-2a8.003 8.003 0 0015.357 2" />
@@ -25,30 +25,30 @@
             </button>
           </div>
         </div>
-        <p class="mt-2 text-gray-600">
+        <p class="mt-2 text-body">
           Mantenha seu perfil atualizado para aumentar suas chances de ser encontrado por contratantes.
         </p>
       </div>
 
-      <div v-if="!isProvider" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-dashed border-gray-200">
-        <h2 class="text-2xl font-semibold text-gray-900">Perfil de prestador indisponível</h2>
-        <p class="mt-3 text-gray-600">
+      <div v-if="!isProvider" class="bg-surface rounded-2xl shadow-sm p-10 text-center border border-dashed border-gray-200">
+        <h2 class="text-2xl font-semibold text-heading">Perfil de prestador indisponível</h2>
+        <p class="mt-3 text-body">
           Esta função está disponível apenas para contas do tipo prestador. Altere o tipo de conta ou crie uma nova conta de prestador.
         </p>
       </div>
 
       <div v-else>
-        <div v-if="isPageLoading" class="bg-white rounded-2xl shadow-sm p-12 text-center">
+        <div v-if="isPageLoading" class="bg-surface rounded-2xl shadow-sm p-12 text-center">
           <div class="inline-flex h-14 w-14 items-center justify-center rounded-full border-4 border-primary-100 border-t-primary-600 animate-spin"></div>
-          <p class="mt-4 text-gray-600">Carregando informações do perfil...</p>
+          <p class="mt-4 text-body">Carregando informações do perfil...</p>
         </div>
 
-        <div v-else-if="error" class="bg-white rounded-2xl shadow-sm p-10 text-center border border-red-100">
+        <div v-else-if="error" class="bg-surface rounded-2xl shadow-sm p-10 text-center border border-red-100">
           <svg class="w-14 h-14 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 5a7 7 0 00-7 7v1a7 7 0 0014 0v-1a7 7 0 00-7-7z" />
           </svg>
-          <h2 class="mt-4 text-2xl font-semibold text-gray-900">Não foi possível carregar seu perfil</h2>
-          <p class="mt-2 text-gray-600">{{ error }}</p>
+          <h2 class="mt-4 text-2xl font-semibold text-heading">Não foi possível carregar seu perfil</h2>
+          <p class="mt-2 text-body">{{ error }}</p>
           <button
             type="button"
             @click="loadData"
@@ -61,7 +61,7 @@
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Sidebar -->
           <aside class="space-y-6">
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
               <div class="flex items-center gap-4">
                 <div class="h-20 w-20 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl font-semibold text-primary-700">
                   <img
@@ -73,7 +73,7 @@
                   <span v-else>{{ userInitials }}</span>
                 </div>
                 <div>
-                  <h2 class="text-xl font-semibold text-gray-900">{{ profile?.name }}</h2>
+                  <h2 class="text-xl font-semibold text-heading">{{ profile?.name }}</h2>
                   <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um título profissional' }}</p>
                   <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium" :class="availabilityClasses">
                     {{ availabilityCopy.label }}
@@ -83,44 +83,44 @@
 
               <div class="mt-6 grid grid-cols-3 gap-4 text-center">
                 <div class="bg-gray-50 rounded-xl p-3">
-                  <p class="text-2xl font-semibold text-gray-900">{{ formatNumber(providerMeta.total_projects) }}</p>
+                  <p class="text-2xl font-semibold text-heading">{{ formatNumber(providerMeta.total_projects) }}</p>
                   <p class="text-xs text-gray-500">Projetos</p>
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
-                  <p class="text-2xl font-semibold text-gray-900">{{ formatNumber(providerMeta.total_reviews) }}</p>
+                  <p class="text-2xl font-semibold text-heading">{{ formatNumber(providerMeta.total_reviews) }}</p>
                   <p class="text-xs text-gray-500">Avaliações</p>
                 </div>
                 <div class="bg-gray-50 rounded-xl p-3">
-                  <p class="text-2xl font-semibold text-gray-900">{{ providerMeta.rating ? providerMeta.rating.toFixed(1) : '—' }}</p>
+                  <p class="text-2xl font-semibold text-heading">{{ providerMeta.rating ? providerMeta.rating.toFixed(1) : '—' }}</p>
                   <p class="text-xs text-gray-500">Nota</p>
                 </div>
               </div>
 
-              <dl class="mt-6 space-y-4 text-sm text-gray-600">
+              <dl class="mt-6 space-y-4 text-sm text-body">
                 <div class="flex items-center justify-between">
                   <dt>Orçamento/hora</dt>
-                  <dd class="font-medium text-gray-900">
+                  <dd class="font-medium text-heading">
                     {{ providerMeta.hourly_rate ? formatCurrency(providerMeta.hourly_rate) : 'N/A' }}
                   </dd>
                 </div>
                 <div class="flex items-center justify-between">
                   <dt>Tempo de resposta</dt>
-                  <dd class="font-medium text-gray-900">{{ providerMeta.response_time_hours || 24 }}h</dd>
+                  <dd class="font-medium text-heading">{{ providerMeta.response_time_hours || 24 }}h</dd>
                 </div>
                 <div class="flex items-center justify-between">
                   <dt>Experiência</dt>
-                  <dd class="font-medium text-gray-900">{{ providerMeta.experience_years || 0 }} anos</dd>
+                  <dd class="font-medium text-heading">{{ providerMeta.experience_years || 0 }} anos</dd>
                 </div>
               </dl>
             </section>
 
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Métricas recentes</h3>
+            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 class="text-lg font-semibold text-heading mb-4">Métricas recentes</h3>
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-sm text-gray-500">Propostas enviadas</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats?.total_bids) }}</p>
+                    <p class="text-xl font-semibold text-heading">{{ formatNumber(stats?.total_bids) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700">
                     {{ formatNumber(stats?.pending_bids) }} pendentes
@@ -129,7 +129,7 @@
                 <div class="flex items-center justify-between">
                   <div>
                     <p class="text-sm text-gray-500">Contratos ativos</p>
-                    <p class="text-xl font-semibold text-gray-900">{{ formatNumber(stats?.active_contracts) }}</p>
+                    <p class="text-xl font-semibold text-heading">{{ formatNumber(stats?.active_contracts) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-green-50 text-green-700">
                     {{ formatNumber(stats?.completed_contracts) }} concluídos
@@ -137,13 +137,13 @@
                 </div>
                 <div>
                   <p class="text-sm text-gray-500">Receita total</p>
-                  <p class="text-2xl font-semibold text-gray-900">{{ formatCurrency(stats?.total_earnings) }}</p>
+                  <p class="text-2xl font-semibold text-heading">{{ formatCurrency(stats?.total_earnings) }}</p>
                 </div>
               </div>
             </section>
 
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Habilidades & ferramentas</h3>
+            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 class="text-lg font-semibold text-heading mb-4">Habilidades & ferramentas</h3>
               <div v-if="displaySkills.length" class="flex flex-wrap gap-2">
                 <span
                   v-for="skill in displaySkills"
@@ -158,8 +158,8 @@
               </div>
             </section>
 
-            <section v-if="socialLinks.length" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-              <h3 class="text-lg font-semibold text-gray-900">Links e contato</h3>
+            <section v-if="socialLinks.length" class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+              <h3 class="text-lg font-semibold text-heading">Links e contato</h3>
               <ul class="space-y-3 text-sm">
                 <li v-for="link in socialLinks" :key="link.label" class="flex items-center gap-3">
                   <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500">
@@ -213,10 +213,10 @@
           <!-- Main form -->
           <main id="provider-profile-form" class="lg:col-span-2 space-y-8">
             <form @submit.prevent="handleSave" class="space-y-8">
-              <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header class="flex items-start justify-between">
                   <div>
-                    <h2 class="text-xl font-semibold text-gray-900">Informações gerais</h2>
+                    <h2 class="text-xl font-semibold text-heading">Informações gerais</h2>
                     <p class="text-sm text-gray-500">Essas informações são exibidas na parte superior do seu perfil.</p>
                   </div>
                   <span v-if="hasChanges" class="text-xs font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
@@ -226,7 +226,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome completo</label>
+                    <label class="block text-sm font-medium text-body mb-2">Nome completo</label>
                     <input
                       v-model="form.name"
                       type="text"
@@ -236,7 +236,7 @@
                     <p v-if="validationErrors.name" class="mt-1 text-sm text-red-600">{{ validationErrors.name }}</p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Título profissional</label>
+                    <label class="block text-sm font-medium text-body mb-2">Título profissional</label>
                     <input
                       v-model="form.title"
                       type="text"
@@ -248,7 +248,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                  <label class="block text-sm font-medium text-body mb-2">Bio</label>
                   <textarea
                     v-model="form.bio"
                     rows="4"
@@ -259,7 +259,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Localização</label>
+                    <label class="block text-sm font-medium text-body mb-2">Localização</label>
                     <input
                       v-model="form.location"
                       type="text"
@@ -268,7 +268,7 @@
                     />
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
+                    <label class="block text-sm font-medium text-body mb-2">Timezone</label>
                     <select
                       v-model="form.timezone"
                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -279,7 +279,7 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Idioma</label>
+                    <label class="block text-sm font-medium text-body mb-2">Idioma</label>
                     <select
                       v-model="form.language"
                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -292,15 +292,15 @@
                 </div>
               </section>
 
-              <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header>
-                  <h2 class="text-xl font-semibold text-gray-900">Informações profissionais</h2>
+                  <h2 class="text-xl font-semibold text-heading">Informações profissionais</h2>
                   <p class="text-sm text-gray-500">Defina disponibilidade, valores e habilidades principais.</p>
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Disponibilidade</label>
+                    <label class="block text-sm font-medium text-body mb-2">Disponibilidade</label>
                     <select
                       v-model="form.availability"
                       class="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -311,7 +311,7 @@
                     </select>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Valor hora (R$)</label>
+                    <label class="block text-sm font-medium text-body mb-2">Valor hora (R$)</label>
                     <input
                       v-model.number="form.hourly_rate"
                       type="number"
@@ -323,7 +323,7 @@
                     <p v-if="validationErrors.hourly_rate" class="mt-1 text-sm text-red-600">{{ validationErrors.hourly_rate }}</p>
                   </div>
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Experiência (anos)</label>
+                    <label class="block text-sm font-medium text-body mb-2">Experiência (anos)</label>
                     <input
                       v-model.number="form.experience_years"
                       type="number"
@@ -335,7 +335,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Habilidades principais</label>
+                  <label class="block text-sm font-medium text-body mb-2">Habilidades principais</label>
                   <input
                     v-model="skillsInput"
                     type="text"
@@ -347,15 +347,15 @@
                 </div>
               </section>
 
-              <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
                 <header>
-                  <h2 class="text-xl font-semibold text-gray-900">Portfólio & links</h2>
+                  <h2 class="text-xl font-semibold text-heading">Portfólio & links</h2>
                   <p class="text-sm text-gray-500">Compartilhe seus projetos e perfis profissionais.</p>
                 </header>
 
                 <div class="grid grid-cols-1 gap-5">
                   <div v-for="link in portfolioFields" :key="link.model">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ link.label }}</label>
+                    <label class="block text-sm font-medium text-body mb-2">{{ link.label }}</label>
                     <input
                       v-model="form[link.model]"
                       type="url"
@@ -366,7 +366,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                  <label class="block text-sm font-medium text-body mb-2">Website</label>
                   <input
                     v-model="form.website"
                     type="url"
@@ -376,7 +376,7 @@
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-2">Telefone comercial</label>
+                  <label class="block text-sm font-medium text-body mb-2">Telefone comercial</label>
                   <input
                     v-model="form.phone"
                     type="text"
@@ -390,7 +390,7 @@
                 <button
                   type="button"
                   @click="resetForm"
-                  class="w-full md:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                  class="w-full md:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-body font-medium hover:bg-gray-50 transition-colors"
                 >
                   Descartar alterações
                 </button>
@@ -409,9 +409,9 @@
                 </button>
               </div>
               <!-- Avaliações recentes -->
-              <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
                 <header class="flex items-center justify-between">
-                  <h2 class="text-xl font-semibold text-gray-900">Avaliações recentes</h2>
+                  <h2 class="text-xl font-semibold text-heading">Avaliações recentes</h2>
                   <span class="text-sm text-gray-500" v-if="reviews.length">{{ reviews.length }} recebidas</span>
                 </header>
                 <div v-if="!reviewsLoaded" class="text-sm text-gray-500">Carregando avaliações...</div>
@@ -420,7 +420,7 @@
                   <li v-for="r in reviews" :key="r.id" class="border-b last:border-0 border-gray-100 pb-4">
                     <div class="flex items-center justify-between">
                       <div>
-                        <p class="text-sm font-medium text-gray-900">{{ r.reviewer_name }}</p>
+                        <p class="text-sm font-medium text-heading">{{ r.reviewer_name }}</p>
                         <p class="text-xs text-gray-500">{{ formatDate(r.created_at) }}</p>
                       </div>
                       <div class="text-amber-500 text-sm">
@@ -428,7 +428,7 @@
                         <span v-for="i in (5 - r.rating)" :key="'e'+i" class="text-gray-300">★</span>
                       </div>
                     </div>
-                    <p v-if="r.comment" class="mt-2 text-sm text-gray-700">{{ r.comment }}</p>
+                    <p v-if="r.comment" class="mt-2 text-sm text-body">{{ r.comment }}</p>
                   </li>
                 </ul>
               </section>

@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Meus Projetos</h1>
-        <p class="mt-2 text-gray-600">Gerencie todos os seus projetos publicados</p>
+        <h1 class="text-3xl font-bold text-heading">Meus Projetos</h1>
+        <p class="mt-2 text-body">Gerencie todos os seus projetos publicados</p>
       </div>
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-blue-100 text-blue-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,13 +17,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.total }}</p>
-              <p class="text-sm text-gray-600">Total</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.total }}</p>
+              <p class="text-sm text-body">Total</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,13 +31,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.open }}</p>
-              <p class="text-sm text-gray-600">Abertos</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.open }}</p>
+              <p class="text-sm text-body">Abertos</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,13 +45,13 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.in_progress }}</p>
-              <p class="text-sm text-gray-600">Em Andamento</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.in_progress }}</p>
+              <p class="text-sm text-body">Em Andamento</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-surface rounded-lg shadow p-6">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-purple-100 text-purple-600 mr-4">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,18 +59,18 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-gray-900">{{ stats.completed }}</p>
-              <p class="text-sm text-gray-600">Concluídos</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.completed }}</p>
+              <p class="text-sm text-body">Concluídos</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Filters -->
-      <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <div class="bg-surface rounded-lg shadow p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -84,7 +84,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+            <label class="block text-sm font-medium text-body mb-2">Categoria</label>
             <select
               v-model="filters.category"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -97,7 +97,7 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
@@ -124,15 +124,15 @@
       <!-- Projects List -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-        <p class="mt-4 text-gray-600">Carregando projetos...</p>
+        <p class="mt-4 text-body">Carregando projetos...</p>
       </div>
 
-      <div v-else-if="error" class="bg-white rounded-lg shadow p-8 text-center">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Erro ao carregar projetos</h3>
-        <p class="mt-2 text-sm text-gray-600">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar projetos</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadProjects"
           class="mt-6 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
@@ -141,12 +141,12 @@
         </button>
       </div>
 
-      <div v-else-if="filteredProjects.length === 0" class="bg-white rounded-lg shadow p-12 text-center">
+      <div v-else-if="filteredProjects.length === 0" class="bg-surface rounded-lg shadow p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-gray-900">Nenhum projeto encontrado</h3>
-        <p class="mt-2 text-sm text-gray-600">
+        <h3 class="mt-4 text-lg font-medium text-heading">Nenhum projeto encontrado</h3>
+        <p class="mt-2 text-sm text-body">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você ainda não criou nenhum projeto.' }}
         </p>
         <div class="mt-6">
@@ -163,16 +163,16 @@
         <div
           v-for="project in filteredProjects"
           :key="project.id"
-          class="bg-white rounded-lg shadow hover:shadow-md transition-shadow"
+          class="bg-surface rounded-lg shadow hover:shadow-md transition-shadow"
         >
           <div class="p-6">
             <div class="flex items-start justify-between">
               <div class="flex-1">
                 <div class="flex items-center gap-3 mb-2">
-                  <h3 class="text-xl font-semibold text-gray-900">{{ project.title }}</h3>
+                  <h3 class="text-xl font-semibold text-heading">{{ project.title }}</h3>
                   <StatusBadge :status="project.status" />
                 </div>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ project.description }}</p>
+                <p class="text-body text-sm mb-4 line-clamp-2">{{ project.description }}</p>
                 
                 <div class="flex items-center gap-6 text-sm text-gray-500 mb-4">
                   <span class="flex items-center">
@@ -206,7 +206,7 @@
             <div class="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-gray-200">
               <router-link
                 :to="`/projects/${project.id}`"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                class="px-4 py-2 text-sm font-medium text-body bg-surface border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Ver Detalhes
               </router-link>

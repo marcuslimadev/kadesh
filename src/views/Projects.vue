@@ -1,18 +1,18 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
+  <div class="min-h-screen bg-page py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Projetos Disponíveis</h1>
-        <p class="text-gray-600">Encontre oportunidades e faça propostas</p>
+        <h1 class="text-3xl font-bold text-heading mb-2">Projetos Disponíveis</h1>
+        <p class="text-body">Encontre oportunidades e faça propostas</p>
       </div>
 
       <!-- Filters and Search -->
-      <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+      <div class="bg-surface rounded-lg shadow-sm p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <!-- Search -->
           <div class="md:col-span-2">
-            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="search" class="block text-sm font-medium text-body mb-1">
               Buscar
             </label>
             <input
@@ -27,7 +27,7 @@
 
           <!-- Category -->
           <div>
-            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="category" class="block text-sm font-medium text-body mb-1">
               Categoria
             </label>
             <select
@@ -49,7 +49,7 @@
 
           <!-- Budget Range -->
           <div>
-            <label for="budget" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="budget" class="block text-sm font-medium text-body mb-1">
               Orçamento
             </label>
             <select
@@ -69,7 +69,7 @@
 
         <!-- Active Filters -->
         <div v-if="hasActiveFilters" class="mt-4 flex items-center gap-2">
-          <span class="text-sm text-gray-600">Filtros ativos:</span>
+          <span class="text-sm text-body">Filtros ativos:</span>
           <button
             v-if="filters.search"
             @click="clearFilter('search')"
@@ -124,11 +124,11 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="bg-white rounded-lg shadow-sm p-12 text-center">
+      <div v-else class="bg-surface rounded-lg shadow-sm p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
-        <h3 class="mt-2 text-lg font-medium text-gray-900">Nenhum projeto encontrado</h3>
+        <h3 class="mt-2 text-lg font-medium text-heading">Nenhum projeto encontrado</h3>
         <p class="mt-1 text-sm text-gray-500">Tente ajustar os filtros ou fazer uma nova busca.</p>
         <div class="mt-6">
           <button
