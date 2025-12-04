@@ -15,6 +15,9 @@
     <template v-else>
       <NavBar v-if="showNavigation" />
       
+      <!-- Indicador de modo fixo (visível quando sidebar está escondida) -->
+      <ModeIndicator v-if="showNavigation" />
+      
       <main :class="mainClasses">
         <router-view />
       </main>
@@ -33,6 +36,7 @@ import { useSidebarStore } from '@/stores/sidebarStore'
 import { wakeUpServer } from '@/services/api'
 import NavBar from '@/components/layout/NavBar.vue'
 import Footer from '@/components/layout/Footer.vue'
+import ModeIndicator from '@/components/ui/ModeIndicator.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()

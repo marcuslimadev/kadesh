@@ -4,7 +4,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-blue-600">Kadesh Admin</h1>
+            <h1 class="text-2xl font-bold text-amber-600">Kadesh Admin</h1>
             <div class="hidden md:ml-10 md:flex md:space-x-4">
               <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Dashboard</router-link>
               <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Usuários</router-link>
@@ -26,7 +26,7 @@
       <h2 class="text-3xl font-bold text-gray-900 mb-6">Configurações do Sistema</h2>
 
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
       </div>
 
       <!-- Error Message -->
@@ -76,7 +76,7 @@
               :class="[
                 'py-4 px-1 border-b-2 font-medium text-sm',
                 activeTab === 'mercadopago'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-amber-500 text-amber-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               ]"
             >
@@ -87,7 +87,7 @@
               :class="[
                 'py-4 px-1 border-b-2 font-medium text-sm',
                 activeTab === 'system'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-amber-500 text-amber-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               ]"
             >
@@ -112,7 +112,7 @@
                 v-model="mpPublicKey"
                 type="text"
                 placeholder="APP_USR-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
               <p class="mt-1 text-xs text-gray-500">Encontre em: Dashboard do Mercado Pago → Suas integrações → Credenciais</p>
             </div>
@@ -128,7 +128,7 @@
                   v-model="mpAccessToken"
                   :type="showToken ? 'text' : 'password'"
                   placeholder="APP_USR-xxxxxxxxxxxx-xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxxx"
-                  class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 />
                 <button
                   type="button"
@@ -154,7 +154,7 @@
               </label>
               <select
                 v-model="mpEnvironment"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               >
                 <option value="sandbox">Sandbox (Testes)</option>
                 <option value="production">Produção (Real)</option>
@@ -174,7 +174,7 @@
               <button
                 @click="saveMercadoPago"
                 :disabled="saving || !mpPublicKey || !mpAccessToken"
-                class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-6 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {{ saving ? 'Salvando...' : 'Salvar Configurações' }}
               </button>
@@ -217,7 +217,7 @@
                       v-model="setting.value"
                       @blur="updateSetting(setting)"
                       type="text"
-                      class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      class="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500"
                     />
                   </div>
                 </div>

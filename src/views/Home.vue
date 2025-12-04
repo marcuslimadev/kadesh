@@ -73,7 +73,7 @@
     <section class="bg-gradient-to-b from-gray-900 via-primary-900 to-gray-900 py-20 relative overflow-hidden">
       <!-- Efeitos decorativos -->
       <div class="absolute top-0 left-1/4 w-96 h-96 bg-accent-500/20 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"></div>
       
       <!-- Grid de estrelas animadas -->
       <div class="absolute inset-0 opacity-30">
@@ -116,7 +116,7 @@
             class="group relative rounded-3xl overflow-hidden shadow-2xl hover:shadow-accent-500/50 transition-all duration-500 transform hover:-translate-y-3 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-accent-500/50 bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50"
           >
             <!-- Brilho no hover -->
-            <div class="absolute inset-0 bg-gradient-to-br from-accent-400/0 via-accent-400/0 to-accent-400/0 group-hover:from-accent-400/20 group-hover:via-transparent group-hover:to-blue-400/20 transition-all duration-700"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-accent-400/0 via-accent-400/0 to-accent-400/0 group-hover:from-accent-400/20 group-hover:via-transparent group-hover:to-amber-400/20 transition-all duration-700"></div>
             
             <!-- Imagem do Banner -->
             <div class="aspect-[16/9] overflow-hidden bg-gradient-to-br from-gray-700 to-gray-900 relative">
@@ -175,7 +175,7 @@
     <!-- Categorias -->
     <section class="bg-gradient-to-b from-gray-50 to-white py-20 relative">
       <div class="absolute top-16 left-12 w-20 h-20 bg-accent-500/10 rounded-full blur-3xl animate-float"></div>
-      <div class="absolute bottom-16 right-12 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl animate-float animation-delay-2000"></div>
+      <div class="absolute bottom-16 right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl animate-float animation-delay-2000"></div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-16">
@@ -271,7 +271,7 @@
     <section class="relative bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 py-24 overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
         <div class="absolute w-64 h-64 bg-accent-500/10 rounded-full blur-3xl top-12 right-20 animate-float-slow"></div>
-        <div class="absolute w-96 h-96 bg-blue-500/10 rounded-full blur-3xl bottom-12 left-16 animate-float-slow animation-delay-3000"></div>
+        <div class="absolute w-96 h-96 bg-amber-500/10 rounded-full blur-3xl bottom-12 left-16 animate-float-slow animation-delay-3000"></div>
         <div class="absolute inset-0 opacity-5 bg-grid-pattern animate-grid-scroll"></div>
       </div>
 
@@ -446,12 +446,12 @@
     </section>
 
     <!-- Lobby de Leilões Reversos -->
-    <section class="bg-gradient-to-br from-blue-50 to-indigo-50 py-20">
+    <section class="bg-gradient-to-br from-amber-50 to-amber-50 py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <p class="text-sm text-blue-600 font-semibold uppercase tracking-wide">🎯 Coração da Plataforma</p>
+          <p class="text-sm text-amber-600 font-semibold uppercase tracking-wide">🎯 Coração da Plataforma</p>
           <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
-            Lobby de <span class="bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">Leilões Reversos</span>
+            Lobby de <span class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Leilões Reversos</span>
           </h2>
           <p class="text-gray-700 text-lg max-w-3xl mx-auto">
             O Lobby é onde a mágica acontece! Acompanhe em tempo real todos os projetos abertos, propostas em disputa e negocie com transparência total.
@@ -460,8 +460,8 @@
 
         <div class="grid md:grid-cols-3 gap-8 mb-12">
           <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
@@ -470,8 +470,8 @@
           </div>
 
           <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-              <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
             </div>
@@ -494,7 +494,7 @@
           <router-link
             v-if="isAuthenticated"
             to="/lobby"
-            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
+            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
           >
             🎯 Acessar Lobby Agora
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -504,7 +504,7 @@
           <router-link
             v-else
             to="/register"
-            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
+            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
           >
             Cadastre-se para Acessar o Lobby
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -531,9 +531,9 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <router-link
             to="/tutorial"
-            class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 hover:shadow-lg transition group"
+            class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl p-6 hover:shadow-lg transition group"
           >
-            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
+            <div class="w-12 h-12 bg-amber-600 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
@@ -573,11 +573,11 @@
           </div>
         </div>
 
-        <div class="mt-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white">
+        <div class="mt-12 bg-gradient-to-r from-amber-600 to-amber-600 rounded-2xl p-8 text-white">
           <div class="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 class="text-2xl font-bold mb-2">📄 Comprovantes de Pagamento</h3>
-              <p class="text-blue-100">Gere comprovantes em PDF (modelo RPA) de todas as suas transações e serviços executados. Ideal para declaração e contabilidade!</p>
+              <p class="text-amber-100">Gere comprovantes em PDF (modelo RPA) de todas as suas transações e serviços executados. Ideal para declaração e contabilidade!</p>
             </div>
             <div class="flex gap-4">
               <div class="text-center">
@@ -1378,6 +1378,8 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 </style>
+
+
 
 
 

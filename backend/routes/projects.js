@@ -541,6 +541,7 @@ router.post('/', auth, async (req, res) => {
       description,
       category,
       budget,
+      estimated_hours,
       deadline,
       requirements,
       skills_required
@@ -564,10 +565,10 @@ router.post('/', auth, async (req, res) => {
     // Create project
     const result = await db.query(`
       INSERT INTO projects (
-        client_id, title, description, category, budget, deadline,
+        client_id, title, description, category, budget, estimated_hours, deadline,
         requirements, skills_required, status, created_at, updated_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'open', NOW(), NOW())
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'open', NOW(), NOW())
       RETURNING *
     `, [
       req.user.userId,
@@ -575,6 +576,7 @@ router.post('/', auth, async (req, res) => {
       description,
       category,
       parseFloat(budget),
+      estimated_hours ? parseInt(estimated_hours) : null,
       deadline,
       requirements || null,
       skills_required || null

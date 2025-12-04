@@ -26,7 +26,7 @@ const statusConfig = {
   },
   in_progress: {
     text: 'Em andamento',
-    classes: 'bg-blue-100 text-blue-800'
+    classes: 'bg-amber-100 text-amber-800'
   },
   completed: {
     text: 'Concluído',
@@ -62,3 +62,4 @@ const statusClasses = computed(() => {
   return statusConfig[props.status]?.classes || 'bg-gray-100 text-gray-800'
 })
 </script>
+

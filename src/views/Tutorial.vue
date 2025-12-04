@@ -24,22 +24,22 @@
     <section class="mb-10 bg-white p-6 rounded-lg shadow-sm">
       <h2 class="text-2xl font-semibold mb-4 text-primary-700">2. Lobby de Leilões Reversos</h2>
       <p class="text-gray-800 mb-3">Após Login, você verá o <strong>Lobby de Leilões Reversos</strong> onde conseguirá visualizar todas as propostas ofertadas e todas as disputas em negociação, com opções de <strong>Filtros</strong> e <strong>Botões de ações rápidas</strong>.</p>
-      <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
-        <p class="text-sm text-blue-800">
+      <div class="bg-amber-50 border-l-4 border-amber-400 p-4 mt-4">
+        <p class="text-sm text-amber-800">
           <strong>💡 Dica:</strong> O conteúdo do Lobby muda conforme o perfil selecionado no switch "Ver como". Como Contratante, você vê projetos publicados. Como Prestador, você vê oportunidades para dar lances.
         </p>
       </div>
     </section>
 
     <!-- Divisão em Duas Torres -->
-    <div class="mb-6 bg-gradient-to-r from-blue-100 to-green-100 p-6 rounded-xl border-2 border-gray-300">
+    <div class="mb-6 bg-gradient-to-r from-amber-100 to-green-100 p-6 rounded-xl border-2 border-gray-300">
       <h2 class="text-2xl font-bold mb-3 text-gray-900 text-center">🔄 Como usar o Switch "Ver como"</h2>
       <p class="text-gray-800 text-center mb-4">
         A Kaddesh agora oferece <strong>perfis unificados</strong>! Você pode alternar entre Contratante e Prestador usando o botão no topo da página.
       </p>
       <div class="grid md:grid-cols-2 gap-4">
         <div class="bg-white p-4 rounded-lg">
-          <h3 class="font-semibold text-blue-700 mb-2">👔 Modo Contratante</h3>
+          <h3 class="font-semibold text-amber-700 mb-2">👔 Modo Contratante</h3>
           <ul class="text-sm text-gray-700 space-y-1">
             <li>• Criar e publicar projetos</li>
             <li>• Ver propostas recebidas</li>
@@ -61,11 +61,11 @@
 
     <div class="grid md:grid-cols-2 gap-8 mb-12">
       <!-- Torre: CONTRATANTE -->
-      <div class="bg-blue-50 p-6 rounded-xl border-2 border-blue-200">
-        <h2 class="text-3xl font-bold mb-6 text-blue-900 text-center">🏢 Contratante</h2>
+      <div class="bg-amber-50 p-6 rounded-xl border-2 border-amber-200">
+        <h2 class="text-3xl font-bold mb-6 text-amber-900 text-center">🏢 Contratante</h2>
         
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">3. ABA DASHBOARD</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">3. ABA DASHBOARD</h3>
           <p class="text-gray-800 mb-2">Após login, você verá seu painel pessoal onde verá todo o dashboard contendo:</p>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>Propostas recebidas</li>
@@ -77,7 +77,7 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">4. ABA PROJETOS</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">4. ABA PROJETOS</h3>
           <p class="text-gray-800 mb-2"><strong>Criar Projeto:</strong></p>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>No menu, clique em <strong>Publicar Projeto</strong>.</li>
@@ -88,7 +88,7 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">5. ABA MEUS PROJETOS</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">5. ABA MEUS PROJETOS</h3>
           <p class="text-gray-800 mb-2">Nesta aba você tem acesso ao <strong>gerenciamento de seus projetos publicados</strong>:</p>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>Acompanhamentos</li>
@@ -107,7 +107,7 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">6. ABA CARTEIRA</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">6. ABA CARTEIRA</h3>
           <p class="text-gray-800 mb-2">Nesta aba você consegue acompanhar sua carteira com opções de:</p>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>Inclusão e retirada de valores</li>
@@ -119,7 +119,7 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">📊 Após toda sua experiência na plataforma</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">📊 Após toda sua experiência na plataforma</h3>
           <p class="text-gray-800 mb-2">Volte ao Painel Dashboard e:</p>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>Veja gráficos e relatórios (em constante evolução)</li>
@@ -131,7 +131,7 @@
         </section>
 
         <section class="mb-8">
-          <h3 class="text-xl font-semibold mb-3 text-blue-800">💡 Dicas Finais (Contratante)</h3>
+          <h3 class="text-xl font-semibold mb-3 text-amber-800">💡 Dicas Finais (Contratante)</h3>
           <ul class="list-disc ml-6 text-gray-700 space-y-1">
             <li>Use sempre o chat para registrar acordos.</li>
             <li>Libere milestones só após entrega aprovada.</li>
@@ -224,7 +224,7 @@
     </div>
 
     <!-- Mensagem Final -->
-    <div class="mt-12 p-8 bg-gradient-to-r from-blue-100 to-green-100 rounded-xl text-center">
+    <div class="mt-12 p-8 bg-gradient-to-r from-amber-100 to-green-100 rounded-xl text-center">
       <p class="text-lg font-semibold text-gray-800 mb-3">Fique sempre atento a novas ações e acessos em nossa plataforma</p>
       <p class="text-gray-700">Todas as funcionalidades estarão constantemente em processo de aprimoramentos em prol do melhor resultado ao Usuário.</p>
       <p class="text-xl font-bold text-primary-900 mt-6">Pronto! Agora você já sabe usar a Kaddesh como um profissional.</p>
@@ -236,3 +236,5 @@
 <script setup>
 // Nenhuma lógica JS necessária para tutorial
 </script>
+
+

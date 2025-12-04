@@ -4,12 +4,13 @@ import { ref } from 'vue'
 const STORAGE_KEY = 'kadesh_sidebar_visible'
 
 const getInitialVisibility = () => {
-  if (typeof window === 'undefined') return true
+  if (typeof window === 'undefined') return false
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored === null ? true : stored === 'true'
+    // Sidebar escondida por padrão (false se não houver valor salvo)
+    return stored === null ? false : stored === 'true'
   } catch {
-    return true
+    return false
   }
 }
 

@@ -69,16 +69,16 @@
         </div>
         <div
           v-if="hasPendingDeposits"
-          class="mt-6 bg-blue-50/80 border border-blue-100 rounded-2xl p-4"
+          class="mt-6 bg-amber-50/80 border border-amber-100 rounded-2xl p-4"
         >
           <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <div>
-              <p class="text-sm font-semibold text-blue-700 uppercase tracking-wide">Pagamentos aguardando confirmação</p>
-              <p class="text-sm text-blue-900/80">Assim que o Mercado Pago aprovar, o valor aparecerá automaticamente no saldo.</p>
+              <p class="text-sm font-semibold text-amber-700 uppercase tracking-wide">Pagamentos aguardando confirmação</p>
+              <p class="text-sm text-amber-900/80">Assim que o Mercado Pago aprovar, o valor aparecerá automaticamente no saldo.</p>
             </div>
             <button
               type="button"
-              class="text-sm font-medium text-blue-700 hover:text-blue-900"
+              class="text-sm font-medium text-amber-700 hover:text-amber-900"
               @click="loadPendingDeposits"
             >
               Atualizar status
@@ -88,7 +88,7 @@
             <div
               v-for="intent in pendingDeposits"
               :key="intent.id"
-              class="bg-surface border border-blue-100 rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
+              class="bg-surface border border-amber-100 rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
                 <p class="text-base font-semibold text-heading">
@@ -101,14 +101,14 @@
               <div class="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                  class="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
                   @click="openCheckoutLink(intent.checkout_url)"
                 >
                   Reabrir checkout
                 </button>
                 <button
                   type="button"
-                  class="px-4 py-2 text-sm font-medium text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-50"
+                  class="px-4 py-2 text-sm font-medium text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-50"
                   @click="copyCheckoutLink(intent.checkout_url)"
                 >
                   Copiar link
@@ -518,7 +518,7 @@ const transactionTypeColors = {
   deposit: 'bg-green-100 text-green-800',
   withdrawal: 'bg-red-100 text-red-800',
   escrow_hold: 'bg-yellow-100 text-yellow-800',
-  escrow_release: 'bg-blue-100 text-blue-800',
+  escrow_release: 'bg-amber-100 text-amber-800',
   payment: 'bg-purple-100 text-purple-800',
   payment_received: 'bg-emerald-100 text-emerald-800',
   payment_sent: 'bg-purple-100 text-purple-800',
@@ -845,3 +845,5 @@ onMounted(() => {
   loadTransactions()
 })
 </script>
+
+

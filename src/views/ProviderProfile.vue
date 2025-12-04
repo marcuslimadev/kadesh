@@ -122,7 +122,7 @@
                     <p class="text-sm text-gray-500">Propostas enviadas</p>
                     <p class="text-xl font-semibold text-heading">{{ formatNumber(stats?.total_bids) }}</p>
                   </div>
-                  <span class="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700">
+                  <span class="text-xs px-3 py-1 rounded-full bg-amber-50 text-amber-700">
                     {{ formatNumber(stats?.pending_bids) }} pendentes
                   </span>
                 </div>
@@ -386,6 +386,72 @@
                 </div>
               </section>
 
+              <!-- Documents Section -->
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+                <header>
+                  <h2 class="text-xl font-semibold text-heading">📄 Documentos</h2>
+                  <p class="text-sm text-gray-500">Anexe certificados, diplomas e documentos profissionais.</p>
+                </header>
+
+                <div class="space-y-4">
+                  <!-- Upload area -->
+                  <div 
+                    class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-amber-500 transition-colors cursor-pointer"
+                    @click="$refs.documentInput.click()"
+                    @dragover.prevent
+                    @drop.prevent="handleDocumentDrop"
+                  >
+                    <input 
+                      ref="documentInput" 
+                      type="file" 
+                      class="hidden" 
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      multiple
+                      @change="handleDocumentSelect"
+                    />
+                    <svg class="w-10 h-10 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p class="text-sm font-medium text-heading">Clique ou arraste arquivos aqui</p>
+                    <p class="text-xs text-gray-500 mt-1">PDF, DOC, JPG, PNG (máx 5MB cada)</p>
+                  </div>
+
+                  <!-- Uploaded documents list -->
+                  <div v-if="documents.length > 0" class="space-y-3">
+                    <div 
+                      v-for="(doc, index) in documents" 
+                      :key="index"
+                      class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                          <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-heading">{{ doc.name }}</p>
+                          <p class="text-xs text-gray-500">{{ formatFileSize(doc.size) }}</p>
+                        </div>
+                      </div>
+                      <button 
+                        type="button"
+                        @click="removeDocument(index)"
+                        class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <p v-else class="text-sm text-gray-500 text-center py-4">
+                    Nenhum documento anexado ainda
+                  </p>
+                </div>
+              </section>
+
               <div class="flex flex-col md:flex-row items-center justify-end gap-3">
                 <button
                   type="button"
@@ -450,6 +516,7 @@ const authStore = useAuthStore()
 
 const error = ref('')
 const isPageLoading = ref(true)
+const documents = ref([])
 const form = ref({
   name: '',
   title: '',
@@ -639,6 +706,53 @@ const loadData = async () => {
   isPageLoading.value = false
 }
 
+// Document handling functions
+const handleDocumentSelect = (event) => {
+  const files = Array.from(event.target.files)
+  addDocuments(files)
+}
+
+const handleDocumentDrop = (event) => {
+  const files = Array.from(event.dataTransfer.files)
+  addDocuments(files)
+}
+
+const addDocuments = (files) => {
+  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png']
+  const maxSize = 5 * 1024 * 1024 // 5MB
+
+  files.forEach(file => {
+    if (!allowedTypes.includes(file.type)) {
+      console.warn(`Tipo de arquivo não permitido: ${file.type}`)
+      return
+    }
+    if (file.size > maxSize) {
+      console.warn(`Arquivo muito grande: ${file.name}`)
+      return
+    }
+    documents.value.push({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      file: file
+    })
+  })
+  hasChanges.value = true
+}
+
+const removeDocument = (index) => {
+  documents.value.splice(index, 1)
+  hasChanges.value = true
+}
+
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
 const validateForm = () => {
   const errors = {}
 
@@ -750,3 +864,5 @@ watch(profile, (val) => {
   if (val?.id) fetchReviews()
 })
 </script>
+
+

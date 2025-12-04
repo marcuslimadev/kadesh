@@ -83,7 +83,7 @@
         <!-- Dev link (only shown in development) -->
         <div v-if="devResetLink" class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
           <p class="text-sm text-yellow-800 font-medium mb-2">🔧 Link de desenvolvimento:</p>
-          <a :href="devResetLink" class="text-sm text-blue-600 hover:underline break-all">
+          <a :href="devResetLink" class="text-sm text-amber-600 hover:underline break-all">
             {{ devResetLink }}
           </a>
         </div>
@@ -125,3 +125,5 @@ const handleSubmit = async () => {
   }
 }
 </script>
+
+

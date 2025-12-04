@@ -10,7 +10,7 @@
       </div>
 
       <div v-if="loading" class="bg-surface rounded-lg p-12 text-center shadow-sm">
-        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
+        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full border-4 border-amber-100 border-t-amber-600 animate-spin"></div>
         <p class="mt-3 text-body">Carregando contratos...</p>
       </div>
 
@@ -92,3 +92,5 @@ async function fetchContracts() {
 
 onMounted(fetchContracts)
 </script>
+
+

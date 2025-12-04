@@ -286,7 +286,7 @@ const getTypeLabel = (type) => {
 
 const getTypeColor = (type) => {
   const colors = {
-    project: 'bg-blue-100 text-blue-800',
+    project: 'bg-amber-100 text-amber-800',
     bid: 'bg-green-100 text-green-800',
     payment: 'bg-purple-100 text-purple-800',
     message: 'bg-yellow-100 text-yellow-800',
@@ -297,7 +297,7 @@ const getTypeColor = (type) => {
 
 const getNotificationIconClass = (type) => {
   const classes = {
-    project: 'bg-blue-100 text-blue-600',
+    project: 'bg-amber-100 text-amber-600',
     bid: 'bg-green-100 text-green-600',
     payment: 'bg-purple-100 text-purple-600',
     message: 'bg-yellow-100 text-yellow-600',
@@ -431,3 +431,5 @@ onMounted(() => {
   loadNotifications()
 })
 </script>
+
+

@@ -8,7 +8,7 @@
       </div>
 
       <div v-if="loading" class="bg-surface rounded-lg p-12 text-center shadow-sm">
-        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full border-4 border-blue-100 border-t-blue-600 animate-spin"></div>
+        <div class="inline-flex h-12 w-12 items-center justify-center rounded-full border-4 border-amber-100 border-t-amber-600 animate-spin"></div>
         <p class="mt-3 text-body">Carregando contrato...</p>
       </div>
 
@@ -44,7 +44,7 @@
             <button
               v-if="canMarkComplete"
               @click="markComplete"
-              class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+              class="px-4 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
               :disabled="actionLoading"
             >
               {{ actionLoading ? 'Enviando...' : 'Marcar como completo' }}
@@ -224,3 +224,5 @@ async function submitReview(){
 
 onMounted(fetchContract)
 </script>
+
+

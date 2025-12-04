@@ -190,128 +190,91 @@
           <p class="text-muted">Nenhum projeto encontrado com os filtros atuais</p>
         </div>
 
-        <div v-else class="space-y-4">
-          <div
-            v-for="project in filteredProjects"
-            :key="project.id"
-            class="card project-card"
-          >
-            <div class="grid gap-6 md:grid-cols-[180px_1fr]">
-              <div class="relative">
-                <div
-                  class="h-40 w-full rounded-xl overflow-hidden bg-surface-alt flex items-center justify-center border border-muted"
-                >
-                  <img
-                    v-if="getCoverImage(project)"
-                    :src="getCoverImage(project)"
-                    :alt="project.title"
-                    class="object-cover w-full h-full"
-                  />
-                  <div v-else class="text-center px-4">
-                    <svg class="w-10 h-10 text-muted mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
-                    </svg>
-                    <p class="text-xs text-muted mt-2">Sem anexos enviados</p>
-                  </div>
-                </div>
-                <div
-                  v-if="attachmentCount(project)"
-                  class="absolute top-2 left-2 bg-surface-alt/90 backdrop-blur px-3 py-1 rounded-full text-xs font-semibold text-primary shadow border border-muted"
-                >
-                  {{ attachmentCount(project) }} {{ attachmentCount(project) === 1 ? 'arquivo' : 'arquivos' }}
-                </div>
-              </div>
-
-              <div>
-                <div class="flex flex-wrap gap-4 items-start justify-between">
-                  <div class="flex-1 min-w-[220px] space-y-2">
-                    <router-link
-                      :to="`/projects/${project.id}`"
-                      class="text-xl font-semibold text-primary hover:text-gold"
-                    >
-                      {{ project.title }}
-                    </router-link>
-                    <div class="flex flex-wrap items-center gap-3 text-sm text-muted">
-                      <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                        </svg>
-                        {{ getCategoryLabel(project.category) }}
-                      </span>
-                      <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {{ formatDate(project.created_at) }}
-                      </span>
-                      <span v-if="project.deadline" class="flex items-center text-amber-300">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l3 3" />
-                        </svg>
-                        Prazo: {{ formatDeadline(project.deadline) }}
-                      </span>
-                      <span
-                        v-if="getDeadlineBadge(project)"
-                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
-                        :class="getDeadlineBadge(project).class"
-                      >
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6l3 3" />
-                        </svg>
-                        {{ getDeadlineBadge(project).text }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="text-right">
-                    <p class="text-xs uppercase tracking-wide text-muted">Orçamento Máx.</p>
-                    <div class="text-2xl font-bold text-gold">R$ {{ formatCurrency(project.budget) }}</div>
-                    <div
+        <div v-else class="space-y-6">
+          <!-- Grid de cards de leilão -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div
+              v-for="project in filteredProjects"
+              :key="project.id"
+              class="auction-card group"
+            >
+              <!-- Header do card com status e countdown -->
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span
                       :class="[
-                        'inline-block px-3 py-1 rounded-full text-xs font-medium mt-2',
-                        project.status === 'open' ? 'bg-green-100 text-green-800' :
-                        project.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
+                        'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide',
+                        project.status === 'open' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                        project.status === 'in_progress' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
                       ]"
                     >
                       {{ getStatusLabel(project.status) }}
-                    </div>
-                  </div>
-                </div>
-
-                <p class="text-muted my-4 line-clamp-2">{{ project.description }}</p>
-
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                  <div class="flex items-center gap-4 text-sm">
-                    <div class="flex items-center text-muted">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      <span>{{ project.client_name || 'Contratante' }}</span>
-                    </div>
-                    <div class="flex items-center text-gold font-medium">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                      </svg>
-                      {{ getBidCount(project) }} {{ getBidCount(project) === 1 ? 'proposta' : 'propostas' }}
-                    </div>
-                    <div
-                      v-if="getBidCount(project) && getLowestBid(project)"
-                      class="flex items-center text-gold font-medium"
-                    >
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      Menor lance: R$ {{ formatCurrency(getLowestBid(project)) }}
-                    </div>
+                    </span>
+                    <span class="text-xs text-muted">{{ getCategoryLabel(project.category) }}</span>
                   </div>
                   <router-link
                     :to="`/projects/${project.id}`"
-                    class="cta-link"
+                    class="text-xl font-bold text-heading hover:text-accent transition-colors line-clamp-1"
                   >
-                    Ver detalhes
+                    {{ project.title }}
                   </router-link>
                 </div>
+                
+                <!-- Countdown badge -->
+                <div
+                  v-if="getDeadlineBadge(project)"
+                  class="countdown-badge"
+                  :class="getDeadlineBadge(project).class"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="font-bold">{{ getDeadlineBadge(project).text }}</span>
+                </div>
+              </div>
+
+              <!-- Descrição -->
+              <p class="text-body text-sm line-clamp-2 mb-4">{{ project.description }}</p>
+
+              <!-- Stats do leilão -->
+              <div class="grid grid-cols-3 gap-4 mb-4 p-4 bg-surface-alt rounded-xl">
+                <div class="text-center">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Orçamento</p>
+                  <p class="text-lg font-bold text-accent">R$ {{ formatCurrency(project.budget) }}</p>
+                </div>
+                <div class="text-center border-x border-muted/20">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Propostas</p>
+                  <p class="text-lg font-bold text-heading">{{ getBidCount(project) }}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Menor Lance</p>
+                  <p class="text-lg font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-muted'">
+                    {{ getLowestBid(project) ? `R$ ${formatCurrency(getLowestBid(project))}` : '—' }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Contratante e ações -->
+              <div class="flex items-center justify-between pt-4 border-t border-muted/20">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                    <span class="text-accent font-bold text-sm">
+                      {{ (project.client_name || 'C')[0].toUpperCase() }}
+                    </span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-heading">{{ project.client_name || 'Contratante' }}</p>
+                    <p class="text-xs text-muted">{{ formatDate(project.created_at) }}</p>
+                  </div>
+                </div>
+                <router-link
+                  :to="`/projects/${project.id}`"
+                  class="px-4 py-2 bg-accent text-graphite-900 font-bold text-sm rounded-lg hover:bg-accent/90 transition-all hover:scale-105"
+                >
+                  {{ isProviderView ? 'Dar Lance' : 'Ver Detalhes' }}
+                </router-link>
               </div>
             </div>
           </div>
@@ -888,6 +851,43 @@ watch(filters, () => {
   transform: translateY(-2px);
 }
 
+/* Auction Card - Novo design */
+.auction-card {
+  background: var(--surface);
+  border: 2px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auction-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+  transform: translateY(-4px);
+}
+
+.countdown-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.bg-surface-alt {
+  background: var(--surface-alt);
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}
+
+.border-muted {
+  border-color: var(--muted-border);
+}
+
 .pagination-button {
   display: inline-flex;
   align-items: center;
@@ -955,3 +955,5 @@ watch(filters, () => {
   }
 }
 </style>
+
+

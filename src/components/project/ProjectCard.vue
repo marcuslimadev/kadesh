@@ -112,3 +112,4 @@ const formatDate = (date) => {
   return format(new Date(date), 'dd/MM/yyyy', { locale: ptBR })
 }
 </script>
+

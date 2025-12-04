@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,36 +19,39 @@ textarea {
 
 @layer base {
         :root {
-                --page-bg: #0c1021;
-                --surface: #0f172a;
-                --surface-alt: #111827;
+                --page-bg: #1A1A1A;
+                --surface: #242424;
+                --surface-alt: #2D2D2D;
                 --text-primary: #f8fafc;
-                --text-secondary: #cbd5e1;
-                --accent: #d4af37;
+                --text-secondary: #a1a1aa;
+                --accent: #D4AF37;
                 --accent-strong: #f7e266;
                 --card-border: rgba(212, 175, 55, 0.24);
                 --muted-border: rgba(255, 255, 255, 0.06);
+                
+                --font-heading: 'Montserrat', sans-serif;
+                --font-body: 'Open Sans', sans-serif;
         }
 
         .theme-light {
-                --page-bg: #f8fafc;
+                --page-bg: #f5f5f5;
                 --surface: #ffffff;
-                --surface-alt: #f1f5f9;
-                --text-primary: #0f172a;
-                --text-secondary: #334155;
-                --accent: #d4af37;
+                --surface-alt: #fafafa;
+                --text-primary: #1A1A1A;
+                --text-secondary: #525252;
+                --accent: #D4AF37;
                 --accent-strong: #b8960c;
                 --card-border: rgba(212, 175, 55, 0.24);
-                --muted-border: rgba(15, 23, 42, 0.08);
+                --muted-border: rgba(26, 26, 26, 0.08);
         }
 
         .theme-dark {
-                --page-bg: #0c1021;
-                --surface: #0f172a;
-                --surface-alt: #111827;
+                --page-bg: #1A1A1A;
+                --surface: #242424;
+                --surface-alt: #2D2D2D;
                 --text-primary: #f8fafc;
-                --text-secondary: #cbd5e1;
-                --accent: #d4af37;
+                --text-secondary: #a1a1aa;
+                --accent: #D4AF37;
                 --accent-strong: #f7e266;
                 --card-border: rgba(212, 175, 55, 0.24);
                 --muted-border: rgba(255, 255, 255, 0.06);
@@ -55,6 +60,11 @@ textarea {
         body {
                 background: var(--page-bg);
                 color: var(--text-primary);
+                font-family: var(--font-body);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+                font-family: var(--font-heading);
         }
 
         /* Theme-aware utility classes */
@@ -73,8 +83,14 @@ textarea {
         .text-body {
                 color: var(--text-secondary) !important;
         }
+        .text-accent {
+                color: var(--accent) !important;
+        }
         .border-theme {
                 border-color: var(--card-border) !important;
+        }
+        .border-accent {
+                border-color: var(--accent) !important;
         }
 }
 
@@ -261,6 +277,12 @@ textarea {
 		box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
 	}
 
-	.backdrop-blur-sm { backdrop-filter: blur(8px); }
-	.backdrop-blur-md { backdrop-filter: blur(12px); }
+	.backdrop-blur-sm { 
+		-webkit-backdrop-filter: blur(8px);
+		backdrop-filter: blur(8px); 
+	}
+	.backdrop-blur-md { 
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px); 
+	}
 }

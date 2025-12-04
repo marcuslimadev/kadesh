@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 flex items-center justify-center px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <!-- Header -->
       <div class="text-center">
         <h1 class="text-4xl font-bold text-white mb-2">Kaddesh Admin</h1>
-        <p class="text-blue-200">Painel de Administração</p>
+        <p class="text-amber-200">Painel de Administração</p>
       </div>
 
       <!-- Login Form -->
@@ -26,7 +26,7 @@
               type="email"
               required
               autocomplete="email"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               placeholder="admin@kaddesh.local"
             />
           </div>
@@ -42,7 +42,7 @@
               type="password"
               required
               autocomplete="current-password"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
               placeholder="••••••••"
             />
           </div>
@@ -56,7 +56,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+            class="w-full bg-amber-600 hover:bg-amber-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
           >
             <span v-if="!loading">Entrar no Painel</span>
             <span v-else class="flex items-center justify-center">
@@ -73,7 +73,7 @@
         <div class="mt-6 text-center">
           <router-link 
             to="/" 
-            class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            class="text-sm text-amber-600 hover:text-neutral-800 font-medium"
           >
             ← Voltar para o site
           </router-link>
@@ -81,7 +81,7 @@
       </div>
 
       <!-- Security Notice -->
-      <div class="text-center text-blue-100 text-xs">
+      <div class="text-center text-amber-100 text-xs">
         <p>🔒 Área segura - Todos os acessos são monitorados</p>
       </div>
     </div>

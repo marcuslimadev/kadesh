@@ -115,3 +115,4 @@ const getInitials = (name) => {
   overflow: hidden;
 }
 </style>
+

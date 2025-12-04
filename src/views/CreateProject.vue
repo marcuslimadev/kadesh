@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-8">
+  <div class="min-h-screen bg-gradient-to-br from-amber-50 to-amber-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8 text-center">
@@ -15,21 +15,21 @@
               <div :class="[
                 'w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all',
                 currentStep >= index + 1 
-                  ? 'bg-blue-600 text-white' 
+                  ? 'bg-amber-600 text-white' 
                   : 'bg-gray-200 text-gray-500'
               ]">
                 {{ index + 1 }}
               </div>
               <span :class="[
                 'mt-2 text-xs font-medium',
-                currentStep >= index + 1 ? 'text-blue-600' : 'text-gray-500'
+                currentStep >= index + 1 ? 'text-amber-600' : 'text-gray-500'
               ]">
                 {{ step }}
               </span>
             </div>
             <div v-if="index < steps.length - 1" :class="[
               'w-16 h-1 mx-2 mb-6 transition-all',
-              currentStep > index + 1 ? 'bg-blue-600' : 'bg-gray-200'
+              currentStep > index + 1 ? 'bg-amber-600' : 'bg-gray-200'
             ]"></div>
           </div>
         </div>
@@ -42,7 +42,7 @@
           <!-- Step 1: Informações Básicas -->
           <div v-show="currentStep === 1" class="space-y-6">
             <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+              <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mr-4">
                 <span class="text-2xl">📝</span>
               </div>
               <div>
@@ -61,7 +61,7 @@
                 v-model="form.title"
                 type="text"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.title }"
                 placeholder="Ex: Desenvolvimento de site institucional para empresa"
               />
@@ -85,7 +85,7 @@
                 id="category"
                 v-model="form.category"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.category }"
               >
                 <option value="">Selecione uma categoria</option>
@@ -124,7 +124,7 @@
                 v-model="form.description"
                 rows="8"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.description }"
                 placeholder="Exemplo:
 
@@ -170,7 +170,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                 id="requirements"
                 v-model="form.requirements"
                 rows="4"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                 placeholder="Ex: Deve ser desenvolvido em WordPress, compatível com todos os navegadores, otimizado para SEO..."
               ></textarea>
               <p class="mt-2 text-sm text-gray-500">
@@ -193,9 +193,9 @@ Preferência por design clean e profissional, com cores azul e branco."
               />
               <label
                 for="projectAttachments"
-                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
+                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition"
               >
-                <svg class="w-10 h-10 text-blue-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 text-amber-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M4 12l2.293 2.293a1 1 0 001.414 0L12 10l4.293 4.293a1 1 0 001.414 0L20 12M12 4v6" />
                 </svg>
                 <p class="text-sm font-medium text-gray-900">
@@ -256,7 +256,7 @@ Preferência por design clean e profissional, com cores azul e branco."
             </div>
 
             <!-- Budget and Deadline -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <!-- Budget -->
               <div>
                 <label for="budget" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -271,7 +271,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                     min="0"
                     step="0.01"
                     required
-                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                     :class="{ 'border-red-500 focus:ring-red-500': errors.budget }"
                     placeholder="0,00"
                   />
@@ -283,7 +283,29 @@ Preferência por design clean e profissional, com cores azul e branco."
                   {{ errors.budget }}
                 </p>
                 <p v-else class="mt-2 text-sm text-gray-500">
-                  💡 Este é o valor máximo que você está disposto a pagar
+                  💡 Valor máximo que você está disposto a pagar
+                </p>
+              </div>
+
+              <!-- Estimated Hours -->
+              <div>
+                <label for="estimated_hours" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Horas Estimadas
+                </label>
+                <div class="relative">
+                  <span class="absolute left-4 top-3 text-gray-500 font-medium">⏱️</span>
+                  <input
+                    id="estimated_hours"
+                    v-model.number="form.estimated_hours"
+                    type="number"
+                    min="1"
+                    step="1"
+                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                    placeholder="Ex: 40"
+                  />
+                </div>
+                <p class="mt-2 text-sm text-gray-500">
+                  📊 Opcional: previsão de horas de trabalho
                 </p>
               </div>
 
@@ -299,7 +321,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                       v-model="form.deadline"
                       type="date"
                       :min="minDate"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                       :class="{ 'border-red-500 focus:ring-red-500': errors.deadline }"
                     />
                   </div>
@@ -309,7 +331,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                       v-model="form.deadlineTime"
                       type="time"
                       :disabled="!form.deadline"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all disabled:bg-gray-100 disabled:text-gray-400"
+                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all disabled:bg-gray-100 disabled:text-gray-400"
                       :class="{ 'border-red-500 focus:ring-red-500': errors.deadlineTime }"
                     />
                   </div>
@@ -346,14 +368,14 @@ Preferência por design clean e profissional, com cores azul e branco."
                   :class="[
                     'flex flex-col items-center p-4 border-2 rounded-xl transition-all transform hover:scale-105',
                     form.priority === priority.value
-                      ? 'border-blue-600 bg-blue-50 shadow-lg'
+                      ? 'border-amber-600 bg-amber-50 shadow-lg'
                       : 'border-gray-200 hover:border-gray-300 bg-white'
                   ]"
                 >
                   <span class="text-3xl mb-2">{{ priority.icon }}</span>
                   <span :class="[
                     'text-sm font-bold',
-                    form.priority === priority.value ? 'text-blue-600' : 'text-gray-700'
+                    form.priority === priority.value ? 'text-amber-600' : 'text-gray-700'
                   ]">
                     {{ priority.label }}
                   </span>
@@ -384,13 +406,13 @@ Preferência por design clean e profissional, com cores azul e branco."
                   v-model="skillInput"
                   type="text"
                   placeholder="Ex: React, Node.js, Figma, SEO..."
-                  class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
                   @keypress.enter.prevent="addSkill"
                 />
                 <button
                   type="button"
                   @click="addSkill"
-                  class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-all transform hover:scale-105 flex items-center"
+                  class="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 font-medium transition-all transform hover:scale-105 flex items-center"
                 >
                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -405,13 +427,13 @@ Preferência por design clean e profissional, com cores azul e branco."
                   <span
                     v-for="(skill, index) in form.skills_required"
                     :key="index"
-                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800 transition-all hover:bg-blue-200"
+                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-amber-100 text-amber-800 transition-all hover:bg-amber-200"
                   >
                     {{ skill }}
                     <button
                       type="button"
                       @click="removeSkill(index)"
-                      class="ml-2 text-blue-600 hover:text-blue-800 transition-colors"
+                      class="ml-2 text-amber-600 hover:text-amber-800 transition-colors"
                     >
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -439,7 +461,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                   :key="suggestion"
                   type="button"
                   @click="addSuggestedSkill(suggestion)"
-                  class="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 rounded-full hover:border-blue-500 hover:text-blue-600 transition-all"
+                  class="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 rounded-full hover:border-amber-500 hover:text-amber-600 transition-all"
                   :disabled="form.skills_required.includes(suggestion)"
                   :class="{ 'opacity-50 cursor-not-allowed': form.skills_required.includes(suggestion) }"
                 >
@@ -490,7 +512,7 @@ Preferência por design clean e profissional, com cores azul e branco."
               v-if="currentStep < 4"
               type="button"
               @click="nextStep"
-              class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 font-medium transition-all transform hover:scale-105 flex items-center justify-center"
+              class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg hover:from-amber-700 hover:to-amber-800 font-medium transition-all transform hover:scale-105 flex items-center justify-center"
             >
               Próximo
               <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -518,7 +540,7 @@ Preferência por design clean e profissional, com cores azul e branco."
       </div>
 
       <!-- Help Card -->
-      <div class="mt-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white shadow-xl">
+      <div class="mt-8 bg-gradient-to-r from-amber-600 to-amber-600 rounded-2xl p-6 text-white shadow-xl">
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -527,7 +549,7 @@ Preferência por design clean e profissional, com cores azul e branco."
           </div>
           <div class="ml-4">
             <h3 class="text-lg font-bold mb-2">💡 Dicas para um projeto bem-sucedido</h3>
-            <ul class="space-y-1 text-sm text-blue-100">
+            <ul class="space-y-1 text-sm text-amber-100">
               <li>✓ Seja específico sobre o que você precisa</li>
               <li>✓ Defina um orçamento realista baseado no mercado</li>
               <li>✓ Adicione exemplos ou referências se possível</li>
@@ -560,6 +582,7 @@ const form = reactive({
   description: '',
   category: '',
   budget: '',
+  estimated_hours: '',
   deadline: '',
   deadlineTime: '',
   requirements: '',
@@ -587,7 +610,7 @@ const MAX_FILE_SIZE_MB = Math.round(MAX_FILE_SIZE / (1024 * 1024))
 const priorities = [
   { value: 1, label: 'Urgente', icon: '🔥', color: 'text-red-500' },
   { value: 2, label: 'Alta', icon: '⚡', color: 'text-orange-500' },
-  { value: 3, label: 'Normal', icon: '📌', color: 'text-blue-500' },
+  { value: 3, label: 'Normal', icon: '📌', color: 'text-amber-500' },
   { value: 4, label: 'Baixa', icon: '📋', color: 'text-gray-500' }
 ]
 
@@ -850,6 +873,7 @@ const handleSubmit = async () => {
       description: form.description.trim(),
       category: form.category,
       budget: parseFloat(form.budget),
+      estimated_hours: form.estimated_hours ? parseInt(form.estimated_hours) : null,
       deadline: buildDeadlineISO(),
       requirements: form.requirements.trim() || null,
       skills_required: form.skills_required,
@@ -885,3 +909,5 @@ const handleSubmit = async () => {
   }
 }
 </script>
+
+

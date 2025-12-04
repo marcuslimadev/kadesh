@@ -101,7 +101,7 @@
                   />
                   <label
                     for="detailAttachmentUpload"
-                    class="inline-flex items-center px-3 py-2 rounded-lg border border-blue-200 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 cursor-pointer disabled:opacity-50"
+                    class="inline-flex items-center px-3 py-2 rounded-lg border border-amber-200 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 cursor-pointer disabled:opacity-50"
                     :class="{ 'pointer-events-none opacity-60': isUploadingAttachment }"
                   >
                     <svg
@@ -148,7 +148,7 @@
                         :href="attachment.file_url"
                         target="_blank"
                         rel="noopener"
-                        class="text-xs font-semibold text-blue-600 hover:text-blue-800"
+                        class="text-xs font-semibold text-amber-600 hover:text-amber-800"
                       >
                         Baixar / Abrir
                       </a>
@@ -932,3 +932,5 @@ onUnmounted(() => {
   }
 })
 </script>
+
+

@@ -16,7 +16,7 @@
               :class="[
                 'py-4 px-6 border-b-2 font-medium text-sm transition',
                 activeTab === 'contracts'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-amber-500 text-amber-600'
                   : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
               ]"
             >
@@ -27,7 +27,7 @@
               :class="[
                 'py-4 px-6 border-b-2 font-medium text-sm transition',
                 activeTab === 'transactions'
-                  ? 'border-blue-500 text-blue-600'
+                  ? 'border-amber-500 text-amber-600'
                   : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
               ]"
             >
@@ -40,7 +40,7 @@
       <!-- Contracts Tab -->
       <div v-if="activeTab === 'contracts'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
           <p class="mt-4 text-body">Carregando...</p>
         </div>
 
@@ -79,7 +79,7 @@
               <button
                 @click="generateReceipt(contract, 'contract')"
                 :disabled="generatingId === contract.id"
-                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <svg v-if="generatingId === contract.id" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -104,7 +104,7 @@
       <!-- Transactions Tab -->
       <div v-if="activeTab === 'transactions'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
           <p class="mt-4 text-body">Carregando...</p>
         </div>
 
@@ -146,7 +146,7 @@
             <button
               @click="generateReceipt(transaction, 'transaction')"
               :disabled="generatingId === transaction.id"
-              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <svg v-if="generatingId === transaction.id" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -162,9 +162,9 @@
       </div>
 
       <!-- Info Box -->
-      <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div class="mt-8 bg-amber-50 border border-amber-200 rounded-lg p-6">
         <div class="flex gap-4">
-          <svg class="w-6 h-6 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
@@ -334,3 +334,5 @@ const checkTabChange = () => {
 // Run check periodically
 setInterval(checkTabChange, 100)
 </script>
+
+

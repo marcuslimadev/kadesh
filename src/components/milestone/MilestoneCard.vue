@@ -28,7 +28,7 @@
           v-if="isProvider && milestone.status === 'in_progress'"
           @click="submitMilestone"
           :disabled="loading"
-          class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
+          class="px-4 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 disabled:opacity-50 transition"
         >
           Enviar para Aprovação
         </button>
@@ -137,7 +137,7 @@ const rejectionReason = ref('')
 const statusClass = computed(() => {
   const classes = {
     pending: 'px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded',
-    in_progress: 'px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded',
+    in_progress: 'px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded',
     submitted: 'px-2 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded',
     approved: 'px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded',
     rejected: 'px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded',
@@ -246,3 +246,4 @@ const deleteMilestone = async () => {
   }
 }
 </script>
+

@@ -119,17 +119,17 @@
     </div>
   </transition>
 
-  <!-- Desktop sidebar toggle button -->
+  <!-- Desktop sidebar toggle button (quando sidebar está escondida) -->
   <button
-    v-if="!isSidebarVisible && isAuthenticated"
+    v-if="!isSidebarVisible"
     @click="sidebarStore.show"
-    class="hidden md:flex fixed top-4 left-4 z-30 items-center gap-2 px-3 py-2 bg-dark text-offwhite border border-gold/30 rounded-lg shadow-lg hover:bg-dark-80 transition"
+    class="hidden md:flex fixed top-4 left-4 z-50 items-center gap-2 px-4 py-3 bg-surface border border-accent/40 rounded-xl shadow-xl hover:shadow-2xl hover:border-accent/60 transition-all group"
     aria-label="Mostrar menu lateral"
   >
-    <svg class="h-4 w-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h16" />
+    <svg class="h-5 w-5 text-accent group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
-    <span class="text-sm font-semibold">Mostrar menu</span>
+    <span class="text-sm font-semibold text-heading">Menu</span>
   </button>
 
   <!-- Desktop sidebar -->
@@ -165,16 +165,26 @@
 
     <div class="p-4 border-b border-gold/20">
       <button
-        class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-dark-80 border border-gold/40 text-offwhite hover:bg-dark-90"
+        class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-surface-alt border border-accent/30 hover:border-accent/60 transition-all group"
         @click="toggleTheme"
       >
-        <span class="flex items-center gap-2">
-          <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-          </svg>
-          <span class="font-semibold">Tema {{ themeStore.isDark ? 'Escuro' : 'Claro' }}</span>
+        <span class="flex items-center gap-3">
+          <!-- Ícone Sol/Lua animado -->
+          <div class="relative w-8 h-8 flex items-center justify-center">
+            <svg 
+              :class="['h-6 w-6 transition-all duration-300', themeStore.isDark ? 'text-amber-300' : 'text-amber-500']" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </svg>
+          </div>
+          <span class="font-semibold text-heading">{{ themeStore.isDark ? 'Modo Escuro' : 'Modo Claro' }}</span>
         </span>
-        <span class="text-xs text-offwhite-muted">Alternar</span>
+        <span class="text-xs font-medium px-2 py-1 rounded-full bg-accent/20 text-accent">
+          {{ themeStore.isDark ? '🌙' : '☀️' }}
+        </span>
       </button>
     </div>
 
@@ -427,3 +437,4 @@ const toggleTheme = () => {
   opacity: 0;
 }
 </style>
+
