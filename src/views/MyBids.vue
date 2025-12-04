@@ -9,71 +9,71 @@
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-surface rounded-lg shadow p-6">
+        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-amber-100 text-amber-600 mr-4">
+            <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-heading">{{ stats.total }}</p>
-              <p class="text-sm text-body">Total</p>
+              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.total }}</p>
+              <p class="text-sm text-[#C7C7C7]">Total</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-surface rounded-lg shadow p-6">
+        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 mr-4">
+            <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-heading">{{ stats.pending }}</p>
-              <p class="text-sm text-body">Pendentes</p>
+              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.pending }}</p>
+              <p class="text-sm text-[#C7C7C7]">Pendentes</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-surface rounded-lg shadow p-6">
+        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-green-100 text-green-600 mr-4">
+            <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-heading">{{ stats.accepted }}</p>
-              <p class="text-sm text-body">Aceitas</p>
+              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.accepted }}</p>
+              <p class="text-sm text-[#C7C7C7]">Aceitas</p>
             </div>
           </div>
         </div>
         
-        <div class="bg-surface rounded-lg shadow p-6">
+        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center">
-            <div class="p-3 rounded-full bg-red-100 text-red-600 mr-4">
+            <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-heading">{{ stats.rejected }}</p>
-              <p class="text-sm text-body">Rejeitadas</p>
+              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.rejected }}</p>
+              <p class="text-sm text-[#C7C7C7]">Rejeitadas</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Filters -->
-      <div class="bg-surface rounded-lg shadow p-6 mb-6">
+      <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Status</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="pending">Pendente</option>
@@ -84,10 +84,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Categoria</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Categoria</label>
             <select
               v-model="filters.category"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option v-for="cat in categories" :key="cat.value" :value="cat.value">
@@ -97,10 +97,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="created_at_desc">Mais Recentes</option>
               <option value="created_at_asc">Mais Antigas</option>
@@ -113,7 +113,7 @@
         <div v-if="hasActiveFilters" class="mt-4">
           <button
             @click="clearFilters"
-            class="text-sm text-primary-600 hover:text-primary-700 font-medium"
+            class="text-sm text-[#D4AF37] hover:text-[#E5C04A] font-medium"
           >
             Limpar Filtros
           </button>

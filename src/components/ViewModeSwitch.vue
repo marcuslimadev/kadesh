@@ -4,7 +4,7 @@
     <div
       :class="[
         'hidden md:flex items-center rounded-full transition-all duration-500',
-        isSidebar ? 'flex-col gap-2 bg-transparent shadow-none p-0 w-full' : 'bg-white/80 backdrop-blur-sm shadow-lg p-1.5 border border-gray-200/50'
+        isSidebar ? 'flex-col gap-2 bg-transparent shadow-none p-0 w-full' : 'bg-[#161821] backdrop-blur-sm shadow-lg p-1.5 border border-[rgba(212,175,55,0.24)]'
       ]"
     >
       <button
@@ -14,11 +14,11 @@
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
           viewMode.isContractor
             ? isSidebar
-              ? 'bg-gold text-dark shadow-gold'
-              : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900 shadow-lg scale-105'
+              ? 'bg-[#D4AF37] text-[#0F1117] shadow-[0_4px_20px_rgba(212,175,55,0.25)]'
+              : 'bg-[#D4AF37] text-[#0F1117] shadow-lg scale-105'
             : isSidebar
-              ? 'text-offwhite bg-dark-80 border border-gold/25 hover:border-gold/40'
-              : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50/80'
+              ? 'text-[#C7C7C7] bg-[#1A1A1A] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
+              : 'text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
         ]"
       >
         <span class="text-lg transition-transform duration-500" :class="viewMode.isContractor ? 'scale-110' : ''">📘</span>
@@ -32,11 +32,11 @@
           isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
           viewMode.isProvider
             ? isSidebar
-              ? 'bg-gold text-dark shadow-gold'
-              : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900 shadow-lg scale-105'
+              ? 'bg-[#D4AF37] text-[#0F1117] shadow-[0_4px_20px_rgba(212,175,55,0.25)]'
+              : 'bg-[#D4AF37] text-[#0F1117] shadow-lg scale-105'
             : isSidebar
-              ? 'text-offwhite bg-dark-80 border border-gold/25 hover:border-gold/40'
-              : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50/80'
+              ? 'text-[#C7C7C7] bg-[#1A1A1A] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
+              : 'text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
         ]"
       >
         <span class="text-lg transition-transform duration-500" :class="viewMode.isProvider ? 'scale-110' : ''">🛠️</span>
@@ -48,12 +48,7 @@
     <div class="md:hidden flex items-center justify-center">
       <button
         @click="toggleMode()"
-        :class="[
-          'flex items-center gap-2.5 px-5 py-3 rounded-full font-bold shadow-xl transition-all duration-700 ease-in-out transform hover:scale-105 backdrop-blur-sm',
-          viewMode.isContractor
-            ? 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900'
-            : 'bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-300 text-amber-900'
-        ]"
+        class="flex items-center gap-2.5 px-5 py-3 rounded-full font-bold shadow-xl transition-all duration-700 ease-in-out transform hover:scale-105 backdrop-blur-sm bg-[#D4AF37] text-[#0F1117]"
       >
         <span class="text-xl transition-transform duration-500">{{ viewMode.modeIcon }}</span>
         <span class="text-sm">Ver como {{ viewMode.modeLabel }}</span>

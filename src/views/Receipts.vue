@@ -8,68 +8,66 @@
       </div>
 
       <!-- Tabs -->
-      <div class="bg-surface rounded-lg shadow-sm mb-6">
-        <div class="border-b border-gray-200">
-          <nav class="flex -mb-px">
-            <button
-              @click="activeTab = 'contracts'"
-              :class="[
-                'py-4 px-6 border-b-2 font-medium text-sm transition',
-                activeTab === 'contracts'
-                  ? 'border-amber-500 text-amber-600'
-                  : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
-              ]"
-            >
-              Contratos Finalizados
-            </button>
-            <button
-              @click="activeTab = 'transactions'"
-              :class="[
-                'py-4 px-6 border-b-2 font-medium text-sm transition',
-                activeTab === 'transactions'
-                  ? 'border-amber-500 text-amber-600'
-                  : 'border-transparent text-gray-500 hover:text-body hover:border-gray-300'
-              ]"
-            >
-              Transações de Carteira
-            </button>
-          </nav>
-        </div>
+      <div class="bg-[#161821] rounded-lg shadow-lg mb-6 border border-[rgba(212,175,55,0.24)]">
+        <nav class="flex">
+          <button
+            @click="activeTab = 'contracts'"
+            :class="[
+              'py-4 px-6 font-medium text-sm transition border-b-2',
+              activeTab === 'contracts'
+                ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.1)]'
+                : 'border-transparent text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+            ]"
+          >
+            Contratos Finalizados
+          </button>
+          <button
+            @click="activeTab = 'transactions'"
+            :class="[
+              'py-4 px-6 font-medium text-sm transition border-b-2',
+              activeTab === 'transactions'
+                ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.1)]'
+                : 'border-transparent text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+            ]"
+          >
+            Transações de Carteira
+          </button>
+        </nav>
       </div>
 
       <!-- Contracts Tab -->
       <div v-if="activeTab === 'contracts'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
-          <p class="mt-4 text-body">Carregando...</p>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto"></div>
+          <p class="mt-4 text-[#C7C7C7]">Carregando...</p>
         </div>
 
-        <div v-else-if="contracts.length === 0" class="bg-surface rounded-lg shadow-sm p-12 text-center">
-          <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div v-else-if="contracts.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
+          <svg class="w-16 h-16 text-[#D4AF37] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p class="text-body">Nenhum contrato finalizado ainda</p>
+          <p class="text-[#C7C7C7]">Nenhum contrato finalizado ainda</p>
         </div>
 
         <div v-else class="space-y-4">
           <div
             v-for="contract in contracts"
             :key="contract.id"
-            class="bg-surface rounded-lg shadow-sm p-6 hover:shadow-md transition"
+            class="bg-[#161821] rounded-lg shadow-lg p-6 hover:border-[#D4AF37] transition border border-[rgba(212,175,55,0.24)]"
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-heading">{{ contract.project_title }}</h3>
-                <p class="text-sm text-gray-500 mt-1">Contrato #{{ contract.id }}</p>
-                <p class="text-sm text-gray-500">
+                <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ contract.project_title }}</h3>
+                <p class="text-sm text-[#8A8A8A] mt-1">Contrato #{{ contract.id }}</p>
+                <p class="text-sm text-[#C7C7C7]">
                   {{ isClient ? 'Prestador' : 'Contratante' }}: {{ contract.other_party_name }}
                 </p>
               </div>
               <div class="text-right">
-                <p class="text-2xl font-bold text-green-600">
+                <p class="text-2xl font-bold text-[#22c55e]">
                   R$ {{ formatCurrency(contract.total_amount) }}
                 </p>
-                <p class="text-sm text-gray-500 mt-1">
+                <p class="text-sm text-[#8A8A8A] mt-1">
                   Finalizado em {{ formatDate(contract.completed_at) }}
                 </p>
               </div>
@@ -79,7 +77,7 @@
               <button
                 @click="generateReceipt(contract, 'contract')"
                 :disabled="generatingId === contract.id"
-                class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                class="px-4 py-2 bg-[#D4AF37] text-[#0F1117] font-semibold rounded-md hover:bg-[#E5C04A] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <svg v-if="generatingId === contract.id" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -92,7 +90,7 @@
               </button>
               <button
                 @click="viewContract(contract.id)"
-                class="px-4 py-2 bg-gray-100 text-body rounded-md hover:bg-gray-200"
+                class="px-4 py-2 bg-[#1A1A1A] text-[#D4AF37] border border-[#D4AF37] rounded-md hover:bg-[rgba(212,175,55,0.15)]"
               >
                 Ver Detalhes
               </button>
@@ -104,40 +102,40 @@
       <!-- Transactions Tab -->
       <div v-if="activeTab === 'transactions'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
-          <p class="mt-4 text-body">Carregando...</p>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto"></div>
+          <p class="mt-4 text-[#C7C7C7]">Carregando...</p>
         </div>
 
-        <div v-else-if="transactions.length === 0" class="bg-surface rounded-lg shadow-sm p-12 text-center">
-          <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div v-else-if="transactions.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
+          <svg class="w-16 h-16 text-[#D4AF37] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          <p class="text-body">Nenhuma transação registrada</p>
+          <p class="text-[#C7C7C7]">Nenhuma transação registrada</p>
         </div>
 
         <div v-else class="space-y-4">
           <div
             v-for="transaction in transactions"
             :key="transaction.id"
-            class="bg-surface rounded-lg shadow-sm p-6 hover:shadow-md transition"
+            class="bg-[#161821] rounded-lg shadow-lg p-6 hover:border-[#D4AF37] transition border border-[rgba(212,175,55,0.24)]"
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-heading">
+                <h3 class="text-lg font-semibold text-[#F5F5F5]">
                   {{ getTransactionTitle(transaction.type) }}
                 </h3>
-                <p class="text-sm text-gray-500 mt-1">Transação #{{ transaction.id }}</p>
-                <p class="text-sm text-body mt-2">{{ transaction.description }}</p>
+                <p class="text-sm text-[#8A8A8A] mt-1">Transação #{{ transaction.id }}</p>
+                <p class="text-sm text-[#C7C7C7] mt-2">{{ transaction.description }}</p>
               </div>
               <div class="text-right">
                 <p :class="[
                   'text-2xl font-bold',
-                  transaction.type === 'credit' || transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                  transaction.type === 'credit' || transaction.type === 'deposit' ? 'text-[#22c55e]' : 'text-[#ef4444]'
                 ]">
                   {{ transaction.type === 'credit' || transaction.type === 'deposit' ? '+' : '-' }}
                   R$ {{ formatCurrency(transaction.amount) }}
                 </p>
-                <p class="text-sm text-gray-500 mt-1">
+                <p class="text-sm text-[#8A8A8A] mt-1">
                   {{ formatDate(transaction.created_at) }}
                 </p>
               </div>
@@ -146,7 +144,7 @@
             <button
               @click="generateReceipt(transaction, 'transaction')"
               :disabled="generatingId === transaction.id"
-              class="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              class="px-4 py-2 bg-[#D4AF37] text-[#0F1117] font-semibold rounded-md hover:bg-[#E5C04A] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               <svg v-if="generatingId === transaction.id" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -162,17 +160,17 @@
       </div>
 
       <!-- Info Box -->
-      <div class="mt-8 bg-amber-50 border border-amber-200 rounded-lg p-6">
+      <div class="mt-8 bg-[rgba(212,175,55,0.1)] border border-[#D4AF37] rounded-lg p-6">
         <div class="flex gap-4">
-          <svg class="w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h4 class="font-semibold text-heading mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
-            <p class="text-sm text-body mb-2">
+            <h4 class="font-semibold text-[#F5F5F5] mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
+            <p class="text-sm text-[#C7C7C7] mb-2">
               Os comprovantes gerados seguem o modelo RPA, ideal para prestadores de serviço autônomos.
             </p>
-            <ul class="text-sm text-body space-y-1 list-disc list-inside">
+            <ul class="text-sm text-[#C7C7C7] space-y-1 list-disc list-inside">
               <li>Inclui dados completos: Contratante, Prestador, valor, data e descrição do serviço</li>
               <li>Útil para declaração de IR e contabilidade</li>
               <li>Para emissão de NF-e, entre em contato com o Contratante/Prestador via chat</li>

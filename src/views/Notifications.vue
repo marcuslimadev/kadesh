@@ -11,7 +11,7 @@
           <button
             v-if="unreadCount > 0"
             @click="markAllAsRead"
-            class="px-4 py-2 text-sm font-medium text-primary-600 border border-primary-600 rounded-md hover:bg-primary-50 transition-colors"
+            class="px-4 py-2 text-sm font-medium text-[#D4AF37] border border-[#D4AF37] rounded-md hover:bg-[#D4AF37]/10 transition-colors"
           >
             Marcar todas como lida
           </button>
@@ -19,13 +19,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-surface rounded-lg shadow p-6 mb-6">
+      <div class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Tipo</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Tipo</label>
             <select
               v-model="filters.type"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="project">Projetos</option>
@@ -37,10 +37,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Status</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option value="unread">Não Lidas</option>
@@ -49,10 +49,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="date_desc">Mais Recentes</option>
               <option value="date_asc">Mais Antigas</option>
@@ -63,7 +63,7 @@
         <div v-if="hasActiveFilters" class="mt-4">
           <button
             @click="clearFilters"
-            class="text-sm text-primary-600 hover:text-primary-700 font-medium"
+            class="text-sm text-[#D4AF37] hover:text-[#E5C04A] font-medium"
           >
             Limpar Filtros
           </button>
@@ -76,26 +76,26 @@
         <p class="mt-4 text-body">Carregando notificações...</p>
       </div>
 
-      <div v-else-if="error" class="bg-surface rounded-lg shadow p-8 text-center">
+      <div v-else-if="error" class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar notificações</h3>
-        <p class="mt-2 text-sm text-body">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Erro ao carregar notificações</h3>
+        <p class="mt-2 text-sm text-[#C7C7C7]">{{ error }}</p>
         <button
           @click="loadNotifications"
-          class="mt-6 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+          class="mt-6 px-4 py-2 bg-[#D4AF37] text-[#0F1117] rounded-md hover:bg-[#E5C04A] font-semibold"
         >
           Tentar Novamente
         </button>
       </div>
 
-      <div v-else-if="filteredNotifications.length === 0" class="bg-surface rounded-lg shadow p-12 text-center">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div v-else-if="filteredNotifications.length === 0" class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-12 text-center">
+        <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-heading">Nenhuma notificação encontrada</h3>
-        <p class="mt-2 text-sm text-body">
+        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Nenhuma notificação encontrada</h3>
+        <p class="mt-2 text-sm text-[#C7C7C7]">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você está em dia! Não há notificações no momento.' }}
         </p>
       </div>
@@ -106,8 +106,8 @@
           :key="notification.id"
           @click="handleNotificationClick(notification)"
           :class="[
-            'bg-surface rounded-lg shadow hover:shadow-md transition-all cursor-pointer',
-            notification.is_read ? 'opacity-75' : 'border-l-4 border-primary-500'
+            'bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] hover:shadow-md hover:border-[#D4AF37]/50 transition-all cursor-pointer',
+            notification.is_read ? 'opacity-75' : 'border-l-4 border-l-[#D4AF37]'
           ]"
         >
           <div class="p-6">
@@ -126,7 +126,7 @@
                     <p class="text-sm font-medium text-heading">{{ notification.title }}</p>
                     <p class="mt-1 text-sm text-body">{{ notification.message }}</p>
                   </div>
-                  <span v-if="!notification.is_read" class="ml-2 w-2 h-2 bg-primary-500 rounded-full flex-shrink-0"></span>
+                  <span v-if="!notification.is_read" class="ml-2 w-2 h-2 bg-[#D4AF37] rounded-full flex-shrink-0"></span>
                 </div>
                 
                 <div class="mt-2 flex items-center gap-4 text-xs text-gray-500">
@@ -286,24 +286,24 @@ const getTypeLabel = (type) => {
 
 const getTypeColor = (type) => {
   const colors = {
-    project: 'bg-amber-100 text-amber-800',
-    bid: 'bg-green-100 text-green-800',
-    payment: 'bg-purple-100 text-purple-800',
-    message: 'bg-yellow-100 text-yellow-800',
-    system: 'bg-gray-100 text-gray-800'
+    project: 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30',
+    bid: 'bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/30',
+    payment: 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30',
+    message: 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30',
+    system: 'bg-[#8A8A8A]/10 text-[#8A8A8A] border border-[#8A8A8A]/30'
   }
-  return colors[type] || 'bg-gray-100 text-gray-800'
+  return colors[type] || 'bg-[#8A8A8A]/10 text-[#8A8A8A] border border-[#8A8A8A]/30'
 }
 
 const getNotificationIconClass = (type) => {
   const classes = {
-    project: 'bg-amber-100 text-amber-600',
-    bid: 'bg-green-100 text-green-600',
-    payment: 'bg-purple-100 text-purple-600',
-    message: 'bg-yellow-100 text-yellow-600',
-    system: 'bg-gray-100 text-body'
+    project: 'bg-[#D4AF37]/10 text-[#D4AF37]',
+    bid: 'bg-[#22c55e]/10 text-[#22c55e]',
+    payment: 'bg-[#D4AF37]/10 text-[#D4AF37]',
+    message: 'bg-[#D4AF37]/10 text-[#D4AF37]',
+    system: 'bg-[#8A8A8A]/10 text-[#8A8A8A]'
   }
-  return classes[type] || 'bg-gray-100 text-body'
+  return classes[type] || 'bg-[#8A8A8A]/10 text-[#8A8A8A]'
 }
 
 const getNotificationIcon = (type) => {

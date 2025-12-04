@@ -47,16 +47,16 @@
 
         <div class="mb-4">
           <button
-            class="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-gold/30 text-dark"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] bg-[#1A1A1A] text-[#F5F5F5]"
             @click="toggleTheme"
           >
             <span class="flex items-center gap-2">
-              <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-5 w-5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
               </svg>
               <span class="font-semibold">{{ themeLabel }}</span>
             </span>
-            <span class="text-xs font-semibold text-gray-500">{{ themeStore.isDark ? 'Escuro' : 'Claro' }}</span>
+            <span class="text-xs font-semibold text-[#D4AF37]">{{ themeStore.isDark ? '🌙' : '☀️' }}</span>
           </button>
         </div>
 
@@ -165,14 +165,14 @@
 
     <div class="p-4 border-b border-gold/20">
       <button
-        class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-surface-alt border border-accent/30 hover:border-accent/60 transition-all group"
+        class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-[#1A1A1A] border border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] transition-all group"
         @click="toggleTheme"
       >
         <span class="flex items-center gap-3">
           <!-- Ícone Sol/Lua animado -->
           <div class="relative w-8 h-8 flex items-center justify-center">
             <svg 
-              :class="['h-6 w-6 transition-all duration-300', themeStore.isDark ? 'text-amber-300' : 'text-amber-500']" 
+              :class="['h-6 w-6 transition-all duration-300', themeStore.isDark ? 'text-[#D4AF37]' : 'text-[#D4AF37]']" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -180,9 +180,9 @@
               <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
           </div>
-          <span class="font-semibold text-heading">{{ themeStore.isDark ? 'Modo Escuro' : 'Modo Claro' }}</span>
+          <span class="font-semibold text-[#F5F5F5]">{{ themeStore.isDark ? 'Modo Escuro' : 'Modo Claro' }}</span>
         </span>
-        <span class="text-xs font-medium px-2 py-1 rounded-full bg-accent/20 text-accent">
+        <span class="text-xs font-medium px-2 py-1 rounded-full bg-[rgba(212,175,55,0.2)] text-[#D4AF37]">
           {{ themeStore.isDark ? '🌙' : '☀️' }}
         </span>
       </button>
