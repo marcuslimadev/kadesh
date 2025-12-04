@@ -92,6 +92,37 @@ textarea {
         .border-accent {
                 border-color: var(--accent) !important;
         }
+
+        /* Form inputs - garantir contraste em ambos os temas */
+        input:not(.search-input):not(.input-dark), 
+        select, 
+        textarea:not(.input-dark) {
+                background-color: #ffffff;
+                color: #1A1A1A;
+                border-color: #d1d5db;
+        }
+        
+        input:not(.search-input):not(.input-dark)::placeholder, 
+        textarea:not(.input-dark)::placeholder {
+                color: #9ca3af;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+                border-color: var(--accent) !important;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+        }
+
+        /* Input para fundos escuros (ex: hero search, newsletter) */
+        .input-dark {
+                background-color: #1A1A1A !important;
+                color: #f8fafc !important;
+                border-color: rgba(212, 175, 55, 0.5) !important;
+        }
+        
+        .input-dark::placeholder {
+                color: #a1a1aa !important;
+        }
 }
 
 @layer components {
