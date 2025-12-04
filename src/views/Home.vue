@@ -407,44 +407,6 @@
       </div>
     </section>
 
-    <!-- Progress snapshot -->
-    <section class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-16 text-white">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-12 items-center">
-          <div class="lg:w-2/5 space-y-4">
-            <p class="text-sm font-semibold tracking-widest text-accent-300 uppercase">Estado real do roadmap</p>
-            <h2 class="text-3xl font-bold">Estamos {{ progressSnapshot.mvp }}% do MVP e {{ progressSnapshot.platform }}% da plataforma completa</h2>
-            <p class="text-gray-300">
-              Percentuais confirmados no arquivo <strong>{{ progressSnapshot.referenceDoc }}</strong> em {{ progressSnapshot.lastUpdated }}. O quadro abaixo mostra exatamente o que
-              falta para cada marco — sem placeholders, apenas sinalização transparente para quem acompanha o progresso.
-            </p>
-            <div class="text-sm text-gray-400">
-              Último marco prioritário: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
-            </div>
-          </div>
-          <div class="lg:flex-1 w-full grid gap-6 md:grid-cols-2">
-            <article
-              v-for="item in progressSnapshot.blocks"
-              :key="item.label"
-              class="bg-white/5 backdrop-blur rounded-2xl border border-white/10 p-6 space-y-4"
-            >
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-white">{{ item.label }}</h3>
-                <span class="text-2xl font-bold text-accent-300">{{ item.value }}%</span>
-              </div>
-              <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                <div class="h-3 bg-accent-400 rounded-full transition-all duration-500" :style="{ width: getProgressBarWidth(item.value) }"></div>
-              </div>
-              <p class="text-sm text-gray-300">{{ item.description }}</p>
-              <ul class="text-xs text-gray-400 space-y-1">
-                <li v-for="bullet in item.pending" :key="bullet">• {{ bullet }}</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Lobby de Leilões Reversos -->
     <section class="bg-gradient-to-br from-amber-50 to-amber-50 py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -592,101 +554,7 @@
       </div>
     </section>
 
-    <!-- Comunidade -->
-    <section class="bg-gradient-to-br from-amber-50 to-yellow-50 py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-          <p class="text-sm text-amber-600 font-semibold uppercase tracking-wide">🤝 Junte-se a Nós</p>
-          <h2 class="text-4xl lg:text-5xl font-bold text-primary-900 mb-4">
-            Nossa <span class="bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent">Comunidade</span>
-          </h2>
-          <p class="text-gray-700 text-lg max-w-3xl mx-auto">
-            Conecte-se com outros profissionais, compartilhe experiências e cresça junto com a comunidade Kaddesh.
-          </p>
-        </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Chat da Comunidade</h3>
-            <p class="text-gray-600 mb-4">Converse com outros membros, tire dúvidas e faça networking.</p>
-            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
-          </div>
-
-          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Blog & Artigos</h3>
-            <p class="text-gray-600 mb-4">Conteúdo exclusivo sobre freelancing, gestão e produtividade.</p>
-            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
-          </div>
-
-          <div class="bg-white rounded-2xl p-8 shadow-lg text-center hover:shadow-xl transition">
-            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Eventos & Webinars</h3>
-            <p class="text-gray-600 mb-4">Participe de lives, workshops e eventos exclusivos.</p>
-            <button class="text-amber-600 font-semibold hover:underline">Em breve</button>
-          </div>
-        </div>
-
-        <div class="mt-12 text-center bg-white rounded-2xl p-8 shadow-lg">
-          <h3 class="text-2xl font-bold text-gray-900 mb-4">💬 Sugestões e Feedback</h3>
-          <p class="text-gray-600 mb-6">Sua opinião é muito importante! Ajude-nos a melhorar a plataforma.</p>
-          <button class="px-8 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg transition">
-            Enviar Sugestão
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Roadmap / Progresso -->
-    <section class="bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 text-white py-20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-12 items-center">
-          <div class="lg:w-2/5 space-y-4">
-            <p class="text-sm font-semibold tracking-widest text-accent-300 uppercase">Estado real do roadmap</p>
-            <h2 class="text-3xl font-bold">Estamos {{ progressSnapshot.mvp }}% do MVP e {{ progressSnapshot.platform }}% da plataforma completa</h2>
-            <p class="text-gray-300">
-              Percentuais confirmados no arquivo <strong>{{ progressSnapshot.referenceDoc }}</strong> em {{ progressSnapshot.lastUpdated }}. O quadro abaixo mostra exatamente o que
-              falta para cada marco — sem placeholders, apenas sinalização transparente para quem acompanha o progresso.
-            </p>
-            <div class="text-sm text-gray-400">
-              Último marco prioritário: <span class="text-white font-semibold">{{ progressSnapshot.nextMilestone }}</span>
-            </div>
-          </div>
-          <div class="lg:flex-1 w-full grid gap-6 md:grid-cols-2">
-            <article
-              v-for="item in progressSnapshot.blocks"
-              :key="item.label"
-              class="bg-white/5 backdrop-blur rounded-2xl border border-white/10 p-6 space-y-4"
-            >
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-white">{{ item.label }}</h3>
-                <span class="text-2xl font-bold text-accent-300">{{ item.value }}%</span>
-              </div>
-              <div class="w-full h-3 bg-white/10 rounded-full overflow-hidden">
-                <div class="h-3 bg-accent-400 rounded-full transition-all duration-500" :style="{ width: getProgressBarWidth(item.value) }"></div>
-              </div>
-              <p class="text-sm text-gray-300">{{ item.description }}</p>
-              <ul class="text-xs text-gray-400 space-y-1">
-                <li v-for="bullet in item.pending" :key="bullet">• {{ bullet }}</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
     <section class="bg-primary-900 py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-4">Inscreva-se no nosso boletim</h2>
@@ -750,31 +618,6 @@ const featuredProjects = ref([])
 const loadingProjects = ref(false)
 const activeBanners = ref([])
 const loadingBanners = ref(false)
-const progressSnapshot = {
-  mvp: 100,
-  platform: 100,
-  referenceDoc: 'STATUS-ATUAL-DESENVOLVIMENTO.md',
-  lastUpdated: '17/11/2025',
-  nextMilestone: 'Lançar gráficos/relatórios (analytics) como melhoria contínua',
-  blocks: [
-    {
-      label: 'MVP Funcional',
-      value: 100,
-      description: 'Auth, marketplace, leilões, contratos, disputas admin, wallet e pagamentos 100% completos.',
-      pending: [
-        'MVP concluído! ✅'
-      ]
-    },
-    {
-      label: 'Plataforma Completa',
-      value: 100,
-      description: 'Plataforma completa entregue: escrow/milestones, reviews com moderação, perfis públicos/portfólio e chat em tempo real concluídos.',
-      pending: [
-        'Concluído! ✅'
-      ]
-    }
-  ]
-}
 
 const heroStats = [
   { label: 'Talentos ativos', value: '12k+' },
@@ -1021,11 +864,6 @@ const getHeroImage = project => {
   const attachments = Array.isArray(project.attachments) ? project.attachments : []
   const firstImage = attachments.find(att => (att.mime_type || '').startsWith('image/') || /\.(jpg|jpeg|png|webp)$/i.test(att.original_name || ''))
   return firstImage?.file_url || null
-}
-
-const getProgressBarWidth = value => {
-  const safeValue = Math.min(Math.max(Number(value) || 0, 0), 100)
-  return `${safeValue}%`
 }
 
 const goToLogin = () => {
