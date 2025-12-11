@@ -191,90 +191,131 @@
         </div>
 
         <div v-else class="space-y-6">
-          <!-- Grid de cards de leilão -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Grid de cards de leilão estilo Monitor Leilão / Vestri -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               v-for="project in filteredProjects"
               :key="project.id"
-              class="auction-card group"
+              class="auction-card-modern group"
             >
-              <!-- Header do card com status e countdown -->
-              <div class="flex items-start justify-between gap-4 mb-4">
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-2">
-                    <span
-                      :class="[
-                        'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide',
-                        project.status === 'open' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                        project.status === 'in_progress' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                      ]"
-                    >
-                      {{ getStatusLabel(project.status) }}
-                    </span>
-                    <span class="text-xs text-muted">{{ getCategoryLabel(project.category) }}</span>
+              <!-- Image Thumbnail -->
+              <div class="relative h-48 overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0F1117]">
+                <img
+                  v-if="project.attachments && project.attachments.length > 0"
+                  :src="project.attachments[0]"
+                  :alt="project.title"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div v-else class="w-full h-full flex items-center justify-center">
+                  <svg class="w-20 h-20 text-[#D4AF37]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                
+                <!-- Overlay gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                <!-- Status Badge -->
+                <div class="absolute top-3 left-3">
+                  <span
+                    :class="[
+                      'px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide backdrop-blur-sm',
+                      project.status === 'open' ? 'bg-emerald-500/90 text-white' :
+                      project.status === 'in_progress' ? 'bg-amber-500/90 text-white' :
+                      'bg-gray-500/90 text-white'
+                    ]"
+                  >
+                    {{ getStatusLabel(project.status) }}
+                  </span>
+                </div>
+
+                <!-- Countdown Timer - Prominent Display -->
+                <div
+                  v-if="getDeadlineBadge(project)"
+                  class="absolute top-3 right-3"
+                >
+                  <div
+                    class="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-white font-bold text-sm"
+                    :class="getDeadlineBadge(project).bgClass"
+                  >
+                    <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    {{ getDeadlineBadge(project).text }}
+                  </div>
+                </div>
+
+                <!-- Bid Count Badge -->
+                <div class="absolute bottom-3 left-3">
+                  <div class="flex items-center gap-2 px-3 py-1.5 bg-[#D4AF37]/90 backdrop-blur-sm rounded-full text-[#0F1117] font-bold text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                    </svg>
+                    {{ getBidCount(project) }} Lance(s)
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card Content -->
+              <div class="p-5 bg-[#161821] border-x border-b border-[rgba(212,175,55,0.24)] rounded-b-2xl">
+                <!-- Category Tag -->
+                <span class="inline-block px-3 py-1 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-semibold rounded-full mb-3">
+                  {{ getCategoryLabel(project.category) }}
+                </span>
+
+                <!-- Title -->
+                <router-link
+                  :to="`/projects/${project.id}`"
+                  class="block text-lg font-bold text-[#F5F5F5] hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
+                >
+                  {{ project.title }}
+                </router-link>
+
+                <!-- Description -->
+                <p class="text-[#C7C7C7] text-sm line-clamp-2 mb-4">
+                  {{ project.description }}
+                </p>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-3 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
+                  <div class="text-center">
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orçamento</p>
+                    <p class="text-base font-bold text-[#D4AF37]">
+                      {{ formatCurrencyCompact(project.budget) }}
+                    </p>
+                  </div>
+                  <div class="text-center border-x border-[rgba(212,175,55,0.1)]">
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Propostas</p>
+                    <p class="text-base font-bold text-[#F5F5F5]">{{ getBidCount(project) }}</p>
+                  </div>
+                  <div class="text-center">
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Menor</p>
+                    <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-[#8A8A8A]'">
+                      {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : '—' }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Client Info & CTA -->
+                <div class="flex items-center justify-between pt-3 border-t border-[rgba(212,175,55,0.1)]">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
+                      <span class="text-[#D4AF37] font-bold text-xs">
+                        {{ (project.client_name || 'C')[0].toUpperCase() }}
+                      </span>
+                    </div>
+                    <div>
+                      <p class="text-xs font-medium text-[#F5F5F5]">{{ project.client_name || 'Contratante' }}</p>
+                      <p class="text-xs text-[#8A8A8A]">{{ formatDateCompact(project.created_at) }}</p>
+                    </div>
                   </div>
                   <router-link
                     :to="`/projects/${project.id}`"
-                    class="text-xl font-bold text-heading hover:text-accent transition-colors line-clamp-1"
+                    class="px-4 py-2 bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] text-[#0F1117] font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/30 transition-all transform hover:scale-105"
                   >
-                    {{ project.title }}
+                    {{ isProviderView ? 'Dar Lance' : 'Ver' }}
                   </router-link>
                 </div>
-                
-                <!-- Countdown badge -->
-                <div
-                  v-if="getDeadlineBadge(project)"
-                  class="countdown-badge"
-                  :class="getDeadlineBadge(project).class"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span class="font-bold">{{ getDeadlineBadge(project).text }}</span>
-                </div>
-              </div>
-
-              <!-- Descrição -->
-              <p class="text-body text-sm line-clamp-2 mb-4">{{ project.description }}</p>
-
-              <!-- Stats do leilão -->
-              <div class="grid grid-cols-3 gap-4 mb-4 p-4 bg-surface-alt rounded-xl">
-                <div class="text-center">
-                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Orçamento</p>
-                  <p class="text-lg font-bold text-accent">R$ {{ formatCurrency(project.budget) }}</p>
-                </div>
-                <div class="text-center border-x border-muted/20">
-                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Propostas</p>
-                  <p class="text-lg font-bold text-heading">{{ getBidCount(project) }}</p>
-                </div>
-                <div class="text-center">
-                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Menor Lance</p>
-                  <p class="text-lg font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-muted'">
-                    {{ getLowestBid(project) ? `R$ ${formatCurrency(getLowestBid(project))}` : '—' }}
-                  </p>
-                </div>
-              </div>
-
-              <!-- Contratante e ações -->
-              <div class="flex items-center justify-between pt-4 border-t border-muted/20">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                    <span class="text-accent font-bold text-sm">
-                      {{ (project.client_name || 'C')[0].toUpperCase() }}
-                    </span>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-heading">{{ project.client_name || 'Contratante' }}</p>
-                    <p class="text-xs text-muted">{{ formatDate(project.created_at) }}</p>
-                  </div>
-                </div>
-                <router-link
-                  :to="`/projects/${project.id}`"
-                  class="px-4 py-2 bg-accent text-graphite-900 font-bold text-sm rounded-lg hover:bg-accent/90 transition-all hover:scale-105"
-                >
-                  {{ isProviderView ? 'Dar Lance' : 'Ver Detalhes' }}
-                </router-link>
               </div>
             </div>
           </div>
@@ -545,6 +586,29 @@ const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR').format(value || 0)
 }
 
+const formatCurrencyCompact = (value) => {
+  const num = Number(value || 0)
+  if (num >= 1000000) {
+    return `R$ ${(num / 1000000).toFixed(1)}M`
+  } else if (num >= 1000) {
+    return `R$ ${(num / 1000).toFixed(1)}k`
+  }
+  return `R$ ${num.toFixed(0)}`
+}
+
+const formatDateCompact = (dateString) => {
+  if (!dateString) return 'N/A'
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffMs = now - date
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Hoje'
+  if (diffDays === 1) return 'Ontem'
+  if (diffDays < 7) return `${diffDays}d atrás`
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+}
+
 const getCategoryLabel = (value) => {
   const cat = categoryOptions.find(c => c.value === value || c.label === value)
   return cat ? cat.label : (value || 'Geral')
@@ -611,7 +675,8 @@ const getDeadlineBadge = (project) => {
   if (diffMs <= 0) {
     return {
       text: 'Prazo encerrado',
-      class: 'bg-red-100 text-red-700'
+      class: 'bg-red-100 text-red-700',
+      bgClass: 'bg-red-500/90'
     }
   }
 
@@ -630,13 +695,25 @@ const getDeadlineBadge = (project) => {
   }
 
   let badgeClass = 'bg-green-100 text-green-700'
-  if (days <= 2) badgeClass = 'bg-amber-100 text-amber-700'
-  if (hours < 6 && days === 0) badgeClass = 'bg-orange-100 text-orange-700'
-  if (hours === 0 && days === 0) badgeClass = 'bg-red-100 text-red-700'
+  let bgClass = 'bg-emerald-500/90'
+  
+  if (days <= 2) {
+    badgeClass = 'bg-amber-100 text-amber-700'
+    bgClass = 'bg-amber-500/90'
+  }
+  if (hours < 6 && days === 0) {
+    badgeClass = 'bg-orange-100 text-orange-700'
+    bgClass = 'bg-orange-500/90'
+  }
+  if (hours === 0 && days === 0) {
+    badgeClass = 'bg-red-100 text-red-700'
+    bgClass = 'bg-red-500/90'
+  }
 
   return {
-    text: `Termina em ${label}`,
-    class: badgeClass
+    text: label,
+    class: badgeClass,
+    bgClass: bgClass
   }
 }
 
@@ -940,6 +1017,16 @@ watch(filters, () => {
   max-width: 520px;
   border: 1px solid var(--card-border);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* Auction Card - Novo design estilo Monitor Leilão/Vestri */
+.auction-card-modern {
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auction-card-modern:hover {
+  transform: translateY(-6px);
 }
 
 .line-clamp-2 {

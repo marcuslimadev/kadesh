@@ -2,68 +2,90 @@
     <div class="home-shell overflow-hidden">
     <AdRail position="left" />
     <AdRail position="right" />
-    <!-- Hero -->
-    <section class="hero-section">
-      <div class="hero-container">
-        <div class="hero-grid">
-          <div class="hero-copy">
-            <div class="flex items-center gap-3">
-              <img src="/logo.jpeg" alt="Kaddesh" class="h-12 w-12 rounded-xl border border-gold/40 shadow-sm object-cover" />
-              <p class="eyebrow">KADDESH - Service Bridge</p>
-            </div>
-            <h1 class="hero-title">Leiloes reversos com curadoria e seguranca</h1>
-            <p class="hero-sub tagline">Kaddesh: Onde a excelencia encontra a demanda.</p>
-            <p class="hero-sub">
-              Conectamos contratantes e prestadores em um ambiente confiavel, com anexos, prazos em horas e vencedor automatico pelo menor lance elegivel.
-            </p>
+    
+    <!-- Hero Video Section - Inspired by Hospital Metropolitano -->
+    <section class="relative h-screen min-h-[700px] w-full overflow-hidden">
+      <!-- Video Background -->
+      <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline
+        class="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/hero-video.mp4" type="video/mp4">
+      </video>
 
-            <div class="hero-search">
-              <div class="flex flex-col md:flex-row gap-3">
-                <div class="flex-1">
-                  <label class="sr-only" for="searchKeyword">Pesquise por palavra-chave</label>
-                  <div class="relative group">
-                    <MagnifyingGlassIcon class="h-5 w-5 absolute left-4 top-1/2 -translate-y-1/2 text-offwhite-muted group-focus-within:text-gold" />
-                    <input
-                      id="searchKeyword"
-                      v-model="searchKeyword"
-                      type="text"
-                      placeholder="Desenvolvimento web, branding, social media..."
-                      class="search-input"
-                    />
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  @click="handleSearch"
-                  class="cta-primary"
-                >
-                  Procurar agora
-                  <ArrowRightIcon class="h-5 w-5" />
-                </button>
-              </div>
-            </div>
+      <!-- Dark Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80"></div>
 
-            <dl class="hero-stats">
-              <div v-for="stat in heroStats" :key="stat.label" class="hero-stat-card">
-                <dt class="hero-stat-label">{{ stat.label }}</dt>
-                <dd class="hero-stat-value">{{ stat.value }}</dd>
-              </div>
-            </dl>
+      <!-- Hero Content -->
+      <div class="relative z-10 h-full flex items-center justify-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <!-- Logo + Brand -->
+          <div class="flex items-center justify-center gap-4 mb-8 animate-fade-in-up">
+            <img src="/logo.jpeg" alt="Kaddesh" class="h-16 w-16 md:h-20 md:w-20 rounded-2xl border-2 border-[#D4AF37]/60 shadow-2xl object-cover" />
+            <div class="text-left">
+              <p class="text-[#D4AF37] text-sm md:text-base font-bold uppercase tracking-wider">KADDESH</p>
+              <p class="text-[#F5F5F5] text-xs md:text-sm opacity-90">Service Bridge</p>
+            </div>
           </div>
 
-          <div class="hero-visual">
-            <div class="hero-visual-glow"></div>
-            <div class="hero-visual-card">
-              <img
-                src="/assets/images/hero-handshake.avif"
-                alt="Profissionais fechando parceria"
-                class="hero-visual-image"
-              />
-              <div class="hero-visual-overlay">
-                <p class="hero-visual-caption">Prazo em horas + anexos ativos</p>
-                <p class="hero-visual-highlight">Leilao ativo - menor lance define</p>
-              </div>
+          <!-- Main Headline -->
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.2s;">
+            Leilões Reversos com<br />
+            <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">Curadoria e Segurança</span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.4s;">
+            Onde a excelência encontra a demanda.
+          </p>
+
+          <p class="text-base md:text-lg text-gray-300 mb-12 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 0.6s;">
+            Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.
+          </p>
+
+          <!-- CTA Buttons - Hospital Style -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up" style="animation-delay: 0.8s;">
+            <button
+              @click="goToLobby"
+              class="group relative px-10 py-5 bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] text-[#0F1117] rounded-xl font-bold text-lg shadow-2xl shadow-[#D4AF37]/50 hover:shadow-[#D4AF37]/70 transform hover:scale-105 transition-all duration-300 min-w-[280px]"
+            >
+              <span class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Buscar Oportunidades
+              </span>
+            </button>
+
+            <button
+              @click="goToCreateProject"
+              class="group relative px-10 py-5 bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 rounded-xl font-bold text-lg shadow-xl hover:bg-white/20 hover:border-white/50 transform hover:scale-105 transition-all duration-300 min-w-[280px]"
+            >
+              <span class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Publique seu Projeto
+              </span>
+            </button>
+          </div>
+
+          <!-- Stats - Mini Version -->
+          <div class="grid grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto animate-fade-in-up" style="animation-delay: 1s;">
+            <div v-for="stat in heroStats" :key="stat.label" class="text-center">
+              <p class="text-3xl md:text-4xl font-bold text-[#D4AF37] mb-2">{{ stat.value }}</p>
+              <p class="text-sm md:text-base text-gray-300">{{ stat.label }}</p>
             </div>
+          </div>
+
+          <!-- Scroll Indicator -->
+          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-8 h-8 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
           </div>
         </div>
       </div>
@@ -578,6 +600,9 @@
         <p class="text-sm text-gray-400 mt-4">Sem spam. Apenas conteúdo valioso e convites ao vivo.</p>
       </div>
     </section>
+
+    <!-- Floating Chat Widget -->
+    <FloatingChat />
   </div>
 </template>
 
@@ -587,6 +612,7 @@ import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
 import AdRail from '@/components/layout/AdRail.vue'
+import FloatingChat from '@/components/chat/FloatingChat.vue'
 import api from '@/services/api'
 import {
   MagnifyingGlassIcon,
@@ -872,6 +898,22 @@ const goToLogin = () => {
 
 const goToRegister = () => {
   router.push({ name: 'register' })
+}
+
+const goToLobby = () => {
+  if (isAuthenticated.value) {
+    router.push('/lobby')
+  } else {
+    router.push({ name: 'login', query: { redirect: '/lobby' } })
+  }
+}
+
+const goToCreateProject = () => {
+  if (isAuthenticated.value) {
+    router.push('/projects/create')
+  } else {
+    router.push({ name: 'register', query: { redirect: '/projects/create' } })
+  }
 }
 
 onMounted(() => {
@@ -1214,6 +1256,23 @@ onMounted(() => {
 
 .cta-button:hover {
   transform: translateY(-2px);
+}
+
+/* Animações para o novo Hero com Vídeo */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
 }
 </style>
 
