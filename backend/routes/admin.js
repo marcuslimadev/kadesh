@@ -15,9 +15,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Check if admin exists
+    // Check if admin exists in users table
     const result = await db.query(
-      'SELECT * FROM admin_users WHERE email = $1 AND is_active = true',
+      'SELECT * FROM users WHERE email = $1 AND is_admin = true',
       [email]
     );
 
@@ -35,16 +35,17 @@ router.post('/login', async (req, res) => {
 
     // Update last login
     await db.query(
-      'UPDATE admin_users SET last_login = NOW() WHERE id = $1',
+      'UPDATE users SET last_login = NOW() WHERE id = $1',
       [admin.id]
     );
 
     // Generate JWT token
     const token = jwt.sign(
       { 
-        adminId: admin.id, 
-        role: admin.role,
-        permissions: admin.permissions
+        adminId: admin.id,
+        userId: admin.id,
+        role: 'admin',
+        permissions: ['all']
       },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
@@ -55,11 +56,10 @@ router.post('/login', async (req, res) => {
       token,
       admin: {
         id: admin.id,
-        username: admin.username,
         email: admin.email,
         name: admin.name,
-        role: admin.role,
-        permissions: admin.permissions
+        role: 'admin',
+        permissions: ['all']
       }
     });
   } catch (error) {
@@ -72,7 +72,7 @@ router.post('/login', async (req, res) => {
 router.get('/profile', adminAuth, async (req, res) => {
   try {
     const result = await db.query(
-      'SELECT id, username, email, name, role, permissions, last_login, created_at FROM admin_users WHERE id = $1',
+      'SELECT id, email, name, type, is_admin, last_login, created_at FROM users WHERE id = $1 AND is_admin = true',
       [req.admin.adminId]
     );
 
@@ -82,7 +82,11 @@ router.get('/profile', adminAuth, async (req, res) => {
 
     res.json({
       success: true,
-      data: result.rows[0]
+      data: {
+        ...result.rows[0],
+        role: 'admin',
+        permissions: ['all']
+      }
     });
   } catch (error) {
     console.error('Get admin profile error:', error);
