@@ -1,7 +1,5 @@
 <template>
     <div class="home-shell overflow-hidden">
-    <AdRail position="left" />
-    <AdRail position="right" />
     
     <!-- Hero Video Section - Inspired by Hospital Metropolitano -->
     <section class="relative h-screen min-h-[700px] w-full overflow-hidden">
@@ -13,7 +11,7 @@
         playsinline
         class="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/hero-video.mp4" type="video/mp4">
+        <source src="/novovideo.mp4" type="video/mp4">
       </video>
 
       <!-- Dark Overlay -->
@@ -611,7 +609,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
-import AdRail from '@/components/layout/AdRail.vue'
 import FloatingChat from '@/components/chat/FloatingChat.vue'
 import api from '@/services/api'
 import {
