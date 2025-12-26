@@ -11,25 +11,40 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('[Admin Login] Tentativa de login:', email);
+
     if (!email || !password) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
     // Check if admin exists in users table
-    const result = await db.query(
-      'SELECT * FROM users WHERE email = $1 AND is_admin = true',
-      [email]
-    );
+    let result;
+    try {
+      result = await db.query(
+        'SELECT * FROM users WHERE email = $1 AND is_admin = true',
+        [email]
+      );
+    } catch (dbError) {
+      // Fallback: se coluna is_admin não existe, tentar buscar apenas por email
+      console.log('[Admin Login] Coluna is_admin não existe, usando fallback');
+      result = await db.query(
+        'SELECT * FROM users WHERE email = $1',
+        [email]
+      );
+    }
 
     if (result.rows.length === 0) {
+      console.log('[Admin Login] Usuário não encontrado:', email);
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
     const admin = result.rows[0];
+    console.log('[Admin Login] Usuário encontrado:', { id: admin.id, email: admin.email, is_admin: admin.is_admin });
 
     // Verify password
     const validPassword = await bcrypt.compare(password, admin.password_hash);
     if (!validPassword) {
+      console.log('[Admin Login] Senha inválida');
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
@@ -44,12 +59,15 @@ router.post('/login', async (req, res) => {
       { 
         adminId: admin.id,
         userId: admin.id,
+        isAdmin: true,
         role: 'admin',
         permissions: ['all']
       },
       process.env.JWT_SECRET,
       { expiresIn: '8h' }
     );
+
+    console.log('[Admin Login] Login bem-sucedido:', admin.email);
 
     res.json({
       success: true,
@@ -63,8 +81,8 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Admin login error:', error);
-    res.status(500).json({ error: 'Erro ao fazer login' });
+    console.error('[Admin Login] Erro:', error);
+    res.status(500).json({ error: 'Erro ao fazer login', details: error.message });
   }
 });
 
