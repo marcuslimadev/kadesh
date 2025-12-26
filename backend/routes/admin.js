@@ -3,6 +3,7 @@ const db = require('../config/database');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const adminAuth = require('../middleware/adminAuth');
+const logger = require('../utils/logger');
 
 const router = express.Router();
 
@@ -11,54 +12,62 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log('[Admin Login] Tentativa de login:', email);
+    logger.info('Tentativa de login admin', { email });
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email e senha são obrigatórios' });
     }
 
-    // Check if admin exists in users table
-    let result;
-    try {
-      result = await db.query(
-        'SELECT * FROM users WHERE email = $1 AND is_admin = true',
-        [email]
-      );
-    } catch (dbError) {
-      // Fallback: se coluna is_admin não existe, tentar buscar apenas por email
-      console.log('[Admin Login] Coluna is_admin não existe, usando fallback');
-      result = await db.query(
-        'SELECT * FROM users WHERE email = $1',
-        [email]
-      );
-    }
+    // Buscar usuário apenas por email (sem is_admin)
+    const result = await db.query(
+      'SELECT id, email, password_hash, name, type FROM users WHERE email = $1',
+      [email]
+    );
 
     if (result.rows.length === 0) {
-      console.log('[Admin Login] Usuário não encontrado:', email);
+      logger.warn('Usuário não encontrado', { email });
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }
 
-    const admin = result.rows[0];
-    console.log('[Admin Login] Usuário encontrado:', { id: admin.id, email: admin.email, is_admin: admin.is_admin });
+    const user = result.rows[0];
+    logger.info('Usuário encontrado', { id: user.id, email: user.email });
 
     // Verify password
-    const validPassword = await bcrypt.compare(password, admin.password_hash);
+    const validPassword = await bcrypt.compare(password, user.password_hash);
     if (!validPassword) {
-      console.log('[Admin Login] Senha inválida');
+      logger.warn('Senha inválida', { email });
       return res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+
+    // Verificar se é admin pelo email (emails específicos)
+    const adminEmails = [
+      'admin@kadesh.local',
+      'kaddesh@kaddesh.com',
+      'admin@kaddesh.com'
+    ];
+
+    const isAdmin = adminEmails.includes(user.email.toLowerCase());
+    
+    if (!isAdmin) {
+      logger.warn('Usuário não é admin', { email: user.email });
+      return res.status(403).json({ error: 'Acesso negado. Apenas administradores.' });
     }
 
     // Update last login
-    await db.query(
-      'UPDATE users SET last_login = NOW() WHERE id = $1',
-      [admin.id]
-    );
+    try {
+      await db.query(
+        'UPDATE users SET last_login = NOW() WHERE id = $1',
+        [user.id]
+      );
+    } catch (updateError) {
+      logger.warn('Erro ao atualizar last_login', { error: updateError.message });
+    }
 
     // Generate JWT token
     const token = jwt.sign(
       { 
-        adminId: admin.id,
-        userId: admin.id,
+        adminId: user.id,
+        userId: user.id,
         isAdmin: true,
         role: 'admin',
         permissions: ['all']
@@ -67,22 +76,25 @@ router.post('/login', async (req, res) => {
       { expiresIn: '8h' }
     );
 
-    console.log('[Admin Login] Login bem-sucedido:', admin.email);
+    logger.info('Login admin bem-sucedido', { email: user.email, id: user.id });
 
     res.json({
       success: true,
       token,
       admin: {
-        id: admin.id,
-        email: admin.email,
-        name: admin.name,
+        id: user.id,
+        email: user.email,
+        name: user.name,
         role: 'admin',
         permissions: ['all']
       }
     });
   } catch (error) {
-    console.error('[Admin Login] Erro:', error);
-    res.status(500).json({ error: 'Erro ao fazer login', details: error.message });
+    logger.error('Erro no login admin', { error: error.message, stack: error.stack });
+    res.status(500).json({ 
+      error: 'Erro ao fazer login', 
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno'
+    });
   }
 });
 
@@ -109,6 +121,47 @@ router.get('/profile', adminAuth, async (req, res) => {
   } catch (error) {
     console.error('Get admin profile error:', error);
     res.status(500).json({ error: 'Erro ao buscar perfil' });
+  }
+});
+
+// Get Logs
+router.get('/logs', adminAuth, async (req, res) => {
+  try {
+    const { level, limit, since } = req.query;
+
+    const logs = logger.getLogs({
+      level,
+      limit: limit ? parseInt(limit) : 100,
+      since
+    });
+
+    const stats = logger.getStats();
+
+    res.json({
+      success: true,
+      logs,
+      stats,
+      count: logs.length
+    });
+  } catch (error) {
+    console.error('Get logs error:', error);
+    res.status(500).json({ error: 'Erro ao buscar logs' });
+  }
+});
+
+// Clear Logs
+router.delete('/logs', adminAuth, async (req, res) => {
+  try {
+    const count = logger.clearLogs();
+
+    res.json({
+      success: true,
+      message: `${count} logs removidos`,
+      cleared: count
+    });
+  } catch (error) {
+    console.error('Clear logs error:', error);
+    res.status(500).json({ error: 'Erro ao limpar logs' });
   }
 });
 
