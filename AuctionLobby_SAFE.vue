@@ -1,73 +1,38 @@
 <template>
-  <div class="lobby-shell py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
+  <div class="lobby-shell py-8 px-4 sm:px-6 lg:px-8">
     <div class="lobby-grid max-w-7xl mx-auto">
       <AdRail position="left" />
 
-      <div class="space-y-6">
-        <!-- Header Hero com Estilo Power BI -->
-        <section class="lobby-hero-modern">
-          <div class="flex flex-wrap items-center justify-between gap-6">
-            <div class="space-y-2">
-              <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#D4AF37] to-[#E5C04A] rounded-lg flex items-center justify-center">
-                  <svg class="w-7 h-7 text-[#0F1117]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-sm font-semibold text-[#D4AF37] uppercase tracking-wide">Service Bridge</p>
-                  <h1 class="text-3xl font-bold text-gray-900">{{ lobbyTitle }}</h1>
-                </div>
-              </div>
-              <p class="text-gray-600 max-w-2xl">{{ lobbyDescription }}</p>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span class="tag-modern tag-primary">Modo: {{ isContractorView ? 'Contratante' : 'Prestador' }}</span>
-                <span class="tag-modern tag-secondary">{{ projects.length }} oportunidades disponíveis</span>
+      <div class="space-y-8">
+        <section class="lobby-hero card">
+          <div class="flex flex-wrap items-start justify-between gap-6">
+            <div class="space-y-3">
+              <p class="hero-eyebrow">Service Bridge • Acesso premium</p>
+              <h1 class="hero-title">{{ lobbyTitle }}</h1>
+              <p class="hero-sub">{{ lobbyDescription }}</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="tag">Modo: {{ isContractorView ? 'Contratante' : 'Prestador' }}</span>
+                <span class="tag">{{ projects.length }} projetos carregados</span>
               </div>
             </div>
             <div class="flex flex-col gap-3 min-w-[240px]">
-              <router-link to="/" class="btn-modern btn-outline">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Voltar para Home
-              </router-link>
-              <router-link
-                v-if="isContractorView"
-                to="/projects/create"
-                class="btn-modern btn-primary"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Novo Projeto
-              </router-link>
+              <router-link to="/" class="cta-link">Voltar para a Home</router-link>
+              <button class="cta-outline" @click="showQuickAccess = !showQuickAccess">
+                {{ showQuickAccess ? 'Esconder acessos' : 'Mostrar acessos' }}
+              </button>
             </div>
           </div>
         </section>
 
-        <!-- KPIs Estilo Power BI -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div
             v-for="highlight in lobbyHighlights"
             :key="highlight.label"
-            class="kpi-card"
+            class="stat-card card"
           >
-            <div class="kpi-icon" :style="{ background: highlight.color || 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' }">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
-            </div>
-            <div class="kpi-content">
-              <p class="kpi-label">{{ highlight.label }}</p>
-              <p class="kpi-value">{{ highlight.value }}</p>
-              <div class="kpi-trend" :class="highlight.trendClass || 'text-emerald-600'">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" />
-                </svg>
-                <span>{{ highlight.caption }}</span>
-              </div>
-            </div>
+            <p class="text-sm text-muted">{{ highlight.label }}</p>
+            <p class="text-3xl font-bold text-primary">{{ highlight.value }}</p>
+            <span class="text-xs font-semibold" :class="highlight.text">{{ highlight.caption }}</span>
           </div>
         </section>
 
@@ -226,32 +191,92 @@
         </div>
 
         <div v-else class="space-y-6">
-          <!-- Cabeçalho da Listagem -->
-          <div class="flex items-center justify-between bg-white rounded-lg px-6 py-4 shadow-sm border border-gray-200">
-            <div>
-              <h2 class="text-lg font-bold text-gray-900">Leilões Disponíveis</h2>
-              <p class="text-sm text-gray-600">{{ filteredProjects.length }} oportunidade(s) encontrada(s)</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <select class="filter-input-compact" v-model="sortBy" @change="applySorting">
-                <option value="newest">Mais recentes</option>
-                <option value="deadline">Prazo final</option>
-                <option value="budget-high">Maior orçamento</option>
-                <option value="budget-low">Menor orçamento</option>
-                <option value="bids">Mais propostas</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Grid de cards de leilão estilo Monitor Leilão / Vestri -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <ProjectAuctionCard
+          <!-- Grid de cards de leilão -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div
               v-for="project in filteredProjects"
               :key="project.id"
-              :project="project"
-              :bid-count="getBidCount(project)"
-              :lowest-bid="getLowestBid(project)"
-            />
+              class="auction-card group"
+            >
+              <!-- Header do card com status e countdown -->
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span
+                      :class="[
+                        'px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide',
+                        project.status === 'open' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                        project.status === 'in_progress' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                        'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                      ]"
+                    >
+                      {{ getStatusLabel(project.status) }}
+                    </span>
+                    <span class="text-xs text-muted">{{ getCategoryLabel(project.category) }}</span>
+                  </div>
+                  <router-link
+                    :to="`/projects/${project.id}`"
+                    class="text-xl font-bold text-heading hover:text-accent transition-colors line-clamp-1"
+                  >
+                    {{ project.title }}
+                  </router-link>
+                </div>
+                
+                <!-- Countdown badge -->
+                <div
+                  v-if="getDeadlineBadge(project)"
+                  class="countdown-badge"
+                  :class="getDeadlineBadge(project).class"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="font-bold">{{ getDeadlineBadge(project).text }}</span>
+                </div>
+              </div>
+
+              <!-- Descrição -->
+              <p class="text-body text-sm line-clamp-2 mb-4">{{ project.description }}</p>
+
+              <!-- Stats do leilão -->
+              <div class="grid grid-cols-3 gap-4 mb-4 p-4 bg-surface-alt rounded-xl">
+                <div class="text-center">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Orçamento</p>
+                  <p class="text-lg font-bold text-accent">R$ {{ formatCurrency(project.budget) }}</p>
+                </div>
+                <div class="text-center border-x border-muted/20">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Propostas</p>
+                  <p class="text-lg font-bold text-heading">{{ getBidCount(project) }}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-xs text-muted uppercase tracking-wide mb-1">Menor Lance</p>
+                  <p class="text-lg font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-muted'">
+                    {{ getLowestBid(project) ? `R$ ${formatCurrency(getLowestBid(project))}` : '—' }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Contratante e ações -->
+              <div class="flex items-center justify-between pt-4 border-t border-muted/20">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                    <span class="text-accent font-bold text-sm">
+                      {{ (project.client_name || 'C')[0].toUpperCase() }}
+                    </span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-heading">{{ project.client_name || 'Contratante' }}</p>
+                    <p class="text-xs text-muted">{{ formatDate(project.created_at) }}</p>
+                  </div>
+                </div>
+                <router-link
+                  :to="`/projects/${project.id}`"
+                  class="px-4 py-2 bg-accent text-graphite-900 font-bold text-sm rounded-lg hover:bg-accent/90 transition-all hover:scale-105"
+                >
+                  {{ isProviderView ? 'Dar Lance' : 'Ver Detalhes' }}
+                </router-link>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -298,7 +323,7 @@
             </div>
             <div>
               <label class="filter-label">Descrição</label>
-              <textarea v-model="newCategory.description" rows="3" class="filter-input" placeholder="Conte rapidamente o que engloba a categoria"></textarea>
+              <textarea v-model="newCategory.description" rows="3" class="filter-input" placeholder="Conte rapidamente o que engloba a categoria" />
             </div>
           </div>
           <div class="mt-6 flex justify-end gap-2">
@@ -319,7 +344,6 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 import projectService from '@/services/projectService'
 import api from '@/services/api'
 import AdRail from '@/components/layout/AdRail.vue'
-import ProjectAuctionCard from '@/components/project/ProjectAuctionCard.vue'
 
 const viewModeStore = useViewModeStore()
 const { currentMode } = storeToRefs(viewModeStore)
@@ -410,7 +434,6 @@ const showQuickAccess = ref(true)
 const showCategoryModal = ref(false)
 const newCategory = ref({ name: '', description: '' })
 const pendingCategories = ref([])
-const sortBy = ref('newest')
 
 const FILTER_STORAGE_KEYS = {
   contractor: 'kadesh_lobby_filters_contractor',
@@ -518,55 +541,8 @@ const clearFilters = () => {
   applyFilters()
 }
 
-const applySorting = () => {
-  const sorted = [...projects.value]
-  
-  switch (sortBy.value) {
-    case 'newest':
-      sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      break
-    case 'deadline':
-      sorted.sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
-      break
-    case 'budget-high':
-      sorted.sort((a, b) => b.budget - a.budget)
-      break
-    case 'budget-low':
-      sorted.sort((a, b) => a.budget - b.budget)
-      break
-    case 'bids':
-      sorted.sort((a, b) => (b.bid_count || 0) - (a.bid_count || 0))
-      break
-  }
-  
-  projects.value = sorted
-}
-
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR').format(value || 0)
-}
-
-const formatCurrencyCompact = (value) => {
-  const num = Number(value || 0)
-  if (num >= 1000000) {
-    return `R$ ${(num / 1000000).toFixed(1)}M`
-  } else if (num >= 1000) {
-    return `R$ ${(num / 1000).toFixed(1)}k`
-  }
-  return `R$ ${num.toFixed(0)}`
-}
-
-const formatDateCompact = (dateString) => {
-  if (!dateString) return 'N/A'
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffMs = now - date
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 0) return 'Hoje'
-  if (diffDays === 1) return 'Ontem'
-  if (diffDays < 7) return `${diffDays}d atrás`
-  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 }
 
 const getCategoryLabel = (value) => {
@@ -635,8 +611,7 @@ const getDeadlineBadge = (project) => {
   if (diffMs <= 0) {
     return {
       text: 'Prazo encerrado',
-      class: 'bg-red-100 text-red-700',
-      bgClass: 'bg-red-500/90'
+      class: 'bg-red-100 text-red-700'
     }
   }
 
@@ -655,25 +630,13 @@ const getDeadlineBadge = (project) => {
   }
 
   let badgeClass = 'bg-green-100 text-green-700'
-  let bgClass = 'bg-emerald-500/90'
-  
-  if (days <= 2) {
-    badgeClass = 'bg-amber-100 text-amber-700'
-    bgClass = 'bg-amber-500/90'
-  }
-  if (hours < 6 && days === 0) {
-    badgeClass = 'bg-orange-100 text-orange-700'
-    bgClass = 'bg-orange-500/90'
-  }
-  if (hours === 0 && days === 0) {
-    badgeClass = 'bg-red-100 text-red-700'
-    bgClass = 'bg-red-500/90'
-  }
+  if (days <= 2) badgeClass = 'bg-amber-100 text-amber-700'
+  if (hours < 6 && days === 0) badgeClass = 'bg-orange-100 text-orange-700'
+  if (hours === 0 && days === 0) badgeClass = 'bg-red-100 text-red-700'
 
   return {
-    text: label,
-    class: badgeClass,
-    bgClass: bgClass
+    text: `Termina em ${label}`,
+    class: badgeClass
   }
 }
 
@@ -979,16 +942,6 @@ watch(filters, () => {
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
 }
 
-/* Auction Card - Novo design estilo Monitor Leilão/Vestri */
-.auction-card-modern {
-  background: transparent;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.auction-card-modern:hover {
-  transform: translateY(-6px);
-}
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -996,138 +949,11 @@ watch(filters, () => {
   overflow: hidden;
 }
 
-/* Novos estilos - Hero e KPIs estilo Power BI */
-.lobby-hero-modern {
-  background: white;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
+@media (max-width: 1279px) {
+  .lobby-grid {
+    grid-template-columns: 1fr;
+  }
 }
+</style>
 
-.tag-modern {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.tag-primary {
-  background: linear-gradient(135deg, #D4AF37 0%, #E5C04A 100%);
-  color: #0F1117;
-}
-
-.tag-secondary {
-  background: rgba(59, 130, 246, 0.1);
-  color: #2563eb;
-}
-
-.btn-modern {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #D4AF37 0%, #E5C04A 100%);
-  color: #0F1117;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
-}
-
-.btn-outline {
-  background: white;
-  color: #374151;
-  border: 2px solid #e5e7eb;
-}
-
-.btn-outline:hover {
-  border-color: #D4AF37;
-  color: #D4AF37;
-}
-
-/* KPI Cards estilo Power BI */
-.kpi-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
-  transition: all 0.3s ease;
-}
-
-.kpi-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-.kpi-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.kpi-content {
-  flex: 1;
-}
-
-.kpi-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-
-.kpi-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 8px;
-}
-
-.kpi-trend {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.filter-input-compact {
-  padding: 8px 12px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #374151;
-  background: white;
-  transition: all 0.2s ease;
-}
-
-.filter-input-compact:focus {
-  outline: none;
-  border-color: #D4AF37;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-}
 

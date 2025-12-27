@@ -3,7 +3,8 @@
     <div class="max-w-md w-full space-y-8">
       <!-- Header -->
       <div class="text-center">
-        <!-- Logo do Leão -->
+        <!-- Logo do Leão (comentado até upload da imagem) -->
+        <!--
         <div class="flex justify-center mb-6">
           <img 
             src="/leao.png" 
@@ -12,6 +13,7 @@
             onerror="this.style.display='none'"
           />
         </div>
+        -->
         <h1 class="text-4xl font-bold text-white mb-2">Kaddesh Admin</h1>
         <p class="text-amber-200">Painel de Administração</p>
       </div>
