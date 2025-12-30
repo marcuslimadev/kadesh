@@ -19,7 +19,7 @@ $db = new Database();
 $conn = $db->getConnection();
 
 try {
-    $stmt = $conn->prepare("SELECT id, name, email, password, user_type, is_active as status, created_at FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, name, email, password, user_type, status, created_at FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -27,7 +27,7 @@ try {
         Helpers::jsonResponse(['error' => 'Email ou senha incorretos'], 401);
     }
 
-    if ($user['status'] !== 'active' && $user['status'] != 1) {
+    if ($user['status'] !== 'active') {
         Helpers::jsonResponse(['error' => 'Conta desativada. Entre em contato com o suporte.'], 403);
     }
 
