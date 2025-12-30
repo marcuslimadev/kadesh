@@ -141,29 +141,28 @@ const hasMore = computed(() => {
 const loadReviews = async (append = false) => {
   loading.value = true
   try {
-    const { data } = await api.get('/reviews', {
+    const { data } = await api.get(`/reviews-simple/user/${props.userId}`, {
       params: {
-        user_id: props.userId,
         limit: pagination.value.limit,
         offset: append ? pagination.value.offset : 0
       }
     })
 
     if (append) {
-      reviews.value = [...reviews.value, ...data.data]
+      reviews.value = [...reviews.value, ...data.data.reviews]
     } else {
-      reviews.value = data.data
+      reviews.value = data.data.reviews
     }
 
     pagination.value = {
-      total: data.pagination.total,
-      limit: data.pagination.limit,
-      offset: data.pagination.offset
+      total: data.data.totalReviews,
+      limit: parseInt(data.pagination.limit),
+      offset: parseInt(data.pagination.offset)
     }
 
     stats.value = {
-      total: data.pagination.total,
-      average: data.pagination.avg_rating || 0
+      total: data.data.totalReviews,
+      average: data.data.avgRating || 0
     }
   } catch (error) {
     console.error('Error loading reviews:', error)

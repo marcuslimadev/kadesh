@@ -475,28 +475,9 @@
                 </button>
               </div>
               <!-- Avaliações recentes -->
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
-                <header class="flex items-center justify-between">
-                  <h2 class="text-xl font-semibold text-heading">Avaliações recentes</h2>
-                  <span class="text-sm text-gray-500" v-if="reviews.length">{{ reviews.length }} recebidas</span>
-                </header>
-                <div v-if="!reviewsLoaded" class="text-sm text-gray-500">Carregando avaliações...</div>
-                <div v-else-if="reviews.length === 0" class="text-sm text-gray-500">Nenhuma avaliação recebida ainda.</div>
-                <ul v-else class="space-y-4">
-                  <li v-for="r in reviews" :key="r.id" class="border-b last:border-0 border-gray-100 pb-4">
-                    <div class="flex items-center justify-between">
-                      <div>
-                        <p class="text-sm font-medium text-heading">{{ r.reviewer_name }}</p>
-                        <p class="text-xs text-gray-500">{{ formatDate(r.created_at) }}</p>
-                      </div>
-                      <div class="text-amber-500 text-sm">
-                        <span v-for="i in r.rating" :key="i">★</span>
-                        <span v-for="i in (5 - r.rating)" :key="'e'+i" class="text-gray-300">★</span>
-                      </div>
-                    </div>
-                    <p v-if="r.comment" class="mt-2 text-sm text-body">{{ r.comment }}</p>
-                  </li>
-                </ul>
+              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xl font-semibold text-heading mb-6">Minhas Avaliações</h2>
+                <ReviewList :userId="authStore.user?.id" />
               </section>
             </form>
           </main>
@@ -510,6 +491,7 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useProviderStore } from '@/stores/provider'
 import { useAuthStore } from '@/stores/auth'
+import ReviewList from '@/components/review/ReviewList.vue'
 
 const providerStore = useProviderStore()
 const authStore = useAuthStore()
@@ -841,27 +823,6 @@ watch(
 
 onMounted(() => {
   loadData()
-})
-
-// Reviews
-import api from '@/services/api'
-const reviews = ref([])
-const reviewsLoaded = ref(false)
-const formatDate = (v) => (v ? new Date(v).toLocaleDateString('pt-BR') : '-')
-
-const fetchReviews = async () => {
-  try {
-    const id = profile.value?.id
-    if (!id) return
-    const { data } = await api.get('/api/reviews', { params: { user_id: id, limit: 5 } })
-    reviews.value = data?.data || []
-  } finally {
-    reviewsLoaded.value = true
-  }
-}
-
-watch(profile, (val) => {
-  if (val?.id) fetchReviews()
 })
 </script>
 

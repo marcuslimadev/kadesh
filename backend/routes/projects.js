@@ -15,8 +15,8 @@ const closeExpiredProjects = async () => {
       SELECT id
       FROM projects
       WHERE status = 'open'
-        AND deadline IS NOT NULL
-        AND deadline <= NOW()
+        AND bidding_ends_at IS NOT NULL
+        AND bidding_ends_at <= NOW()
     `);
 
     if (result.rows.length === 0) return;
@@ -193,32 +193,10 @@ router.get('/', async (req, res) => {
         p.*,
         u.name as client_name,
         u.email as client_email,
-        COALESCE(b_data.bid_count, 0) as bid_count,
-        b_data.lowest_bid_amount,
-        COALESCE(attachment_data.attachments, '[]'::json) as attachments
+        (SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id) as bid_count,
+        (SELECT MIN(b.amount) FROM bids b WHERE b.project_id = p.id) as lowest_bid_amount
       FROM projects p
-      JOIN users u ON p.client_id = u.id
-        LEFT JOIN LATERAL (
-          SELECT 
-            COUNT(*)::int as bid_count,
-            MIN(b.amount) as lowest_bid_amount
-          FROM bids b
-          WHERE b.project_id = p.id
-        ) b_data ON true
-      LEFT JOIN LATERAL (
-        SELECT json_agg(
-          json_build_object(
-            'id', pa.id,
-            'file_url', pa.file_url,
-            'original_name', pa.original_name,
-            'mime_type', pa.mime_type,
-            'file_size', pa.file_size,
-            'created_at', pa.created_at
-          ) ORDER BY pa.created_at ASC
-        ) as attachments
-        FROM project_attachments pa
-        WHERE pa.project_id = p.id
-      ) attachment_data ON true
+      JOIN users u ON p.contractor_id = u.id
       WHERE 1=1
     `;
     
@@ -290,46 +268,25 @@ const getMyProjectsHandler = async (req, res) => {
         p.*,
         u.name as client_name,
         u.email as client_email,
-          COALESCE(b_data.bid_count, 0) as bid_count,
-          b_data.lowest_bid_amount,
-        COALESCE(attachment_data.attachments, '[]'::json) as attachments
+        (SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id) as bid_count,
+        (SELECT MIN(b.amount) FROM bids b WHERE b.project_id = p.id) as lowest_bid_amount
       FROM projects p
-      JOIN users u ON p.client_id = u.id
-        LEFT JOIN LATERAL (
-          SELECT 
-            COUNT(*)::int as bid_count,
-            MIN(b.amount) as lowest_bid_amount
-          FROM bids b
-          WHERE b.project_id = p.id
-        ) b_data ON true
-      LEFT JOIN LATERAL (
-        SELECT json_agg(
-          json_build_object(
-            'id', pa.id,
-            'file_url', pa.file_url,
-            'original_name', pa.original_name,
-            'mime_type', pa.mime_type,
-            'file_size', pa.file_size,
-            'created_at', pa.created_at
-          ) ORDER BY pa.created_at ASC
-        ) as attachments
-        FROM project_attachments pa
-        WHERE pa.project_id = p.id
-      ) attachment_data ON true
-      WHERE p.client_id = $1
+      JOIN users u ON p.contractor_id = u.id
+      WHERE p.contractor_id = ?
     `;
     
     const params = [userId];
     let paramCount = 1;
 
     if (status) {
-      query += ` AND p.status = $${++paramCount}`;
+      query += ` AND p.status = ?`;
       params.push(status);
+      paramCount++;
     }
 
     query += `
       ORDER BY p.created_at DESC
-      LIMIT $${++paramCount} OFFSET $${++paramCount}
+      LIMIT ? OFFSET ?
     `;
     params.push(parseInt(limit), parseInt(offset));
 
@@ -763,6 +720,150 @@ router.get('/auctions/expiring', auth, async (req, res) => {
     console.error('Get expiring auctions error:', error);
     res.status(500).json({
       error: 'Erro ao buscar leilões expirando'
+    });
+  }
+});
+
+// Release escrow payment (contractor approves and releases payment to provider)
+router.post('/:id/release-payment', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.userId;
+
+    const { createWalletTransaction } = require('../services/walletService');
+
+    await db.transaction(async (client) => {
+      // Verify user is the contractor and project is awarded
+      const projectResult = await client.query(
+        `SELECT * FROM projects 
+         WHERE id = ? AND contractor_id = ? AND status = 'awarded'`,
+        [id, userId]
+      );
+
+      if (projectResult.rows.length === 0) {
+        const error = new Error('Projeto não encontrado ou você não é o contratante');
+        error.status = 404;
+        throw error;
+      }
+
+      const project = projectResult.rows[0];
+
+      if (project.payment_status === 'released') {
+        const error = new Error('Pagamento já foi liberado anteriormente');
+        error.status = 400;
+        throw error;
+      }
+
+      if (!project.winner_id) {
+        const error = new Error('Projeto não tem vencedor definido');
+        error.status = 400;
+        throw error;
+      }
+
+      const finalPrice = Number(project.final_price);
+      
+      // Platform fee calculation
+      const platformFeePercent = Number(process.env.PLATFORM_FEE_PERCENT || 10);
+      const platformFee = finalPrice * (platformFeePercent / 100);
+      const providerAmount = finalPrice - platformFee;
+
+      // Update project payment status to released
+      await client.query(
+        `UPDATE projects SET 
+          payment_status = 'released',
+          updated_at = NOW()
+         WHERE id = ?`,
+        [id]
+      );
+
+      // Create escrow release transaction (zero amount, just marks release)
+      await createWalletTransaction(userId, {
+        amount: 0,
+        type: 'escrow_release',
+        status: 'completed',
+        description: `Pagamento liberado - Projeto: ${project.title}`,
+        referenceType: 'project',
+        referenceId: project.id,
+        metadata: {
+          projectId: project.id,
+          providerId: project.winner_id,
+          amount: finalPrice
+        }
+      }, client);
+
+      // Release locked escrow funds (update status)
+      await client.query(
+        `UPDATE wallet_transactions
+         SET status = 'released', updated_at = NOW()
+         WHERE user_id = ? AND reference_type = 'project' AND reference_id = ? 
+           AND type = 'escrow_hold' AND status = 'locked'`,
+        [userId, id]
+      );
+
+      // Transfer funds to provider (after platform fee)
+      await createWalletTransaction(project.winner_id, {
+        amount: providerAmount,
+        type: 'payment_received',
+        status: 'completed',
+        description: `Pagamento recebido - Projeto: ${project.title} (Taxa: ${platformFeePercent}%)`,
+        referenceType: 'project',
+        referenceId: project.id,
+        metadata: {
+          clientId: userId,
+          projectId: project.id,
+          grossAmount: finalPrice,
+          platformFee: platformFee,
+          netAmount: providerAmount
+        }
+      }, client);
+
+      // Create platform fee transaction (revenue for platform)
+      await createWalletTransaction(userId, {
+        amount: -Math.abs(platformFee),
+        type: 'platform_fee',
+        status: 'completed',
+        description: `Taxa da plataforma (${platformFeePercent}%) - Projeto: ${project.title}`,
+        referenceType: 'project',
+        referenceId: project.id,
+        metadata: {
+          projectId: project.id,
+          providerId: project.winner_id,
+          totalAmount: finalPrice,
+          feePercent: platformFeePercent,
+          feeAmount: platformFee
+        }
+      }, client);
+
+      // Create notification for provider
+      await client.query(
+        `INSERT INTO notifications (user_id, type, title, content, action_url, data, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, NOW())`,
+        [
+          project.winner_id,
+          'payment',
+          '💰 Pagamento Recebido!',
+          `Você recebeu R$ ${providerAmount.toFixed(2)} do projeto "${project.title}" (Bruto: R$ ${finalPrice.toFixed(2)}, Taxa: R$ ${platformFee.toFixed(2)}).`,
+          `/projects/${id}`,
+          JSON.stringify({ projectId: id, grossAmount: finalPrice, netAmount: providerAmount, platformFee: platformFee })
+        ]
+      );
+
+      console.log(`✅ Payment released for project ${id}: R$ ${finalPrice} (Provider: R$ ${providerAmount}, Fee: R$ ${platformFee})`);
+    });
+
+    res.json({
+      success: true,
+      message: 'Pagamento liberado com sucesso'
+    });
+  } catch (error) {
+    console.error('Release payment error:', error);
+
+    if (error.status) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res.status(500).json({
+      error: 'Erro ao liberar pagamento'
     });
   }
 });

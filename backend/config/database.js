@@ -1,69 +1,61 @@
-const { Pool } = require('pg');
+const mysql = require('mysql2/promise');
 
 class Database {
   constructor() {
-    // Try DATABASE_URL first (for Render), then individual variables
-    const connectionString = process.env.DATABASE_URL;
-    
-    if (connectionString) {
-      this.pool = new Pool({
-        connectionString,
-        ssl: process.env.NODE_ENV === 'production' ? {
-          rejectUnauthorized: false
-        } : false,
-        max: 20,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000
-      });
-    } else {
-      this.pool = new Pool({
-        user: process.env.DB_USER,
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT || 5432,
-        ssl: process.env.NODE_ENV === 'production' ? {
-          rejectUnauthorized: false
-        } : false,
-        max: 20,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 2000
-      });
-    }
-
-    // Connection error handling
-    this.pool.on('error', (err) => {
-      console.error('Unexpected error on idle client:', err);
+    this.pool = mysql.createPool({
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'kadesh',
+      port: process.env.DB_PORT || 3306,
+      waitForConnections: true,
+      connectionLimit: 20,
+      queueLimit: 0,
+      enableKeepAlive: true,
+      keepAliveInitialDelay: 0
     });
 
+    // Connection error handling
     this.testConnection();
   }
 
   async testConnection() {
     try {
-      const client = await this.pool.connect();
-      console.log('✅ PostgreSQL connected successfully');
-      client.release();
+      const connection = await this.pool.getConnection();
+      console.log('✅ MySQL connected successfully');
+      connection.release();
     } catch (err) {
-      console.error('❌ PostgreSQL connection failed:', err.message);
+      console.error('❌ MySQL connection failed:', err.message);
     }
   }
 
   async query(text, params) {
     const start = Date.now();
     try {
-      const res = await this.pool.query(text, params);
+      // Converter placeholders $1, $2... para ? (MySQL style)
+      let sqlQuery = text;
+      if (params && params.length > 0) {
+        params.forEach((_, index) => {
+          sqlQuery = sqlQuery.replace(`$${index + 1}`, '?');
+        });
+      }
+      
+      const [rows] = await this.pool.execute(sqlQuery, params || []);
       const duration = Date.now() - start;
       
       if (process.env.NODE_ENV === 'development') {
         console.log('🔍 Query executed:', {
-          text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
+          text: sqlQuery.substring(0, 100) + (sqlQuery.length > 100 ? '...' : ''),
           duration: `${duration}ms`,
-          rows: res.rowCount
+          rows: Array.isArray(rows) ? rows.length : 0
         });
       }
       
-      return res;
+      // Retornar no formato PostgreSQL para compatibilidade
+      return {
+        rows: Array.isArray(rows) ? rows : [rows],
+        rowCount: Array.isArray(rows) ? rows.length : (rows.affectedRows || 0)
+      };
     } catch (err) {
       console.error('❌ Database query error:', {
         query: text.substring(0, 100),
@@ -74,22 +66,22 @@ class Database {
   }
 
   async getClient() {
-    return await this.pool.connect();
+    return await this.pool.getConnection();
   }
 
   async transaction(callback) {
-    const client = await this.pool.connect();
+    const connection = await this.pool.getConnection();
     
     try {
-      await client.query('BEGIN');
-      const result = await callback(client);
-      await client.query('COMMIT');
+      await connection.beginTransaction();
+      const result = await callback(connection);
+      await connection.commit();
       return result;
     } catch (err) {
-      await client.query('ROLLBACK');
+      await connection.rollback();
       throw err;
     } finally {
-      client.release();
+      connection.release();
     }
   }
 

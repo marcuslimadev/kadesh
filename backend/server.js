@@ -41,6 +41,7 @@ app.use(compression());
 const defaultFrontends = [
   'http://localhost:3000',
   'http://localhost:3001',
+  'http://localhost:4173',  // Vite preview
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'https://kadesh-frontend.onrender.com',
@@ -132,6 +133,10 @@ app.use('/api/milestones', milestoneRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/receipts', receiptsRoutes);
 app.use('/api/advertisements', advertisementsRoutes);
+
+// Simple reviews for MySQL (without contracts table)
+const reviewsSimpleRoutes = require('./routes/reviews-simple');
+app.use('/api/reviews-simple', reviewsSimpleRoutes);
 
 // Rotas de compatibilidade (aliases para retro-compatibilidade)
 const auth = require('./middleware/auth');
@@ -281,24 +286,8 @@ io.on('connection', async (socket) => {
 const { startScheduler: startAuctionScheduler } = require('./services/auctionScheduler');
 
 async function ensureDeadlineColumn() {
-  try {
-    await db.query(`
-      DO $$
-      BEGIN
-        IF EXISTS (
-          SELECT 1 FROM information_schema.columns 
-          WHERE table_name = 'projects' AND column_name = 'deadline' AND data_type = 'date'
-        ) THEN
-          ALTER TABLE projects 
-            ALTER COLUMN deadline TYPE TIMESTAMPTZ 
-            USING deadline::timestamptz;
-        END IF;
-      END $$;
-    `);
-    console.log('✅ Migration check: projects.deadline is TIMESTAMPTZ');
-  } catch (error) {
-    console.error('⚠️ Failed to ensure TIMESTAMPTZ on projects.deadline:', error.message);
-  }
+  // MySQL já tem bidding_ends_at - não precisa migração
+  console.log('✅ MySQL mode - bidding_ends_at column ready');
 }
 
 async function bootstrap() {
@@ -309,8 +298,9 @@ async function bootstrap() {
     console.log(`📊 Environment: ${process.env.NODE_ENV}`);
     console.log(`🌐 CORS allowed origins: ${allowedOrigins.join(', ')}`);
     
-    // Start auction scheduler after server is listening
+    // Start auction scheduler
     startAuctionScheduler();
+    console.log('⏰ Auction scheduler ENABLED - checking every 60s');
   });
 }
 

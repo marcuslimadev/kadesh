@@ -8,17 +8,15 @@ router.get('/', async (req, res) => {
   try {
     const { position } = req.query;
     
-    // Primeiro, verificar se a tabela existe
+    // Verificar se a tabela existe (sintaxe MySQL)
     const tableCheck = await pool.query(`
-      SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public' 
+      SELECT COUNT(*) as table_exists
+      FROM information_schema.tables 
+      WHERE table_schema = DATABASE()
         AND table_name = 'advertisements'
-      );
     `);
     
-    if (!tableCheck.rows[0].exists) {
-      // Tabela não existe - retornar array vazio em vez de erro
+    if (tableCheck.rows[0].table_exists === 0) {
       console.log('[Advertisements] Tabela advertisements não existe ainda. Retornando array vazio.');
       return res.json([]);
     }

@@ -7,6 +7,7 @@
 
 const db = require('../config/database');
 const { getIO } = require('../utils/socket');
+const { createWalletTransaction, getCurrentBalance } = require('./walletService');
 
 // Configuration constants
 const DEFAULT_CHECK_INTERVAL_MS = 60000; // 1 minute
@@ -51,16 +52,16 @@ async function processExpiredAuctions() {
       SELECT 
         p.id,
         p.title,
-        p.client_id,
-        p.deadline,
-        p.budget,
-        p.category,
+        p.contractor_id as client_id,
+        p.bidding_ends_at as deadline,
+        p.max_budget as budget,
+        p.title as category,
         (SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id AND b.status = 'pending') as bid_count
       FROM projects p
       WHERE p.status = 'open'
-        AND p.deadline IS NOT NULL
-        AND p.deadline < NOW()
-      ORDER BY p.deadline ASC
+        AND p.bidding_ends_at IS NOT NULL
+        AND p.bidding_ends_at < NOW()
+      ORDER BY p.bidding_ends_at ASC
       LIMIT 50
     `);
 
@@ -119,8 +120,8 @@ async function closeAuction(project) {
       FROM bids b
       JOIN users u ON b.provider_id = u.id
       LEFT JOIN provider_profiles pp ON u.id = pp.user_id
-      WHERE b.project_id = $1 AND b.status = 'pending'
-      ORDER BY b.amount ASC, pp.rating DESC NULLS LAST, b.created_at ASC
+      WHERE b.project_id = ? AND b.status = 'pending'
+      ORDER BY b.amount ASC, pp.rating DESC, b.created_at ASC
     `, [project.id]);
 
     const bids = bidsResult.rows;
@@ -128,7 +129,7 @@ async function closeAuction(project) {
     if (bids.length === 0) {
       // No bids received - close auction without winner
       await client.query(
-        `UPDATE projects SET status = 'cancelled', updated_at = NOW() WHERE id = $1`,
+        `UPDATE projects SET status = 'cancelled', updated_at = NOW() WHERE id = ?`,
         [project.id]
       );
 
@@ -152,37 +153,56 @@ async function closeAuction(project) {
 
     // Accept the winning bid
     await client.query(
-      `UPDATE bids SET status = 'accepted', updated_at = NOW() WHERE id = $1`,
+      `UPDATE bids SET status = 'accepted', updated_at = NOW() WHERE id = ?`,
       [winnerBid.id]
     );
 
     // Reject all other bids
     await client.query(
       `UPDATE bids SET status = 'rejected', updated_at = NOW() 
-       WHERE project_id = $1 AND id != $2 AND status = 'pending'`,
+       WHERE project_id = ? AND id != ? AND status = 'pending'`,
       [project.id, winnerBid.id]
     );
 
-    // Update project status to in_progress
+    // Update project with winner info and change status to awarded
     await client.query(
-      `UPDATE projects SET status = 'in_progress', updated_at = NOW() WHERE id = $1`,
-      [project.id]
+      `UPDATE projects SET 
+        status = 'awarded',
+        winner_id = ?,
+        winner_bid_id = ?,
+        final_price = ?,
+        payment_status = 'escrow_hold',
+        started_at = NOW(),
+        updated_at = NOW()
+       WHERE id = ?`,
+      [winnerBid.provider_id, winnerBid.id, winnerBid.amount, project.id]
     );
 
-    // Create contract
-    await client.query(`
-      INSERT INTO contracts (
-        project_id, client_id, provider_id, bid_id, amount,
-        status, start_date, created_at, updated_at
-      )
-      VALUES ($1, $2, $3, $4, $5, 'in_progress', NOW(), NOW(), NOW())
-    `, [
-      project.id,
-      project.client_id,
-      winnerBid.provider_id,
-      winnerBid.id,
-      winnerBid.amount
-    ]);
+    // Create escrow hold transaction - lock funds from client
+    const finalPrice = Number(winnerBid.amount);
+    const clientBalance = await getCurrentBalance(project.client_id, client);
+
+    if (clientBalance >= finalPrice) {
+      await createWalletTransaction(project.client_id, {
+        amount: -Math.abs(finalPrice),
+        type: 'escrow_hold',
+        status: 'locked',
+        description: `Valor bloqueado em escrow - Projeto: ${project.title}`,
+        referenceType: 'project',
+        referenceId: project.id,
+        metadata: {
+          projectId: project.id,
+          providerId: winnerBid.provider_id,
+          bidId: winnerBid.id,
+          amount: finalPrice
+        }
+      }, client);
+
+      console.log(`💰 Escrow hold created: R$ ${finalPrice} locked from client ${project.client_id} for project ${project.id}`);
+    } else {
+      console.warn(`⚠️ Insufficient balance for escrow hold. Client ${project.client_id} has R$ ${clientBalance}, needs R$ ${finalPrice}. Escrow NOT created.`);
+      // Project status remains 'awarded' but payment_status shows escrow_hold (pending funding)
+    }
 
     // Sanitize user-generated content for notifications
     const safeTitle = sanitizeForDisplay(project.title);
@@ -239,7 +259,7 @@ async function closeAuction(project) {
 async function createNotification(client, { userId, type, title, content, actionUrl, data }) {
   await client.query(`
     INSERT INTO notifications (user_id, type, title, content, action_url, data)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    VALUES (?, ?, ?, ?, ?, ?)
   `, [userId, type, title, content, actionUrl, data ? JSON.stringify(data) : null]);
 }
 
@@ -317,14 +337,14 @@ async function manuallyCloseAuction(projectId, clientId) {
     SELECT 
       p.id,
       p.title,
-      p.client_id,
-      p.deadline,
-      p.budget,
-      p.category,
+      p.contractor_id as client_id,
+      p.bidding_ends_at as deadline,
+      p.max_budget as budget,
+      p.title as category,
       p.status,
       (SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id AND b.status = 'pending') as bid_count
     FROM projects p
-    WHERE p.id = $1
+    WHERE p.id = ?
   `, [projectId]);
 
   if (projectResult.rows.length === 0) {
@@ -361,21 +381,21 @@ async function getExpiringAuctions(hoursAhead = 24) {
     SELECT 
       p.id,
       p.title,
-      p.client_id,
-      p.deadline,
-      p.budget,
-      p.category,
+      p.contractor_id as client_id,
+      p.bidding_ends_at as deadline,
+      p.max_budget as budget,
+      p.title as category,
       u.name as client_name,
       u.email as client_email,
       (SELECT COUNT(*) FROM bids b WHERE b.project_id = p.id AND b.status = 'pending') as bid_count,
-      EXTRACT(EPOCH FROM (p.deadline - NOW()))/3600 as hours_remaining
+      TIMESTAMPDIFF(HOUR, NOW(), p.bidding_ends_at) as hours_remaining
     FROM projects p
-    JOIN users u ON p.client_id = u.id
+    JOIN users u ON p.contractor_id = u.id
     WHERE p.status = 'open'
-      AND p.deadline IS NOT NULL
-      AND p.deadline > NOW()
-      AND p.deadline <= NOW() + ($1 || ' hours')::interval
-    ORDER BY p.deadline ASC
+      AND p.bidding_ends_at IS NOT NULL
+      AND p.bidding_ends_at > NOW()
+      AND p.bidding_ends_at <= DATE_ADD(NOW(), INTERVAL ? HOUR)
+    ORDER BY p.bidding_ends_at ASC
   `, [hours]);
 
   return result.rows;

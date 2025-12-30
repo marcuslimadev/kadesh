@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
 
     // Buscar usuário apenas por email (sem is_admin)
     const result = await db.query(
-      'SELECT id, email, password_hash, name, type FROM users WHERE email = $1',
+      'SELECT id, email, password, name, user_type FROM users WHERE email = ?',
       [email]
     );
 
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     logger.info('Usuário encontrado', { id: user.id, email: user.email });
 
     // Verify password
-    const validPassword = await bcrypt.compare(password, user.password_hash);
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       logger.warn('Senha inválida', { email });
       return res.status(401).json({ error: 'Credenciais inválidas' });
@@ -53,14 +53,14 @@ router.post('/login', async (req, res) => {
       return res.status(403).json({ error: 'Acesso negado. Apenas administradores.' });
     }
 
-    // Update last login
+    // Update last login (MySQL usa last_activity ao invés de last_login)
     try {
       await db.query(
-        'UPDATE users SET last_login = NOW() WHERE id = $1',
+        'UPDATE users SET last_activity = NOW() WHERE id = ?',
         [user.id]
       );
     } catch (updateError) {
-      logger.warn('Erro ao atualizar last_login', { error: updateError.message });
+      logger.warn('Erro ao atualizar last_activity', { error: updateError.message });
     }
 
     // Generate JWT token
@@ -172,10 +172,10 @@ router.get('/stats/dashboard', adminAuth, async (req, res) => {
     const usersResult = await db.query(
       `SELECT 
         COUNT(*) as total,
-        COUNT(*) FILTER (WHERE type = 'client') as clients,
-        COUNT(*) FILTER (WHERE type = 'provider') as providers,
-        COUNT(*) FILTER (WHERE status = 'active') as active,
-        COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '30 days') as new_this_month
+        SUM(CASE WHEN user_type = 'contractor' THEN 1 ELSE 0 END) as clients,
+        SUM(CASE WHEN user_type = 'provider' THEN 1 ELSE 0 END) as providers,
+        SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active,
+        SUM(CASE WHEN created_at > NOW() - INTERVAL 30 DAY THEN 1 ELSE 0 END) as new_this_month
       FROM users`
     );
 
@@ -183,10 +183,10 @@ router.get('/stats/dashboard', adminAuth, async (req, res) => {
     const projectsResult = await db.query(
       `SELECT 
         COUNT(*) as total,
-        COUNT(*) FILTER (WHERE status = 'open') as open,
-        COUNT(*) FILTER (WHERE status = 'in_progress') as in_progress,
-        COUNT(*) FILTER (WHERE status = 'completed') as completed,
-        COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '30 days') as new_this_month
+        SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open,
+        SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
+        SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+        SUM(CASE WHEN created_at > NOW() - INTERVAL 30 DAY THEN 1 ELSE 0 END) as new_this_month
       FROM projects`
     );
 
@@ -194,9 +194,9 @@ router.get('/stats/dashboard', adminAuth, async (req, res) => {
     const bidsResult = await db.query(
       `SELECT 
         COUNT(*) as total,
-        COUNT(*) FILTER (WHERE status = 'pending') as pending,
-        COUNT(*) FILTER (WHERE status = 'accepted') as accepted,
-        COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '30 days') as new_this_month
+        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN status = 'accepted' THEN 1 ELSE 0 END) as accepted,
+        SUM(CASE WHEN created_at > NOW() - INTERVAL 30 DAY THEN 1 ELSE 0 END) as new_this_month
       FROM bids`
     );
 
@@ -205,21 +205,21 @@ router.get('/stats/dashboard', adminAuth, async (req, res) => {
       `SELECT 
         COUNT(*) as total,
         COALESCE(SUM(amount), 0) as total_amount,
-        COALESCE(SUM(platform_fee), 0) as total_fees,
-        COUNT(*) FILTER (WHERE status = 'completed') as completed,
-        COALESCE(SUM(amount) FILTER (WHERE status = 'completed'), 0) as completed_amount
+        0 as total_fees,
+        SUM(CASE WHEN status = 'paid' THEN 1 ELSE 0 END) as completed,
+        COALESCE(SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END), 0) as completed_amount
       FROM payments`
     );
 
     // Get recent activity
     const recentUsers = await db.query(
-      'SELECT name, email, type, created_at FROM users ORDER BY created_at DESC LIMIT 5'
+      'SELECT name, email, user_type as type, created_at FROM users ORDER BY created_at DESC LIMIT 5'
     );
 
     const recentProjects = await db.query(
-      `SELECT p.id, p.title, p.budget, p.created_at, u.name as client_name 
+      `SELECT p.id, p.title, p.max_budget as budget, p.created_at, u.name as client_name 
        FROM projects p 
-       JOIN users u ON p.client_id = u.id 
+       JOIN users u ON p.contractor_id = u.id 
        ORDER BY p.created_at DESC LIMIT 5`
     );
 
@@ -250,24 +250,20 @@ router.get('/users', adminAuth, async (req, res) => {
 
     let whereConditions = [];
     let params = [];
-    let paramCounter = 1;
 
     if (type) {
-      whereConditions.push(`type = $${paramCounter}`);
+      whereConditions.push(`user_type = ?`);
       params.push(type);
-      paramCounter++;
     }
 
     if (status) {
-      whereConditions.push(`status = $${paramCounter}`);
-      params.push(status);
-      paramCounter++;
+      whereConditions.push(`is_active = ?`);
+      params.push(status === 'active' ? 1 : 0);
     }
 
     if (search) {
-      whereConditions.push(`(name ILIKE $${paramCounter} OR email ILIKE $${paramCounter})`);
-      params.push(`%${search}%`);
-      paramCounter++;
+      whereConditions.push(`(name LIKE ? OR email LIKE ?)`);
+      params.push(`%${search}%`, `%${search}%`);
     }
 
     const whereClause = whereConditions.length > 0 
@@ -283,10 +279,10 @@ router.get('/users', adminAuth, async (req, res) => {
     // Get users
     params.push(limit, offset);
     const usersResult = await db.query(
-      `SELECT id, name, email, type, status, phone, location, email_verified, last_login, created_at, updated_at
+      `SELECT id, name, email, user_type as type, is_active as status, phone, email_verified_at as email_verified, last_activity as last_login, created_at, updated_at
        FROM users ${whereClause}
        ORDER BY created_at DESC
-       LIMIT $${paramCounter} OFFSET $${paramCounter + 1}`,
+       LIMIT ? OFFSET ?`,
       params
     );
 
@@ -647,13 +643,12 @@ router.get('/payments', adminAuth, async (req, res) => {
 // Get all system settings
 router.get('/settings', adminAuth, async (req, res) => {
   try {
-    const result = await db.query(
-      'SELECT * FROM system_settings ORDER BY key'
-    );
-
+    // Tabela system_settings não existe no MySQL atual
+    // Retornando vazio até implementação completa
     res.json({
       success: true,
-      data: result.rows
+      data: [],
+      message: 'Funcionalidade em desenvolvimento'
     });
   } catch (error) {
     console.error('Get settings error:', error);
@@ -739,193 +734,51 @@ router.post('/run-migrations', adminAuth, async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // ===== DISPUTE MANAGEMENT =====
 // List disputes grouped by contract
 router.get('/disputes', adminAuth, async (req, res) => {
   try {
-    const { status } = req.query // optional: 'open' | 'closed'
-
-    const rows = await db.query(
-      `WITH base AS (
-         SELECT 
-           c.id AS contract_id,
-           c.project_id,
-           c.client_id,
-           c.provider_id,
-           c.amount,
-           c.status AS contract_status,
-           p.title AS project_title,
-           uc.name AS client_name,
-           up.name AS provider_name,
-           MAX(allm.created_at) AS last_activity,
-           EXISTS (
-             SELECT 1 FROM messages m2 
-             WHERE m2.contract_id = c.id 
-               AND m2.is_system_message = TRUE 
-               AND m2.content LIKE '[DISPUTE_CLOSED%'
-           ) AS is_closed
-         FROM contracts c
-         JOIN projects p ON c.project_id = p.id
-         JOIN users uc ON c.client_id = uc.id
-         JOIN users up ON c.provider_id = up.id
-         JOIN messages m ON m.contract_id = c.id AND m.is_system_message = TRUE AND m.content LIKE '[DISPUTE%'
-         JOIN messages allm ON allm.contract_id = c.id
-         GROUP BY c.id, p.title, uc.name, up.name
-       )
-       SELECT * FROM base
-       ${status === 'open' ? 'WHERE NOT is_closed' : status === 'closed' ? 'WHERE is_closed' : ''}
-       ORDER BY last_activity DESC`
-    )
-
-    res.json({ success: true, data: rows.rows })
+    // Tabela contracts não existe no MySQL atual
+    // Retornando vazio até implementação completa
+    res.json({
+      success: true,
+      disputes: [],
+      total: 0,
+      message: 'Funcionalidade em desenvolvimento'
+    });
   } catch (error) {
-    console.error('Get disputes error:', error)
-    res.status(500).json({ error: 'Erro ao buscar disputas' })
+    console.error('Get disputes error:', error);
+    res.status(500).json({ error: 'Erro ao buscar disputas' });
   }
-})
+});
 
 // Get details for a specific contract dispute
 router.get('/disputes/:id', adminAuth, async (req, res) => {
   try {
-    const { id } = req.params
-
-    const contractResult = await db.query(
-      `SELECT 
-         c.*, p.title AS project_title, p.description AS project_description,
-         uc.name AS client_name, uc.email AS client_email,
-         up.name AS provider_name, up.email AS provider_email
-       FROM contracts c
-       JOIN projects p ON c.project_id = p.id
-       JOIN users uc ON c.client_id = uc.id
-       JOIN users up ON c.provider_id = up.id
-       WHERE c.id = $1`,
-      [id]
-    )
-
-    if (contractResult.rows.length === 0) {
-      return res.status(404).json({ error: 'Contrato não encontrado' })
-    }
-
-    const messagesResult = await db.query(
-      `SELECT id, content, created_at
-       FROM messages
-       WHERE contract_id = $1 AND is_system_message = TRUE AND content LIKE '[DISPUTE%'
-       ORDER BY created_at ASC`,
-      [id]
-    )
-
-    const isClosed = messagesResult.rows.some(m => m.content.startsWith('[DISPUTE_CLOSED'))
-
+    // Tabela contracts não existe no MySQL atual
     res.json({
       success: true,
-      data: {
-        contract: contractResult.rows[0],
-        disputeMessages: messagesResult.rows,
-        isClosed
-      }
-    })
+      data: null,
+      message: 'Funcionalidade em desenvolvimento'
+    });
   } catch (error) {
-    console.error('Get dispute details error:', error)
-    res.status(500).json({ error: 'Erro ao buscar disputa' })
+    console.error('Get dispute details error:', error);
+    res.status(500).json({ error: 'Erro ao buscar detalhes da disputa' });
   }
-})
+});
 
 // Resolve a contract dispute
 router.post('/disputes/:id/resolve', adminAuth, async (req, res) => {
   try {
-    const { id } = req.params
-    const { action, notes } = req.body // action: release | refund | dismiss
-
-    if (!['release', 'refund', 'dismiss'].includes(action)) {
-      return res.status(400).json({ error: 'Ação inválida' })
-    }
-
-    const { createWalletTransaction } = require('../services/walletService')
-
-    await db.transaction(async (client) => {
-      const contractResult = await client.query('SELECT * FROM contracts WHERE id = $1 FOR UPDATE', [id])
-      if (contractResult.rows.length === 0) {
-        const e = new Error('Contrato não encontrado')
-        e.status = 404
-        throw e
-      }
-
-      const contract = contractResult.rows[0]
-      const amount = Number(contract.amount)
-
-      if (action === 'release') {
-        // Credit provider, debit client
-        await createWalletTransaction(
-          contract.provider_id,
-          {
-            amount: amount,
-            type: 'escrow_release',
-            description: 'Liberação de pagamento do contrato',
-            referenceType: 'contract',
-            referenceId: contract.id
-          },
-          client
-        )
-
-        await createWalletTransaction(
-          contract.client_id,
-          {
-            amount: -amount,
-            type: 'payment_sent',
-            description: 'Pagamento de contrato (liberação)',
-            referenceType: 'contract',
-            referenceId: contract.id
-          },
-          client
-        )
-
-        // Ensure end_date is set
-        await client.query(
-          `UPDATE contracts SET end_date = COALESCE(end_date, NOW()), updated_at = NOW() WHERE id = $1`,
-          [id]
-        )
-      } else if (action === 'refund') {
-        // Refund client (no debit to provider since funds aren't held here)
-        await createWalletTransaction(
-          contract.client_id,
-          {
-            amount: amount,
-            type: 'refund',
-            description: 'Reembolso de contrato',
-            referenceType: 'contract',
-            referenceId: contract.id
-          },
-          client
-        )
-
-        // Mark as cancelled
-        await client.query(
-          `UPDATE contracts SET status = 'cancelled', updated_at = NOW() WHERE id = $1`,
-          [id]
-        )
-      }
-
-      // Register resolution system message
-      const resolutionTag = `[DISPUTE_CLOSED:${action.toUpperCase()}]`
-      const messageContent = `${resolutionTag} ${notes || ''}`.trim()
-
-      await client.query(
-        `INSERT INTO messages (contract_id, sender_id, receiver_id, content, is_system_message)
-         VALUES ($1, $2, $3, $4, TRUE)`,
-        [
-          id,
-          contract.client_id,
-          contract.provider_id,
-          messageContent
-        ]
-      )
-    })
-
-    res.json({ success: true, message: 'Disputa resolvida com sucesso' })
+    // Tabela contracts não existe no MySQL atual
+    res.json({
+      success: true,
+      message: 'Funcionalidade em desenvolvimento'
+    });
   } catch (error) {
-    console.error('Resolve dispute error:', error)
-    res.status(error.status || 500).json({ error: error.message || 'Erro ao resolver disputa' })
+    console.error('Resolve dispute error:', error);
+    res.status(500).json({ error: 'Erro ao resolver disputa' });
   }
-})
+});
+
+module.exports = router;

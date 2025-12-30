@@ -71,56 +71,15 @@ const hidden = ref(false)
 const slots = ref([])
 const position = computed(() => (props.position === 'right' ? 'right' : 'left'))
 
-// Mock de anúncios (fallback quando API não estiver disponível)
-const mockAdvertisements = {
-  left: [
-    {
-      id: 'mock-1',
-      title: 'Impulsione seu Projeto',
-      description: 'Destaque seu projeto e encontre os melhores profissionais em minutos.',
-      link_url: '#',
-      position: 'left',
-      slot_order: 1
-    },
-    {
-      id: 'mock-2',
-      title: 'Seja um Prestador Premium',
-      description: 'Aumente sua visibilidade e conquiste mais clientes com nossos planos premium.',
-      link_url: '#',
-      position: 'left',
-      slot_order: 2
-    }
-  ],
-  right: [
-    {
-      id: 'mock-3',
-      title: 'Suporte 24/7',
-      description: 'Nossa equipe está sempre disponível para ajudar você a ter sucesso.',
-      link_url: '#',
-      position: 'right',
-      slot_order: 1
-    },
-    {
-      id: 'mock-4',
-      title: 'Pagamentos Seguros',
-      description: 'Transações protegidas com Mercado Pago. Seus projetos com total segurança.',
-      link_url: '#',
-      position: 'right',
-      slot_order: 2
-    }
-  ]
-}
-
 async function loadAdvertisements() {
   try {
     const response = await api.get('/api/advertisements', {
       params: { position: position.value }
     })
-    slots.value = response.data
+    slots.value = Array.isArray(response.data) ? response.data : []
   } catch (error) {
     console.error('Erro ao carregar anúncios:', error)
-    // Usar anúncios mock como fallback
-    slots.value = mockAdvertisements[position.value] || []
+    slots.value = []
   }
 }
 

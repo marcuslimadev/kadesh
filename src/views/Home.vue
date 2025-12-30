@@ -755,37 +755,6 @@ const fetchFeaturedProjects = async () => {
   }
 }
 
-// Mock de banners para fallback
-const mockBanners = [
-  {
-    id: 'banner-1',
-    title: '🎯 Projetos Premium',
-    description: 'Encontre os melhores profissionais para projetos de alta qualidade com garantia de resultados.',
-    link_url: '/auction-lobby',
-    image_url: null,
-    position: 'home_featured',
-    slot_order: 1
-  },
-  {
-    id: 'banner-2',
-    title: '💎 Seja um Prestador Elite',
-    description: 'Destaque-se no mercado, conquiste mais clientes e aumente seus ganhos como prestador premium.',
-    link_url: '/provider-profile',
-    image_url: null,
-    position: 'home_featured',
-    slot_order: 2
-  },
-  {
-    id: 'banner-3',
-    title: '🔒 Pagamentos 100% Seguros',
-    description: 'Sistema de escrow com Mercado Pago. Seus pagamentos e projetos totalmente protegidos.',
-    link_url: '/wallet',
-    image_url: null,
-    position: 'home_featured',
-    slot_order: 3
-  }
-]
-
 const fetchActiveBanners = async () => {
   loadingBanners.value = true
   try {
@@ -795,9 +764,8 @@ const fetchActiveBanners = async () => {
     })
     activeBanners.value = Array.isArray(data) ? data.slice(0, 3) : []
   } catch (error) {
-    console.warn('Banners não disponíveis, usando mock:', error.message)
-    // Usar banners mock como fallback
-    activeBanners.value = mockBanners
+    console.error('Erro ao carregar banners:', error.message)
+    activeBanners.value = []
   } finally {
     loadingBanners.value = false
   }

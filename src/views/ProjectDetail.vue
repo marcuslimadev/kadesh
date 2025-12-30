@@ -423,6 +423,17 @@
               </div>
             </div>
           </div>
+
+          <!-- Payment Release Button -->
+          <ReleasePaymentButton
+            v-if="project.status === 'awarded' || project.payment_status === 'escrow_hold'"
+            :project-id="project.id"
+            :payment-status="project.payment_status"
+            :final-price="project.final_price || acceptedBid?.amount || project.budget"
+            :is-contractor="authStore.user?.id === project.client_id"
+            :provider-name="acceptedBid?.provider_name || 'o prestador'"
+            @payment-released="handlePaymentReleased"
+          />
         </div>
       </div>
     </div>
@@ -436,6 +447,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useProjectsStore } from '@/stores/projects'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import BidCard from '@/components/project/BidCard.vue'
+import ReleasePaymentButton from '@/components/payment/ReleasePaymentButton.vue'
 import projectService from '@/services/projectService'
 import bidService from '@/services/bidService'
 // import { useToast } from 'vue-toastification'
@@ -885,6 +897,12 @@ const rejectBid = async (bidId) => {
     console.error('Error rejecting bid:', err)
     // toast.error('Erro ao rejeitar proposta')
   }
+}
+
+const handlePaymentReleased = async (data) => {
+  console.log('Payment released:', data)
+  // Reload project to update status
+  await loadProject()
 }
 
 const closeAuction = async () => {

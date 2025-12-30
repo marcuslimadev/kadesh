@@ -154,7 +154,7 @@
                     <p class="font-medium admin-text-primary">{{ project.title }}</p>
                     <p class="admin-text-xs admin-text-secondary mt-1">Por: {{ project.client_name }}</p>
                   </div>
-                  <span class="admin-text-sm font-bold text-green-600">
+                  <span class="admin-text-sm font-bold text-amber-400">
                     R$ {{ formatCurrency(project.budget) }}
                   </span>
                 </div>

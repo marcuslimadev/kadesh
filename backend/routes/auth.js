@@ -50,20 +50,27 @@ router.post('/register', async (req, res) => {
 
     // Create user with unified type (frontend switch controls view mode)
     const result = await db.query(
-      `INSERT INTO users (name, email, password_hash, type, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, NOW(), NOW())
-       RETURNING id, name, email, type, created_at`,
-      [name, email, passwordHash, 'unified']
+      `INSERT INTO users (name, email, password, user_type, created_at, updated_at)
+       VALUES (?, ?, ?, ?, NOW(), NOW())`,
+      [name, email, passwordHash, 'both']
     );
 
-    const user = result.rows[0];
+    // MySQL INSERT não retorna RETURNING, buscar o ID inserido
+    const userId = result.rows.insertId || result.rowCount;
+    
+    const userResult = await db.query(
+      'SELECT id, name, email, user_type, created_at FROM users WHERE id = ?',
+      [userId]
+    );
+    
+    const user = userResult.rows[0];
 
     // Generate JWT
     const token = jwt.sign(
       {
         userId: user.id,
         email: user.email,
-        type: user.type
+        type: user.user_type
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
@@ -75,7 +82,7 @@ router.post('/register', async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        type: user.type,
+        type: user.user_type,
         created_at: user.created_at
       },
       token
@@ -111,8 +118,8 @@ router.post('/login', async (req, res) => {
 
     // Find user
     const result = await db.query(
-      `SELECT id, name, email, password_hash, type, status, created_at
-       FROM users WHERE email = $1`,
+      `SELECT id, name, email, password, user_type, is_active as status, created_at
+       FROM users WHERE email = ?`,
       [email]
     );
 
@@ -124,18 +131,18 @@ router.post('/login', async (req, res) => {
 
     const user = result.rows[0];
     
-    // Check if user is admin (type = 'admin')
-    const isAdmin = user.type === 'admin';
+    // Check if user is admin (user_type = 'admin')
+    const isAdmin = user.user_type === 'admin';
 
     // Check if user is active
-    if (user.status !== 'active') {
+    if (user.status !== 'active' && user.status !== 1) {
       return res.status(403).json({
         error: 'Conta desativada. Entre em contato com o suporte.'
       });
     }
 
     // Verify password
-    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    const isValidPassword = await bcrypt.compare(password, user.password);
     
     if (!isValidPassword) {
       return res.status(401).json({
@@ -148,7 +155,7 @@ router.post('/login', async (req, res) => {
       {
         userId: user.id,
         email: user.email,
-        type: user.type,
+        type: user.user_type,
         isAdmin: isAdmin
       },
       process.env.JWT_SECRET,
@@ -157,7 +164,7 @@ router.post('/login', async (req, res) => {
 
     // Update last login
     await db.query(
-      'UPDATE users SET last_login = NOW(), updated_at = NOW() WHERE id = $1',
+      'UPDATE users SET last_activity = NOW(), updated_at = NOW() WHERE id = ?',
       [user.id]
     );
 
@@ -167,7 +174,7 @@ router.post('/login', async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        type: user.type,
+        type: user.user_type,
         status: user.status,
         created_at: user.created_at,
         isAdmin: isAdmin
