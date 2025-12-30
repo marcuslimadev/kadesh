@@ -1,0 +1,65 @@
+<?php
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../utils/helpers.php';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    Helpers::jsonResponse(['error' => 'Método não permitido'], 405);
+}
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+$email = $data['email'] ?? null;
+$password = $data['password'] ?? null;
+
+if (!$email || !$password) {
+    Helpers::jsonResponse(['error' => 'Email e senha são obrigatórios'], 400);
+}
+
+$db = new Database();
+$conn = $db->getConnection();
+
+try {
+    $stmt = $conn->prepare("SELECT id, name, email, password, user_type, is_active as status, created_at FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user || !password_verify($password, $user['password'])) {
+        Helpers::jsonResponse(['error' => 'Email ou senha incorretos'], 401);
+    }
+
+    if ($user['status'] !== 'active' && $user['status'] != 1) {
+        Helpers::jsonResponse(['error' => 'Conta desativada. Entre em contato com o suporte.'], 403);
+    }
+
+    $isAdmin = ($user['user_type'] === 'admin');
+
+    $payload = [
+        'userId' => $user['id'],
+        'email' => $user['email'],
+        'type' => $user['user_type'],
+        'isAdmin' => $isAdmin,
+        'exp' => time() + (7 * 24 * 60 * 60)
+    ];
+    $token = Helpers::generateJWT($payload);
+
+    // Atualizar último login
+    $stmt = $conn->prepare("UPDATE users SET last_activity = NOW(), updated_at = NOW() WHERE id = ?");
+    $stmt->execute([$user['id']]);
+
+    Helpers::jsonResponse([
+        'message' => 'Login realizado com sucesso',
+        'user' => [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'type' => $user['user_type'],
+            'status' => $user['status'],
+            'created_at' => $user['created_at'],
+            'isAdmin' => $isAdmin
+        ],
+        'token' => $token
+    ]);
+
+} catch (PDOException $e) {
+    Helpers::jsonResponse(['error' => 'Erro no banco de dados: ' . $e->getMessage()], 500);
+}

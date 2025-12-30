@@ -1,6 +1,8 @@
 node_modules/
 backend/node_modules/
 backend/.env
+backend/.env.production
+backend_php/config/env.php
 dist/
 .env
 .env.local
