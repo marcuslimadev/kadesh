@@ -22,6 +22,17 @@ class Helpers {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
+    public static function generateUUID() {
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0x0fff) | 0x4000,
+            mt_rand(0, 0x3fff) | 0x8000,
+            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+        );
+    }
+
     // JWT Simples (para PHP puro sem dependências externas pesadas)
     // Em produção, recomenda-se usar firebase/php-jwt via composer
     public static function generateJWT($payload) {

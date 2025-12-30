@@ -37,12 +37,14 @@ try {
 
     // Hash da senha
     $passwordHash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+    
+    // Gerar UUID
+    $userId = Helpers::generateUUID();
+    $userType = $data['user_type'] ?? 'both';
 
     // Inserir usuário
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, user_type, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())");
-    $stmt->execute([$name, $email, $passwordHash, 'both']);
-    
-    $userId = $conn->lastInsertId();
+    $stmt = $conn->prepare("INSERT INTO users (id, name, email, password, user_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())");
+    $stmt->execute([$userId, $name, $email, $passwordHash, $userType]);
 
     // Buscar usuário criado
     $stmt = $conn->prepare("SELECT id, name, email, user_type, created_at FROM users WHERE id = ?");
