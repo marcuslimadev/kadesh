@@ -23,32 +23,14 @@ $db = new Database();
 $conn = $db->getConnection();
 
 try {
-    // Primeiro tenta admin_users
+    // Buscar admin na tabela users
     $stmt = $conn->prepare("
-        SELECT id, username, email, password, name, role, permissions, is_active
-        FROM admin_users 
-        WHERE email = ? OR username = ?
+        SELECT id, name, email, password, user_type, status
+        FROM users 
+        WHERE email = ? AND user_type = 'admin'
     ");
-    $stmt->execute([$email, $email]);
+    $stmt->execute([$email]);
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$admin) {
-        // Tentar na tabela users com type = admin
-        $stmt = $conn->prepare("
-            SELECT id, name, email, password, user_type, status
-            FROM users 
-            WHERE email = ? AND user_type = 'admin'
-        ");
-        $stmt->execute([$email]);
-        $admin = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($admin) {
-            // Converter para formato admin
-            $admin['is_active'] = $admin['status'] === 'active';
-            $admin['role'] = 'admin';
-            $admin['permissions'] = null;
-        }
-    }
 
     if (!$admin) {
         Helpers::jsonResponse(['error' => 'Credenciais inválidas'], 401);
@@ -58,7 +40,7 @@ try {
         Helpers::jsonResponse(['error' => 'Credenciais inválidas'], 401);
     }
 
-    if (isset($admin['is_active']) && !$admin['is_active']) {
+    if ($admin['status'] !== 'active') {
         Helpers::jsonResponse(['error' => 'Conta de administrador desativada'], 403);
     }
 
@@ -67,14 +49,14 @@ try {
         'userId' => $admin['id'],
         'email' => $admin['email'],
         'type' => 'admin',
-        'role' => $admin['role'] ?? 'admin',
+        'role' => 'admin',
         'isAdmin' => true,
         'exp' => time() + (24 * 60 * 60) // 24 horas
     ];
     $token = Helpers::generateJWT($payload);
 
     // Atualizar último login
-    $stmt = $conn->prepare("UPDATE admin_users SET last_login = NOW() WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
     $stmt->execute([$admin['id']]);
 
     Helpers::jsonResponse([
