@@ -43,7 +43,7 @@ try {
     $token = Helpers::generateJWT($payload);
 
     // Atualizar último login
-    $stmt = $conn->prepare("UPDATE users SET last_activity = NOW(), updated_at = NOW() WHERE id = ?");
+    $stmt = $conn->prepare("UPDATE users SET last_login = NOW(), updated_at = NOW() WHERE id = ?");
     $stmt->execute([$user['id']]);
 
     Helpers::jsonResponse([
