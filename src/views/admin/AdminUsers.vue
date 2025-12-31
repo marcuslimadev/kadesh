@@ -284,7 +284,7 @@ const fetchUsers = async () => {
     const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const params = { page: pagination.value.page, limit: pagination.value.limit, ...filters.value }
     
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
       headers: { Authorization: `Bearer ${token}` },
       params
     })
@@ -355,8 +355,8 @@ const handlePromote = async (formData) => {
     promoting.value = true
     const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/promote`,
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/promote`,
       formData,
       {
         headers: { Authorization: `Bearer ${token}` }
@@ -402,8 +402,8 @@ const handleToggleStatus = async () => {
     const newStatus = selectedUser.value.status === 'active' ? 'suspended' : 'active'
     const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
-    await axios.patch(
-      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/status`,
+        await axios.patch(
+          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/status`,
       { status: newStatus },
       {
         headers: { Authorization: `Bearer ${token}` }
@@ -442,8 +442,8 @@ const handleDelete = async () => {
     deleting.value = true
     const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     
-    await axios.delete(
-      `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}`,
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}`,
       {
         headers: { Authorization: `Bearer ${token}` }
       }

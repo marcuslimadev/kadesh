@@ -1,4 +1,4 @@
-<?php
+est<?php
 // Script para adicionar require do env.php em todos os endpoints
 
 $baseDir = __DIR__;

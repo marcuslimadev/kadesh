@@ -5,19 +5,17 @@ import { useAuthStore } from '@/stores/auth'
 // Toast instance (guarded for SSR/build time)
 // const toast = typeof window !== 'undefined' ? useToast() : null
 
-const DEFAULT_API_URL = 'https://kadesh-2.onrender.com'
+const DEFAULT_API_URL = ''
 const DEFAULT_API_TIMEOUT = 60000 // 60s to handle Render cold starts
 
+const isDefined = (value) => value !== undefined && value !== null
+
 const resolveBaseUrl = () => {
-  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
-  if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
+  // Aceita string vazia: VITE_API_URL= (mesma origem)
+  if (isDefined(import.meta.env.VITE_API_URL)) return import.meta.env.VITE_API_URL
+  if (isDefined(import.meta.env.VITE_BACKEND_URL)) return import.meta.env.VITE_BACKEND_URL
 
-  // Em ambiente de desenvolvimento, falhar se nenhuma URL de API foi definida
-  if (import.meta.env.DEV) {
-    throw new Error('Defina VITE_API_URL para evitar chamadas involuntárias ao backend de produção')
-  }
-
-  // Fallback apenas para builds já configuradas em produção
+  // Dev/prod: fallback para mesma origem (as rotas já usam /api/...)
   return DEFAULT_API_URL
 }
 

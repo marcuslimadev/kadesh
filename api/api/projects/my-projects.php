@@ -36,8 +36,8 @@ try {
     $total = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
 
     // Buscar projetos
-    $params[] = $perPage;
-    $params[] = $offset;
+    $limit = (int) $perPage;
+    $offsetInt = (int) $offset;
     
     $stmt = $conn->prepare("
         SELECT p.*,
@@ -46,7 +46,7 @@ try {
         FROM projects p
         $whereClause
         ORDER BY p.created_at DESC
-        LIMIT ? OFFSET ?
+        LIMIT $limit OFFSET $offsetInt
     ");
     $stmt->execute($params);
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);

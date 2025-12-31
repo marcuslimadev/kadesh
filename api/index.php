@@ -72,6 +72,7 @@ $staticRoutes = [
     // Projects
     'GET:/projects' => 'api/projects/index.php',
     'POST:/projects' => 'api/projects/create.php',
+    'POST:/projects/test-create' => 'api/projects/test-create.php',
     'GET:/projects/my-projects' => 'api/projects/my-projects.php',
     'GET:/user/my-projects' => 'api/projects/my-projects.php',
     

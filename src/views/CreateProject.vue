@@ -803,6 +803,56 @@ onBeforeUnmount(() => {
   clearAllAttachments()
 })
 
+const validateCurrentStep = () => {
+  // Reset errors
+  Object.keys(errors).forEach(key => errors[key] = '')
+  let isValid = true
+
+  if (currentStep.value === 1) {
+    // Validar título
+    if (!form.title.trim()) {
+      errors.title = 'Título é obrigatório'
+      isValid = false
+    } else if (form.title.length < 10) {
+      errors.title = 'Título deve ter pelo menos 10 caracteres'
+      isValid = false
+    }
+
+    // Validar categoria
+    if (!form.category) {
+      errors.category = 'Categoria é obrigatória'
+      isValid = false
+    }
+  }
+
+  if (currentStep.value === 2) {
+    // Validar descrição
+    if (!form.description.trim()) {
+      errors.description = 'Descrição é obrigatória'
+      isValid = false
+    } else if (form.description.length < 50) {
+      errors.description = 'Descrição deve ter pelo menos 50 caracteres'
+      isValid = false
+    }
+  }
+
+  if (currentStep.value === 3) {
+    // Validar orçamento
+    if (!form.budget || form.budget <= 0) {
+      errors.budget = 'Orçamento deve ser maior que zero'
+      isValid = false
+    }
+
+    // Validar prazo (se informado)
+    if (form.deadline && !form.deadlineTime) {
+      errors.deadlineTime = 'Informe a hora limite para o prazo'
+      isValid = false
+    }
+  }
+
+  return isValid
+}
+
 const validateForm = () => {
   let isValid = true
   
@@ -861,7 +911,27 @@ const buildDeadlineISO = () => {
 
 const handleSubmit = async () => {
   if (!validateForm()) {
-    // toast.error('Por favor, corrija os erros antes de continuar')
+    console.error('[CreateProject] Validação falhou:', errors)
+    
+    // Determinar qual etapa tem erro e voltar para ela
+    if (errors.title || errors.category) {
+      currentStep.value = 1
+      errors.general = '❌ Preencha corretamente o título e a categoria na Etapa 1'
+    } else if (errors.description) {
+      currentStep.value = 2
+      errors.general = '❌ A descrição deve ter pelo menos 50 caracteres (Etapa 2)'
+    } else if (errors.budget || errors.deadline || errors.deadlineTime) {
+      currentStep.value = 3
+      errors.general = '❌ Preencha corretamente o orçamento e o prazo na Etapa 3'
+    } else {
+      const firstError = Object.entries(errors).find(([key, val]) => val)
+      if (firstError) {
+        errors.general = `❌ ${firstError[1]}`
+      }
+    }
+    
+    // Scroll para o topo para ver a mensagem de erro
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     return
   }
 
@@ -880,6 +950,7 @@ const handleSubmit = async () => {
       priority: form.priority
     }
 
+    console.log('[CreateProject] Enviando dados:', projectData)
     const result = await projectService.createProject(projectData)
 
     if (result.success) {
