@@ -4,6 +4,12 @@ backend/.env
 backend/.env.production
 backend_php/config/env.php
 dist/
+/assets/
+/api-temp/
+/playwright-report/
+/test-results/
+/prints/
+/video/
 .env
 .env.local
 .env.production

@@ -2,10 +2,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
+const DEV_BASE = '/'
+const PROD_BASE = '/kadesh/dist/'
+
 // https://vitejs.dev/config/
-export default defineConfig({
-  // App servida em http://localhost/kadesh/dist/
-  base: '/kadesh/dist/',
+export default defineConfig(({ command }) => ({
+  // App servida em http://localhost/kadesh/dist/ quando buildado
+  base: command === 'serve' ? DEV_BASE : PROD_BASE,
   plugins: [vue()],
   resolve: {
     alias: {
@@ -24,6 +27,12 @@ export default defineConfig({
     },
     watch: {
       usePolling: true
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost/kadesh',
+        changeOrigin: true
+      }
     }
   },
   build: {
@@ -46,4 +55,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ['vue', 'vue-router', 'pinia', 'axios']
   }
-})
+}))
