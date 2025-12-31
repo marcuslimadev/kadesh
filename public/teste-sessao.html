@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 TESTE DE SESSÃO - Kadesh</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0f172a;
+            color: #10b981;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #10b981;
+        }
+        h1 {
+            color: #fbbf24;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .status {
+            background: #334155;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border-left: 4px solid #10b981;
+        }
+        .error {
+            border-left-color: #ef4444;
+            color: #ef4444;
+        }
+        .success {
+            border-left-color: #10b981;
+            color: #10b981;
+        }
+        button {
+            background: #10b981;
+            color: #0f172a;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+        .danger {
+            background: #ef4444;
+        }
+        .danger:hover {
+            background: #dc2626;
+        }
+        pre {
+            background: #000;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #10b981;
+        }
+        .info {
+            color: #60a5fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 TESTE DE SESSÃO</h1>
+        
+        <div class="status" id="tokenStatus"></div>
+        <div class="status" id="userStatus"></div>
+        <div class="status" id="storageStatus"></div>
+        
+        <div style="text-align: center; margin: 2rem 0;">
+            <button onclick="verificarEstado()">🔍 VERIFICAR ESTADO</button>
+            <button onclick="testarHardRefresh()" class="danger">🔄 SIMULAR HARD REFRESH</button>
+            <button onclick="limparTudo()" class="danger">🗑️ LIMPAR TUDO</button>
+        </div>
+        
+        <h2 class="info">📊 Console Log:</h2>
+        <pre id="log"></pre>
+    </div>
+
+    <script>
+        const log = (msg) => {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString('pt-BR');
+            logEl.textContent += `[${timestamp}] ${msg}\n`;
+            console.log(msg);
+        };
+
+        const verificarEstado = () => {
+            document.getElementById('log').textContent = '';
+            log('🔍 Verificando estado da sessão...');
+            
+            // Token
+            const token = localStorage.getItem('kadesh_token') || sessionStorage.getItem('kadesh_token');
+            const tokenEl = document.getElementById('tokenStatus');
+            if (token) {
+                tokenEl.className = 'status success';
+                tokenEl.innerHTML = `✅ <strong>TOKEN ENCONTRADO</strong><br>Tamanho: ${token.length} caracteres`;
+                log('✅ Token encontrado no localStorage/sessionStorage');
+            } else {
+                tokenEl.className = 'status error';
+                tokenEl.innerHTML = '❌ <strong>NENHUM TOKEN ENCONTRADO</strong>';
+                log('❌ Nenhum token encontrado');
+            }
+            
+            // User
+            const userLocal = localStorage.getItem('kadesh_user');
+            const userSession = sessionStorage.getItem('kadesh_user');
+            const userEl = document.getElementById('userStatus');
+            
+            if (userLocal || userSession) {
+                try {
+                    const user = JSON.parse(userLocal || userSession);
+                    userEl.className = 'status success';
+                    userEl.innerHTML = `✅ <strong>USUÁRIO ENCONTRADO</strong><br>Email: ${user.email}<br>Tipo: ${user.type}`;
+                    log(`✅ Usuário: ${user.email} (${user.type})`);
+                } catch (e) {
+                    userEl.className = 'status error';
+                    userEl.innerHTML = '⚠️ <strong>USUÁRIO COM ERRO DE PARSE</strong>';
+                    log('⚠️ Erro ao fazer parse do usuário');
+                }
+            } else {
+                userEl.className = 'status error';
+                userEl.innerHTML = '❌ <strong>NENHUM USUÁRIO ENCONTRADO</strong>';
+                log('❌ Nenhum usuário encontrado');
+            }
+            
+            // Storage geral
+            const storageEl = document.getElementById('storageStatus');
+            const allKeys = Object.keys(localStorage);
+            const kadeshKeys = allKeys.filter(k => k.startsWith('kadesh_'));
+            
+            storageEl.className = 'status info';
+            storageEl.innerHTML = `
+                📦 <strong>STORAGE</strong><br>
+                Total de chaves: ${allKeys.length}<br>
+                Chaves Kadesh: ${kadeshKeys.length}<br>
+                ${kadeshKeys.map(k => `- ${k}: ${localStorage.getItem(k)?.substring(0, 50)}...`).join('<br>')}
+            `;
+            log(`📦 Storage: ${kadeshKeys.length} chaves Kadesh`);
+        };
+
+        const testarHardRefresh = () => {
+            log('🔄 Simulando hard refresh...');
+            log('⚠️ Salvando estado antes do reload...');
+            
+            const preToken = localStorage.getItem('kadesh_token');
+            const preUser = localStorage.getItem('kadesh_user');
+            
+            log(`📸 Estado PRÉ-REFRESH: Token=${preToken ? 'SIM' : 'NÃO'}, User=${preUser ? 'SIM' : 'NÃO'}`);
+            
+            setTimeout(() => {
+                location.reload(true);
+            }, 1000);
+        };
+
+        const limparTudo = () => {
+            if (!confirm('⚠️ Isso vai limpar TUDO! Continuar?')) return;
+            
+            log('🗑️ Limpando localStorage...');
+            localStorage.clear();
+            
+            log('🗑️ Limpando sessionStorage...');
+            sessionStorage.clear();
+            
+            log('✅ TUDO LIMPO! Redirecionando...');
+            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1500);
+        };
+
+        // Auto-verificar ao carregar
+        window.addEventListener('load', () => {
+            verificarEstado();
+            
+            // Se veio de um reload, logar
+            if (performance.navigation.type === 1) {
+                log('🔄 Página foi recarregada!');
+            }
+        });
+    </script>
+</body>
+</html>

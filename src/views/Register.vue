@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <router-link to="/" class="flex justify-center group">
-        <h1 class="text-4xl font-bold bg-gradient-to-r from-amber-500 to-amber-600 bg-clip-text text-transparent transition-all duration-500 group-hover:from-amber-600 group-hover:to-amber-700">Kaddesh</h1>
+      <router-link to="/" class="flex justify-center">
+        <img src="/logo.jpeg" alt="Kadesh" class="h-32 w-32 object-contain" />
       </router-link>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
         Crie sua conta

@@ -17,7 +17,6 @@ $category = $data['category'] ?? null;
 $budget = $data['budget'] ?? null;
 $deadline = $data['deadline'] ?? null;
 $requirements = $data['requirements'] ?? null;
-$estimated_hours = $data['estimated_hours'] ?? null;
 $priority = $data['priority'] ?? 3; // Default: normal
 $skills_required = $data['skills_required'] ?? [];
 
@@ -29,106 +28,65 @@ $db = new Database();
 $conn = $db->getConnection();
 
 try {
-    $columns = [];
-    $stmt = $conn->query("SHOW COLUMNS FROM projects");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        if (!empty($row['Field'])) {
-            $columns[$row['Field']] = true;
-        }
-    }
-
-    $clientIdColumn = isset($columns['contractor_id']) ? 'contractor_id' : 'client_id';
-    $budgetColumn = isset($columns['max_budget']) ? 'max_budget' : 'budget';
-    $skillsColumn = isset($columns['required_skills']) ? 'required_skills' : 'skills_required';
-    $deadlineColumn = isset($columns['bidding_ends_at']) ? 'bidding_ends_at' : (isset($columns['deadline']) ? 'deadline' : null);
-
-    $deadlineValue = null;
-    if (!empty($deadline) && $deadlineColumn) {
-        try {
-            $dt = new DateTime($deadline);
-            $deadlineValue = $dt->format('Y-m-d H:i:s');
-        } catch (Exception $e) {
-            $deadlineValue = null;
-        }
-    }
-
     $projectId = Helpers::generateUUID();
-    
+
+    // Normalizar deadline: frontend envia ISO (ex.: 2026-01-15T12:00:00.000Z)
+    // MySQL DATETIME espera 'Y-m-d H:i:s' sem timezone.
+    $deadlineSql = null;
+    if ($deadline !== null) {
+        $deadlineStr = is_string($deadline) ? trim($deadline) : '';
+        if ($deadlineStr !== '') {
+            try {
+                $dt = new DateTime($deadlineStr);
+                $dt->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+                $deadlineSql = $dt->format('Y-m-d H:i:s');
+            } catch (Throwable $e) {
+                Helpers::jsonResponse(['error' => 'Prazo (deadline) inválido'], 400);
+            }
+        }
+    }
+
     // Converter array de skills para JSON
     $skillsJson = json_encode($skills_required);
 
-    $insertColumns = ['id', $clientIdColumn, 'title', 'description', 'category', $budgetColumn];
-    $insertValues = [$projectId, $user['userId'], $title, $description, $category, $budget];
-
-    if ($deadlineColumn) {
-        $insertColumns[] = $deadlineColumn;
-        $insertValues[] = $deadlineValue;
-    }
-    if (isset($columns['requirements'])) {
-        $insertColumns[] = 'requirements';
-        $insertValues[] = $requirements;
-    }
-    if (isset($columns['estimated_hours'])) {
-        $insertColumns[] = 'estimated_hours';
-        $insertValues[] = $estimated_hours;
-    }
-    if (isset($columns[$skillsColumn])) {
-        $insertColumns[] = $skillsColumn;
-        $insertValues[] = $skillsJson;
-    }
-    if (isset($columns['priority'])) {
-        $insertColumns[] = 'priority';
-        $insertValues[] = $priority;
-    }
-    if (isset($columns['status'])) {
-        $insertColumns[] = 'status';
-        $insertValues[] = 'open';
-    }
-
-    $placeholders = implode(',', array_fill(0, count($insertColumns), '?'));
-    $columnsSql = implode(',', $insertColumns);
-    $stmt = $conn->prepare("INSERT INTO projects ($columnsSql) VALUES ($placeholders)");
-    $stmt->execute($insertValues);
+    $stmt = $conn->prepare("
+        INSERT INTO projects (
+            id, client_id, title, description, category, budget, 
+            bidding_ends_at, requirements, 
+            skills_required, priority, status, created_at, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'open', NOW(), NOW())
+    ");
+    
+    $stmt->execute([
+        $projectId,
+        $user['userId'],
+        $title,
+        $description,
+        $category,
+        $budget,
+        $deadlineSql,
+        $requirements,
+        $skillsJson,
+        $priority
+    ]);
 
     // Buscar o projeto criado para retornar no formato esperado pelo frontend
-    $selectParts = [
-        'id',
-        $clientIdColumn . ' as client_id',
-        'title',
-        'description',
-        'category',
-        $budgetColumn . ' as budget'
-    ];
-    if ($deadlineColumn) {
-        $selectParts[] = $deadlineColumn . ' as deadline';
-    }
-    if (isset($columns['requirements'])) {
-        $selectParts[] = 'requirements';
-    }
-    if (isset($columns['estimated_hours'])) {
-        $selectParts[] = 'estimated_hours';
-    }
-    if (isset($columns[$skillsColumn])) {
-        $selectParts[] = $skillsColumn . ' as skills_required';
-    }
-    if (isset($columns['priority'])) {
-        $selectParts[] = 'priority';
-    }
-    if (isset($columns['status'])) {
-        $selectParts[] = 'status';
-    }
-    if (isset($columns['created_at'])) {
-        $selectParts[] = 'created_at';
-    }
-    if (isset($columns['updated_at'])) {
-        $selectParts[] = 'updated_at';
-    }
-
-    $selectSql = implode(",\n            ", $selectParts);
     $stmt = $conn->prepare("
         SELECT 
-            $selectSql
+            id,
+            client_id,
+            title,
+            description,
+            category,
+            budget,
+            bidding_ends_at as deadline,
+            requirements,
+            skills_required,
+            priority,
+            status,
+            created_at,
+            updated_at
         FROM projects
         WHERE id = ?
     ");
@@ -138,16 +96,12 @@ try {
     
     // Decodificar skills_required de JSON para array
     if ($project && isset($project['skills_required'])) {
-        $decodedSkills = json_decode($project['skills_required'], true);
-        $project['skills_required'] = is_array($decodedSkills) ? $decodedSkills : [];
+        $project['skills_required'] = json_decode($project['skills_required'], true) ?? [];
     }
 
+    // Formato esperado pelo frontend: result.data.project.id
     Helpers::jsonResponse([
-        'success' => true,
-        'message' => 'Projeto criado com sucesso',
-        'data' => [
-            'project' => $project
-        ]
+        'project' => $project
     ], 201);
 
 } catch (PDOException $e) {

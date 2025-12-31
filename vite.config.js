@@ -17,11 +17,33 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    // DESABILITAR CACHE COMPLETAMENTE
+    hmr: {
+      overlay: true
+    },
+    watch: {
+      usePolling: true
+    },
+    // Headers para prevenir cache
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    },
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:3001',
+        target: 'http://localhost/kadesh',
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            if (req.headers?.authorization) {
+              proxyReq.setHeader('authorization', req.headers.authorization)
+              proxyReq.setHeader('Authorization', req.headers.authorization)
+            }
+          })
+        }
       },
     },
   },

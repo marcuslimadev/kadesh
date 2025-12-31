@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste CSS Dark Mode</title>
+    <style>
+        :root {
+            /* Light theme */
+            --page-bg: linear-gradient(to bottom right, #fef3c7, #fde68a);
+            --surface: #ffffff;
+            --surface-alt: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #9ca3af;
+            --accent: #d4af37;
+            --accent-muted: #fef3c7;
+            --card-border: #e5e7eb;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme */
+            --page-bg: linear-gradient(to bottom right, #0f172a, #1e293b);
+            --surface: #1e293b;
+            --surface-alt: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent: #d4af37;
+            --accent-muted: rgba(212, 175, 55, 0.1);
+            --card-border: #475569;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--page-bg);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .muted {
+            color: var(--text-muted);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: var(--accent);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 2px solid var(--card-border);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle" onclick="toggleTheme()">🌓 Alternar Tema</button>
+
+    <div class="card">
+        <h1>✨ Criar Novo Projeto</h1>
+        <p>Preencha os detalhes e receba propostas de profissionais qualificados</p>
+        <p class="muted">Este é um texto secundário/muted</p>
+
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+            Título do Projeto
+        </label>
+        <input type="text" placeholder="Ex: Desenvolvimento de site institucional">
+
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+            Categoria
+        </label>
+        <select>
+            <option>Selecione uma categoria</option>
+            <option>Desenvolvimento Web</option>
+            <option>Design</option>
+        </select>
+
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-primary);">
+            Descrição
+        </label>
+        <textarea rows="4" placeholder="Descreva seu projeto aqui..."></textarea>
+
+        <button>Próximo</button>
+    </div>
+
+    <script>
+        // Detectar tema salvo
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+    </script>
+</body>
+</html>

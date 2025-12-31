@@ -251,13 +251,20 @@ router.beforeEach(async (to, from, next) => {
     if (!token) {
       return next({ name: 'login', query: { redirect: to.fullPath } })
     }
-    // If user not hydrated, verify token with backend before proceeding
-    if (!authStore.user) {
-      const verified = await authStore.verifyToken()
-      if (!verified) {
-        return next({ name: 'login', query: { redirect: to.fullPath } })
+
+    // Em hard reload, user pode não estar hidratado mas o token existe.
+    // Não force verify aqui (race condition com App.vue bootstrap).
+    // Apenas sincronize o modo se já tiver user hidratado.
+    const userType = authStore.user?.value?.type
+    if (userType) {
+      if (userType === 'provider') {
+        viewMode.setProviderMode()
+      } else if (userType === 'client') {
+        viewMode.setContractorMode()
       }
     }
+    // Se user não estiver hidratado ainda, deixa o App.vue fazer o verify.
+    // O guard só bloqueia se NÃO existir token.
   }
 
   // Guest-only routes redirect if already authenticated

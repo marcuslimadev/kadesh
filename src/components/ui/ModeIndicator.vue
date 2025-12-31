@@ -51,11 +51,15 @@ const showIndicator = computed(() => {
   // Não mostrar em telas admin
   if (route.path.startsWith('/admin')) return false
   // Mostrar sempre que a sidebar estiver escondida
-  return !sidebarStore.isVisible
+  const sidebarVisible = sidebarStore.isVisible && typeof sidebarStore.isVisible === 'object' && 'value' in sidebarStore.isVisible
+    ? sidebarStore.isVisible.value
+    : sidebarStore.isVisible
+
+  return !sidebarVisible
 })
 
 const toggleMode = () => {
-  viewMode.toggle()
+  viewMode.toggleMode()
   
   // Navegar para a página apropriada baseada no novo modo
   if (viewMode.isProvider) {

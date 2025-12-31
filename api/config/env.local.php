@@ -4,11 +4,12 @@
  */
 
 // ============ DATABASE ============
-putenv('DB_HOST=localhost');
+// Banco de dados de PRODUÇÃO (Hostinger) - acesso remoto liberado
+putenv('DB_HOST=193.203.175.250');
 putenv('DB_PORT=3306');
-putenv('DB_NAME=kadesh');
-putenv('DB_USER=root');
-putenv('DB_PASSWORD=');
+putenv('DB_NAME=u912059534_kadesh');
+putenv('DB_USER=u912059534_kadesh');
+putenv('DB_PASSWORD=MundoMelhor@10');
 
 // ============ AMBIENTE ============
 putenv('APP_ENV=development');
@@ -19,8 +20,8 @@ putenv('JWT_SECRET=dev_secret_key_change_in_production_min_32_chars');
 putenv('JWT_EXPIRATION=86400'); // 24 horas
 
 // ============ FRONTEND ============
-putenv('FRONTEND_URL=http://localhost:5173');
-putenv('FRONTEND_URLS=http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173');
+putenv('FRONTEND_URL=http://localhost:3001');
+putenv('FRONTEND_URLS=http://localhost:3001,http://localhost:3000,http://localhost:5173,http://127.0.0.1:3001,http://127.0.0.1:5173');
 
 // ============ CORS ============
 putenv('CORS_ALLOW_CREDENTIALS=true');

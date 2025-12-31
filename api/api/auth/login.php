@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    Helpers::jsonResponse(['error' => 'Método não permitido'], 405);
+    Helpers::jsonResponse(['error' => 'Metodo nao permitido'], 405);
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -12,7 +12,7 @@ $email = $data['email'] ?? null;
 $password = $data['password'] ?? null;
 
 if (!$email || !$password) {
-    Helpers::jsonResponse(['error' => 'Email e senha são obrigatórios'], 400);
+    Helpers::jsonResponse(['error' => 'Email e senha sao obrigatorios'], 400);
 }
 
 $db = new Database();
@@ -42,7 +42,6 @@ try {
     ];
     $token = Helpers::generateJWT($payload);
 
-    // Atualizar último login
     $stmt = $conn->prepare("UPDATE users SET last_login = NOW(), updated_at = NOW() WHERE id = ?");
     $stmt->execute([$user['id']]);
 

@@ -9,12 +9,33 @@ class Helpers {
     }
 
     public static function getBearerToken() {
-        $headers = getallheaders();
-        if (isset($headers['Authorization'])) {
-            if (preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+        $headers = function_exists('getallheaders') ? getallheaders() : [];
+
+        // Normalizar chaves para case-insensitive (ex.: 'authorization')
+        $normalized = [];
+        foreach ($headers as $key => $value) {
+            $normalized[strtolower((string) $key)] = $value;
+        }
+
+        $candidates = [];
+
+        if (isset($normalized['authorization'])) {
+            $candidates[] = $normalized['authorization'];
+        }
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $candidates[] = $_SERVER['HTTP_AUTHORIZATION'];
+        }
+        if (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $candidates[] = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
+
+        foreach ($candidates as $authHeader) {
+            if (!$authHeader) continue;
+            if (preg_match('/Bearer\s+(\S+)/i', $authHeader, $matches)) {
                 return $matches[1];
             }
         }
+
         return null;
     }
 

@@ -119,23 +119,9 @@
     </div>
   </transition>
 
-  <!-- Desktop sidebar toggle button (quando sidebar está escondida) -->
-  <button
-    v-if="!isSidebarVisible"
-    @click="sidebarStore.show"
-    class="hidden md:flex fixed top-4 left-4 z-50 items-center gap-2 px-4 py-3 bg-surface border border-accent/40 rounded-xl shadow-xl hover:shadow-2xl hover:border-accent/60 transition-all group"
-    aria-label="Mostrar menu lateral"
-  >
-    <svg class="h-5 w-5 text-accent group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-    <span class="text-sm font-semibold text-heading">Menu</span>
-  </button>
-
-  <!-- Desktop sidebar -->
+  <!-- Desktop sidebar - SEMPRE VISÍVEL -->
   <aside
-    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-nav text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl transition-transform duration-200"
-    :class="{ '-translate-x-full': !isSidebarVisible }"
+    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-nav text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl"
   >
     <div class="p-6 border-b border-gold/20 flex items-center justify-between gap-3">
       <router-link to="/" class="flex items-center gap-3">
@@ -145,16 +131,6 @@
           <p class="text-xs text-offwhite-muted">Service Bridge</p>
         </div>
       </router-link>
-      <button
-        v-if="isAuthenticated"
-        @click="sidebarStore.hide"
-        class="p-2 rounded-lg hover:bg-dark-80 transition text-offwhite-muted"
-        aria-label="Ocultar menu lateral"
-      >
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6" />
-        </svg>
-      </button>
     </div>
 
     <div class="p-4 border-b border-gold/20" v-if="isAuthenticated">
@@ -275,6 +251,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
@@ -287,14 +264,19 @@ const authStore = useAuthStore()
 const viewMode = useViewModeStore()
 const themeStore = useThemeStore()
 const sidebarStore = useSidebarStore()
+const { isVisible: sidebarVisibleRef } = storeToRefs(sidebarStore)
 
 const mobileMenuOpen = ref(false)
 
-const isAuthenticated = computed(() => authStore.isAuthenticated)
+const tokenRef = authStore.token
+const isAuthenticated = computed(() => {
+  const token = tokenRef && typeof tokenRef === 'object' && 'value' in tokenRef ? tokenRef.value : tokenRef
+  return Boolean(token)
+})
 const isAdmin = computed(() => authStore.isAdmin)
 const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
-const isSidebarVisible = computed(() => sidebarStore.isVisible)
+const isSidebarVisible = computed(() => sidebarVisibleRef.value)
 const activePath = computed(() => router.currentRoute.value.path)
 const themeLabel = computed(() => (themeStore.isDark ? 'Tema escuro' : 'Tema claro'))
 const themeIcon = computed(() =>

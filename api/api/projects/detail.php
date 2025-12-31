@@ -80,7 +80,7 @@ try {
         'attachments' => $attachments
     ];
 
-    Helpers::jsonResponse($response);
+    Helpers::jsonResponse(['project' => $response]);
 
 } catch (PDOException $e) {
     Helpers::jsonResponse(['error' => 'Erro no banco de dados: ' . $e->getMessage()], 500);

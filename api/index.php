@@ -4,8 +4,10 @@
  * Backend PHP para Hostinger
  */
 
-// Carregar configurações de ambiente
-if (file_exists(__DIR__ . '/config/env.php')) {
+// Carregar configurações de ambiente (prioriza local)
+if (file_exists(__DIR__ . '/config/env.local.php')) {
+    require_once __DIR__ . '/config/env.local.php';
+} elseif (file_exists(__DIR__ . '/config/env.php')) {
     require_once __DIR__ . '/config/env.php';
 }
 
@@ -43,8 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-// Remover prefixo /api se existir
-$path = preg_replace('/^\/api/', '', $requestUri);
+// Remover prefixos /kadesh/api ou apenas /api
+$path = preg_replace('/^\/kadesh\/api/', '', $requestUri);
+$path = preg_replace('/^\/api/', '', $path);
 $path = rtrim($path, '/'); // Remover trailing slash
 
 // ============================================
@@ -53,6 +56,9 @@ $path = rtrim($path, '/'); // Remover trailing slash
 $staticRoutes = [
     // Health
     'GET:/health' => 'health.php',
+    
+        // Debug (dev)
+        'GET:/debug-headers' => 'debug-headers.php',
     
     // Auth
     'POST:/auth/register' => 'api/auth/register.php',

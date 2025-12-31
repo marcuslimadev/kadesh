@@ -1,12 +1,5 @@
 <?php
 
-// Carregar variáveis de ambiente
-if (file_exists(__DIR__ . '/env.local.php')) {
-    require_once __DIR__ . '/env.local.php';
-} elseif (file_exists(__DIR__ . '/env.php')) {
-    require_once __DIR__ . '/env.php';
-}
-
 class Database {
     private $host;
     private $db_name;

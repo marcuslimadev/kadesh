@@ -1,42 +1,26 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-const STORAGE_KEY = 'kadesh_sidebar_visible'
-
+// SIDEBAR SEMPRE VISÍVEL - NÃO USA MAIS LOCALSTORAGE
 const getInitialVisibility = () => {
-  if (typeof window === 'undefined') return false
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    // Sidebar escondida por padrão (false se não houver valor salvo)
-    return stored === null ? false : stored === 'true'
-  } catch {
-    return false
-  }
+  return true // SEMPRE TRUE
 }
 
 export const useSidebarStore = defineStore('sidebar', () => {
-  const isVisible = ref(getInitialVisibility())
-
-  const persist = (value) => {
-    if (typeof window === 'undefined') return
-    try {
-      localStorage.setItem(STORAGE_KEY, String(value))
-    } catch {}
-  }
+  const isVisible = ref(true) // SEMPRE TRUE
 
   const show = () => {
-    isVisible.value = true
-    persist(true)
+    isVisible.value = true // SEMPRE TRUE
   }
 
   const hide = () => {
-    isVisible.value = false
-    persist(false)
+    // NÃO FAZ NADA - SIDEBAR NUNCA ESCONDE
+    isVisible.value = true
   }
 
   const toggle = () => {
-    isVisible.value = !isVisible.value
-    persist(isVisible.value)
+    // NÃO FAZ NADA - SIDEBAR NUNCA ESCONDE
+    isVisible.value = true
   }
 
   return {
@@ -46,3 +30,4 @@ export const useSidebarStore = defineStore('sidebar', () => {
     toggle
   }
 })
+

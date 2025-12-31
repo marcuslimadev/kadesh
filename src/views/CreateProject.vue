@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-amber-50 to-amber-50 py-8">
+  <div class="min-h-screen py-8" style="background: var(--page-bg);">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-3">✨ Criar Novo Projeto</h1>
-        <p class="text-lg text-gray-600">Preencha os detalhes e receba propostas de profissionais qualificados</p>
+        <h1 class="text-4xl font-bold mb-3" style="color: var(--text-primary);">✨ Criar Novo Projeto</h1>
+        <p class="text-lg" style="color: var(--text-secondary);">Preencha os detalhes e receba propostas de profissionais qualificados</p>
       </div>
 
       <!-- Progress Steps -->
@@ -15,45 +15,44 @@
               <div :class="[
                 'w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all',
                 currentStep >= index + 1 
-                  ? 'bg-amber-600 text-white' 
-                  : 'bg-gray-200 text-gray-500'
-              ]">
+                  ? 'text-white' 
+                  : 'text-gray-500'
+              ]" :style="currentStep >= index + 1 ? 'background: var(--accent);' : 'background: var(--surface-alt);'">
                 {{ index + 1 }}
               </div>
               <span :class="[
                 'mt-2 text-xs font-medium',
-                currentStep >= index + 1 ? 'text-amber-600' : 'text-gray-500'
-              ]">
+                currentStep >= index + 1 ? '' : ''
+              ]" :style="currentStep >= index + 1 ? 'color: var(--accent);' : 'color: var(--text-muted);'">
                 {{ step }}
               </span>
             </div>
             <div v-if="index < steps.length - 1" :class="[
-              'w-16 h-1 mx-2 mb-6 transition-all',
-              currentStep > index + 1 ? 'bg-amber-600' : 'bg-gray-200'
-            ]"></div>
+              'w-16 h-1 mx-2 mb-6 transition-all'
+            ]" :style="currentStep > index + 1 ? 'background: var(--accent);' : 'background: var(--surface-alt);'"></div>
           </div>
         </div>
       </div>
 
       <!-- Form -->
-      <div class="bg-white rounded-2xl shadow-xl p-8">
+      <div class="rounded-2xl shadow-xl p-8 card-premium" style="background: var(--surface); border: 2px solid var(--card-border);">
         <form @submit.prevent="handleSubmit" class="space-y-8">
           
           <!-- Step 1: Informações Básicas -->
           <div v-show="currentStep === 1" class="space-y-6">
             <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mr-4">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" style="background: var(--accent-muted);">
                 <span class="text-2xl">📝</span>
               </div>
               <div>
-                <h2 class="text-2xl font-bold text-gray-900">Informações Básicas</h2>
-                <p class="text-gray-600">Defina o título e a categoria do seu projeto</p>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Informações Básicas</h2>
+                <p style="color: var(--text-secondary);">Defina o título e a categoria do seu projeto</p>
               </div>
             </div>
 
             <!-- Title -->
             <div>
-              <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label for="title" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                 Título do Projeto *
               </label>
               <input
@@ -61,7 +60,8 @@
                 v-model="form.title"
                 type="text"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.title }"
                 placeholder="Ex: Desenvolvimento de site institucional para empresa"
               />
@@ -71,21 +71,32 @@
                 </svg>
                 {{ errors.title }}
               </p>
-              <p v-else class="mt-2 text-sm text-gray-500">
+              <p v-else class="mt-2 text-sm" style="color: var(--text-muted);">
                 💡 Seja claro e específico para atrair os profissionais certos
               </p>
             </div>
 
             <!-- Category -->
             <div>
-              <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">
-                Categoria *
-              </label>
+              <div class="flex items-center justify-between mb-2">
+                <label for="category" class="block text-sm font-semibold" style="color: var(--text-primary);">
+                  Categoria *
+                </label>
+                <button
+                  type="button"
+                  @click="showCategoryModal = true"
+                  class="text-xs font-semibold px-3 py-1 rounded-full transition-all hover:shadow-md"
+                  style="background: var(--accent-muted); color: var(--accent);"
+                >
+                  + Nova categoria
+                </button>
+              </div>
               <select
                 id="category"
                 v-model="form.category"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.category }"
               >
                 <option value="">Selecione uma categoria</option>
@@ -105,18 +116,18 @@
           <!-- Step 2: Descrição Detalhada -->
           <div v-show="currentStep === 2" class="space-y-6">
             <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" style="background: var(--accent-muted);">
                 <span class="text-2xl">📋</span>
               </div>
               <div>
-                <h2 class="text-2xl font-bold text-gray-900">Descrição Detalhada</h2>
-                <p class="text-gray-600">Quanto mais detalhes, melhores propostas você receberá</p>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Descrição Detalhada</h2>
+                <p style="color: var(--text-secondary);">Quanto mais detalhes, melhores propostas você receberá</p>
               </div>
             </div>
 
             <!-- Description -->
             <div>
-              <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label for="description" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                 Descrição do Projeto *
               </label>
               <textarea
@@ -124,7 +135,8 @@
                 v-model="form.description"
                 rows="8"
                 required
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                 :class="{ 'border-red-500 focus:ring-red-500': errors.description }"
                 placeholder="Exemplo:
 
@@ -140,10 +152,7 @@ O site deve ter:
 Preferência por design clean e profissional, com cores azul e branco."
               ></textarea>
               <div class="mt-2 flex items-center justify-between">
-                <p :class="[
-                  'text-sm',
-                  form.description.length >= 50 ? 'text-green-600' : 'text-gray-500'
-                ]">
+                <p class="text-sm" :style="form.description.length >= 50 ? 'color: #10b981;' : 'color: var(--text-muted);'">
                   {{ form.description.length }} / 2000 caracteres (mínimo 50)
                 </p>
                 <span v-if="form.description.length >= 50" class="text-green-600 text-sm flex items-center">
@@ -163,24 +172,25 @@ Preferência por design clean e profissional, com cores azul e branco."
 
             <!-- Requirements -->
             <div>
-              <label for="requirements" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label for="requirements" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                 Requisitos Técnicos (Opcional)
               </label>
               <textarea
                 id="requirements"
                 v-model="form.requirements"
                 rows="4"
-                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                 placeholder="Ex: Deve ser desenvolvido em WordPress, compatível com todos os navegadores, otimizado para SEO..."
               ></textarea>
-              <p class="mt-2 text-sm text-gray-500">
+              <p class="mt-2 text-sm" style="color: var(--text-muted);">
                 💡 Informe tecnologias específicas, critérios de aceitação ou integrações necessárias
               </p>
             </div>
 
             <!-- Attachments -->
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                 Anexos (Opcional)
               </label>
               <input
@@ -193,43 +203,45 @@ Preferência por design clean e profissional, com cores azul e branco."
               />
               <label
                 for="projectAttachments"
-                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition"
+                class="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition"
+                style="border-color: var(--card-border); background: var(--surface-alt);"
               >
-                <svg class="w-10 h-10 text-amber-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-10 h-10 mb-2" style="color: var(--accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M4 12l2.293 2.293a1 1 0 001.414 0L12 10l4.293 4.293a1 1 0 001.414 0L20 12M12 4v6" />
                 </svg>
-                <p class="text-sm font-medium text-gray-900">
+                <p class="text-sm font-medium" style="color: var(--text-primary);">
                   Clique ou arraste arquivos para enviar
                 </p>
-                <p class="text-xs text-gray-500 mt-1">
+                <p class="text-xs mt-1" style="color: var(--text-muted);">
                   Aceitamos imagens e PDFs. Máximo de {{ MAX_ATTACHMENTS }} arquivos.
                 </p>
               </label>
-              <div class="mt-2 text-sm text-gray-500 flex flex-wrap items-center justify-between gap-2">
+              <div class="mt-2 text-sm flex flex-wrap items-center justify-between gap-2" style="color: var(--text-muted);">
                 <span>Formatos aceitos: JPG, PNG, WEBP e PDF (até {{ MAX_FILE_SIZE_MB }} MB)</span>
-                <span class="font-medium text-gray-700">{{ attachments.length }} / {{ MAX_ATTACHMENTS }} anexos</span>
+                <span class="font-medium" style="color: var(--text-primary);">{{ attachments.length }} / {{ MAX_ATTACHMENTS }} anexos</span>
               </div>
 
               <div v-if="attachments.length" class="mt-4 grid gap-4 sm:grid-cols-2">
                 <div
                   v-for="item in attachments"
                   :key="item.id"
-                  class="flex items-center gap-4 p-3 border-2 border-gray-200 rounded-xl bg-gray-50"
+                  class="flex items-center gap-4 p-3 border-2 rounded-xl"
+                  style="background: var(--surface-alt); border-color: var(--card-border);"
                 >
-                  <div class="w-16 h-16 rounded-lg bg-white flex items-center justify-center overflow-hidden">
+                  <div class="w-16 h-16 rounded-lg flex items-center justify-center overflow-hidden" style="background: var(--surface);">
                     <img
                       v-if="item.preview"
                       :src="item.preview"
                       :alt="item.file.name"
                       class="object-cover w-full h-full"
                     />
-                    <svg v-else class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg v-else class="w-8 h-8" style="color: var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
                     </svg>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900 truncate">{{ item.file.name }}</p>
-                    <p class="text-xs text-gray-500">{{ formatFileSize(item.file.size) }}</p>
+                    <p class="text-sm font-medium truncate" style="color: var(--text-primary);">{{ item.file.name }}</p>
+                    <p class="text-xs" style="color: var(--text-muted);">{{ formatFileSize(item.file.size) }}</p>
                     <button
                       type="button"
                       class="mt-2 text-xs font-semibold text-red-600 hover:text-red-800"
@@ -246,24 +258,48 @@ Preferência por design clean e profissional, com cores azul e branco."
           <!-- Step 3: Orçamento e Prazo -->
           <div v-show="currentStep === 3" class="space-y-6">
             <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" style="background: var(--accent-muted);">
                 <span class="text-2xl">💰</span>
               </div>
               <div>
-                <h2 class="text-2xl font-bold text-gray-900">Orçamento e Prazo</h2>
-                <p class="text-gray-600">Defina quanto pode investir e quando precisa do projeto</p>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Orçamento e Prazo</h2>
+                <p style="color: var(--text-secondary);">Defina quanto pode investir e quando precisa do projeto</p>
               </div>
             </div>
 
             <!-- Budget and Deadline -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Budget Type -->
+              <div>
+                <label for="budgetType" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
+                  Tipo de Orçamento *
+                </label>
+                <select
+                  id="budgetType"
+                  v-model="form.budgetType"
+                  required
+                  class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                  style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
+                >
+                  <option value="">Selecione</option>
+                  <option value="project">Projeto Completo</option>
+                  <option value="hourly">Por Hora</option>
+                  <option value="daily">Por Dia</option>
+                  <option value="milestone">Por Etapa/Milestone</option>
+                  <option value="demand">Por Demanda</option>
+                </select>
+                <p class="mt-2 text-sm" style="color: var(--text-muted);">
+                  📊 Como o orçamento será calculado
+                </p>
+              </div>
+
               <!-- Budget -->
               <div>
-                <label for="budget" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label for="budget" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                   Orçamento (R$) *
                 </label>
                 <div class="relative">
-                  <span class="absolute left-4 top-3 text-gray-500 font-medium">R$</span>
+                  <span class="absolute left-4 top-3 font-medium" style="color: var(--text-muted);">R$</span>
                   <input
                     id="budget"
                     v-model.number="form.budget"
@@ -271,7 +307,8 @@ Preferência por design clean e profissional, com cores azul e branco."
                     min="0"
                     step="0.01"
                     required
-                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                    class="w-full pl-12 pr-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                    style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                     :class="{ 'border-red-500 focus:ring-red-500': errors.budget }"
                     placeholder="0,00"
                   />
@@ -282,36 +319,37 @@ Preferência por design clean e profissional, com cores azul e branco."
                   </svg>
                   {{ errors.budget }}
                 </p>
-                <p v-else class="mt-2 text-sm text-gray-500">
+                <p v-else class="mt-2 text-sm" style="color: var(--text-muted);">
                   💡 Valor máximo que você está disposto a pagar
                 </p>
               </div>
 
               <!-- Estimated Hours -->
               <div>
-                <label for="estimated_hours" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label for="estimated_hours" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                   Horas Estimadas
                 </label>
                 <div class="relative">
-                  <span class="absolute left-4 top-3 text-gray-500 font-medium">⏱️</span>
+                  <span class="absolute left-4 top-3 font-medium" style="color: var(--text-muted);">⏱️</span>
                   <input
                     id="estimated_hours"
                     v-model.number="form.estimated_hours"
                     type="number"
                     min="1"
                     step="1"
-                    class="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                    class="w-full pl-12 pr-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                    style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                     placeholder="Ex: 40"
                   />
                 </div>
-                <p class="mt-2 text-sm text-gray-500">
+                <p class="mt-2 text-sm" style="color: var(--text-muted);">
                   📊 Opcional: previsão de horas de trabalho
                 </p>
               </div>
 
               <!-- Deadline -->
               <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                   Prazo de Entrega
                 </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -321,7 +359,8 @@ Preferência por design clean e profissional, com cores azul e branco."
                       v-model="form.deadline"
                       type="date"
                       :min="minDate"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                      class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                      style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                       :class="{ 'border-red-500 focus:ring-red-500': errors.deadline }"
                     />
                   </div>
@@ -331,7 +370,8 @@ Preferência por design clean e profissional, com cores azul e branco."
                       v-model="form.deadlineTime"
                       type="time"
                       :disabled="!form.deadline"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all disabled:bg-gray-100 disabled:text-gray-400"
+                      class="w-full px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                      style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                       :class="{ 'border-red-500 focus:ring-red-500': errors.deadlineTime }"
                     />
                   </div>
@@ -348,7 +388,7 @@ Preferência por design clean e profissional, com cores azul e branco."
                   </svg>
                   {{ errors.deadlineTime }}
                 </p>
-                <p v-else class="mt-2 text-sm text-gray-500">
+                <p v-else class="mt-2 text-sm" style="color: var(--text-muted);">
                   💡 Informe data e hora para que o contador do lobby funcione com precisão. Prazo flexível? Deixe em branco.
                 </p>
               </div>
@@ -356,7 +396,7 @@ Preferência por design clean e profissional, com cores azul e branco."
 
             <!-- Priority -->
             <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-3">
+              <label class="block text-sm font-semibold mb-3" style="color: var(--text-primary);">
                 Prioridade do Projeto
               </label>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -365,18 +405,11 @@ Preferência por design clean e profissional, com cores azul e branco."
                   :key="priority.value"
                   type="button"
                   @click="form.priority = priority.value"
-                  :class="[
-                    'flex flex-col items-center p-4 border-2 rounded-xl transition-all transform hover:scale-105',
-                    form.priority === priority.value
-                      ? 'border-amber-600 bg-amber-50 shadow-lg'
-                      : 'border-gray-200 hover:border-gray-300 bg-white'
-                  ]"
+                  class="flex flex-col items-center p-4 border-2 rounded-xl transition-all transform hover:scale-105"
+                  :style="form.priority === priority.value ? 'border-color: var(--accent); background: var(--accent-muted);' : 'border-color: var(--card-border); background: var(--surface);'"
                 >
                   <span class="text-3xl mb-2">{{ priority.icon }}</span>
-                  <span :class="[
-                    'text-sm font-bold',
-                    form.priority === priority.value ? 'text-amber-600' : 'text-gray-700'
-                  ]">
+                  <span class="text-sm font-bold" :style="form.priority === priority.value ? 'color: var(--accent);' : 'color: var(--text-primary);'">
                     {{ priority.label }}
                   </span>
                 </button>
@@ -387,18 +420,18 @@ Preferência por design clean e profissional, com cores azul e branco."
           <!-- Step 4: Habilidades -->
           <div v-show="currentStep === 4" class="space-y-6">
             <div class="flex items-center mb-6">
-              <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center mr-4" style="background: var(--accent-muted);">
                 <span class="text-2xl">🎯</span>
               </div>
               <div>
-                <h2 class="text-2xl font-bold text-gray-900">Habilidades Necessárias</h2>
-                <p class="text-gray-600">Quais competências o profissional deve ter?</p>
+                <h2 class="text-2xl font-bold" style="color: var(--text-primary);">Habilidades Necessárias</h2>
+                <p style="color: var(--text-secondary);">Quais competências o profissional deve ter?</p>
               </div>
             </div>
 
             <!-- Skills Required -->
             <div>
-              <label for="skills" class="block text-sm font-semibold text-gray-700 mb-2">
+              <label for="skills" class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">
                 Adicionar Habilidades
               </label>
               <div class="flex gap-2 mb-4">
@@ -406,13 +439,15 @@ Preferência por design clean e profissional, com cores azul e branco."
                   v-model="skillInput"
                   type="text"
                   placeholder="Ex: React, Node.js, Figma, SEO..."
-                  class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all"
+                  class="flex-1 px-4 py-3 border-2 rounded-lg focus:ring-2 transition-all"
+                  style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);"
                   @keypress.enter.prevent="addSkill"
                 />
                 <button
                   type="button"
                   @click="addSkill"
-                  class="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 font-medium transition-all transform hover:scale-105 flex items-center"
+                  class="px-6 py-3 text-white rounded-lg font-medium transition-all transform hover:scale-105 flex items-center"
+                  style="background: var(--accent);"
                 >
                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -421,19 +456,21 @@ Preferência por design clean e profissional, com cores azul e branco."
                 </button>
               </div>
               
-              <div v-if="form.skills_required.length > 0" class="bg-gray-50 rounded-lg p-4 border-2 border-gray-200">
-                <p class="text-sm font-medium text-gray-700 mb-3">Habilidades selecionadas:</p>
+              <div v-if="form.skills_required.length > 0" class="rounded-lg p-4 border-2" style="background: var(--surface-alt); border-color: var(--card-border);">
+                <p class="text-sm font-medium mb-3" style="color: var(--text-primary);">Habilidades selecionadas:</p>
                 <div class="flex flex-wrap gap-2">
                   <span
                     v-for="(skill, index) in form.skills_required"
                     :key="index"
-                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-amber-100 text-amber-800 transition-all hover:bg-amber-200"
+                    class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all"
+                    style="background: var(--accent-muted); color: var(--accent);"
                   >
                     {{ skill }}
                     <button
                       type="button"
                       @click="removeSkill(index)"
-                      class="ml-2 text-amber-600 hover:text-amber-800 transition-colors"
+                      class="ml-2 transition-colors"
+                      style="color: var(--accent);"
                     >
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -442,8 +479,8 @@ Preferência por design clean e profissional, com cores azul e branco."
                   </span>
                 </div>
               </div>
-              <div v-else class="bg-yellow-50 rounded-lg p-4 border-2 border-yellow-200">
-                <p class="text-sm text-yellow-800 flex items-center">
+              <div v-else class="rounded-lg p-4 border-2" style="background: #fef3c7; border-color: #fde047;">
+                <p class="text-sm flex items-center" style="color: #854d0e;">
                   <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                   </svg>
@@ -454,14 +491,15 @@ Preferência por design clean e profissional, com cores azul e branco."
 
             <!-- Suggested Skills -->
             <div>
-              <p class="text-sm font-medium text-gray-700 mb-3">Sugestões populares:</p>
+              <p class="text-sm font-medium mb-3" style="color: var(--text-primary);">Sugestões populares:</p>
               <div class="flex flex-wrap gap-2">
                 <button
                   v-for="suggestion in suggestedSkills"
                   :key="suggestion"
                   type="button"
                   @click="addSuggestedSkill(suggestion)"
-                  class="px-3 py-1.5 text-sm bg-white border-2 border-gray-300 text-gray-700 rounded-full hover:border-amber-500 hover:text-amber-600 transition-all"
+                  class="px-3 py-1.5 text-sm border-2 rounded-full transition-all"
+                  style="background: var(--surface); border-color: var(--card-border); color: var(--text-primary);"
                   :disabled="form.skills_required.includes(suggestion)"
                   :class="{ 'opacity-50 cursor-not-allowed': form.skills_required.includes(suggestion) }"
                 >
@@ -486,12 +524,13 @@ Preferência por design clean e profissional, com cores azul e branco."
           </div>
 
           <!-- Navigation Buttons -->
-          <div class="flex gap-4 pt-6 border-t-2 border-gray-200">
+          <div class="flex gap-4 pt-6 border-t-2" style="border-color: var(--card-border);">
             <button
               v-if="currentStep > 1"
               type="button"
               @click="prevStep"
-              class="flex items-center px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-all"
+              class="flex items-center px-6 py-3 border-2 rounded-lg font-medium transition-all"
+              style="border-color: var(--card-border); color: var(--text-primary); background: var(--surface);"
             >
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -503,7 +542,8 @@ Preferência por design clean e profissional, com cores azul e branco."
               v-if="currentStep === 1"
               type="button"
               @click="$router.push('/dashboard')"
-              class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-all"
+              class="flex-1 px-6 py-3 border-2 rounded-lg font-medium transition-all"
+              style="border-color: var(--card-border); color: var(--text-primary); background: var(--surface);"
             >
               Cancelar
             </button>
@@ -512,7 +552,8 @@ Preferência por design clean e profissional, com cores azul e branco."
               v-if="currentStep < 4"
               type="button"
               @click="nextStep"
-              class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg hover:from-amber-700 hover:to-amber-800 font-medium transition-all transform hover:scale-105 flex items-center justify-center"
+              class="flex-1 px-6 py-3 text-white rounded-lg font-medium transition-all transform hover:scale-105 flex items-center justify-center"
+              style="background: var(--accent);"
             >
               Próximo
               <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,7 +581,7 @@ Preferência por design clean e profissional, com cores azul e branco."
       </div>
 
       <!-- Help Card -->
-      <div class="mt-8 bg-gradient-to-r from-amber-600 to-amber-600 rounded-2xl p-6 text-white shadow-xl">
+      <div class="mt-8 rounded-2xl p-6 text-white shadow-xl" style="background: var(--accent);">
         <div class="flex items-start">
           <div class="flex-shrink-0">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -549,7 +590,7 @@ Preferência por design clean e profissional, com cores azul e branco."
           </div>
           <div class="ml-4">
             <h3 class="text-lg font-bold mb-2">💡 Dicas para um projeto bem-sucedido</h3>
-            <ul class="space-y-1 text-sm text-amber-100">
+            <ul class="space-y-1 text-sm opacity-90">
               <li>✓ Seja específico sobre o que você precisa</li>
               <li>✓ Defina um orçamento realista baseado no mercado</li>
               <li>✓ Adicione exemplos ou referências se possível</li>
@@ -559,6 +600,37 @@ Preferência por design clean e profissional, com cores azul e branco."
         </div>
       </div>
     </div>
+
+    <!-- Modal Nova Categoria -->
+    <transition name="fade">
+      <div v-if="showCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(0, 0, 0, 0.6);" @click.self="closeCategoryModal">
+        <div class="rounded-2xl p-6 max-w-md w-full shadow-2xl" style="background: var(--surface); border: 2px solid var(--card-border);" @click.stop>
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <p class="text-sm" style="color: var(--text-muted);">+ Categoria</p>
+              <h3 class="text-xl font-semibold" style="color: var(--text-primary);">Sugerir nova categoria</h3>
+            </div>
+            <button class="px-3 py-1 rounded-lg transition-all" style="border: 1px solid var(--muted-border); color: var(--text-secondary);" @click="closeCategoryModal">
+              Fechar
+            </button>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2" style="color: var(--text-primary);">Nome</label>
+              <input v-model="newCategoryName" type="text" class="w-full px-4 py-3 border-2 rounded-lg transition-all" style="background: var(--surface); color: var(--text-primary); border-color: var(--card-border);" placeholder="Ex: IA Generativa" />
+            </div>
+          </div>
+          <div class="mt-6 flex justify-end gap-2">
+            <button class="px-4 py-2 rounded-lg transition-all" style="border: 1px solid var(--muted-border); color: var(--text-secondary);" @click="closeCategoryModal">
+              Cancelar
+            </button>
+            <button class="px-4 py-2 rounded-lg font-semibold transition-all" style="background: var(--accent); color: #0f172a;" @click="submitCategoryRequest">
+              Enviar para validação
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -581,6 +653,7 @@ const form = reactive({
   title: '',
   description: '',
   category: '',
+  budgetType: '',
   budget: '',
   estimated_hours: '',
   deadline: '',
@@ -603,6 +676,8 @@ const errors = reactive({
 const skillInput = ref('')
 const isSubmitting = ref(false)
 const attachments = ref([])
+const showCategoryModal = ref(false)
+const newCategoryName = ref('')
 const MAX_ATTACHMENTS = 3
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 const MAX_FILE_SIZE_MB = Math.round(MAX_FILE_SIZE / (1024 * 1024))
@@ -697,6 +772,20 @@ const addSuggestedSkill = (skill) => {
   if (!form.skills_required.includes(skill)) {
     form.skills_required.push(skill)
   }
+}
+
+const closeCategoryModal = () => {
+  showCategoryModal.value = false
+  newCategoryName.value = ''
+}
+
+const submitCategoryRequest = () => {
+  if (!newCategoryName.value.trim()) return
+  
+  // Aqui enviaria para admin validar, mas por ora só fecha
+  console.log('[CreateProject] Nova categoria sugerida:', newCategoryName.value)
+  // toast?.success('Categoria enviada para análise do administrador.')
+  closeCategoryModal()
 }
 
 const removeSkill = (index) => {

@@ -34,10 +34,47 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Add auth token if available
-    const authStore = useAuthStore()
-    if (authStore.token) {
-      config.headers.Authorization = `Bearer ${authStore.token}`
+    // SEMPRE ler token fresco do storage (nunca confiar em cache/defaults)
+    // Isso garante que Ctrl+Shift+R funcione
+    let token = null
+    if (typeof window !== 'undefined') {
+      token = localStorage.getItem('kadesh_token') || sessionStorage.getItem('kadesh_token')
+    }
+
+    // Fallback: tentar do Pinia se storage estiver vazio
+    if (!token) {
+      try {
+        const authStore = useAuthStore()
+        token = authStore.token
+
+        // Pinia setup-store pode expor refs (token.value)
+        if (token && typeof token === 'object' && 'value' in token) {
+          token = token.value
+        }
+      } catch {
+        token = null
+      }
+    }
+
+    if (token) {
+      // Forçar header em toda request (sobrescrever qualquer default)
+      if (config.headers && typeof config.headers.set === 'function') {
+        config.headers.set('Authorization', `Bearer ${token}`)
+      } else {
+        config.headers = config.headers || {}
+        config.headers.Authorization = `Bearer ${token}`
+      }
+    }
+
+    // Diagnóstico focado: quando der 401 em /my-projects, precisamos saber se o header está sendo anexado.
+    if (config.url?.includes('/api/projects/my-projects')) {
+      const headers = config.headers
+      const authHeader =
+        (headers && typeof headers.get === 'function'
+          ? (headers.get('Authorization') || headers.get('authorization'))
+          : (headers?.Authorization || headers?.authorization)) || null
+
+      console.log('[API] /projects/my-projects Authorization anexado?', Boolean(authHeader))
     }
 
     // Add request timestamp for debugging
@@ -67,7 +104,7 @@ api.interceptors.response.use(
     console.error('[API] Response error:', error)
     
     // Check if request is marked as silent (no toast on error)
-    const isSilent = error.config?.silent === true
+    const isSilent = error.config?.silent === true || error.config?._silent === true
 
     // Handle common error cases
     if (error.response) {
@@ -75,9 +112,22 @@ api.interceptors.response.use(
 
       switch (status) {
         case 401:
-          // Unauthorized - clear auth and redirect to login
-          const authStore = useAuthStore()
-          authStore.logout()
+          // Unauthorized
+          // NÃO desloga automaticamente aqui: 401 pode acontecer por header não chegar,
+          // rota protegida usada em modo errado, ou instabilidade. O logout deve ser
+          // decidido pelo fluxo de verifyToken() (fonte de verdade).
+          if (import.meta.env.VITE_DEBUG_MODE === 'true') {
+            const headers = error.config?.headers
+            const sentAuthHeader =
+              (headers && typeof headers.get === 'function'
+                ? (headers.get('Authorization') || headers.get('authorization'))
+                : (headers?.Authorization || headers?.authorization)) || null
+            console.warn('[API] 401 recebido.', {
+              url: error.config?.url,
+              sentAuthorization: Boolean(sentAuthHeader),
+              responseError: data?.error
+            })
+          }
           if (!isSilent) {
             // toast?.error('Sessão expirada. Faça login novamente.')
           }

@@ -49,13 +49,22 @@ const INITIALIZATION_FALLBACK_MS = 2000
 // Compute whether to show navigation
 const showNavigation = computed(() => {
   const hideNavRoutes = ['login', 'register', 'forgot-password']
-  if (!authStore.isAuthenticated) return false
+  const token = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
+    ? authStore.token.value
+    : authStore.token
+
+  const hasToken = Boolean(token || (typeof window !== 'undefined' && localStorage.getItem('kadesh_token')))
+  if (!hasToken) return false
   return !hideNavRoutes.includes(route.name)
 })
 
 const mainClasses = computed(() => {
   if (!showNavigation.value) return 'app-main'
-  return sidebarStore.isVisible ? 'app-main pt-16 md:pt-0 md:pl-64' : 'app-main pt-16 md:pt-0'
+  const sidebarVisible = sidebarStore.isVisible && typeof sidebarStore.isVisible === 'object' && 'value' in sidebarStore.isVisible
+    ? sidebarStore.isVisible.value
+    : sidebarStore.isVisible
+
+  return sidebarVisible ? 'app-main pt-16 md:pt-0 md:pl-64' : 'app-main pt-16 md:pt-0'
 })
 
 const appClasses = computed(() => [
@@ -77,16 +86,24 @@ onMounted(() => {
     // Silently ignore wake up failures
   })
 
-  if (!authStore.token) {
+  // Checa token de forma robusta (pode ser ref ou string)
+  const currentToken = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
+    ? authStore.token.value
+    : authStore.token
+
+  const hasToken = currentToken || (typeof window !== 'undefined' && localStorage.getItem('kadesh_token'))
+
+  if (!hasToken) {
     clearTimeout(fallbackTimer)
     finishInitialization()
     return
   }
 
+  // Verifica token mas não bloqueia a UI se falhar (servidor pode estar lento)
   authStore
     .verifyToken()
     .catch((error) => {
-      console.error('App initialization error:', error)
+      console.warn('App initialization: token verify falhou, mas mantendo sessão se token existir', error.message)
     })
     .finally(() => {
       clearTimeout(fallbackTimer)

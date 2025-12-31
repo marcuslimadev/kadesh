@@ -6,10 +6,10 @@
       position === 'left' ? 'xl:mr-8' : 'xl:ml-8'
     ]"
   >
-    <div class="flex items-center justify-between text-xs font-medium text-gray-400">
+    <div class="flex items-center justify-between text-xs font-medium text-muted">
       <span class="uppercase tracking-wider">Patrocinado</span>
       <button
-        class="text-gray-400 hover:text-gray-600 transition-colors"
+        class="text-muted hover:text-heading transition-colors"
         @click="hidden = true"
         title="Ocultar anúncios"
       >
@@ -21,7 +21,7 @@
     <div
       v-for="slot in slots"
       :key="slot.id"
-      class="ad-card"
+      class="ad-card card-premium"
     >
       <div class="ad-badge">
         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -38,7 +38,7 @@
         :href="slot.link_url"
         target="_blank"
         rel="noopener"
-        class="ad-cta"
+        class="ad-cta btn-gold"
         @click="trackClick(slot.id)"
       >
         <span>Saiba mais</span>
@@ -46,7 +46,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
       </a>
-      <button v-else class="ad-cta" type="button">
+      <button v-else class="ad-cta btn-gold" type="button">
         <span>Saiba mais</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -71,20 +71,53 @@ const hidden = ref(false)
 const slots = ref([])
 const position = computed(() => (props.position === 'right' ? 'right' : 'left'))
 
+const MOCK_ADS = {
+  left: [
+    {
+      id: 'mock-left-1',
+      title: 'Impulsione seu Projeto',
+      description: 'Destaque seu projeto e encontre os melhores profissionais.',
+      link_url: '/lobby'
+    },
+    {
+      id: 'mock-left-2',
+      title: 'Seja um Prestador Premium',
+      description: 'Aumente sua visibilidade e ganhe mais propostas.',
+      link_url: '/profile'
+    }
+  ],
+  right: [
+    {
+      id: 'mock-right-1',
+      title: 'Suporte 24/7',
+      description: 'Nossa equipe está sempre disponível para ajudar.',
+      link_url: '/tutorial'
+    },
+    {
+      id: 'mock-right-2',
+      title: 'Pagamentos 100% Seguros',
+      description: 'Transações protegidas e fluxo com escrow.',
+      link_url: '/wallet'
+    }
+  ]
+}
+
 async function loadAdvertisements() {
   try {
     const response = await api.get('/api/advertisements', {
       params: { position: position.value }
     })
-    slots.value = Array.isArray(response.data) ? response.data : []
+    const data = Array.isArray(response.data) ? response.data : []
+    slots.value = data.length ? data : (MOCK_ADS[position.value] || [])
   } catch (error) {
     console.error('Erro ao carregar anúncios:', error)
-    slots.value = []
+    slots.value = MOCK_ADS[position.value] || []
   }
 }
 
 async function trackClick(adId) {
   try {
+    if (String(adId).startsWith('mock-')) return
     await api.post(`/api/advertisements/${adId}/click`)
   } catch (error) {
     console.error('Erro ao registrar clique:', error)
@@ -98,36 +131,9 @@ onMounted(() => {
 
 <style scoped>
 .ad-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-}
-
-.ad-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.ad-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-  transform: translateY(-2px);
-}
-
-.ad-card:hover::before {
-  opacity: 1;
 }
 
 .ad-badge {
@@ -135,12 +141,12 @@ onMounted(() => {
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-  border: 1px solid #bae6fd;
   border-radius: 12px;
   font-size: 10px;
   font-weight: 600;
-  color: #0284c7;
+  background: var(--accent-muted);
+  border: 1px solid var(--card-border);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 12px;
@@ -149,7 +155,7 @@ onMounted(() => {
 .ad-title {
   font-size: 17px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-primary);
   margin-bottom: 8px;
   line-height: 1.4;
   letter-spacing: -0.01em;
@@ -157,7 +163,7 @@ onMounted(() => {
 
 .ad-description {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 16px;
 }
@@ -169,26 +175,11 @@ onMounted(() => {
   gap: 6px;
   width: 100%;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  border: none;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-}
-
-.ad-cta:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-  transform: translateY(-1px);
-}
-
-.ad-cta:active {
-  transform: translateY(0);
 }
 </style>
 

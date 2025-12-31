@@ -381,11 +381,13 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 // import { useToast } from 'vue-toastification'
+import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
 import projectService from '@/services/projectService'
 import api from '@/services/api'
 import AdRail from '@/components/layout/AdRail.vue'
 
+const authStore = useAuthStore()
 const viewModeStore = useViewModeStore()
 const { currentMode } = storeToRefs(viewModeStore)
 // const toast = useToast()
@@ -393,9 +395,18 @@ const { currentMode } = storeToRefs(viewModeStore)
 const isContractorView = computed(() => currentMode.value === 'contractor')
 const isProviderView = computed(() => currentMode.value === 'provider')
 
-const lobbyTitle = computed(() =>
-  isContractorView.value ? '🎯 Lobby do Contratante' : '⚙️ Lobby do Prestador'
-)
+const userName = computed(() => {
+  const user = authStore.user
+  if (user && user.name) {
+    return user.name.split(' ')[0] // Apenas primeiro nome
+  }
+  return 'Usuário'
+})
+
+const lobbyTitle = computed(() => {
+  const mode = isContractorView.value ? 'Contratante' : 'Prestador'
+  return `🎯 Lobby do ${mode} - ${userName.value}`
+})
 
 const lobbyDescription = computed(() =>
   isContractorView.value
@@ -531,9 +542,30 @@ const filteredProjects = computed(() => {
   return result
 })
 
+const ensureAuthHeader = () => {
+  if (typeof window === 'undefined') return
+  const storedToken = localStorage.getItem('kadesh_token')
+  if (!storedToken) {
+    console.warn('[Lobby] Nenhum token encontrado para setar header')
+    return
+  }
+
+  // Setar em múltiplas camadas para garantir
+  if (api?.defaults?.headers?.common) {
+    api.defaults.headers.common.Authorization = `Bearer ${storedToken}`
+    api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
+  }
+  if (api?.defaults?.headers) {
+    api.defaults.headers.Authorization = `Bearer ${storedToken}`
+  }
+  console.log('[Lobby] Header Authorization garantido antes de loadProjects')
+}
+
 const loadProjects = async () => {
   loading.value = true
   try {
+    ensureAuthHeader()
+
     const endpoint = isContractorView.value ? '/api/projects/my-projects' : '/api/projects'
     const params = {
       per_page: pageSize.value,

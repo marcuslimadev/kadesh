@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar LocalStorage - Kadesh</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 1rem;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5);
+        }
+        #status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .success { color: #10b981; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpeza de Cache</h1>
+        <p>Clique no botão abaixo para limpar TUDO:</p>
+        
+        <button onclick="limparTudo()">🔥 LIMPAR TUDO AGORA</button>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function limparTudo() {
+            const status = document.getElementById('status');
+            
+            // Limpar localStorage
+            localStorage.clear();
+            
+            // Limpar sessionStorage
+            sessionStorage.clear();
+            
+            // Forçar sidebar visível
+            localStorage.setItem('kadesh_sidebar_visible', 'true');
+            
+            // Limpar cache de service workers
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => caches.delete(name));
+                });
+            }
+            
+            status.innerHTML = `
+                <div class="success">✅ localStorage LIMPO</div>
+                <div class="success">✅ sessionStorage LIMPO</div>
+                <div class="success">✅ Cache de service workers LIMPO</div>
+                <div class="success">✅ Sidebar forçada para VISÍVEL</div>
+                <br>
+                <div class="info">🔄 Redirecionando em 2 segundos...</div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+        }
+        
+        // Mostrar dados atuais
+        window.addEventListener('load', () => {
+            console.log('📊 Estado atual do localStorage:', {...localStorage});
+            console.log('📊 Estado atual do sessionStorage:', {...sessionStorage});
+        });
+    </script>
+</body>
+</html>
