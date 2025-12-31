@@ -6,17 +6,41 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 const SESSION_DURATION_MS = 4 * 60 * 60 * 1000 // 4 HORAS
 
 const isSessionValid = () => {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') {
+    console.log('[Auth] isSessionValid: window undefined')
+    return false
+  }
   
   const token = localStorage.getItem('kadesh_token')
   const expiresAt = localStorage.getItem('kadesh_session_expires')
   
-  if (!token || !expiresAt) return false
+  console.log('[Auth] isSessionValid check:', {
+    hasToken: !!token,
+    tokenLength: token?.length || 0,
+    expiresAt,
+    expiresDate: expiresAt ? new Date(parseInt(expiresAt)).toLocaleString('pt-BR') : 'N/A'
+  })
+  
+  if (!token || !expiresAt) {
+    console.warn('[Auth] isSessionValid: FALSE - token ou expiresAt ausente')
+    return false
+  }
   
   const now = Date.now()
   const expires = parseInt(expiresAt, 10)
+  const isValid = now < expires
   
-  return now < expires
+  if (!isValid) {
+    console.warn('[Auth] isSessionValid: FALSE - sessão expirada', {
+      now: new Date(now).toLocaleString('pt-BR'),
+      expires: new Date(expires).toLocaleString('pt-BR')
+    })
+  } else {
+    const hoursLeft = ((expires - now) / (1000 * 60 * 60)).toFixed(2)
+    console.log(`[Auth] isSessionValid: TRUE - válida por ${hoursLeft}h`)
+  }
+  
+  return isValid
 }
 
 const renewSession = () => {
@@ -88,9 +112,17 @@ export const useAuthStore = defineStore('auth', () => {
       // Store auth data COM EXPIRAÇÃO DE 4 HORAS
       user.value = userData
       token.value = userToken
+      
+      console.log('[Auth] Salvando token no localStorage:', userToken.substring(0, 30) + '...')
       localStorage.setItem('kadesh_token', userToken)
       localStorage.setItem('kadesh_user', JSON.stringify(userData))
       renewSession() // Criar timestamp de expiração
+      
+      console.log('[Auth] Verificando se salvou:', {
+        tokenSalvo: localStorage.getItem('kadesh_token')?.substring(0, 30) + '...',
+        userSalvo: !!localStorage.getItem('kadesh_user'),
+        expiresSalvo: localStorage.getItem('kadesh_session_expires')
+      })
 
       // Garantir que as próximas requisições já saiam autenticadas
       if (api?.defaults?.headers?.common) {

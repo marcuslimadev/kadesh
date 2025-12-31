@@ -39,6 +39,7 @@ api.interceptors.request.use(
     let token = null
     if (typeof window !== 'undefined') {
       token = localStorage.getItem('kadesh_token') || sessionStorage.getItem('kadesh_token')
+      console.log('[API] Token do localStorage:', token ? `${token.substring(0, 20)}...` : 'NENHUM')
     }
 
     // Fallback: tentar do Pinia se storage estiver vazio
@@ -51,6 +52,7 @@ api.interceptors.request.use(
         if (token && typeof token === 'object' && 'value' in token) {
           token = token.value
         }
+        console.log('[API] Token do Pinia Store:', token ? `${token.substring(0, 20)}...` : 'NENHUM')
       } catch {
         token = null
       }
@@ -64,6 +66,9 @@ api.interceptors.request.use(
         config.headers = config.headers || {}
         config.headers.Authorization = `Bearer ${token}`
       }
+      console.log('[API] ✅ Authorization header anexado:', `Bearer ${token.substring(0, 20)}...`)
+    } else {
+      console.warn('[API] ⚠️ NENHUM TOKEN ENCONTRADO - requisição sem autenticação!')
     }
 
     // Diagnóstico focado: quando der 401 em /my-projects, precisamos saber se o header está sendo anexado.
@@ -74,7 +79,7 @@ api.interceptors.request.use(
           ? (headers.get('Authorization') || headers.get('authorization'))
           : (headers?.Authorization || headers?.authorization)) || null
 
-      console.log('[API] /projects/my-projects Authorization anexado?', Boolean(authHeader))
+      console.log('[API] /projects/my-projects Authorization anexado?', Boolean(authHeader), authHeader)
     }
 
     // Add request timestamp for debugging

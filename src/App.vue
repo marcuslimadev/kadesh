@@ -48,14 +48,24 @@ const INITIALIZATION_FALLBACK_MS = 2000
 
 // Compute whether to show navigation
 const showNavigation = computed(() => {
-  const hideNavRoutes = ['login', 'register', 'forgot-password']
-  const token = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
-    ? authStore.token.value
-    : authStore.token
-
-  const hasToken = Boolean(token || (typeof window !== 'undefined' && localStorage.getItem('kadesh_token')))
-  if (!hasToken) return false
-  return !hideNavRoutes.includes(route.name)
+  const hideNavRoutes = ['login', 'register', 'forgot-password', 'reset-password']
+  
+  // Se está em rota de auth, não mostrar
+  if (hideNavRoutes.includes(route.name)) {
+    console.log('[App] Rota de auth - não mostrar nav:', route.name)
+    return false
+  }
+  
+  // Verifica se está autenticado usando o authStore
+  const authenticated = authStore.isAuthenticated
+  console.log('[App] showNavigation check:', {
+    route: route.name,
+    authenticated,
+    hasToken: !!authStore.token,
+    hasUser: !!authStore.user
+  })
+  
+  return authenticated
 })
 
 const mainClasses = computed(() => {
