@@ -22,7 +22,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <!-- Logo + Brand -->
           <div class="flex items-center justify-center gap-4 mb-8 animate-fade-in-up">
-            <img src="/logo.jpeg" alt="Kaddesh" class="h-16 w-16 md:h-20 md:w-20 rounded-2xl border-2 border-[#D4AF37]/60 shadow-2xl object-cover" />
+            <img :src="logoImg" alt="Kaddesh" class="h-16 w-16 md:h-20 md:w-20 rounded-2xl border-2 border-[#D4AF37]/60 shadow-2xl object-cover" />
             <div class="text-left">
               <p class="text-[#D4AF37] text-sm md:text-base font-bold uppercase tracking-wider">KADDESH</p>
               <p class="text-[#F5F5F5] text-xs md:text-sm opacity-90">Service Bridge</p>
@@ -606,6 +606,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import logoImg from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'

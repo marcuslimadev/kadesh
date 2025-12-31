@@ -5,7 +5,7 @@
       <div class="text-center">
         <div class="flex justify-center mb-6">
           <img 
-            src="/logo.jpeg" 
+            :src="logoImg" 
             alt="Kadesh Logo" 
             class="h-40 w-40 object-contain drop-shadow-2xl"
           />
@@ -97,6 +97,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import logoImg from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 // import { useToast } from 'vue-toastification'
@@ -105,8 +106,8 @@ const router = useRouter()
 // const toast = useToast()
 
 const form = ref({
-  email: '',
-  password: ''
+  email: import.meta.env.DEV ? 'admin@kadesh.local' : '',
+  password: import.meta.env.DEV ? 'admin123' : ''
 })
 
 const loading = ref(false)

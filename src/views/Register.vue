@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
-        <img src="/logo.jpeg" alt="Kadesh" class="h-32 w-32 object-contain" />
+        <img :src="logoImg" alt="Kadesh" class="h-32 w-32 object-contain" />
       </router-link>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
         Crie sua conta
@@ -217,6 +217,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import logoImg from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 

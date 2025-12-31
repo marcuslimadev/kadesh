@@ -4,6 +4,8 @@ import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // App servida em http://localhost/kadesh/dist/
+  base: '/kadesh/dist/',
   plugins: [vue()],
   resolve: {
     alias: {
@@ -17,41 +19,20 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-    // DESABILITAR CACHE COMPLETAMENTE
     hmr: {
       overlay: true
     },
     watch: {
       usePolling: true
-    },
-    // Headers para prevenir cache
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0'
-    },
-    proxy: {
-      '/api': {
-        target: 'http://localhost/kadesh',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path,
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq, req) => {
-            if (req.headers?.authorization) {
-              proxyReq.setHeader('authorization', req.headers.authorization)
-              proxyReq.setHeader('Authorization', req.headers.authorization)
-            }
-          })
-        }
-      },
-    },
+    }
   },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
     minify: 'terser',
     sourcemap: false,
+    // Force a single CSS bundle to avoid missing chunked CSS files on Apache
+    cssCodeSplit: false,
     rollupOptions: {
       output: {
         manualChunks: {

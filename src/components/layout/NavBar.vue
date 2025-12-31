@@ -2,7 +2,7 @@
   <!-- Mobile top bar -->
   <header class="sticky top-0 z-40 bg-nav text-offwhite flex md:hidden items-center justify-between px-4 py-3 shadow-lg">
     <router-link to="/" class="flex items-center gap-3">
-      <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+      <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
       <div>
         <p class="text-sm text-gold font-semibold">KADDESH</p>
         <p class="text-xs text-offwhite-muted">Service Bridge</p>
@@ -26,7 +26,7 @@
       <div class="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl p-4 overflow-y-auto">
         <div class="flex items-center justify-between mb-4">
           <router-link to="/" class="flex items-center gap-2">
-            <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+            <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
             <div>
               <p class="text-sm font-semibold text-dark">KADDESH</p>
               <p class="text-xs text-gray-500">Service Bridge</p>
@@ -125,7 +125,7 @@
   >
     <div class="p-6 border-b border-gold/20 flex items-center justify-between gap-3">
       <router-link to="/" class="flex items-center gap-3">
-        <img src="/logo.jpeg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
+        <img :src="logoImg" alt="Kaddesh" class="h-14 w-14 rounded-xl border border-gold/40 object-cover shadow" />
         <div>
           <p class="text-gold font-heading text-xl leading-none">KADDESH</p>
           <p class="text-xs text-offwhite-muted">Service Bridge</p>
@@ -251,6 +251,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import logoImg from '@/assets/logo.png'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'

@@ -8,7 +8,7 @@
         </div>
       </router-link>
       <h2 class="mt-8 text-center text-4xl font-extrabold text-heading tracking-tight">
-        KADDESH
+        KADDESHasdasdasdasd
       </h2>
       <p class="mt-2 text-center text-gold font-medium tracking-widest uppercase text-xs">
         Service Bridge

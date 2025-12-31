@@ -57,7 +57,9 @@ const showNavigation = computed(() => {
   }
   
   // Verifica se está autenticado usando o authStore
-  const authenticated = authStore.isAuthenticated
+  // Usamos !!authStore.token para garantir que a UI apareça mesmo se a sessão
+  // estiver sendo validada ou se houver desincronia no isSessionValid
+  const authenticated = !!authStore.token
   console.log('[App] showNavigation check:', {
     route: route.name,
     authenticated,
