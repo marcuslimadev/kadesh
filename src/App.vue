@@ -58,9 +58,13 @@ const showNavigation = computed(() => {
   
   // Verifica se está autenticado usando o authStore
   const authenticated = authStore.isAuthenticated
+  console.log('[App] showNavigation check:', {
+    route: route.name,
+    authenticated,
+    hasToken: !!authStore.token,
+    hasUser: !!authStore.user
+  })
   
-  // Se estiver autenticado, SEMPRE mostrar navegação (sidebar/navbar)
-  // Exceto em rotas específicas se necessário, mas o pedido é garantir a sidebar
   return authenticated
 })
 

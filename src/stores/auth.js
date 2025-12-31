@@ -6,22 +6,48 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 const SESSION_DURATION_MS = 4 * 60 * 60 * 1000 // 4 HORAS
 
 const isSessionValid = () => {
-  if (typeof window === 'undefined') return false
+  if (typeof window === 'undefined') {
+    console.log('[Auth] isSessionValid: window undefined')
+    return false
+  }
   
   const token = localStorage.getItem('kadesh_token')
   const expiresAt = localStorage.getItem('kadesh_session_expires')
   
-  if (!token || !expiresAt) return false
+  console.log('[Auth] isSessionValid check:', {
+    hasToken: !!token,
+    tokenLength: token?.length || 0,
+    expiresAt,
+    expiresDate: expiresAt ? new Date(parseInt(expiresAt)).toLocaleString('pt-BR') : 'N/A'
+  })
+  
+  if (!token || !expiresAt) {
+    console.warn('[Auth] isSessionValid: FALSE - token ou expiresAt ausente')
+    return false
+  }
   
   const now = Date.now()
   const expires = parseInt(expiresAt, 10)
-  return now < expires
+  const isValid = now < expires
+  
+  if (!isValid) {
+    console.warn('[Auth] isSessionValid: FALSE - sessão expirada', {
+      now: new Date(now).toLocaleString('pt-BR'),
+      expires: new Date(expires).toLocaleString('pt-BR')
+    })
+  } else {
+    const hoursLeft = ((expires - now) / (1000 * 60 * 60)).toFixed(2)
+    console.log(`[Auth] isSessionValid: TRUE - válida por ${hoursLeft}h`)
+  }
+  
+  return isValid
 }
 
 const renewSession = () => {
   if (typeof window === 'undefined') return
   const expiresAt = Date.now() + SESSION_DURATION_MS
   localStorage.setItem('kadesh_session_expires', expiresAt.toString())
+  console.log('[Auth] Sessão renovada por 4 horas')
 }
 
 export const useAuthStore = defineStore('auth', () => {
