@@ -5,54 +5,90 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 
 const SESSION_DURATION_MS = 4 * 60 * 60 * 1000 // 4 HORAS
 
+const TOKEN_KEY = 'kadesh_token'
+const USER_KEY = 'kadesh_user'
+const EXPIRES_KEY = 'kadesh_session_expires'
+const REMEMBER_KEY = 'kadesh_remember'
+
+const getStorageWithToken = () => {
+  if (typeof window === 'undefined') return null
+  if (sessionStorage.getItem(TOKEN_KEY)) return sessionStorage
+  if (localStorage.getItem(TOKEN_KEY)) return localStorage
+  return localStorage
+}
+
 const isSessionValid = () => {
   if (typeof window === 'undefined') {
     console.log('[Auth] isSessionValid: window undefined')
     return false
   }
-  
-  const token = localStorage.getItem('kadesh_token')
-  const expiresAt = localStorage.getItem('kadesh_session_expires')
-  
+
+  const storage = getStorageWithToken()
+  const token = storage?.getItem(TOKEN_KEY)
+  const expiresAt = storage?.getItem(EXPIRES_KEY)
+
   console.log('[Auth] isSessionValid check:', {
     hasToken: !!token,
     tokenLength: token?.length || 0,
     expiresAt,
-    expiresDate: expiresAt ? new Date(parseInt(expiresAt)).toLocaleString('pt-BR') : 'N/A'
+    expiresDate: expiresAt ? new Date(parseInt(expiresAt, 10)).toLocaleString('pt-BR') : 'N/A'
   })
-  
+
   if (!token || !expiresAt) {
     console.warn('[Auth] isSessionValid: FALSE - token ou expiresAt ausente')
     return false
   }
-  
+
   const now = Date.now()
   const expires = parseInt(expiresAt, 10)
   const isValid = now < expires
-  
+
   if (!isValid) {
-    console.warn('[Auth] isSessionValid: FALSE - sessão expirada', {
+    console.warn('[Auth] isSessionValid: FALSE - sessao expirada', {
       now: new Date(now).toLocaleString('pt-BR'),
       expires: new Date(expires).toLocaleString('pt-BR')
     })
   } else {
     const hoursLeft = ((expires - now) / (1000 * 60 * 60)).toFixed(2)
-    console.log(`[Auth] isSessionValid: TRUE - válida por ${hoursLeft}h`)
+    console.log(`[Auth] isSessionValid: TRUE - valida por ${hoursLeft}h`)
   }
-  
+
   return isValid
 }
 
 const renewSession = () => {
   if (typeof window === 'undefined') return
+  const storage = getStorageWithToken()
+  if (!storage) return
   const expiresAt = Date.now() + SESSION_DURATION_MS
-  localStorage.setItem('kadesh_session_expires', expiresAt.toString())
-  console.log('[Auth] Sessão renovada por 4 horas')
+  storage.setItem(EXPIRES_KEY, expiresAt.toString())
+  console.log('[Auth] Sessao renovada por 4 horas')
+}
+
+const persistAuth = ({ userData, userToken, remember }) => {
+  if (typeof window === 'undefined') return
+  const targetStorage = remember ? localStorage : sessionStorage
+
+  targetStorage.setItem(TOKEN_KEY, userToken)
+  targetStorage.setItem(USER_KEY, JSON.stringify(userData))
+  targetStorage.setItem(EXPIRES_KEY, (Date.now() + SESSION_DURATION_MS).toString())
+
+  if (remember) {
+    localStorage.setItem(REMEMBER_KEY, 'true')
+    sessionStorage.removeItem(TOKEN_KEY)
+    sessionStorage.removeItem(USER_KEY)
+    sessionStorage.removeItem(EXPIRES_KEY)
+  } else {
+    localStorage.removeItem(REMEMBER_KEY)
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(USER_KEY)
+    localStorage.removeItem(EXPIRES_KEY)
+  }
 }
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const token = ref(localStorage.getItem('kadesh_token'))
+  const token = ref(getStorageWithToken()?.getItem(TOKEN_KEY) || null)
   const isLoading = ref(false)
 
   const isAuthenticated = computed(() => {
@@ -62,7 +98,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isClient = computed(() => user.value?.type === 'client')
   const isProvider = computed(() => user.value?.type === 'provider' || user.value?.type === 'unified')
   const isAdmin = computed(() => user.value?.isAdmin === true || user.value?.type === 'admin')
-  
+
   const userInitials = computed(() => {
     if (!user.value?.name) return ''
     return user.value.name
@@ -86,11 +122,11 @@ export const useAuthStore = defineStore('auth', () => {
         viewModeStore.setContractorMode()
       }
     } catch (e) {
-      console.warn('[Auth] Erro ao sincronizar modo de visualização', e)
+      console.warn('[Auth] Erro ao sincronizar modo de visualizacao', e)
     }
   }
 
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = false) => {
     isLoading.value = true
     try {
       const response = await api.post('/api/auth/login', { email, password })
@@ -98,10 +134,8 @@ export const useAuthStore = defineStore('auth', () => {
 
       user.value = userData
       token.value = userToken
-      
-      localStorage.setItem('kadesh_token', userToken)
-      localStorage.setItem('kadesh_user', JSON.stringify(userData))
-      renewSession()
+
+      persistAuth({ userData, userToken, remember: rememberMe })
 
       if (api.defaults.headers.common) {
         api.defaults.headers.common['Authorization'] = `Bearer ${userToken}`
@@ -111,8 +145,8 @@ export const useAuthStore = defineStore('auth', () => {
       return { success: true, user: userData }
     } catch (error) {
       console.error('[Auth] Erro ao fazer login:', error.response?.data?.error || error.message)
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response?.data?.error || 'Erro ao fazer login'
       }
     } finally {
@@ -128,9 +162,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       user.value = newUser
       token.value = userToken
-      localStorage.setItem('kadesh_token', userToken)
-      localStorage.setItem('kadesh_user', JSON.stringify(newUser))
-      renewSession()
+      persistAuth({ userData: newUser, userToken, remember: true })
 
       if (api.defaults.headers.common) {
         api.defaults.headers.common['Authorization'] = `Bearer ${userToken}`
@@ -140,8 +172,8 @@ export const useAuthStore = defineStore('auth', () => {
       return { success: true, user: newUser }
     } catch (error) {
       console.error('[Auth] Erro ao registrar:', error)
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response?.data?.error || 'Erro ao criar conta'
       }
     } finally {
@@ -152,9 +184,13 @@ export const useAuthStore = defineStore('auth', () => {
   const logout = () => {
     user.value = null
     token.value = null
-    localStorage.removeItem('kadesh_token')
-    localStorage.removeItem('kadesh_user')
-    localStorage.removeItem('kadesh_session_expires')
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(USER_KEY)
+    localStorage.removeItem(EXPIRES_KEY)
+    localStorage.removeItem(REMEMBER_KEY)
+    sessionStorage.removeItem(TOKEN_KEY)
+    sessionStorage.removeItem(USER_KEY)
+    sessionStorage.removeItem(EXPIRES_KEY)
 
     if (api.defaults.headers.common) {
       delete api.defaults.headers.common['Authorization']
@@ -167,9 +203,10 @@ export const useAuthStore = defineStore('auth', () => {
       return false
     }
 
-    // Se temos token mas não temos usuário, restaurar do localStorage
+    // Se temos token mas nao temos usuario, restaurar do storage
     if (token.value && !user.value) {
-      const storedUser = localStorage.getItem('kadesh_user')
+      const storage = getStorageWithToken()
+      const storedUser = storage?.getItem(USER_KEY)
       if (storedUser) {
         try {
           user.value = JSON.parse(storedUser)
@@ -181,7 +218,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
     }
 
-    // Renovar sessão a cada verificação bem-sucedida
+    // Renovar sessao a cada verificacao bem-sucedida
     renewSession()
     return true
   }
@@ -191,11 +228,12 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await api.put('/api/users/profile', profileData)
       user.value = response.data.user
-      localStorage.setItem('kadesh_user', JSON.stringify(response.data.user))
+      const storage = getStorageWithToken()
+      storage?.setItem(USER_KEY, JSON.stringify(response.data.user))
       return { success: true, user: response.data.user }
     } catch (error) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: error.response?.data?.error || 'Erro ao atualizar perfil'
       }
     } finally {
@@ -209,9 +247,10 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
-    const storedUser = localStorage.getItem('kadesh_user')
-    const storedToken = localStorage.getItem('kadesh_token')
-    
+    const storage = getStorageWithToken()
+    const storedUser = storage?.getItem(USER_KEY)
+    const storedToken = storage?.getItem(TOKEN_KEY)
+
     if (storedUser && storedToken) {
       try {
         user.value = JSON.parse(storedUser)

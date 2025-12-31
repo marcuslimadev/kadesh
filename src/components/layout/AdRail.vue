@@ -2,11 +2,11 @@
   <aside
     v-if="!hidden && slots.length > 0"
     :class="[
-      'hidden xl:flex flex-col gap-6 w-72',
+      'grid grid-cols-1 sm:grid-cols-2 gap-4 w-full xl:w-72 xl:flex xl:flex-col xl:gap-6',
       position === 'left' ? 'xl:mr-8' : 'xl:ml-8'
     ]"
   >
-    <div class="flex items-center justify-between text-xs font-medium text-muted">
+    <div class="flex items-center justify-between text-xs font-medium text-muted sm:col-span-2">
       <span class="uppercase tracking-wider">Patrocinado</span>
       <button
         class="text-muted hover:text-heading transition-colors"
@@ -182,4 +182,3 @@ onMounted(() => {
   cursor: pointer;
 }
 </style>
-

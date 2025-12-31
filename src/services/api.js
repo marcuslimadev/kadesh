@@ -9,6 +9,11 @@ const resolveBaseUrl = () => {
   return DEFAULT_API_URL
 }
 
+const getStoredToken = () => {
+  if (typeof window === 'undefined') return ''
+  return sessionStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || ''
+}
+
 const api = axios.create({
   baseURL: resolveBaseUrl(),
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || DEFAULT_API_TIMEOUT,
@@ -21,7 +26,7 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('kadesh_token')
+    const token = getStoredToken()
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }

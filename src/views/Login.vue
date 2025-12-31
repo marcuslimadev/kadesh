@@ -3,8 +3,8 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
         <div class="relative group">
-          <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-          <img src="/logo.jpeg" alt="Kadesh" class="relative h-40 w-40 object-cover rounded-full border-2 border-gold/30 shadow-2xl" />
+          <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+          <img src="/logo.jpeg" alt="Kadesh" class="relative h-40 w-40 object-cover rounded-2xl border-2 border-gold/30 shadow-2xl" />
         </div>
       </router-link>
       <h2 class="mt-8 text-center text-4xl font-extrabold text-heading tracking-tight">
@@ -201,7 +201,7 @@ const handleLogin = async () => {
   isLoading.value = true
 
   try {
-    const result = await authStore.login(form.email, form.password)
+    const result = await authStore.login(form.email, form.password, form.rememberMe)
 
     if (result.success) {
       // Redirecionar para o Lobby de Leilões após login

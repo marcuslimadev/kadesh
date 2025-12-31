@@ -1,8 +1,6 @@
 <template>
   <div class="lobby-shell py-8 px-4 sm:px-6 lg:px-8">
     <div class="lobby-grid max-w-7xl mx-auto">
-      <AdRail position="left" />
-
       <div class="space-y-8">
         <section class="lobby-hero card">
           <div class="flex flex-wrap items-start justify-between gap-6">
@@ -789,7 +787,7 @@ watch(filters, () => {
 
 .lobby-grid {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   gap: 18px;
 }
 
@@ -1074,5 +1072,4 @@ watch(filters, () => {
   }
 }
 </style>
-
 

@@ -62,6 +62,26 @@ textarea {
                 --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
                 --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
                 --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.25);
+
+                /* Navigation */
+                --nav-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, #0b1224 100%);
+                --nav-drawer-bg: #0f172a;
+                --nav-text: #f5f5f5;
+                --nav-muted: #cfcfcf;
+                --nav-border: rgba(212, 175, 55, 0.2);
+                --nav-hover: rgba(15, 23, 42, 0.85);
+                --nav-link-active-bg: rgba(212, 175, 55, 0.12);
+                --nav-link-active-text: #d4af37;
+                --nav-link-idle-text: #f5f5f5;
+                --nav-link-idle-hover-bg: rgba(255, 255, 255, 0.06);
+                --nav-theme-bg: #1a1a1a;
+                --nav-theme-border: rgba(212, 175, 55, 0.3);
+                --nav-theme-text: #f5f5f5;
+                --nav-theme-chip-bg: rgba(212, 175, 55, 0.2);
+                --nav-theme-chip-text: #d4af37;
+                --nav-danger-bg: rgba(239, 68, 68, 0.12);
+                --nav-danger-text: #ef4444;
+                --nav-danger-hover: rgba(239, 68, 68, 0.2);
         }
 
         .theme-light {
@@ -97,6 +117,25 @@ textarea {
                 --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
                 --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
                 --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.2);
+
+                --nav-bg: linear-gradient(180deg, #f8f6f1 0%, #efe9dd 100%);
+                --nav-drawer-bg: #ffffff;
+                --nav-text: #1f2937;
+                --nav-muted: #6b7280;
+                --nav-border: rgba(26, 26, 26, 0.08);
+                --nav-hover: rgba(17, 24, 39, 0.06);
+                --nav-link-active-bg: rgba(212, 175, 55, 0.18);
+                --nav-link-active-text: #a67900;
+                --nav-link-idle-text: #1f2937;
+                --nav-link-idle-hover-bg: rgba(17, 24, 39, 0.06);
+                --nav-theme-bg: #f8f8f6;
+                --nav-theme-border: rgba(212, 175, 55, 0.3);
+                --nav-theme-text: #1f2937;
+                --nav-theme-chip-bg: rgba(212, 175, 55, 0.15);
+                --nav-theme-chip-text: #a67900;
+                --nav-danger-bg: rgba(239, 68, 68, 0.12);
+                --nav-danger-text: #b91c1c;
+                --nav-danger-hover: rgba(239, 68, 68, 0.18);
         }
 
         .theme-dark {
@@ -132,6 +171,25 @@ textarea {
                 --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
                 --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
                 --shadow-gold: 0 4px 20px rgba(212, 175, 55, 0.25);
+
+                --nav-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, #0b1224 100%);
+                --nav-drawer-bg: #0f172a;
+                --nav-text: #f5f5f5;
+                --nav-muted: #cfcfcf;
+                --nav-border: rgba(212, 175, 55, 0.2);
+                --nav-hover: rgba(15, 23, 42, 0.85);
+                --nav-link-active-bg: rgba(212, 175, 55, 0.12);
+                --nav-link-active-text: #d4af37;
+                --nav-link-idle-text: #f5f5f5;
+                --nav-link-idle-hover-bg: rgba(255, 255, 255, 0.06);
+                --nav-theme-bg: #1a1a1a;
+                --nav-theme-border: rgba(212, 175, 55, 0.3);
+                --nav-theme-text: #f5f5f5;
+                --nav-theme-chip-bg: rgba(212, 175, 55, 0.2);
+                --nav-theme-chip-text: #d4af37;
+                --nav-danger-bg: rgba(239, 68, 68, 0.12);
+                --nav-danger-text: #ef4444;
+                --nav-danger-hover: rgba(239, 68, 68, 0.2);
         }
 
         body {

@@ -23,17 +23,17 @@
   <!-- Mobile drawer -->
   <transition name="fade">
     <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-40 bg-black/50" @click.self="mobileMenuOpen = false">
-      <div class="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl p-4 overflow-y-auto">
+      <div class="absolute top-0 right-0 w-72 h-full sidebar-drawer p-4 overflow-y-auto">
         <div class="flex items-center justify-between mb-4">
           <router-link to="/" class="flex items-center gap-2">
             <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
             <div>
-              <p class="text-sm font-semibold text-dark">KADDESH</p>
-              <p class="text-xs text-gray-500">Service Bridge</p>
+              <p class="text-sm font-semibold sidebar-text">KADDESH</p>
+              <p class="text-xs sidebar-muted">Service Bridge</p>
             </div>
           </router-link>
-          <button @click="mobileMenuOpen = false" class="p-2 rounded hover:bg-gray-100">
-            <svg class="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button @click="mobileMenuOpen = false" class="p-2 rounded sidebar-close-btn">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -47,16 +47,16 @@
 
         <div class="mb-4">
           <button
-            class="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-[rgba(212,175,55,0.3)] bg-[#1A1A1A] text-[#F5F5F5]"
+            class="w-full flex items-center justify-between px-3 py-2 rounded-lg sidebar-theme-btn"
             @click="toggleTheme"
           >
             <span class="flex items-center gap-2">
               <svg class="h-5 w-5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
               </svg>
-              <span class="font-semibold">{{ themeLabel }}</span>
+              <span class="font-semibold sidebar-text">{{ themeLabel }}</span>
             </span>
-            <span class="text-xs font-semibold text-[#D4AF37]">{{ themeStore.isDark ? '🌙' : '☀️' }}</span>
+            <span class="text-xs font-semibold sidebar-theme-chip">{{ themeStore.isDark ? '🌙' : '☀️' }}</span>
           </button>
         </div>
 
@@ -80,7 +80,7 @@
           <router-link
             v-if="isAdmin"
             :to="adminLink.to"
-            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold bg-red-50 text-red-700 border border-red-200"
+            class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold sidebar-danger"
             @click="handleNavigate(adminLink.to)"
           >
             <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@
             </svg>
             <span>{{ settingsLink.label }}</span>
           </router-link>
-          <button @click="handleLogout" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
+          <button @click="handleLogout" class="w-full flex items-center gap-2 px-3 py-2 rounded-lg sidebar-danger">
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
             </svg>
@@ -141,7 +141,7 @@
 
     <div class="p-4 border-b border-gold/20">
       <button
-        class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-[#1A1A1A] border border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] transition-all group"
+        class="w-full flex items-center justify-between px-4 py-3 rounded-xl sidebar-theme-btn group"
         @click="toggleTheme"
       >
         <span class="flex items-center gap-3">
@@ -156,9 +156,9 @@
               <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
           </div>
-          <span class="font-semibold text-[#F5F5F5]">{{ themeStore.isDark ? 'Modo Escuro' : 'Modo Claro' }}</span>
+          <span class="font-semibold sidebar-text">{{ themeStore.isDark ? 'Modo Escuro' : 'Modo Claro' }}</span>
         </span>
-        <span class="text-xs font-medium px-2 py-1 rounded-full bg-[rgba(212,175,55,0.2)] text-[#D4AF37]">
+        <span class="text-xs font-medium px-2 py-1 rounded-full sidebar-theme-chip">
           {{ themeStore.isDark ? '🌙' : '☀️' }}
         </span>
       </button>
@@ -221,7 +221,7 @@
           </svg>
           <span>{{ settingsLink.label }}</span>
         </router-link>
-        <button @click="handleLogout" class="mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 transition">
+        <button @click="handleLogout" class="mt-2 w-full flex items-center gap-2 px-3 py-2 rounded-lg sidebar-danger">
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17l5-5-5-5M20 12H9m4 9H5a2 2 0 01-2-2V5a2 2 0 012-2h8" />
           </svg>
@@ -356,17 +356,13 @@ const isRouteActive = (to) => {
 }
 
 const desktopLinkClasses = (to) => [
-  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition border border-transparent',
-  isRouteActive(to)
-    ? 'bg-dark-80 text-gold border-gold/40 shadow'
-    : 'text-offwhite hover:bg-dark-80'
+  'sidebar-link',
+  isRouteActive(to) ? 'sidebar-link-active' : 'sidebar-link-idle'
 ]
 
 const mobileLinkClasses = (to) => [
-  'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-semibold transition',
-  isRouteActive(to)
-    ? 'bg-gold/10 text-dark border border-gold/40'
-    : 'text-dark hover:bg-gray-100'
+  'sidebar-link',
+  isRouteActive(to) ? 'sidebar-link-active' : 'sidebar-link-idle'
 ]
 
 const handleNavigate = (to) => {
@@ -386,12 +382,12 @@ const toggleTheme = () => {
 </script>
 
 <style scoped>
-.bg-dark { background: #0f172a; }
-.bg-dark-80 { background: rgba(15, 23, 42, 0.85); }
-.bg-dark-90 { background: rgba(15, 23, 42, 0.92); }
-.bg-nav { background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, #0b1224 100%); }
-.text-offwhite { color: #f5f5f5; }
-.text-offwhite-muted { color: #cfcfcf; }
+.bg-dark { background: var(--nav-drawer-bg); }
+.bg-dark-80 { background: var(--nav-hover); }
+.bg-dark-90 { background: var(--nav-hover); }
+.bg-nav { background: var(--nav-bg); }
+.text-offwhite { color: var(--nav-text); }
+.text-offwhite-muted { color: var(--nav-muted); }
 .text-gold { color: #d4af37; }
 .border-gold\/20 { border-color: rgba(212,175,55,0.2); }
 .border-gold\/40 { border-color: rgba(212,175,55,0.4); }
@@ -406,11 +402,78 @@ const toggleTheme = () => {
   width: 100%;
 }
 .sidebar-switch :deep(button) {
-  background: #1b1b1b !important;
-  color: #f5f5f5 !important;
-  border: 1px solid rgba(212,175,55,0.25) !important;
+  background: var(--nav-theme-bg) !important;
+  color: var(--nav-theme-text) !important;
+  border: 1px solid var(--nav-theme-border) !important;
   width: 100%;
   justify-content: center;
+}
+
+.sidebar-drawer {
+  background: var(--nav-drawer-bg);
+  color: var(--nav-text);
+  border-left: 1px solid var(--nav-border);
+  box-shadow: var(--shadow-lg);
+}
+
+.sidebar-text { color: var(--nav-text); }
+.sidebar-muted { color: var(--nav-muted); }
+
+.sidebar-close-btn {
+  color: var(--nav-muted);
+}
+.sidebar-close-btn:hover {
+  background: var(--nav-hover);
+  color: var(--nav-text);
+}
+
+.sidebar-theme-btn {
+  background: var(--nav-theme-bg);
+  border: 1px solid var(--nav-theme-border);
+  color: var(--nav-theme-text);
+}
+.sidebar-theme-btn:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-gold);
+}
+
+.sidebar-theme-chip {
+  background: var(--nav-theme-chip-bg);
+  color: var(--nav-theme-chip-text);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.sidebar-link-idle {
+  color: var(--nav-link-idle-text);
+}
+.sidebar-link-idle:hover {
+  background: var(--nav-link-idle-hover-bg);
+}
+.sidebar-link-active {
+  background: var(--nav-link-active-bg);
+  color: var(--nav-link-active-text);
+  border-color: var(--nav-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-danger {
+  background: var(--nav-danger-bg);
+  color: var(--nav-danger-text);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  transition: all 0.2s ease;
+}
+.sidebar-danger:hover {
+  background: var(--nav-danger-hover);
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -420,4 +483,3 @@ const toggleTheme = () => {
   opacity: 0;
 }
 </style>
-
