@@ -2,11 +2,20 @@
   <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <router-link to="/" class="flex justify-center">
-        <img src="/logo.jpeg" alt="Kadesh" class="h-32 w-32 object-contain" />
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+          <img src="/logo.jpeg" alt="Kadesh" class="relative h-40 w-40 object-cover rounded-full border-2 border-gold/30 shadow-2xl" />
+        </div>
       </router-link>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-heading">
-        Entre na sua conta
+      <h2 class="mt-8 text-center text-4xl font-extrabold text-heading tracking-tight">
+        KADDESH
       </h2>
+      <p class="mt-2 text-center text-gold font-medium tracking-widest uppercase text-xs">
+        Service Bridge
+      </p>
+      <h3 class="mt-6 text-center text-xl font-semibold text-body">
+        Entre na sua conta
+      </h3>
       <p class="mt-2 text-center text-sm text-body">
         Ou
         <router-link to="/register" class="font-medium text-primary-600 hover:text-primary-500">
@@ -16,7 +25,7 @@
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="bg-surface py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="bg-surface py-8 px-4 shadow-2xl sm:rounded-2xl sm:px-10 border border-gold/10 backdrop-blur-sm">
         <form @submit.prevent="handleLogin" class="space-y-6">
           <!-- Email -->
           <div>
@@ -115,7 +124,7 @@
             <button
               type="submit"
               :disabled="isLoading"
-              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-base font-bold text-dark bg-gold hover:bg-gold-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

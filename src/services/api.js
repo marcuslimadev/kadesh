@@ -1,30 +1,17 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth'
-// import { useToast } from 'vue-toastification'
-
-// Toast instance (guarded for SSR/build time)
-// const toast = typeof window !== 'undefined' ? useToast() : null
 
 const DEFAULT_API_URL = ''
-const DEFAULT_API_TIMEOUT = 60000 // 60s to handle Render cold starts
-
-const isDefined = (value) => value !== undefined && value !== null
+const DEFAULT_API_TIMEOUT = 60000
 
 const resolveBaseUrl = () => {
-  // Aceita string vazia: VITE_API_URL= (mesma origem)
-  if (isDefined(import.meta.env.VITE_API_URL)) return import.meta.env.VITE_API_URL
-  if (isDefined(import.meta.env.VITE_BACKEND_URL)) return import.meta.env.VITE_BACKEND_URL
-
-  // Dev/prod: fallback para mesma origem (as rotas já usam /api/...)
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
+  if (import.meta.env.VITE_BACKEND_URL) return import.meta.env.VITE_BACKEND_URL
   return DEFAULT_API_URL
 }
 
-const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT) || DEFAULT_API_TIMEOUT
-
-// Create axios instance
 const api = axios.create({
   baseURL: resolveBaseUrl(),
-  timeout: API_TIMEOUT,
+  timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || DEFAULT_API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -34,200 +21,37 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // SEMPRE ler token fresco do storage (nunca confiar em cache/defaults)
-    // Isso garante que Ctrl+Shift+R funcione
-    let token = null
-    if (typeof window !== 'undefined') {
-      token = localStorage.getItem('kadesh_token') || sessionStorage.getItem('kadesh_token')
-      console.log('[API] Token do localStorage:', token ? `${token.substring(0, 20)}...` : 'NENHUM')
-    }
-
-    // Fallback: tentar do Pinia se storage estiver vazio
-    if (!token) {
-      try {
-        const authStore = useAuthStore()
-        token = authStore.token
-
-        // Pinia setup-store pode expor refs (token.value)
-        if (token && typeof token === 'object' && 'value' in token) {
-          token = token.value
-        }
-        console.log('[API] Token do Pinia Store:', token ? `${token.substring(0, 20)}...` : 'NENHUM')
-      } catch {
-        token = null
-      }
-    }
-
+    const token = localStorage.getItem('kadesh_token')
     if (token) {
-      // Forçar header em toda request (sobrescrever qualquer default)
-      if (config.headers && typeof config.headers.set === 'function') {
-        config.headers.set('Authorization', `Bearer ${token}`)
-      } else {
-        config.headers = config.headers || {}
-        config.headers.Authorization = `Bearer ${token}`
-      }
-      console.log('[API] ✅ Authorization header anexado:', `Bearer ${token.substring(0, 20)}...`)
-    } else {
-      console.warn('[API] ⚠️ NENHUM TOKEN ENCONTRADO - requisição sem autenticação!')
+      config.headers['Authorization'] = `Bearer ${token}`
     }
-
-    // Diagnóstico focado: quando der 401 em /my-projects, precisamos saber se o header está sendo anexado.
-    if (config.url?.includes('/api/projects/my-projects')) {
-      const headers = config.headers
-      const authHeader =
-        (headers && typeof headers.get === 'function'
-          ? (headers.get('Authorization') || headers.get('authorization'))
-          : (headers?.Authorization || headers?.authorization)) || null
-
-      console.log('[API] /projects/my-projects Authorization anexado?', Boolean(authHeader), authHeader)
-    }
-
-    // Add request timestamp for debugging
-    if (import.meta.env.VITE_DEBUG_MODE === 'true') {
-      console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`, config.data)
-    }
-
     return config
   },
   (error) => {
-    console.error('[API] Request error:', error)
     return Promise.reject(error)
   }
 )
 
 // Response interceptor
 api.interceptors.response.use(
-  (response) => {
-    // Log successful responses in debug mode
-    if (import.meta.env.VITE_DEBUG_MODE === 'true') {
-      console.log(`[API] Response:`, response.data)
-    }
-
-    return response
-  },
+  (response) => response,
   (error) => {
-    console.error('[API] Response error:', error)
-    
-    // Check if request is marked as silent (no toast on error)
-    const isSilent = error.config?.silent === true || error.config?._silent === true
-
-    // Handle common error cases
-    if (error.response) {
-      const { status, data } = error.response
-
-      switch (status) {
-        case 401:
-          // Unauthorized
-          // NÃO desloga automaticamente aqui: 401 pode acontecer por header não chegar,
-          // rota protegida usada em modo errado, ou instabilidade. O logout deve ser
-          // decidido pelo fluxo de verifyToken() (fonte de verdade).
-          if (import.meta.env.VITE_DEBUG_MODE === 'true') {
-            const headers = error.config?.headers
-            const sentAuthHeader =
-              (headers && typeof headers.get === 'function'
-                ? (headers.get('Authorization') || headers.get('authorization'))
-                : (headers?.Authorization || headers?.authorization)) || null
-            console.warn('[API] 401 recebido.', {
-              url: error.config?.url,
-              sentAuthorization: Boolean(sentAuthHeader),
-              responseError: data?.error
-            })
-          }
-          if (!isSilent) {
-            // toast?.error('Sessão expirada. Faça login novamente.')
-          }
-          break
-
-        case 403:
-          if (!isSilent) {
-            // toast?.error('Você não tem permissão para esta ação.')
-          }
-          break
-
-        case 404:
-          if (!isSilent) {
-            // toast?.error('Recurso não encontrado.')
-          }
-          break
-
-        case 422:
-          // Validation errors
-          if (!isSilent) {
-            if (data.errors && Array.isArray(data.errors)) {
-              // data.errors.forEach(err => toast?.error(err))
-            } else if (data.error) {
-              // toast?.error(data.error)
-            }
-          }
-          break
-
-        case 429:
-          if (!isSilent) {
-            // toast?.error('Muitas requisições. Tente novamente em alguns minutos.')
-          }
-          break
-
-        case 500:
-          if (!isSilent) {
-            // toast?.error('Erro interno do servidor. Tente novamente mais tarde.')
-          }
-          break
-
-        default:
-          if (!isSilent) {
-            // toast?.error(data?.error || 'Ocorreu um erro inesperado.')
-          }
-      }
-    } else if (error.code === 'ECONNABORTED') {
-      if (!isSilent) {
-        // toast?.error(`Timeout: o servidor demorou mais de ${API_TIMEOUT / 1000}s para responder (pode estar acordando). Tente novamente.`)
-      }
-    } else if (error.message === 'Network Error') {
-      // Network errors são sempre silenciosos para não assustar o usuário na home
-      console.warn('Network error - servidor pode estar indisponível')
-    } else {
-      if (!isSilent) {
-        // toast?.error('Ocorreu um erro inesperado.')
-      }
+    if (error.response && error.response.status === 401) {
+      // Se receber 401 e não for rota de login, pode significar token expirado no backend
+      // Mas como queremos manter a sessão por 4h no front, só deslogamos se o front decidir
+      console.warn('[API] 401 Unauthorized recebido')
     }
-
     return Promise.reject(error)
   }
 )
 
-// Wake up function - pings the server to wake it from cold start
-// Use before critical operations or on app load
-let isWakingUp = false
-let wakeUpPromise = null
-
 export const wakeUpServer = async () => {
-  // Avoid multiple simultaneous wake up calls
-  if (isWakingUp) {
-    return wakeUpPromise
+  try {
+    await api.get('/api/health', { timeout: 70000 })
+    return true
+  } catch (error) {
+    return false
   }
-  
-  isWakingUp = true
-  wakeUpPromise = (async () => {
-    try {
-      // Simple health check endpoint
-      await api.get('/api/health', { 
-        timeout: 70000, // Extra time for cold start
-        _silent: true 
-      })
-      console.log('[API] Server is awake')
-      return true
-    } catch (error) {
-      console.warn('[API] Wake up failed:', error.message)
-      return false
-    } finally {
-      isWakingUp = false
-      wakeUpPromise = null
-    }
-  })()
-  
-  return wakeUpPromise
 }
 
 export default api
-
-

@@ -1,6 +1,6 @@
 <template>
   <!-- Mobile top bar -->
-  <header class="md:hidden sticky top-0 z-40 bg-nav text-offwhite flex items-center justify-between px-4 py-3 shadow-lg">
+  <header class="sticky top-0 z-40 bg-nav text-offwhite flex md:hidden items-center justify-between px-4 py-3 shadow-lg">
     <router-link to="/" class="flex items-center gap-3">
       <img src="/logo.jpeg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
       <div>
@@ -121,7 +121,7 @@
 
   <!-- Desktop sidebar - SEMPRE VISÍVEL -->
   <aside
-    class="hidden md:flex fixed inset-y-0 left-0 w-64 bg-nav text-offwhite z-30 flex-col border-r border-gold/20 shadow-2xl"
+    class="fixed inset-y-0 left-0 w-64 bg-nav text-offwhite z-30 hidden md:flex flex-col border-r border-gold/20 shadow-2xl"
   >
     <div class="p-6 border-b border-gold/20 flex items-center justify-between gap-3">
       <router-link to="/" class="flex items-center gap-3">

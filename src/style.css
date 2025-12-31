@@ -278,9 +278,9 @@ textarea {
         input:not(.search-input):not(.input-dark), 
         select, 
         textarea:not(.input-dark) {
-                background-color: #ffffff;
-                color: #1A1A1A;
-                border-color: #d1d5db;
+                background-color: var(--surface);
+                color: var(--text-primary);
+                border-color: var(--card-border);
         }
         
         input:not(.search-input):not(.input-dark)::placeholder, 

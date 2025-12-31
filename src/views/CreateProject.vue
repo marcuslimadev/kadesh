@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-8" style="background: var(--page-bg);">
+  <div class="min-h-screen py-8 bg-page">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-8 text-center">
