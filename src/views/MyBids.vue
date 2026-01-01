@@ -17,8 +17,8 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.total }}</p>
-              <p class="text-sm text-[#C7C7C7]">Total</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.total }}</p>
+              <p class="text-sm text-body">Total</p>
             </div>
           </div>
         </div>
@@ -31,8 +31,8 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.pending }}</p>
-              <p class="text-sm text-[#C7C7C7]">Pendentes</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.pending }}</p>
+              <p class="text-sm text-body">Pendentes</p>
             </div>
           </div>
         </div>
@@ -45,8 +45,8 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.accepted }}</p>
-              <p class="text-sm text-[#C7C7C7]">Aceitas</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.accepted }}</p>
+              <p class="text-sm text-body">Aceitas</p>
             </div>
           </div>
         </div>
@@ -59,8 +59,8 @@
               </svg>
             </div>
             <div>
-              <p class="text-2xl font-bold text-[#F5F5F5]">{{ stats.rejected }}</p>
-              <p class="text-sm text-[#C7C7C7]">Rejeitadas</p>
+              <p class="text-2xl font-bold text-heading">{{ stats.rejected }}</p>
+              <p class="text-sm text-body">Rejeitadas</p>
             </div>
           </div>
         </div>
@@ -70,10 +70,10 @@
       <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="pending">Pendente</option>
@@ -84,10 +84,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Categoria</label>
+            <label class="block text-sm font-medium text-body mb-2">Categoria</label>
             <select
               v-model="filters.category"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option v-for="cat in categories" :key="cat.value" :value="cat.value">
@@ -97,10 +97,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="created_at_desc">Mais Recentes</option>
               <option value="created_at_asc">Mais Antigas</option>
@@ -411,5 +411,7 @@ onMounted(() => {
   loadBids()
 })
 </script>
+
+
 
 

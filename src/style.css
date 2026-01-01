@@ -138,6 +138,16 @@ textarea {
                 --nav-danger-hover: rgba(239, 68, 68, 0.18);
         }
 
+        .theme-light .bg-white .text-white,
+        .theme-light .bg-page .text-white,
+        .theme-light .bg-surface .text-white,
+        .theme-light .bg-surface-alt .text-white,
+        .theme-light .bg-surface-elevated .text-white,
+        .theme-light .card-premium .text-white,
+        .theme-light .card .text-white {
+                color: var(--text-primary) !important;
+        }
+
         .theme-dark {
                 --page-bg: #0F1117;
                 --surface: #161821;

@@ -11,41 +11,41 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-gradient-to-br from-[#161821] to-[#0F1117] rounded-lg shadow-lg p-6 border border-[#D4AF37]">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-[#C7C7C7]">Saldo Disponível</h3>
+            <h3 class="text-lg font-medium text-body">Saldo Disponível</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <p class="text-4xl font-bold text-[#D4AF37]">{{ formatCurrency(balance.available) }}</p>
-          <p class="mt-2 text-sm text-[#8A8A8A]">Pronto para saque</p>
+          <p class="mt-2 text-sm text-muted">Pronto para saque</p>
         </div>
 
         <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-[#C7C7C7]">Em Escrow</h3>
+            <h3 class="text-lg font-medium text-body">Em Escrow</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <p class="text-3xl font-bold text-[#F5F5F5]">{{ formatCurrency(balance.escrow) }}</p>
-          <p class="mt-2 text-sm text-[#8A8A8A]">Bloqueado em projetos</p>
+          <p class="text-3xl font-bold text-heading">{{ formatCurrency(balance.escrow) }}</p>
+          <p class="mt-2 text-sm text-muted">Bloqueado em projetos</p>
         </div>
 
         <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-[#C7C7C7]">Pendente</h3>
+            <h3 class="text-lg font-medium text-body">Pendente</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p class="text-3xl font-bold text-[#F5F5F5]">{{ formatCurrency(balance.pending) }}</p>
-          <p class="mt-2 text-sm text-[#8A8A8A]">Aguardando confirmação</p>
+          <p class="text-3xl font-bold text-heading">{{ formatCurrency(balance.pending) }}</p>
+          <p class="mt-2 text-sm text-muted">Aguardando confirmação</p>
         </div>
       </div>
 
       <!-- Actions -->
       <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-8 border border-[rgba(212,175,55,0.24)]">
-        <h2 class="text-lg font-semibold text-[#F5F5F5] mb-4">Ações Rápidas</h2>
+        <h2 class="text-lg font-semibold text-heading mb-4">Ações Rápidas</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
             @click="showDepositModal = true"
@@ -74,7 +74,7 @@
           <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <div>
               <p class="text-sm font-semibold text-[#D4AF37] uppercase tracking-wide">Pagamentos aguardando confirmação</p>
-              <p class="text-sm text-[#C7C7C7]">Assim que o Mercado Pago aprovar, o valor aparecerá automaticamente no saldo.</p>
+              <p class="text-sm text-body">Assim que o Mercado Pago aprovar, o valor aparecerá automaticamente no saldo.</p>
             </div>
             <button
               type="button"
@@ -91,10 +91,10 @@
               class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
-                <p class="text-base font-semibold text-[#F5F5F5]">
+                <p class="text-base font-semibold text-heading">
                   {{ formatCurrency(intent.amount) }} • {{ formatDate(intent.created_at) }}
                 </p>
-                <p class="text-sm text-[#C7C7C7]">
+                <p class="text-sm text-body">
                   Preferência #{{ intent.preference_id?.slice(-6) || intent.id.slice(0, 6) }} · Método: Mercado Pago
                 </p>
               </div>
@@ -121,13 +121,13 @@
 
       <!-- Filters -->
       <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
-        <h2 class="text-lg font-semibold text-[#F5F5F5] mb-4">Histórico de Transações</h2>
+        <h2 class="text-lg font-semibold text-heading mb-4">Histórico de Transações</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Tipo</label>
+            <label class="block text-sm font-medium text-body mb-2">Tipo</label>
             <select
               v-model="filters.type"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="deposit">Depósito</option>
@@ -143,10 +143,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="completed">Concluído</option>
@@ -156,10 +156,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="date_desc">Mais Recentes</option>
               <option value="date_asc">Mais Antigas</option>
@@ -182,15 +182,15 @@
       <!-- Transactions List -->
       <div v-if="isLoading" class="text-center py-12">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
-        <p class="mt-4 text-[#C7C7C7]">Carregando transações...</p>
+        <p class="mt-4 text-body">Carregando transações...</p>
       </div>
 
       <div v-else-if="error" class="bg-[#161821] rounded-lg shadow-lg p-8 text-center border border-[rgba(212,175,55,0.24)]">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Erro ao carregar transações</h3>
-        <p class="mt-2 text-sm text-[#C7C7C7]">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar transações</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadTransactions"
           class="mt-6 px-4 py-2 bg-[#D4AF37] text-[#0F1117] font-semibold rounded-md hover:bg-[#E5C04A]"
@@ -203,8 +203,8 @@
         <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Nenhuma transação encontrada</h3>
-        <p class="mt-2 text-sm text-[#C7C7C7]">
+        <h3 class="mt-4 text-lg font-medium text-heading">Nenhuma transação encontrada</h3>
+        <p class="mt-2 text-sm text-body">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você ainda não possui transações.' }}
         </p>
       </div>
@@ -233,7 +233,7 @@
             </thead>
             <tbody class="bg-[#161821] divide-y divide-[rgba(255,255,255,0.08)]">
               <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-[#1A1A1A]">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-[#F5F5F5]">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-heading">
                   {{ formatDate(transaction.created_at) }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
@@ -241,7 +241,7 @@
                     {{ getTypeLabel(transaction.type) }}
                   </span>
                 </td>
-                <td class="px-6 py-4 text-sm text-[#F5F5F5]">
+                <td class="px-6 py-4 text-sm text-heading">
                   {{ transaction.description }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" :class="getAmountColor(transaction)">
@@ -275,10 +275,10 @@
           <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-sm font-medium text-[#D4AF37] uppercase tracking-wide">Adicionar fundos</p>
-              <h3 class="text-2xl font-semibold text-[#F5F5F5]">Checkout seguro Mercado Pago</h3>
-              <p class="text-sm text-[#8A8A8A] mt-1">PIX, boleto ou cartão em um único fluxo. O saldo é liberado automaticamente após a aprovação.</p>
+              <h3 class="text-2xl font-semibold text-heading">Checkout seguro Mercado Pago</h3>
+              <p class="text-sm text-muted mt-1">PIX, boleto ou cartão em um único fluxo. O saldo é liberado automaticamente após a aprovação.</p>
             </div>
-            <button @click="closeDepositModal" class="text-[#8A8A8A] hover:text-[#F5F5F5]">
+            <button @click="closeDepositModal" class="text-muted hover:text-heading">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -287,44 +287,44 @@
 
           <form @submit.prevent="handleDeposit" class="space-y-5">
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7]">Valor</label>
+              <label class="block text-sm font-medium text-body">Valor</label>
               <div class="relative mt-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-[#8A8A8A]">R$</span>
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-muted">R$</span>
                 <input
                   v-model.number="depositForm.amount"
                   type="number"
                   min="10"
                   step="0.01"
-                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                   placeholder="0,00"
                 />
               </div>
-              <p class="mt-1 text-xs text-[#8A8A8A]">Valor mínimo de R$ 10,00</p>
+              <p class="mt-1 text-xs text-muted">Valor mínimo de R$ 10,00</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7] mb-1">Método de pagamento</label>
+              <label class="block text-sm font-medium text-body mb-1">Método de pagamento</label>
               <select
                 v-model="depositForm.method"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] disabled:opacity-50"
+                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] disabled:opacity-50"
                 disabled
               >
                 <option v-for="method in depositMethods" :key="method.value" :value="method.value">
                   {{ method.label }}
                 </option>
               </select>
-              <p class="mt-1 text-xs text-[#8A8A8A]">Integração oficial com autenticação de webhook.</p>
+              <p class="mt-1 text-xs text-muted">Integração oficial com autenticação de webhook.</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7] mb-1">Descrição (opcional)</label>
+              <label class="block text-sm font-medium text-body mb-1">Descrição (opcional)</label>
               <input
                 v-model="depositForm.description"
                 type="text"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                 placeholder="Ex.: Depósito para projeto Landing Page"
               />
-              <p class="mt-1 text-xs text-[#8A8A8A]">Esse texto aparece no comprovante interno da Kaddesh.</p>
+              <p class="mt-1 text-xs text-muted">Esse texto aparece no comprovante interno da Kaddesh.</p>
             </div>
 
             <p v-if="depositError" class="text-sm text-red-400">{{ depositError }}</p>
@@ -332,7 +332,7 @@
             <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
               <button
                 type="button"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-[#C7C7C7] hover:bg-[#1A1A1A]"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-body hover:bg-[#1A1A1A]"
                 @click="closeDepositModal"
               >
                 Cancelar
@@ -365,9 +365,9 @@
           <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-sm font-medium text-[#D4AF37] uppercase tracking-wide">Solicitar saque</p>
-              <h3 class="text-2xl font-semibold text-[#F5F5F5]">Transferir fundos</h3>
+              <h3 class="text-2xl font-semibold text-heading">Transferir fundos</h3>
             </div>
-            <button @click="closeWithdrawModal" class="text-[#8A8A8A] hover:text-[#F5F5F5]">
+            <button @click="closeWithdrawModal" class="text-muted hover:text-heading">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -376,28 +376,28 @@
 
           <form @submit.prevent="handleWithdraw" class="space-y-5">
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7]">Valor</label>
+              <label class="block text-sm font-medium text-body">Valor</label>
               <div class="relative mt-1">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-[#8A8A8A]">R$</span>
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-muted">R$</span>
                 <input
                   v-model.number="withdrawForm.amount"
                   type="number"
                   min="50"
                   step="0.01"
-                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                   placeholder="0,00"
                 />
               </div>
-              <p class="mt-1 text-xs text-[#8A8A8A]">
+              <p class="mt-1 text-xs text-muted">
                 Disponível para saque: <span class="font-semibold text-[#D4AF37]">{{ formatCurrency(balance.available) }}</span>
               </p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7] mb-1">Método</label>
+              <label class="block text-sm font-medium text-body mb-1">Método</label>
               <select
                 v-model="withdrawForm.method"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
               >
                 <option v-for="method in withdrawMethods" :key="method.value" :value="method.value">
                   {{ method.label }}
@@ -406,11 +406,11 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-[#C7C7C7] mb-1">Instruções ou chave PIX</label>
+              <label class="block text-sm font-medium text-body mb-1">Instruções ou chave PIX</label>
               <textarea
                 v-model="withdrawForm.notes"
                 rows="3"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-[#F5F5F5] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                 placeholder="Informe a chave PIX ou dados bancários para transferência"
               ></textarea>
             </div>
@@ -420,7 +420,7 @@
             <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
               <button
                 type="button"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-[#C7C7C7] hover:bg-[#1A1A1A]"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-body hover:bg-[#1A1A1A]"
                 @click="closeWithdrawModal"
               >
                 Cancelar
@@ -523,7 +523,7 @@ const transactionTypeColors = {
   payment_received: 'bg-[rgba(34,197,94,0.15)] text-[#22c55e] border border-[#22c55e]',
   payment_sent: 'bg-[rgba(212,175,55,0.15)] text-[#D4AF37] border border-[#D4AF37]',
   refund: 'bg-[rgba(34,197,94,0.15)] text-[#22c55e] border border-[#22c55e]',
-  fee: 'bg-[rgba(138,138,138,0.15)] text-[#8A8A8A] border border-[#8A8A8A]'
+  fee: 'bg-[rgba(138,138,138,0.15)] text-muted border border-[#8A8A8A]'
 }
 
 const hasActiveFilters = computed(() => {
@@ -613,7 +613,7 @@ const getTypeColor = (type) => {
 
 const getAmountColor = (transaction) => {
   const amount = Number(transaction?.amount || 0)
-  if (amount === 0) return 'text-[#C7C7C7]'
+  if (amount === 0) return 'text-body'
   return amount > 0 ? 'text-[#22c55e]' : 'text-[#ef4444]'
 }
 
@@ -845,5 +845,7 @@ onMounted(() => {
   loadTransactions()
 })
 </script>
+
+
 
 

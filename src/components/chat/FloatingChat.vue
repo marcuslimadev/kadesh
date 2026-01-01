@@ -45,13 +45,13 @@
               <span class="absolute bottom-0 right-0 h-3 w-3 bg-green-500 border-2 border-[#161821] rounded-full"></span>
             </div>
             <div>
-              <h3 class="text-sm font-bold text-[#F5F5F5]">
+              <h3 class="text-sm font-bold text-heading">
                 {{ chatTitle }}
               </h3>
-              <p class="text-xs text-[#8A8A8A]">Online agora</p>
+              <p class="text-xs text-muted">Online agora</p>
             </div>
           </div>
-          <button @click="toggleChat" class="text-[#C7C7C7] hover:text-[#F5F5F5] transition-colors">
+          <button @click="toggleChat" class="text-body hover:text-heading transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -67,15 +67,15 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </div>
-            <p class="text-sm text-[#C7C7C7] mb-2">{{ welcomeMessage }}</p>
-            <p class="text-xs text-[#8A8A8A]">Respondemos em alguns minutos</p>
+            <p class="text-sm text-body mb-2">{{ welcomeMessage }}</p>
+            <p class="text-xs text-muted">Respondemos em alguns minutos</p>
           </div>
 
           <!-- Messages List -->
           <div v-for="(message, index) in messages" :key="index" class="mb-4">
             <div :class="['message', message.isUser ? 'message-user' : 'message-admin']">
-              <p class="text-sm text-[#F5F5F5]">{{ message.text }}</p>
-              <span class="text-xs text-[#8A8A8A] mt-1">{{ message.time }}</span>
+              <p class="text-sm text-heading">{{ message.text }}</p>
+              <span class="text-xs text-muted mt-1">{{ message.time }}</span>
             </div>
           </div>
 
@@ -109,7 +109,7 @@
               </svg>
             </button>
           </div>
-          <p class="text-xs text-[#8A8A8A] mt-2 text-center">
+          <p class="text-xs text-muted mt-2 text-center">
             Atendimento de seg a sex, das 9h às 18h
           </p>
         </div>
@@ -213,7 +213,7 @@ watch(messages, () => {
 }
 
 .chat-tooltip {
-  @apply absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[#161821] text-[#F5F5F5] text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none;
+  @apply absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[#161821] text-heading text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none;
 }
 
 /* Chat Window */
@@ -284,7 +284,7 @@ watch(messages, () => {
 }
 
 .chat-input {
-  @apply flex-1 bg-[#0F1117] border border-[#333] text-[#F5F5F5] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent placeholder-[#8A8A8A];
+  @apply flex-1 bg-[#0F1117] border border-[#333] text-heading px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent placeholder-[#8A8A8A];
 }
 
 .chat-send-btn {
@@ -314,3 +314,5 @@ watch(messages, () => {
   transform: translateY(20px);
 }
 </style>
+
+

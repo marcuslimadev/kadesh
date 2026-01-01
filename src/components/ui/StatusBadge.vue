@@ -30,7 +30,7 @@ const statusConfig = {
   },
   completed: {
     text: 'Concluído',
-    classes: 'bg-[rgba(138,138,138,0.15)] text-[#C7C7C7] border border-[#8A8A8A]'
+    classes: 'bg-[rgba(138,138,138,0.15)] text-body border border-[#8A8A8A]'
   },
   cancelled: {
     text: 'Cancelado',
@@ -50,7 +50,7 @@ const statusConfig = {
   },
   withdrawn: {
     text: 'Retirada',
-    classes: 'bg-[rgba(138,138,138,0.15)] text-[#8A8A8A] border border-[#8A8A8A]'
+    classes: 'bg-[rgba(138,138,138,0.15)] text-muted border border-[#8A8A8A]'
   }
 }
 
@@ -62,4 +62,5 @@ const statusClasses = computed(() => {
   return statusConfig[props.status]?.classes || 'bg-gray-100 text-gray-800'
 })
 </script>
+
 

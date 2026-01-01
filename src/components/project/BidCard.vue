@@ -8,8 +8,8 @@
           {{ getInitials(bid.provider_name) }}
         </div>
         <div>
-          <p class="font-medium text-[#F5F5F5]">{{ bid.provider_name }}</p>
-          <div class="flex items-center text-xs text-[#C7C7C7]">
+          <p class="font-medium text-heading">{{ bid.provider_name }}</p>
+          <div class="flex items-center text-xs text-body">
             <svg class="w-3 h-3 mr-1 text-[#D4AF37] fill-current" viewBox="0 0 20 20">
               <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
             </svg>
@@ -23,17 +23,17 @@
       <!-- Bid Amount -->
       <div class="text-right">
         <p class="text-2xl font-bold text-[#D4AF37]">{{ formatCurrency(bid.amount) }}</p>
-        <p class="text-xs text-[#8A8A8A]">{{ formatDeliveryTime(bid.delivery_time ?? bid.delivery_time_days) }}</p>
+        <p class="text-xs text-muted">{{ formatDeliveryTime(bid.delivery_time ?? bid.delivery_time_days) }}</p>
       </div>
     </div>
 
     <!-- Description -->
     <div class="mb-3">
-      <p class="text-sm text-[#C7C7C7]">{{ bid.proposal || bid.description }}</p>
+      <p class="text-sm text-body">{{ bid.proposal || bid.description }}</p>
     </div>
 
     <!-- Bid Stats -->
-    <div class="flex items-center justify-between text-xs text-[#8A8A8A] mb-3">
+    <div class="flex items-center justify-between text-xs text-muted mb-3">
       <div class="flex items-center space-x-4">
         <span class="flex items-center">
           <svg class="w-3 h-3 mr-1 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@
       </button>
       <button
         @click="$emit('reject', bid.id)"
-        class="px-4 py-2 border border-[rgba(212,175,55,0.24)] text-[#C7C7C7] rounded-md hover:bg-[#1A1A1A] transition-colors text-sm font-medium"
+        class="px-4 py-2 border border-[rgba(212,175,55,0.24)] text-body rounded-md hover:bg-[#1A1A1A] transition-colors text-sm font-medium"
       >
         Rejeitar
       </button>
@@ -138,4 +138,6 @@ const formatDate = (date) => {
   }
 }
 </script>
+
+
 

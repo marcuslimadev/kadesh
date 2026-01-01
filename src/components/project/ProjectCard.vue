@@ -6,7 +6,7 @@
         <div class="flex-1">
           <router-link
             :to="`/projects/${project.id}`"
-            class="text-lg font-semibold text-[#F5F5F5] hover:text-[#D4AF37] transition-colors"
+            class="text-lg font-semibold text-heading hover:text-[#D4AF37] transition-colors"
           >
             {{ project.title }}
           </router-link>
@@ -25,7 +25,7 @@
       </div>
 
       <!-- Description -->
-      <p class="text-[#C7C7C7] text-sm line-clamp-3 mb-4">
+      <p class="text-body text-sm line-clamp-3 mb-4">
         {{ project.description }}
       </p>
 
@@ -34,13 +34,13 @@
         <span
           v-for="skill in project.skills_required.slice(0, 5)"
           :key="skill"
-          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-[#C7C7C7] border border-[rgba(255,255,255,0.08)]"
+          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-body border border-[rgba(255,255,255,0.08)]"
         >
           {{ skill }}
         </span>
         <span
           v-if="project.skills_required.length > 5"
-          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-[#C7C7C7] border border-[rgba(255,255,255,0.08)]"
+          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-body border border-[rgba(255,255,255,0.08)]"
         >
           +{{ project.skills_required.length - 5 }}
         </span>
@@ -49,20 +49,20 @@
       <!-- Footer -->
       <div class="flex items-center justify-between pt-4 border-t border-[rgba(255,255,255,0.08)]">
         <div class="flex items-center gap-4">
-          <div class="flex items-center text-sm text-[#C7C7C7]">
+          <div class="flex items-center text-sm text-body">
             <svg class="w-5 h-5 mr-1 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span class="font-semibold text-[#D4AF37]">{{ formatCurrency(project.budget) }}</span>
           </div>
-          <div v-if="project.deadline" class="flex items-center text-sm text-[#C7C7C7]">
+          <div v-if="project.deadline" class="flex items-center text-sm text-body">
             <svg class="w-5 h-5 mr-1 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             {{ formatDate(project.deadline) }}
           </div>
         </div>
-        <div v-if="showBidCount && project.bid_count !== undefined" class="flex items-center text-sm text-[#C7C7C7]">
+        <div v-if="showBidCount && project.bid_count !== undefined" class="flex items-center text-sm text-body">
           <svg class="w-5 h-5 mr-1 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
           </svg>
@@ -112,4 +112,6 @@ const formatDate = (date) => {
   return format(new Date(date), 'dd/MM/yyyy', { locale: ptBR })
 }
 </script>
+
+
 

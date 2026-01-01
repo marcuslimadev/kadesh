@@ -25,7 +25,7 @@
             <img :src="logoImg" alt="Kaddesh" class="h-16 w-16 md:h-20 md:w-20 rounded-2xl border-2 border-[#D4AF37]/60 shadow-2xl object-cover" />
             <div class="text-left">
               <p class="text-[#D4AF37] text-sm md:text-base font-bold uppercase tracking-wider">KADDESH</p>
-              <p class="text-[#F5F5F5] text-xs md:text-sm opacity-90">Service Bridge</p>
+              <p class="text-heading text-xs md:text-sm opacity-90">Service Bridge</p>
             </div>
           </div>
 
@@ -200,10 +200,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-16">
           <p class="text-sm text-[#D4AF37] font-semibold uppercase tracking-wide">Vamos começar rapidamente hoje</p>
-          <h2 class="text-4xl lg:text-5xl font-bold text-[#F5F5F5]">
+          <h2 class="text-4xl lg:text-5xl font-bold text-heading">
             Vamos explorar <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">categorias populares</span>
           </h2>
-          <p class="text-[#C7C7C7] text-lg mt-4 max-w-3xl mx-auto">
+          <p class="text-body text-lg mt-4 max-w-3xl mx-auto">
             Use o leilão reverso da Kaddesh para contratar especialistas ou aplicar seus talentos nos projetos certos.
           </p>
         </div>
@@ -432,10 +432,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <p class="text-sm text-[#D4AF37] font-semibold uppercase tracking-wide">🎯 Coração da Plataforma</p>
-          <h2 class="text-4xl lg:text-5xl font-bold text-[#F5F5F5] mb-4">
+          <h2 class="text-4xl lg:text-5xl font-bold text-heading mb-4">
             Lobby de <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">Leilões Reversos</span>
           </h2>
-          <p class="text-[#C7C7C7] text-lg max-w-3xl mx-auto">
+          <p class="text-body text-lg max-w-3xl mx-auto">
             O Lobby é onde a mágica acontece! Acompanhe em tempo real todos os projetos abertos, propostas em disputa e negocie com transparência total.
           </p>
         </div>
@@ -447,8 +447,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-[#F5F5F5] mb-2">Projetos em Tempo Real</h3>
-            <p class="text-[#C7C7C7]">Veja todos os projetos ativos, quantas propostas receberam e participe da disputa.</p>
+            <h3 class="text-xl font-bold text-heading mb-2">Projetos em Tempo Real</h3>
+            <p class="text-body">Veja todos os projetos ativos, quantas propostas receberam e participe da disputa.</p>
           </div>
 
           <div class="bg-[#161821] rounded-2xl p-8 shadow-lg hover:shadow-xl transition border border-[rgba(212,175,55,0.24)] hover:border-[#D4AF37]/50">
@@ -457,8 +457,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-[#F5F5F5] mb-2">Filtros Inteligentes</h3>
-            <p class="text-[#C7C7C7]">Filtre por categoria, orçamento, prazo e status. Encontre exatamente o que procura.</p>
+            <h3 class="text-xl font-bold text-heading mb-2">Filtros Inteligentes</h3>
+            <p class="text-body">Filtre por categoria, orçamento, prazo e status. Encontre exatamente o que procura.</p>
           </div>
 
           <div class="bg-[#161821] rounded-2xl p-8 shadow-lg hover:shadow-xl transition border border-[rgba(212,175,55,0.24)] hover:border-[#D4AF37]/50">
@@ -467,8 +467,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-[#F5F5F5] mb-2">Ações Rápidas</h3>
-            <p class="text-[#C7C7C7]">Acesse Dashboard, crie projetos, veja sua carteira e contratos em um clique.</p>
+            <h3 class="text-xl font-bold text-heading mb-2">Ações Rápidas</h3>
+            <p class="text-body">Acesse Dashboard, crie projetos, veja sua carteira e contratos em um clique.</p>
           </div>
         </div>
 
@@ -502,10 +502,10 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <p class="text-sm text-[#D4AF37] font-semibold uppercase tracking-wide">📚 Central de Conhecimento</p>
-          <h2 class="text-4xl lg:text-5xl font-bold text-[#F5F5F5] mb-4">
+          <h2 class="text-4xl lg:text-5xl font-bold text-heading mb-4">
             Documentação <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">Completa</span>
           </h2>
-          <p class="text-[#C7C7C7] text-lg max-w-3xl mx-auto">
+          <p class="text-body text-lg max-w-3xl mx-auto">
             Aprenda como funciona cada recurso da plataforma com guias detalhados, exemplos práticos e FAQs.
           </p>
         </div>
@@ -520,8 +520,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-[#F5F5F5] mb-2">Tutorial Passo a Passo</h3>
-            <p class="text-sm text-[#C7C7C7]">Guia completo dividido para Contratantes e Prestadores</p>
+            <h3 class="text-lg font-bold text-heading mb-2">Tutorial Passo a Passo</h3>
+            <p class="text-sm text-body">Guia completo dividido para Contratantes e Prestadores</p>
           </router-link>
 
           <div class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-2xl p-6 hover:shadow-lg hover:border-[#D4AF37]/50 transition group cursor-pointer">
@@ -530,8 +530,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-[#F5F5F5] mb-2">Como Funciona o Escrow</h3>
-            <p class="text-sm text-[#C7C7C7]">Entenda a proteção de pagamentos e liberação de milestones</p>
+            <h3 class="text-lg font-bold text-heading mb-2">Como Funciona o Escrow</h3>
+            <p class="text-sm text-body">Entenda a proteção de pagamentos e liberação de milestones</p>
           </div>
 
           <div class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-2xl p-6 hover:shadow-lg hover:border-[#D4AF37]/50 transition group cursor-pointer">
@@ -540,8 +540,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-[#F5F5F5] mb-2">Contratos & Milestones</h3>
-            <p class="text-sm text-[#C7C7C7]">Gerencie contratos, etapas e entregas com segurança</p>
+            <h3 class="text-lg font-bold text-heading mb-2">Contratos & Milestones</h3>
+            <p class="text-sm text-body">Gerencie contratos, etapas e entregas com segurança</p>
           </div>
 
           <div class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-2xl p-6 hover:shadow-lg hover:border-[#D4AF37]/50 transition group cursor-pointer">
@@ -550,8 +550,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-[#F5F5F5] mb-2">FAQ & Suporte</h3>
-            <p class="text-sm text-[#C7C7C7]">Dúvidas frequentes e como entrar em contato</p>
+            <h3 class="text-lg font-bold text-heading mb-2">FAQ & Suporte</h3>
+            <p class="text-sm text-body">Dúvidas frequentes e como entrar em contato</p>
           </div>
         </div>
 
@@ -1241,6 +1241,8 @@ onMounted(() => {
   opacity: 0;
 }
 </style>
+
+
 
 
 

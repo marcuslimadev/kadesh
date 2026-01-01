@@ -16,7 +16,7 @@
               'py-4 px-6 font-medium text-sm transition border-b-2',
               activeTab === 'contracts'
                 ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.1)]'
-                : 'border-transparent text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+                : 'border-transparent text-body hover:text-heading hover:bg-[#1A1A1A]'
             ]"
           >
             Contratos Finalizados
@@ -27,7 +27,7 @@
               'py-4 px-6 font-medium text-sm transition border-b-2',
               activeTab === 'transactions'
                 ? 'border-[#D4AF37] text-[#D4AF37] bg-[rgba(212,175,55,0.1)]'
-                : 'border-transparent text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+                : 'border-transparent text-body hover:text-heading hover:bg-[#1A1A1A]'
             ]"
           >
             Transações de Carteira
@@ -39,14 +39,14 @@
       <div v-if="activeTab === 'contracts'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto"></div>
-          <p class="mt-4 text-[#C7C7C7]">Carregando...</p>
+          <p class="mt-4 text-body">Carregando...</p>
         </div>
 
         <div v-else-if="contracts.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
           <svg class="w-16 h-16 text-[#D4AF37] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p class="text-[#C7C7C7]">Nenhum contrato finalizado ainda</p>
+          <p class="text-body">Nenhum contrato finalizado ainda</p>
         </div>
 
         <div v-else class="space-y-4">
@@ -57,9 +57,9 @@
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-[#F5F5F5]">{{ contract.project_title }}</h3>
-                <p class="text-sm text-[#8A8A8A] mt-1">Contrato #{{ contract.id }}</p>
-                <p class="text-sm text-[#C7C7C7]">
+                <h3 class="text-lg font-semibold text-heading">{{ contract.project_title }}</h3>
+                <p class="text-sm text-muted mt-1">Contrato #{{ contract.id }}</p>
+                <p class="text-sm text-body">
                   {{ isClient ? 'Prestador' : 'Contratante' }}: {{ contract.other_party_name }}
                 </p>
               </div>
@@ -67,7 +67,7 @@
                 <p class="text-2xl font-bold text-[#22c55e]">
                   R$ {{ formatCurrency(contract.total_amount) }}
                 </p>
-                <p class="text-sm text-[#8A8A8A] mt-1">
+                <p class="text-sm text-muted mt-1">
                   Finalizado em {{ formatDate(contract.completed_at) }}
                 </p>
               </div>
@@ -103,14 +103,14 @@
       <div v-if="activeTab === 'transactions'" class="space-y-4">
         <div v-if="loading" class="text-center py-12">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37] mx-auto"></div>
-          <p class="mt-4 text-[#C7C7C7]">Carregando...</p>
+          <p class="mt-4 text-body">Carregando...</p>
         </div>
 
         <div v-else-if="transactions.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
           <svg class="w-16 h-16 text-[#D4AF37] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
-          <p class="text-[#C7C7C7]">Nenhuma transação registrada</p>
+          <p class="text-body">Nenhuma transação registrada</p>
         </div>
 
         <div v-else class="space-y-4">
@@ -121,11 +121,11 @@
           >
             <div class="flex justify-between items-start mb-4">
               <div>
-                <h3 class="text-lg font-semibold text-[#F5F5F5]">
+                <h3 class="text-lg font-semibold text-heading">
                   {{ getTransactionTitle(transaction.type) }}
                 </h3>
-                <p class="text-sm text-[#8A8A8A] mt-1">Transação #{{ transaction.id }}</p>
-                <p class="text-sm text-[#C7C7C7] mt-2">{{ transaction.description }}</p>
+                <p class="text-sm text-muted mt-1">Transação #{{ transaction.id }}</p>
+                <p class="text-sm text-body mt-2">{{ transaction.description }}</p>
               </div>
               <div class="text-right">
                 <p :class="[
@@ -135,7 +135,7 @@
                   {{ transaction.type === 'credit' || transaction.type === 'deposit' ? '+' : '-' }}
                   R$ {{ formatCurrency(transaction.amount) }}
                 </p>
-                <p class="text-sm text-[#8A8A8A] mt-1">
+                <p class="text-sm text-muted mt-1">
                   {{ formatDate(transaction.created_at) }}
                 </p>
               </div>
@@ -166,11 +166,11 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h4 class="font-semibold text-[#F5F5F5] mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
-            <p class="text-sm text-[#C7C7C7] mb-2">
+            <h4 class="font-semibold text-heading mb-2">📋 Modelo RPA (Recibo de Pagamento Autônomo)</h4>
+            <p class="text-sm text-body mb-2">
               Os comprovantes gerados seguem o modelo RPA, ideal para prestadores de serviço autônomos.
             </p>
-            <ul class="text-sm text-[#C7C7C7] space-y-1 list-disc list-inside">
+            <ul class="text-sm text-body space-y-1 list-disc list-inside">
               <li>Inclui dados completos: Contratante, Prestador, valor, data e descrição do serviço</li>
               <li>Útil para declaração de IR e contabilidade</li>
               <li>Para emissão de NF-e, entre em contato com o Contratante/Prestador via chat</li>
@@ -332,5 +332,7 @@ const checkTabChange = () => {
 // Run check periodically
 setInterval(checkTabChange, 100)
 </script>
+
+
 
 

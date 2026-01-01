@@ -22,10 +22,10 @@
       <div class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Tipo</label>
+            <label class="block text-sm font-medium text-body mb-2">Tipo</label>
             <select
               v-model="filters.type"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="project">Projetos</option>
@@ -37,10 +37,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Status</label>
+            <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option value="unread">Não Lidas</option>
@@ -49,10 +49,10 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-[#C7C7C7] mb-2">Ordenar Por</label>
+            <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-[#F5F5F5] rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="date_desc">Mais Recentes</option>
               <option value="date_asc">Mais Antigas</option>
@@ -80,8 +80,8 @@
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Erro ao carregar notificações</h3>
-        <p class="mt-2 text-sm text-[#C7C7C7]">{{ error }}</p>
+        <h3 class="mt-4 text-lg font-medium text-heading">Erro ao carregar notificações</h3>
+        <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadNotifications"
           class="mt-6 px-4 py-2 bg-[#D4AF37] text-[#0F1117] rounded-md hover:bg-[#E5C04A] font-semibold"
@@ -94,8 +94,8 @@
         <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
-        <h3 class="mt-4 text-lg font-medium text-[#F5F5F5]">Nenhuma notificação encontrada</h3>
-        <p class="mt-2 text-sm text-[#C7C7C7]">
+        <h3 class="mt-4 text-lg font-medium text-heading">Nenhuma notificação encontrada</h3>
+        <p class="mt-2 text-sm text-body">
           {{ hasActiveFilters ? 'Tente ajustar os filtros para ver mais resultados.' : 'Você está em dia! Não há notificações no momento.' }}
         </p>
       </div>
@@ -290,9 +290,9 @@ const getTypeColor = (type) => {
     bid: 'bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/30',
     payment: 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30',
     message: 'bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30',
-    system: 'bg-[#8A8A8A]/10 text-[#8A8A8A] border border-[#8A8A8A]/30'
+    system: 'bg-[#8A8A8A]/10 text-muted border border-[#8A8A8A]/30'
   }
-  return colors[type] || 'bg-[#8A8A8A]/10 text-[#8A8A8A] border border-[#8A8A8A]/30'
+  return colors[type] || 'bg-[#8A8A8A]/10 text-muted border border-[#8A8A8A]/30'
 }
 
 const getNotificationIconClass = (type) => {
@@ -301,9 +301,9 @@ const getNotificationIconClass = (type) => {
     bid: 'bg-[#22c55e]/10 text-[#22c55e]',
     payment: 'bg-[#D4AF37]/10 text-[#D4AF37]',
     message: 'bg-[#D4AF37]/10 text-[#D4AF37]',
-    system: 'bg-[#8A8A8A]/10 text-[#8A8A8A]'
+    system: 'bg-[#8A8A8A]/10 text-muted'
   }
-  return classes[type] || 'bg-[#8A8A8A]/10 text-[#8A8A8A]'
+  return classes[type] || 'bg-[#8A8A8A]/10 text-muted'
 }
 
 const getNotificationIcon = (type) => {
@@ -431,5 +431,7 @@ onMounted(() => {
   loadNotifications()
 })
 </script>
+
+
 
 
