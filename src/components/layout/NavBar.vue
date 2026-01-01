@@ -401,11 +401,7 @@ const toggleTheme = () => {
   display: block;
   width: 100%;
 }
-.sidebar-switch :deep(button) {
-  background: var(--nav-theme-bg) !important;
-  color: var(--nav-theme-text) !important;
-  border: 1px solid var(--nav-theme-border) !important;
-  width: 100%;
+.sidebar-switch :deep(.vm-pill--sidebar) {
   justify-content: center;
 }
 

@@ -4,21 +4,16 @@
     <div
       :class="[
         'hidden md:flex items-center rounded-full transition-all duration-500',
-        isSidebar ? 'flex-col gap-2 bg-transparent shadow-none p-0 w-full' : 'bg-[#161821] backdrop-blur-sm shadow-lg p-1.5 border border-[rgba(212,175,55,0.24)]'
+        'vm-shell',
+        isSidebar ? 'vm-shell--sidebar' : 'vm-shell--inline'
       ]"
     >
       <button
         @click="goToMode('contractor')"
         :class="[
-          'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
-          isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
-          viewMode.isContractor
-            ? isSidebar
-              ? 'bg-[#D4AF37] text-[#0F1117] shadow-[0_4px_20px_rgba(212,175,55,0.25)]'
-              : 'bg-[#D4AF37] text-[#0F1117] shadow-lg scale-105'
-            : isSidebar
-              ? 'text-[#C7C7C7] bg-[#1A1A1A] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-              : 'text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+          'vm-pill',
+          isSidebar ? 'vm-pill--sidebar' : 'vm-pill--inline',
+          viewMode.isContractor ? 'vm-pill--active' : 'vm-pill--inactive'
         ]"
       >
         <span class="text-lg transition-transform duration-500" :class="viewMode.isContractor ? 'scale-110' : ''">📘</span>
@@ -28,15 +23,9 @@
       <button
         @click="goToMode('provider')"
         :class="[
-          'flex items-center gap-2 rounded-full font-medium transition-all duration-500 ease-out',
-          isSidebar ? 'w-full justify-start px-4 py-2.5 rounded-xl' : 'px-5 py-2.5',
-          viewMode.isProvider
-            ? isSidebar
-              ? 'bg-[#D4AF37] text-[#0F1117] shadow-[0_4px_20px_rgba(212,175,55,0.25)]'
-              : 'bg-[#D4AF37] text-[#0F1117] shadow-lg scale-105'
-            : isSidebar
-              ? 'text-[#C7C7C7] bg-[#1A1A1A] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-              : 'text-[#C7C7C7] hover:text-[#F5F5F5] hover:bg-[#1A1A1A]'
+          'vm-pill',
+          isSidebar ? 'vm-pill--sidebar' : 'vm-pill--inline',
+          viewMode.isProvider ? 'vm-pill--active' : 'vm-pill--inactive'
         ]"
       >
         <span class="text-lg transition-transform duration-500" :class="viewMode.isProvider ? 'scale-110' : ''">🛠️</span>
@@ -48,7 +37,7 @@
     <div class="md:hidden flex items-center justify-center">
       <button
         @click="toggleMode()"
-        class="flex items-center gap-2.5 px-5 py-3 rounded-full font-bold shadow-xl transition-all duration-700 ease-in-out transform hover:scale-105 backdrop-blur-sm bg-[#D4AF37] text-[#0F1117]"
+        class="vm-pill vm-pill--mobile"
       >
         <span class="text-xl transition-transform duration-500">{{ viewMode.modeIcon }}</span>
         <span class="text-sm">Ver como {{ viewMode.modeLabel }}</span>
@@ -123,6 +112,75 @@ const toggleMode = () => {
   display: none;
 }
 
+.vm-shell {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-md);
+  padding: 0.375rem;
+}
+
+.vm-shell--sidebar {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.vm-shell--inline {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.vm-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-radius: 999px;
+}
+
+.vm-pill--inline {
+  padding: 0.625rem 1.25rem;
+}
+
+.vm-pill--sidebar {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+}
+
+.vm-pill--active {
+  background: var(--accent);
+  color: #0f1117;
+  box-shadow: var(--shadow-gold);
+  transform: scale(1.02);
+}
+
+.vm-pill--inactive {
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+  border: 1px solid var(--muted-border);
+}
+
+.vm-pill--inactive:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-border);
+}
+
+.vm-pill--mobile {
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #0f1117;
+  box-shadow: var(--shadow-gold);
+}
+
 @keyframes bounce-subtle {
   0%, 100% {
     transform: translateY(0) translateX(-50%);
@@ -141,4 +199,3 @@ button {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
-
