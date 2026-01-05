@@ -21,6 +21,9 @@ if (!$email || !$password) {
 
 $db = new Database();
 $conn = $db->getConnection();
+if (!$conn) {
+    Helpers::jsonResponse(['error' => 'Erro de conexão com o banco de dados'], 500);
+}
 
 try {
     $stmt = $conn->prepare("SELECT id, name, email, password, user_type, status, created_at FROM users WHERE email = ?");

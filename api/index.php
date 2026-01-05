@@ -4,8 +4,10 @@
  * Backend PHP para Hostinger
  */
 
-// Carregar configurações de ambiente (prioriza local)
-if (file_exists(__DIR__ . '/config/env.local.php')) {
+// Carregar configurações de ambiente (prioriza produção em servidor)
+if (file_exists(__DIR__ . '/config/env.production.php')) {
+    require_once __DIR__ . '/config/env.production.php';
+} elseif (file_exists(__DIR__ . '/config/env.local.php')) {
     require_once __DIR__ . '/config/env.local.php';
 } elseif (file_exists(__DIR__ . '/config/env.php')) {
     require_once __DIR__ . '/config/env.php';
