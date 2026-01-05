@@ -3,7 +3,6 @@ backend/node_modules/
 backend/.env
 backend/.env.production
 backend_php/config/env.php
-dist/
 /assets/
 /api-temp/
 /playwright-report/

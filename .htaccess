@@ -1,13 +1,19 @@
 RewriteEngine On
 RewriteBase /
 
-# Redirecionar para API PHP
+# Redirect API to PHP handler
 RewriteRule ^api/(.*)$ api/index.php [L,QSA]
 
-# Servir arquivos estáticos diretamente
+# Force root to use Vite build
+RewriteRule ^$ dist/index.html [L]
+
+# Do not rewrite build assets
+RewriteRule ^dist/ - [L]
+
+# Serve files and directories directly
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Redirecionar todas as outras requisições para index.html (SPA)
-RewriteRule ^ index.html [L]
+# SPA fallback to build
+RewriteRule ^ dist/index.html [L]
