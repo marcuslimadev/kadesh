@@ -6,7 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     Helpers::jsonResponse(['error' => 'Metodo nao permitido'], 405);
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+$rawInput = file_get_contents("php://input");
+$data = json_decode($rawInput, true);
+if (!is_array($data) || empty($data)) {
+    $data = $_POST;
+}
 
 $email = $data['email'] ?? null;
 $password = $data['password'] ?? null;
