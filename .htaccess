@@ -1,6 +1,15 @@
 RewriteEngine On
 RewriteBase /
 
+# Avoid stale app assets in client caches
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|js|css)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
 # Redirect API to PHP handler
 RewriteRule ^api/(.*)$ api/index.php [L,QSA]
 
