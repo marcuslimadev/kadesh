@@ -204,7 +204,20 @@ const handleLogin = async () => {
     const result = await authStore.login(form.email, form.password, form.rememberMe)
 
     if (result.success) {
-      // Redirecionar para o Lobby de Leilões após login
+      const user = result.user || {}
+      const isAdmin = user.isAdmin === true || user.type === 'admin'
+
+      if (isAdmin) {
+        const token = localStorage.getItem('kadesh_token')
+        if (token) {
+          localStorage.setItem('adminToken', token)
+          localStorage.setItem('adminUser', JSON.stringify(user))
+        }
+        router.push('/admin/dashboard')
+        return
+      }
+
+      // Redirecionar para o Lobby de Leiläes ap¢s login
       router.push('/lobby')
     } else {
       errors.general = result.error
@@ -216,5 +229,6 @@ const handleLogin = async () => {
   }
 }
 </script>
+
 
 

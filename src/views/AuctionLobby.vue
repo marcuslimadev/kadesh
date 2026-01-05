@@ -1,6 +1,8 @@
 <template>
   <div class="lobby-shell py-8 px-4 sm:px-6 lg:px-8">
     <div class="lobby-grid max-w-7xl mx-auto">
+      <AdRail position="left" />
+
       <div class="space-y-8">
         <section class="lobby-hero card">
           <div class="flex flex-wrap items-start justify-between gap-6">
@@ -264,31 +266,31 @@
                 <!-- Title -->
                 <router-link
                   :to="`/projects/${project.id}`"
-                  class="block text-lg font-bold text-heading hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
+                  class="block text-lg font-bold text-[#F5F5F5] hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
                 >
                   {{ project.title }}
                 </router-link>
 
                 <!-- Description -->
-                <p class="text-body text-sm line-clamp-2 mb-4">
+                <p class="text-[#C7C7C7] text-sm line-clamp-2 mb-4">
                   {{ project.description }}
                 </p>
 
                 <!-- Stats Grid -->
                 <div class="grid grid-cols-3 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
                   <div class="text-center">
-                    <p class="text-xs text-muted uppercase mb-1">Orçamento</p>
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orçamento</p>
                     <p class="text-base font-bold text-[#D4AF37]">
                       {{ formatCurrencyCompact(project.budget) }}
                     </p>
                   </div>
                   <div class="text-center border-x border-[rgba(212,175,55,0.1)]">
-                    <p class="text-xs text-muted uppercase mb-1">Propostas</p>
-                    <p class="text-base font-bold text-heading">{{ getBidCount(project) }}</p>
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Propostas</p>
+                    <p class="text-base font-bold text-[#F5F5F5]">{{ getBidCount(project) }}</p>
                   </div>
                   <div class="text-center">
-                    <p class="text-xs text-muted uppercase mb-1">Menor</p>
-                    <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-muted'">
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Menor</p>
+                    <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-[#8A8A8A]'">
                       {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : '—' }}
                     </p>
                   </div>
@@ -303,8 +305,8 @@
                       </span>
                     </div>
                     <div>
-                      <p class="text-xs font-medium text-heading">{{ project.client_name || 'Contratante' }}</p>
-                      <p class="text-xs text-muted">{{ formatDateCompact(project.created_at) }}</p>
+                      <p class="text-xs font-medium text-[#F5F5F5]">{{ project.client_name || 'Contratante' }}</p>
+                      <p class="text-xs text-[#8A8A8A]">{{ formatDateCompact(project.created_at) }}</p>
                     </div>
                   </div>
                   <router-link
@@ -342,7 +344,7 @@
         </div>
       </div>
 
-      <AdRail position="right" />
+      
     </div>
 
     <transition name="fade">
@@ -787,7 +789,7 @@ watch(filters, () => {
 
 .lobby-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr;
   gap: 18px;
 }
 
@@ -1072,6 +1074,3 @@ watch(filters, () => {
   }
 }
 </style>
-
-
-

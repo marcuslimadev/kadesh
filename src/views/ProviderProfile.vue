@@ -9,7 +9,7 @@
             <button
               type="button"
               @click="loadData"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-body hover:bg-gray-100 transition-colors"
+              class="inline-flex items-center px-4 py-2 border border-muted rounded-lg text-sm font-medium text-body hover:bg-surface-alt transition-colors"
             >
               <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9M20 20v-5h-.581m-15.357-2a8.003 8.003 0 0015.357 2" />
@@ -61,7 +61,7 @@
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <!-- Sidebar -->
           <aside class="space-y-6">
-            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+            <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6">
               <div class="flex items-center gap-4">
                 <div class="h-20 w-20 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl font-semibold text-primary-700">
                   <img
@@ -74,7 +74,7 @@
                 </div>
                 <div>
                   <h2 class="text-xl font-semibold text-heading">{{ profile?.name }}</h2>
-                  <p class="text-sm text-gray-500">{{ providerMeta.title || 'Defina um título profissional' }}</p>
+                  <p class="text-sm text-muted">{{ providerMeta.title || 'Defina um título profissional' }}</p>
                   <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-medium" :class="availabilityClasses">
                     {{ availabilityCopy.label }}
                   </div>
@@ -82,17 +82,17 @@
               </div>
 
               <div class="mt-6 grid grid-cols-3 gap-4 text-center">
-                <div class="bg-gray-50 rounded-xl p-3">
+                <div class="bg-surface-alt rounded-xl p-3">
                   <p class="text-2xl font-semibold text-heading">{{ formatNumber(providerMeta.total_projects) }}</p>
-                  <p class="text-xs text-gray-500">Projetos</p>
+                  <p class="text-xs text-muted">Projetos</p>
                 </div>
-                <div class="bg-gray-50 rounded-xl p-3">
+                <div class="bg-surface-alt rounded-xl p-3">
                   <p class="text-2xl font-semibold text-heading">{{ formatNumber(providerMeta.total_reviews) }}</p>
-                  <p class="text-xs text-gray-500">Avaliações</p>
+                  <p class="text-xs text-muted">Avaliações</p>
                 </div>
-                <div class="bg-gray-50 rounded-xl p-3">
+                <div class="bg-surface-alt rounded-xl p-3">
                   <p class="text-2xl font-semibold text-heading">{{ providerMeta.rating ? providerMeta.rating.toFixed(1) : '—' }}</p>
-                  <p class="text-xs text-gray-500">Nota</p>
+                  <p class="text-xs text-muted">Nota</p>
                 </div>
               </div>
 
@@ -114,12 +114,12 @@
               </dl>
             </section>
 
-            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+            <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6">
               <h3 class="text-lg font-semibold text-heading mb-4">Métricas recentes</h3>
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-sm text-gray-500">Propostas enviadas</p>
+                    <p class="text-sm text-muted">Propostas enviadas</p>
                     <p class="text-xl font-semibold text-heading">{{ formatNumber(stats?.total_bids) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-amber-50 text-amber-700">
@@ -128,7 +128,7 @@
                 </div>
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-sm text-gray-500">Contratos ativos</p>
+                    <p class="text-sm text-muted">Contratos ativos</p>
                     <p class="text-xl font-semibold text-heading">{{ formatNumber(stats?.active_contracts) }}</p>
                   </div>
                   <span class="text-xs px-3 py-1 rounded-full bg-green-50 text-green-700">
@@ -136,13 +136,13 @@
                   </span>
                 </div>
                 <div>
-                  <p class="text-sm text-gray-500">Receita total</p>
+                  <p class="text-sm text-muted">Receita total</p>
                   <p class="text-2xl font-semibold text-heading">{{ formatCurrency(stats?.total_earnings) }}</p>
                 </div>
               </div>
             </section>
 
-            <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+            <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6">
               <h3 class="text-lg font-semibold text-heading mb-4">Habilidades & ferramentas</h3>
               <div v-if="displaySkills.length" class="flex flex-wrap gap-2">
                 <span
@@ -153,16 +153,16 @@
                   {{ skill }}
                 </span>
               </div>
-              <div v-else class="text-sm text-gray-500">
+              <div v-else class="text-sm text-muted">
                 Nenhuma habilidade cadastrada ainda. Utilize o formulário ao lado para adicionar suas competências principais.
               </div>
             </section>
 
-            <section v-if="socialLinks.length" class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+            <section v-if="socialLinks.length" class="bg-surface rounded-2xl shadow-sm border border-muted p-6 space-y-4">
               <h3 class="text-lg font-semibold text-heading">Links e contato</h3>
               <ul class="space-y-3 text-sm">
                 <li v-for="link in socialLinks" :key="link.label" class="flex items-center gap-3">
-                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-500">
+                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-surface-alt text-muted">
                     <svg
                       v-if="link.type === 'portfolio'"
                       class="w-4 h-4"
@@ -213,11 +213,11 @@
           <!-- Main form -->
           <main id="provider-profile-form" class="lg:col-span-2 space-y-8">
             <form @submit.prevent="handleSave" class="space-y-8">
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6 space-y-6">
                 <header class="flex items-start justify-between">
                   <div>
                     <h2 class="text-xl font-semibold text-heading">Informações gerais</h2>
-                    <p class="text-sm text-gray-500">Essas informações são exibidas na parte superior do seu perfil.</p>
+                    <p class="text-sm text-muted">Essas informações são exibidas na parte superior do seu perfil.</p>
                   </div>
                   <span v-if="hasChanges" class="text-xs font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
                     Possui alterações não salvas
@@ -292,10 +292,10 @@
                 </div>
               </section>
 
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6 space-y-6">
                 <header>
                   <h2 class="text-xl font-semibold text-heading">Informações profissionais</h2>
-                  <p class="text-sm text-gray-500">Defina disponibilidade, valores e habilidades principais.</p>
+                  <p class="text-sm text-muted">Defina disponibilidade, valores e habilidades principais.</p>
                 </header>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -343,14 +343,14 @@
                     placeholder="Separe as habilidades por vírgula. Ex.: Vue, Node.js, PostgreSQL"
                     @blur="syncSkillsFromInput"
                   />
-                  <p class="mt-1 text-xs text-gray-500">Exibiremos as habilidades individualmente no perfil.</p>
+                  <p class="mt-1 text-xs text-muted">Exibiremos as habilidades individualmente no perfil.</p>
                 </div>
               </section>
 
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6 space-y-6">
                 <header>
                   <h2 class="text-xl font-semibold text-heading">Portfólio & links</h2>
-                  <p class="text-sm text-gray-500">Compartilhe seus projetos e perfis profissionais.</p>
+                  <p class="text-sm text-muted">Compartilhe seus projetos e perfis profissionais.</p>
                 </header>
 
                 <div class="grid grid-cols-1 gap-5">
@@ -387,16 +387,16 @@
               </section>
 
               <!-- Documents Section -->
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6 space-y-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6 space-y-6">
                 <header>
                   <h2 class="text-xl font-semibold text-heading">📄 Documentos</h2>
-                  <p class="text-sm text-gray-500">Anexe certificados, diplomas e documentos profissionais.</p>
+                  <p class="text-sm text-muted">Anexe certificados, diplomas e documentos profissionais.</p>
                 </header>
 
                 <div class="space-y-4">
                   <!-- Upload area -->
                   <div 
-                    class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-amber-500 transition-colors cursor-pointer"
+                    class="border-2 border-dashed border-muted rounded-xl p-6 text-center hover:border-amber-500 transition-colors cursor-pointer"
                     @click="$refs.documentInput.click()"
                     @dragover.prevent
                     @drop.prevent="handleDocumentDrop"
@@ -409,11 +409,11 @@
                       multiple
                       @change="handleDocumentSelect"
                     />
-                    <svg class="w-10 h-10 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10 mx-auto text-muted mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                     <p class="text-sm font-medium text-heading">Clique ou arraste arquivos aqui</p>
-                    <p class="text-xs text-gray-500 mt-1">PDF, DOC, JPG, PNG (máx 5MB cada)</p>
+                    <p class="text-xs text-muted mt-1">PDF, DOC, JPG, PNG (máx 5MB cada)</p>
                   </div>
 
                   <!-- Uploaded documents list -->
@@ -421,7 +421,7 @@
                     <div 
                       v-for="(doc, index) in documents" 
                       :key="index"
-                      class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      class="flex items-center justify-between p-3 bg-surface-alt rounded-lg"
                     >
                       <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
@@ -431,7 +431,7 @@
                         </div>
                         <div>
                           <p class="text-sm font-medium text-heading">{{ doc.name }}</p>
-                          <p class="text-xs text-gray-500">{{ formatFileSize(doc.size) }}</p>
+                          <p class="text-xs text-muted">{{ formatFileSize(doc.size) }}</p>
                         </div>
                       </div>
                       <button 
@@ -446,7 +446,7 @@
                     </div>
                   </div>
 
-                  <p v-else class="text-sm text-gray-500 text-center py-4">
+                  <p v-else class="text-sm text-muted text-center py-4">
                     Nenhum documento anexado ainda
                   </p>
                 </div>
@@ -456,7 +456,7 @@
                 <button
                   type="button"
                   @click="resetForm"
-                  class="w-full md:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-gray-300 text-body font-medium hover:bg-gray-50 transition-colors"
+                  class="w-full md:w-auto inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-muted text-body font-medium hover:bg-surface-alt transition-colors"
                 >
                   Descartar alterações
                 </button>
@@ -475,7 +475,7 @@
                 </button>
               </div>
               <!-- Avaliações recentes -->
-              <section class="bg-surface rounded-2xl shadow-sm border border-gray-100 p-6">
+              <section class="bg-surface rounded-2xl shadow-sm border border-muted p-6">
                 <h2 class="text-xl font-semibold text-heading mb-6">Minhas Avaliações</h2>
                 <ReviewList :userId="authStore.user?.id" />
               </section>
@@ -566,9 +566,9 @@ const availabilityClasses = computed(() => {
     case 'limited':
       return 'bg-amber-50 text-amber-700'
     case 'unavailable':
-      return 'bg-gray-100 text-gray-500'
+      return 'bg-surface-alt text-muted'
     default:
-      return 'bg-gray-100 text-gray-500'
+      return 'bg-surface-alt text-muted'
   }
 })
 
@@ -825,5 +825,6 @@ onMounted(() => {
   loadData()
 })
 </script>
+
 
 

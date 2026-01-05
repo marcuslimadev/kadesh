@@ -51,7 +51,7 @@ const showNavigation = computed(() => {
   const hideNavRoutes = ['login', 'register', 'forgot-password', 'reset-password']
   
   // Se está em rota de auth, não mostrar
-  if (hideNavRoutes.includes(route.name)) {
+  if (hideNavRoutes.includes(route.name) || (route.path && route.path.startsWith('/admin'))) {
     console.log('[App] Rota de auth - não mostrar nav:', route.name)
     return false
   }
@@ -220,3 +220,4 @@ select:focus {
   transform: translateX(100%);
 }
 </style>
+
