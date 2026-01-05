@@ -59,11 +59,15 @@ const showNavigation = computed(() => {
   // Verifica se está autenticado usando o authStore
   // Usamos !!authStore.token para garantir que a UI apareça mesmo se a sessão
   // estiver sendo validada ou se houver desincronia no isSessionValid
-  const authenticated = !!authStore.token
+  const currentToken = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
+    ? authStore.token.value
+    : authStore.token
+  const storedToken = typeof window !== 'undefined' ? localStorage.getItem('kadesh_token') : null
+  const authenticated = !!(currentToken || storedToken)
   console.log('[App] showNavigation check:', {
     route: route.name,
     authenticated,
-    hasToken: !!authStore.token,
+    hasToken: !!currentToken,
     hasUser: !!authStore.user
   })
   
