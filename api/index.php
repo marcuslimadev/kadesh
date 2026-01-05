@@ -120,10 +120,13 @@ $staticRoutes = [
     // Reviews
     'GET:/reviews' => 'api/reviews/index.php',
     'POST:/reviews' => 'api/reviews/create.php',
+    'GET:/reviews-simple' => 'api/reviews/simple.php',
     
     // Advertisements
     'GET:/advertisements' => 'api/advertisements/index.php',
     'POST:/advertisements' => 'api/advertisements/create.php',
+    'GET:/advertisements/admin' => 'api/advertisements/admin.php',
+    'POST:/advertisements/admin' => 'api/advertisements/admin.php',
     
     // Admin
     'POST:/admin/login' => 'api/admin/login.php',
@@ -153,12 +156,17 @@ $dynamicRoutes = [
     ['GET', '/^\/projects\/([^\/]+)$/', 'api/projects/detail.php', 'id'],
     ['PUT', '/^\/projects\/([^\/]+)$/', 'api/projects/update.php', 'id'],
     ['DELETE', '/^\/projects\/([^\/]+)$/', 'api/projects/delete.php', 'id'],
+    ['POST', '/^\/projects\/([^\/]+)\/accept-bid$/', 'api/projects/accept-bid.php', 'id'],
+    ['POST', '/^\/projects\/([^\/]+)\/attachments$/', 'api/projects/attachments.php', 'id'],
+    ['DELETE', '/^\/projects\/([^\/]+)\/attachments\/([^\/]+)$/', 'api/projects/attachments.php', ['id', 'attachment_id']],
     
     // Bids
     ['GET', '/^\/bids\/project\/([^\/]+)$/', 'api/bids/index.php', 'project_id'],
     ['PUT', '/^\/bids\/([^\/]+)$/', 'api/bids/update.php', 'id'],
     ['DELETE', '/^\/bids\/([^\/]+)$/', 'api/bids/delete.php', 'id'],
     ['POST', '/^\/bids\/([^\/]+)\/accept$/', 'api/bids/accept.php', 'id'],
+    ['PUT', '/^\/bids\/([^\/]+)\/reject$/', 'api/bids/reject.php', 'id'],
+    ['PUT', '/^\/bids\/([^\/]+)\/withdraw$/', 'api/bids/withdraw.php', 'id'],
     
     // Contracts
     ['GET', '/^\/contracts\/([^\/]+)$/', 'api/contracts/detail.php', 'id'],
@@ -189,6 +197,7 @@ $dynamicRoutes = [
     // Reviews
     ['GET', '/^\/reviews\/user\/([^\/]+)$/', 'api/reviews/index.php', 'user_id'],
     ['GET', '/^\/reviews\/project\/([^\/]+)$/', 'api/reviews/index.php', 'project_id'],
+    ['GET', '/^\/reviews-simple\/user\/([^\/]+)$/', 'api/reviews/simple.php', 'user_id'],
     
     // Users
     ['GET', '/^\/users\/([^\/]+)\/public$/', 'api/users/public.php', 'id'],
@@ -203,13 +212,22 @@ $dynamicRoutes = [
     
     // Advertisements
     ['POST', '/^\/advertisements\/([^\/]+)\/click$/', 'api/advertisements/index.php', 'id'],
+    ['PUT', '/^\/advertisements\/admin\/([^\/]+)$/', 'api/advertisements/admin.php', 'id'],
+    ['PATCH', '/^\/advertisements\/admin\/([^\/]+)\/toggle$/', 'api/advertisements/admin.php', 'id'],
+    ['DELETE', '/^\/advertisements\/admin\/([^\/]+)$/', 'api/advertisements/admin.php', 'id'],
 ];
 
 foreach ($dynamicRoutes as $route) {
     list($method, $pattern, $file, $paramName) = $route;
     
     if ($requestMethod === $method && preg_match($pattern, $path, $matches)) {
-        if ($paramName && isset($matches[1])) {
+        if (is_array($paramName)) {
+            foreach ($paramName as $index => $name) {
+                if (isset($matches[$index + 1])) {
+                    $_GET[$name] = $matches[$index + 1];
+                }
+            }
+        } elseif ($paramName && isset($matches[1])) {
             $_GET[$paramName] = $matches[1];
         }
         require_once __DIR__ . '/' . $file;

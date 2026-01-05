@@ -7,10 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $userId = $_GET['user_id'] ?? null;
-$projectId = $_GET['project_id'] ?? null;
-$contractId = $_GET['contract_id'] ?? null;
 $limit = isset($_GET['limit']) ? max(1, min(intval($_GET['limit']), 50)) : 10;
 $offset = isset($_GET['offset']) ? max(0, intval($_GET['offset'])) : 0;
+
+if (!$userId) {
+    Helpers::jsonResponse(['error' => 'Usuario obrigatorio'], 400);
+}
 
 $db = new Database();
 $conn = $db->getConnection();
@@ -18,55 +20,25 @@ if (!$conn) {
     Helpers::jsonResponse(['error' => 'Erro de conexao com o banco de dados'], 500);
 }
 
-$conditions = ['r.is_public = 1'];
-$params = [];
-
-if ($userId) {
-    $conditions[] = 'r.reviewed_id = ?';
-    $params[] = $userId;
-}
-
-if ($contractId) {
-    $conditions[] = 'r.contract_id = ?';
-    $params[] = $contractId;
-}
-
-$joinContracts = '';
-if ($projectId) {
-    $joinContracts = 'JOIN contracts c ON r.contract_id = c.id';
-    $conditions[] = 'c.project_id = ?';
-    $params[] = $projectId;
-}
-
-$whereSql = implode(' AND ', $conditions);
-
 try {
-    $countSql = "SELECT COUNT(*) AS total FROM reviews r $joinContracts WHERE $whereSql";
-    $countStmt = $conn->prepare($countSql);
-    $countStmt->execute($params);
+    $countStmt = $conn->prepare("SELECT COUNT(*) AS total FROM reviews WHERE reviewed_id = ? AND is_public = 1");
+    $countStmt->execute([$userId]);
     $total = intval($countStmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
 
-    $avgRating = null;
-    if ($userId) {
-        $avgStmt = $conn->prepare("SELECT AVG(rating) AS avg_rating FROM reviews WHERE reviewed_id = ?");
-        $avgStmt->execute([$userId]);
-        $avgRating = $avgStmt->fetch(PDO::FETCH_ASSOC)['avg_rating'] ?? null;
-    }
+    $avgStmt = $conn->prepare("SELECT AVG(rating) AS avg_rating FROM reviews WHERE reviewed_id = ? AND is_public = 1");
+    $avgStmt->execute([$userId]);
+    $avgRating = $avgStmt->fetch(PDO::FETCH_ASSOC)['avg_rating'] ?? null;
 
-    $sql = "
+    $stmt = $conn->prepare("
         SELECT r.id, r.contract_id, r.reviewer_id, r.reviewed_id, r.rating, r.comment, r.created_at,
                u.name AS reviewer_name, u.avatar_url AS reviewer_avatar
         FROM reviews r
-        $joinContracts
         JOIN users u ON r.reviewer_id = u.id
-        WHERE $whereSql
+        WHERE r.reviewed_id = ? AND r.is_public = 1
         ORDER BY r.created_at DESC
         LIMIT :limit OFFSET :offset
-    ";
-    $stmt = $conn->prepare($sql);
-    foreach ($params as $index => $value) {
-        $stmt->bindValue($index + 1, $value);
-    }
+    ");
+    $stmt->bindValue(1, $userId);
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -78,13 +50,13 @@ try {
 
     Helpers::jsonResponse([
         'data' => [
-            'reviews' => $reviews
+            'reviews' => $reviews,
+            'totalReviews' => $total,
+            'avgRating' => $avgRating !== null ? floatval($avgRating) : null
         ],
         'pagination' => [
-            'total' => $total,
             'limit' => $limit,
-            'offset' => $offset,
-            'avg_rating' => $avgRating !== null ? floatval($avgRating) : null
+            'offset' => $offset
         ]
     ]);
 } catch (PDOException $e) {
