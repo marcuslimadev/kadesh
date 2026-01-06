@@ -52,7 +52,6 @@ const showNavigation = computed(() => {
   
   // Se está em rota de auth, não mostrar
   if (hideNavRoutes.includes(route.name) || (route.path && route.path.startsWith('/admin'))) {
-    console.log('[App] Rota de auth - não mostrar nav:', route.name)
     return false
   }
   
@@ -64,12 +63,6 @@ const showNavigation = computed(() => {
     : authStore.token
   const storedToken = typeof window !== 'undefined' ? localStorage.getItem('kadesh_token') : null
   const authenticated = !!(currentToken || storedToken)
-  console.log('[App] showNavigation check:', {
-    route: route.name,
-    authenticated,
-    hasToken: !!currentToken,
-    hasUser: !!authStore.user
-  })
   
   return authenticated
 })

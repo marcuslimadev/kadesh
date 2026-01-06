@@ -29,15 +29,7 @@ const isSessionValid = () => {
   const token = normalizeToken(localStorage.getItem('kadesh_token'))
   const expiresAt = localStorage.getItem('kadesh_session_expires')
   
-  console.log('[Auth] isSessionValid check:', {
-    hasToken: !!token,
-    tokenLength: token?.length || 0,
-    expiresAt,
-    expiresDate: expiresAt ? new Date(parseInt(expiresAt)).toLocaleString('pt-BR') : 'N/A'
-  })
-  
   if (!token || !expiresAt) {
-    console.warn('[Auth] isSessionValid: FALSE - token ou expiresAt ausente')
     if (!token) {
       localStorage.removeItem('kadesh_token')
     }
