@@ -9,7 +9,7 @@
 
       <!-- Settings Tabs -->
       <div class="bg-surface rounded-lg shadow-sm">
-        <div class="border-b border-gray-200">
+        <div class="border-b border-muted">
           <div class="flex">
             <button
               v-for="tab in tabs"
@@ -18,7 +18,7 @@
               :class="[
                 'px-4 py-3 font-medium text-sm border-b-2 transition-colors',
                 activeTab === tab.id
-                  ? 'border-primary-600 text-primary-600'
+                  ? 'border-accent text-accent'
                   : 'border-transparent text-body hover:text-heading'
               ]"
             >
@@ -40,7 +40,7 @@
               <input
                 v-model="profileForm.name"
                 type="text"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="Seu nome completo"
               />
             </div>
@@ -54,9 +54,9 @@
                 type="email"
                 :value="user?.email"
                 disabled
-                class="w-full px-4 py-2 border border-gray-300 bg-gray-100 rounded-lg text-body"
+                class="w-full px-4 py-2 border border-muted bg-surface-hover rounded-lg text-muted"
               />
-              <p class="text-sm text-gray-500 mt-1">O email não pode ser alterado</p>
+              <p class="text-sm text-muted mt-1">O email não pode ser alterado</p>
             </div>
 
             <!-- Phone -->
@@ -67,7 +67,7 @@
               <input
                 v-model="profileForm.phone"
                 type="tel"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="(11) 99999-9999"
               />
             </div>
@@ -80,7 +80,7 @@
               <textarea
                 v-model="profileForm.bio"
                 rows="4"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="Conte um pouco sobre você..."
               />
             </div>
@@ -93,7 +93,7 @@
               <input
                 v-model="profileForm.location"
                 type="text"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="Cidade, Estado"
               />
             </div>
@@ -106,7 +106,7 @@
               <input
                 v-model="profileForm.website"
                 type="url"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="https://seu-portfolio.com"
               />
             </div>
@@ -116,7 +116,7 @@
               <button
                 type="submit"
                 :disabled="isSaving"
-                class="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white font-medium py-2 rounded-lg transition-colors"
+                class="btn-gold w-full font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
               >
                 {{ isSaving ? 'Salvando...' : 'Salvar Alterações' }}
               </button>
@@ -130,14 +130,14 @@
           
           <div class="space-y-6">
             <!-- Email Preferences -->
-            <div class="border-b border-gray-200 pb-6">
+            <div class="border-b border-muted pb-6">
               <h3 class="font-medium text-heading mb-4">Preferências de Email</h3>
               <div class="space-y-3">
                 <label class="flex items-center">
                   <input
                     v-model="privacySettings.emailNotifications"
                     type="checkbox"
-                    class="w-4 h-4 text-primary-600 rounded"
+                    class="w-4 h-4 text-accent rounded border-muted"
                   />
                   <span class="ml-3 text-sm text-body">Receber notificações por email</span>
                 </label>
@@ -145,7 +145,7 @@
                   <input
                     v-model="privacySettings.emailMarketing"
                     type="checkbox"
-                    class="w-4 h-4 text-primary-600 rounded"
+                    class="w-4 h-4 text-accent rounded border-muted"
                   />
                   <span class="ml-3 text-sm text-body">Receber promoções e novidades</span>
                 </label>
@@ -153,7 +153,7 @@
                   <input
                     v-model="privacySettings.emailWeekly"
                     type="checkbox"
-                    class="w-4 h-4 text-primary-600 rounded"
+                    class="w-4 h-4 text-accent rounded border-muted"
                   />
                   <span class="ml-3 text-sm text-body">Resumo semanal de atividades</span>
                 </label>
@@ -161,7 +161,7 @@
             </div>
 
             <!-- Profile Visibility -->
-            <div class="border-b border-gray-200 pb-6">
+            <div class="border-b border-muted pb-6">
               <h3 class="font-medium text-heading mb-4">Visibilidade do Perfil</h3>
               <div class="space-y-3">
                 <label class="flex items-center">
@@ -169,7 +169,7 @@
                     v-model="privacySettings.profilePublic"
                     type="radio"
                     value="public"
-                    class="w-4 h-4 text-primary-600"
+                    class="w-4 h-4 text-accent border-muted"
                   />
                   <span class="ml-3 text-sm text-body">Perfil público (visível para todos)</span>
                 </label>
@@ -178,7 +178,7 @@
                     v-model="privacySettings.profilePublic"
                     type="radio"
                     value="private"
-                    class="w-4 h-4 text-primary-600"
+                    class="w-4 h-4 text-accent border-muted"
                   />
                   <span class="ml-3 text-sm text-body">Perfil privado (apenas para conexões)</span>
                 </label>
@@ -200,7 +200,7 @@
             <div class="pt-4">
               <button
                 @click="savePrivacySettings"
-                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors"
+                class="btn-gold w-full font-medium py-2 rounded-lg transition-colors"
               >
                 Salvar Preferências
               </button>
@@ -218,7 +218,7 @@
               <label class="block text-sm font-medium text-body mb-2">Idioma</label>
               <select
                 v-model="preferences.language"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
               >
                 <option value="pt-BR">Português (Brasil)</option>
                 <option value="en">English</option>
@@ -231,7 +231,7 @@
               <label class="block text-sm font-medium text-body mb-2">Fuso Horário</label>
               <select
                 v-model="preferences.timezone"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent"
+                class="w-full px-4 py-2 border border-muted rounded-lg bg-surface text-heading focus:ring-2 focus:ring-accent focus:border-transparent"
               >
                 <option value="America/Sao_Paulo">(UTC-3) São Paulo</option>
                 <option value="America/New_York">(UTC-5) Nova York</option>
@@ -244,7 +244,7 @@
             <div class="pt-4">
               <button
                 @click="savePreferences"
-                class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 rounded-lg transition-colors"
+                class="btn-gold w-full font-medium py-2 rounded-lg transition-colors"
               >
                 Salvar Preferências
               </button>

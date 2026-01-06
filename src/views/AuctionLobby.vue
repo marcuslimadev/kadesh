@@ -5,20 +5,20 @@
 
       <div class="lobby-main space-y-6">
         <section class="lobby-hero card">
-          <div class="flex flex-wrap items-start justify-between gap-6">
-            <div class="space-y-3">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div class="space-y-2">
               <p class="hero-eyebrow">Leilao principal - Service Bridge</p>
               <h1 class="hero-title">{{ lobbyTitle }}</h1>
-              <p class="hero-sub">{{ lobbyDescription }}</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="tag">Modo: {{ isContractorView ? 'Contratante' : 'Prestador' }}</span>
-                <span class="tag">{{ projects.length }} projetos carregados</span>
+              <p class="hero-sub text-sm">{{ lobbyDescription }}</p>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <span class="tag text-xs">Modo: {{ isContractorView ? 'Contratante' : 'Prestador' }}</span>
+                <span class="tag text-xs">{{ projects.length }} projetos</span>
               </div>
             </div>
-            <div class="flex flex-col gap-3 min-w-[240px]">
-              <router-link to="/" class="cta-link">Voltar para a Home</router-link>
-              <button class="cta-outline" @click="showQuickAccess = !showQuickAccess">
-                {{ showQuickAccess ? 'Esconder acessos' : 'Mostrar acessos' }}
+            <div class="flex flex-col gap-2 min-w-[200px]">
+              <router-link to="/" class="cta-link text-sm py-2">Voltar para a Home</router-link>
+              <button class="cta-outline text-sm py-2" @click="showQuickAccess = !showQuickAccess">
+                {{ showQuickAccess ? 'Esconder' : 'Mostrar' }} acessos
               </button>
             </div>
           </div>
@@ -196,7 +196,8 @@
             <div
               v-for="project in filteredProjects"
               :key="project.id"
-              class="auction-card-modern group"
+              class="auction-card-modern group transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              :class="getDeadlineBadge(project)?.hours <= 24 ? 'ring-2 ring-[#D4AF37] ring-opacity-50 animate-pulse' : ''"
             >
               <!-- Image Thumbnail -->
               <div class="relative h-48 overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0F1117]">
@@ -495,12 +496,6 @@ const lobbyHighlights = computed(() => {
         value: openCount,
         caption: 'leiloes abertos agora',
         text: 'text-amber-400'
-      },
-      {
-        label: 'Prioridade alta',
-        value: highPriority,
-        caption: 'precisam de atencao',
-        text: 'text-amber-300'
       }
     ]
   }
@@ -521,12 +516,6 @@ const lobbyHighlights = computed(() => {
         return diff <= 24 * 60 * 60 * 1000
       }).length,
       caption: 'oportunidades frescas',
-      text: 'text-amber-400'
-    },
-    {
-      label: 'Alta prioridade',
-      value: highPriority,
-      caption: 'pagam melhor',
       text: 'text-amber-400'
     }
   ]

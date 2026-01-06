@@ -12,6 +12,7 @@ const ForgotPassword = () => import('../views/ForgotPassword.vue')
 const ResetPassword = () => import('../views/ResetPassword.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
 const Projects = () => import('../views/Projects.vue')
+const AdsPlans = () => import('../views/AdsPlans.vue')
 const ProjectDetail = () => import('../views/ProjectDetail.vue')
 const CreateProject = () => import('../views/CreateProject.vue')
 const MyProjects = () => import('../views/MyProjects.vue')
@@ -88,6 +89,12 @@ const routes = [
     path: '/projects',
     name: 'projects',
     component: Projects,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/ads',
+    name: 'ads-plans',
+    component: AdsPlans,
     meta: { requiresAuth: false }
   },
   {

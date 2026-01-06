@@ -59,7 +59,7 @@ const statusText = computed(() => {
 })
 
 const statusClasses = computed(() => {
-  return statusConfig[props.status]?.classes || 'bg-gray-100 text-gray-800'
+  return statusConfig[props.status]?.classes || 'bg-surface-elevated text-body border border-muted'
 })
 </script>
 

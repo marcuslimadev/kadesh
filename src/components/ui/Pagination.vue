@@ -1,12 +1,12 @@
 <template>
-  <nav v-if="totalPages > 1" class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+  <nav v-if="totalPages > 1" class="flex items-center justify-between border-t border-muted px-4 sm:px-0">
     <div class="-mt-px w-0 flex-1 flex">
       <button
         @click="goToPage(currentPage - 1)"
         :disabled="currentPage === 1"
-        class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-body hover:text-heading hover:border-accent/50 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <svg class="mr-3 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="mr-3 h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
         Anterior
@@ -17,12 +17,7 @@
         v-for="page in displayedPages"
         :key="page"
         @click="goToPage(page)"
-        :class="[
-          page === currentPage
-            ? 'border-primary-500 text-primary-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-          'border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium'
-        ]"
+        :class="page === currentPage ? 'border-accent text-accent border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium' : 'border-transparent text-body hover:text-heading hover:border-accent/50 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium'"
       >
         {{ page }}
       </button>
@@ -31,10 +26,10 @@
       <button
         @click="goToPage(currentPage + 1)"
         :disabled="currentPage === totalPages"
-        class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-body hover:text-heading hover:border-accent/50 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Próxima
-        <svg class="ml-3 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="ml-3 h-5 w-5 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
         </svg>
       </button>

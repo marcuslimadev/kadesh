@@ -21,6 +21,49 @@ textarea {
         :root {
                 /* === KADESH PREMIUM THEME PRESET === */
                 /* Dark Theme (Default) */
+                
+                /* ========================================
+                 * GUIA DE VARIÁVEIS CSS - SISTEMA DE TEMAS
+                 * ========================================
+                 * 
+                 * Este sistema usa variáveis CSS customizadas que se adaptam automaticamente
+                 * aos temas claro (.theme-light) e escuro (.theme-dark).
+                 * 
+                 * SEMPRE USE AS CLASSES UTILITÁRIAS em vez de cores do Tailwind diretas:
+                 * 
+                 * BACKGROUNDS:
+                 * - .bg-page          → Fundo da página principal
+                 * - .bg-surface       → Cards, containers, modais
+                 * - .bg-surface-alt   → Fundos alternativos/secundários
+                 * - .bg-surface-elevated → Elementos que precisam destaque (dropdowns, popovers)
+                 * 
+                 * TEXTOS:
+                 * - .text-heading     → Títulos, textos principais (cor primária mais forte)
+                 * - .text-body        → Textos secundários, parágrafos
+                 * - .text-muted       → Textos de menor importância, hints
+                 * - .text-accent      → Cor de destaque (dourado)
+                 * 
+                 * BORDAS:
+                 * - .border-theme     → Bordas de cards (dourado sutil)
+                 * - .border-accent    → Bordas de destaque
+                 * - .border-muted     → Bordas sutis/discretas
+                 * 
+                 * BOTÕES:
+                 * - .btn-gold         → Botão primário dourado
+                 * - .btn-gold-outline → Botão outline dourado
+                 * - .btn-dark         → Botão com fundo escuro/claro adaptável
+                 * 
+                 * CARDS:
+                 * - .card-premium     → Card com estilo premium (borda dourada + hover)
+                 * 
+                 * ⚠️ EVITE usar classes do Tailwind como:
+                 *    bg-white, bg-gray-100, text-gray-900, border-gray-200
+                 *    Elas NÃO se adaptam ao tema e causam inconsistências!
+                 * 
+                 * ✅ PREFIRA:
+                 *    bg-surface, text-heading, border-muted
+                 * ======================================== */
+                
                 --page-bg: #0F1117;
                 --surface: #161821;
                 --surface-alt: #1A1A1A;

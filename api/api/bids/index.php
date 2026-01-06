@@ -36,10 +36,12 @@ try {
             u.email as provider_email,
             u.avatar_url as provider_avatar,
             u.location as provider_location,
-            (SELECT AVG(rating) FROM reviews WHERE provider_id = b.provider_id) as provider_rating,
-            (SELECT COUNT(*) FROM reviews WHERE provider_id = b.provider_id) as provider_reviews_count
+            pp.total_projects as provider_total_projects,
+            (SELECT AVG(rating) FROM reviews WHERE reviewed_id = b.provider_id) as provider_rating,
+            (SELECT COUNT(*) FROM reviews WHERE reviewed_id = b.provider_id) as provider_reviews_count
         FROM bids b
         JOIN users u ON b.provider_id = u.id
+        LEFT JOIN provider_profiles pp ON pp.user_id = b.provider_id
         WHERE b.project_id = ?
         ORDER BY b.amount ASC, b.created_at ASC
     ");
@@ -58,6 +60,11 @@ try {
             'status' => $bid['status'],
             'created_at' => $bid['created_at'],
             'updated_at' => $bid['updated_at'],
+            'provider_name' => $bid['provider_name'],
+            'provider_avatar' => $bid['provider_avatar'],
+            'rating' => $bid['provider_rating'] ? floatval($bid['provider_rating']) : null,
+            'reviews_count' => intval($bid['provider_reviews_count']),
+            'total_projects' => intval($bid['provider_total_projects'] ?? 0),
             'provider' => [
                 'id' => $bid['provider_id'],
                 'name' => $bid['provider_name'],
@@ -65,7 +72,8 @@ try {
                 'avatar_url' => $bid['provider_avatar'],
                 'location' => $bid['provider_location'],
                 'rating' => $bid['provider_rating'] ? floatval($bid['provider_rating']) : null,
-                'reviews_count' => intval($bid['provider_reviews_count'])
+                'reviews_count' => intval($bid['provider_reviews_count']),
+                'total_projects' => intval($bid['provider_total_projects'] ?? 0)
             ]
         ];
     }, $bids);
@@ -78,4 +86,3 @@ try {
 } catch (PDOException $e) {
     Helpers::jsonResponse(['error' => 'Erro ao buscar propostas: ' . $e->getMessage()], 500);
 }
-

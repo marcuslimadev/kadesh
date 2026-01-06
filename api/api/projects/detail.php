@@ -60,6 +60,7 @@ try {
         'budget' => floatval($project['budget']),
         'budget_type' => $project['budget_type'],
         'bidding_ends_at' => $project['bidding_ends_at'],
+        'deadline' => $project['bidding_ends_at'],
         'requirements' => $project['requirements'],
         'skills_required' => json_decode($project['skills_required'] ?? '[]'),
         'status' => $project['status'],
@@ -70,6 +71,9 @@ try {
         'lowest_bid' => $project['lowest_bid'] ? floatval($project['lowest_bid']) : null,
         'created_at' => $project['created_at'],
         'updated_at' => $project['updated_at'],
+        'client_name' => $project['client_name'],
+        'client_avatar' => $project['client_avatar'],
+        'client_location' => $project['client_location'],
         'client' => [
             'id' => $project['client_id'],
             'name' => $project['client_name'],

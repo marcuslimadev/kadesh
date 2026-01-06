@@ -55,14 +55,25 @@
             </div>
 
             <!-- Budget and Deadline -->
-            <div class="grid grid-cols-2 gap-4 p-4 bg-[#0F1117] rounded-lg mb-6 border border-[rgba(212,175,55,0.2)]">
+            <div class="grid grid-cols-2 gap-6 p-6 bg-gradient-to-br from-[#0F1117] to-[#1A1A2E] rounded-xl mb-6 border-2 border-[rgba(212,175,55,0.3)] shadow-lg">
               <div>
-                <p class="text-sm text-heading mb-1">Orcamento</p>
-                <p class="text-2xl font-bold text-heading">{{ formatCurrency(project.budget) }}</p>
+                <p class="text-xs uppercase tracking-wider text-[#8A8A8A] mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+                  </svg>
+                  Orçamento
+                </p>
+                <p class="text-4xl font-extrabold text-[#D4AF37]">{{ formatCurrency(project.budget) }}</p>
               </div>
               <div>
-                <p class="text-sm text-heading mb-1">Prazo de Entrega</p>
-                <p class="text-lg font-semibold text-heading">{{ formatDeadline(project.deadline) }}</p>
+                <p class="text-xs uppercase tracking-wider text-[#8A8A8A] mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                  </svg>
+                  Prazo de Entrega
+                </p>
+                <p class="text-2xl font-bold text-heading">{{ formatDeadline(project.deadline) }}</p>
                 <!-- Countdown Timer -->
                 <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
                   <div class="flex items-center space-x-2">
@@ -211,7 +222,7 @@
           </div>
 
           <!-- Bids Section -->
-          <div class="bg-surface rounded-lg shadow-md p-6">
+          <div class="bg-surface rounded-lg shadow-md p-6" data-bids-section>
             <!-- Auction Timer Banner -->
             <div v-if="project.status === 'open' && formattedTimeRemaining && !formattedTimeRemaining.expired" 
                  class="mb-4 p-4 rounded-lg border-2"
@@ -307,8 +318,8 @@
                     v-model="bidForm.proposal"
                     rows="4"
                     required
-                    class="w-full px-3 py-2 border border-[rgba(212,175,55,0.35)] bg-[#0F1117] text-heading rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                    :class="canSubmitBid ? 'ring-2 ring-amber-400/40 border-amber-400' : ''"
+                    class="w-full px-3 py-2 border-2 bg-[#0F1117] text-heading rounded-md focus:outline-none transition-all"
+                    :class="canSubmitBid ? 'border-[#D4AF37] ring-4 ring-[#D4AF37]/20 shadow-lg shadow-[#D4AF37]/10 animate-pulse' : 'border-[rgba(212,175,55,0.35)]'"
                     placeholder="Descreva como voce pretende realizar o projeto..."
                   ></textarea>
                 </div>
@@ -361,6 +372,20 @@
               </svg>
               <p class="mt-2">Nenhuma proposta enviada ainda</p>
               <p v-if="canSubmitBid" class="text-sm mt-1">Seja o primeiro a enviar uma proposta!</p>
+            </div>
+
+            <!-- Chat Info Banner -->
+            <div v-if="project.status === 'open'" class="mt-6 p-4 bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.3)] rounded-lg flex items-start gap-3">
+              <svg class="w-5 h-5 text-[#D4AF37] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              <div>
+                <p class="text-sm font-semibold text-heading">💬 Chat com o {{ isProjectOwner ? 'vencedor' : 'contratante' }}</p>
+                <p class="text-xs text-body mt-1">
+                  O chat será liberado automaticamente após {{ isProjectOwner ? 'aceitar uma proposta' : 'sua proposta ser aceita' }}. 
+                  Você poderá acessá-lo na página de Contratos.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -489,7 +514,7 @@ const bids = ref([])
 const isLoading = ref(false)
 const isBidsLoading = ref(false)
 const error = ref(null)
-const showBidForm = ref(false)
+const showBidForm = ref(true) // Aberto por padrão para melhor conversão
 const isBidSubmitting = ref(false)
 const timeRemaining = ref(null)
 const countdownInterval = ref(null)
@@ -880,8 +905,15 @@ const submitBid = async () => {
         proposal: '',
         delivery_time: null
       }
-      // Reload bids to show the new one
+      // Reload bids to show the new one immediately
       await loadBids()
+      // Scroll to bids section to show the new bid
+      setTimeout(() => {
+        const bidsSection = document.querySelector('[data-bids-section]')
+        if (bidsSection) {
+          bidsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }
+      }, 300)
     } else {
     // toast.error(result.error || 'Erro ao enviar proposta')
     }

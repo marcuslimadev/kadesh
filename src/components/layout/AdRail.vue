@@ -33,8 +33,19 @@
       <h4 class="ad-title">{{ slot.title }}</h4>
       <p class="ad-description">{{ slot.description }}</p>
       
+      <router-link
+        v-if="slot.link_url && slot.link_url.startsWith('/')"
+        :to="slot.link_url"
+        class="ad-cta btn-gold"
+        @click="trackClick(slot.id)"
+      >
+        <span>Saiba mais</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </router-link>
       <a
-        v-if="slot.link_url"
+        v-else-if="slot.link_url"
         :href="slot.link_url"
         target="_blank"
         rel="noopener"
@@ -46,12 +57,17 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
       </a>
-      <button v-else class="ad-cta btn-gold" type="button">
+      <router-link
+        v-else
+        to="/ads"
+        class="ad-cta btn-gold"
+        @click="trackClick(slot.id)"
+      >
         <span>Saiba mais</span>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
-      </button>
+      </router-link>
     </div>
   </aside>
 </template>
@@ -77,13 +93,13 @@ const MOCK_ADS = {
       id: 'mock-left-1',
       title: 'Impulsione seu Projeto',
       description: 'Destaque seu projeto e encontre os melhores profissionais.',
-      link_url: '/lobby'
+      link_url: '/ads'
     },
     {
       id: 'mock-left-2',
       title: 'Seja um Prestador Premium',
       description: 'Aumente sua visibilidade e ganhe mais propostas.',
-      link_url: '/profile'
+      link_url: '/ads'
     }
   ],
   right: [
@@ -91,13 +107,13 @@ const MOCK_ADS = {
       id: 'mock-right-1',
       title: 'Suporte 24/7',
       description: 'Nossa equipe está sempre disponível para ajudar.',
-      link_url: '/tutorial'
+      link_url: '/ads'
     },
     {
       id: 'mock-right-2',
       title: 'Pagamentos 100% Seguros',
       description: 'Transações protegidas e fluxo com escrow.',
-      link_url: '/wallet'
+      link_url: '/ads'
     }
   ]
 }

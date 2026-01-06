@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+  <div class="card-premium rounded-lg hover:shadow-lg transition-shadow duration-200 overflow-hidden">
     <!-- Project Image/Category Icon -->
-    <div class="h-40 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+    <div class="h-40 bg-gradient-to-br from-accent/80 to-accent flex items-center justify-center">
       <div class="text-center text-white">
         <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -12,19 +12,19 @@
 
     <div class="p-6">
       <!-- Title -->
-      <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600 cursor-pointer">
+      <h3 class="text-lg font-semibold text-heading mb-2 line-clamp-2 hover:text-accent cursor-pointer">
         <router-link :to="`/projects/${project.id}`">
           {{ project.title }}
         </router-link>
       </h3>
 
       <!-- Description -->
-      <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+      <p class="text-sm text-body mb-4 line-clamp-2">
         {{ project.description }}
       </p>
 
       <!-- Meta Info -->
-      <div class="flex items-center justify-between mb-4 text-sm text-gray-500">
+      <div class="flex items-center justify-between mb-4 text-sm text-muted">
         <div class="flex items-center">
           <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -42,8 +42,8 @@
       <!-- Budget and Status -->
       <div class="flex items-center justify-between">
         <div>
-          <span class="text-xs text-gray-500">Orçamento</span>
-          <p class="text-lg font-bold text-gray-900">
+          <span class="text-xs text-muted">Orçamento</span>
+          <p class="text-lg font-bold text-heading">
             {{ formatCurrency(project.budget) }}
           </p>
         </div>
@@ -51,12 +51,12 @@
       </div>
 
       <!-- Client Info (if available) -->
-      <div v-if="project.client_name" class="mt-4 pt-4 border-t border-gray-100 flex items-center">
-        <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-sm font-semibold mr-2">
+      <div v-if="project.client_name" class="mt-4 pt-4 border-t border-muted flex items-center">
+        <div class="w-8 h-8 rounded-full bg-accent-muted text-accent flex items-center justify-center text-sm font-semibold mr-2">
           {{ getInitials(project.client_name) }}
         </div>
         <div class="text-sm">
-          <p class="font-medium text-gray-900">{{ project.client_name }}</p>
+          <p class="font-medium text-heading">{{ project.client_name }}</p>
         </div>
       </div>
     </div>

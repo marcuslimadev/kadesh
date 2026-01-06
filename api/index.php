@@ -204,6 +204,7 @@ $dynamicRoutes = [
     
     // Admin
     ['GET', '/^\/admin\/users\/([^\/]+)$/', 'api/admin/users.php', 'id'],
+    ['POST', '/^\/admin\/users\/([^\/]+)\/promote$/', 'api/admin/users.php', 'id'],
     ['PATCH', '/^\/admin\/users\/([^\/]+)\/status$/', 'api/admin/users.php', 'id'],
     ['DELETE', '/^\/admin\/users\/([^\/]+)$/', 'api/admin/users.php', 'id'],
     ['PATCH', '/^\/admin\/projects\/([^\/]+)\/status$/', 'api/admin/projects.php', 'id'],
