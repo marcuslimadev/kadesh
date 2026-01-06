@@ -286,7 +286,7 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <router-link
               v-if="isClient"
-              to="/create-project"
+              to="/projects/create"
               class="flex items-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
             >
               <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -322,7 +322,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
 import { format } from 'date-fns'
@@ -357,7 +357,7 @@ const loadDashboardData = async () => {
 
   try {
     // Load stats
-    const statsResponse = await api.get('/api/dashboard/stats')
+    const statsResponse = await api.get('/api/users/dashboard/stats')
     if (statsResponse.data?.stats) {
       stats.value = statsResponse.data.stats
     } else if (statsResponse.data) {
@@ -366,7 +366,7 @@ const loadDashboardData = async () => {
 
     // Load recent projects
     const projectsResponse = await api.get('/api/projects/my-projects', {
-      params: { limit: 5, sort: 'recent' }
+      params: { per_page: 5 }
     })
     if (projectsResponse.data?.projects) {
       recentProjects.value = projectsResponse.data.projects
@@ -397,8 +397,21 @@ const loadDashboardData = async () => {
   }
 }
 
+const handleProjectsUpdated = () => {
+  loadDashboardData()
+}
+
 onMounted(() => {
   loadDashboardData()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
+})
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
 })
 </script>
 
@@ -425,5 +438,3 @@ onMounted(() => {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 </style>
-
-

@@ -264,10 +264,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 
-const router = useRouter()
 const advertisements = ref([])
 const loading = ref(true)
 const showModal = ref(false)
@@ -317,13 +315,17 @@ const filteredAdvertisements = computed(() => {
   })
 })
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('kadesh_token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 async function loadAdvertisements() {
   try {
     loading.value = true
     error.value = null
-    const token = localStorage.getItem('admin_token')
-    const response = await axios.get('/api/advertisements/admin', {
-      headers: { Authorization: `Bearer ${token}` }
+    const response = await api.get('/api/advertisements/admin', {
+      headers: getAuthHeaders()
     })
     advertisements.value = response.data
   } catch (err) {
@@ -377,8 +379,6 @@ async function saveAdvertisement() {
     error.value = null
     successMessage.value = null
     
-    const token = localStorage.getItem('admin_token')
-    
     const payload = {
       ...formData.value,
       link_url: formData.value.link_url || null,
@@ -388,13 +388,13 @@ async function saveAdvertisement() {
     }
 
     if (editingAd.value) {
-      await axios.put(`/api/advertisements/admin/${editingAd.value.id}`, payload, {
-        headers: { Authorization: `Bearer ${token}` }
+      await api.put(`/api/advertisements/admin/${editingAd.value.id}`, payload, {
+        headers: getAuthHeaders()
       })
       successMessage.value = 'Anúncio atualizado com sucesso!'
     } else {
-      await axios.post('/api/advertisements/admin', payload, {
-        headers: { Authorization: `Bearer ${token}` }
+      await api.post('/api/advertisements/admin', payload, {
+        headers: getAuthHeaders()
       })
       successMessage.value = 'Anúncio criado com sucesso!'
     }
@@ -412,9 +412,8 @@ async function saveAdvertisement() {
 async function toggleAdvertisement(id) {
   try {
     error.value = null
-    const token = localStorage.getItem('admin_token')
-    await axios.patch(`/api/advertisements/admin/${id}/toggle`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
+    await api.patch(`/api/advertisements/admin/${id}/toggle`, {}, {
+      headers: getAuthHeaders()
     })
     await loadAdvertisements()
     successMessage.value = 'Status alterado!'
@@ -430,9 +429,8 @@ async function deleteAdvertisement(id) {
 
   try {
     error.value = null
-    const token = localStorage.getItem('admin_token')
-    await axios.delete(`/api/advertisements/admin/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
+    await api.delete(`/api/advertisements/admin/${id}`, {
+      headers: getAuthHeaders()
     })
     await loadAdvertisements()
     successMessage.value = 'Anúncio deletado!'

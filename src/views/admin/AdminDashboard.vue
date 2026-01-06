@@ -170,13 +170,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 import AdminLayout from '@/components/admin/AdminLayout.vue'
 
 const router = useRouter()
 
 const loading = ref(true)
 const stats = ref({})
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('kadesh_token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
 
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -187,16 +192,9 @@ const formatCurrency = (value) => {
 
 const fetchDashboardStats = async () => {
   try {
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/admin/stats/dashboard`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const response = await api.get('/api/admin/stats/dashboard', {
+      headers: getAuthHeaders()
+    })
 
     if (response.data.success) {
       stats.value = response.data.data
@@ -219,4 +217,3 @@ onMounted(() => {
 <style scoped>
 @import '@/assets/admin-design-system.css';
 </style>
-

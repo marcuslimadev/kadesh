@@ -224,7 +224,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
+import api from '@/services/api'
 import AdminLayout from '@/components/admin/AdminLayout.vue'
 import ConfirmationModal from '@/components/admin/ConfirmationModal.vue'
 
@@ -270,6 +270,11 @@ const promoteFields = ref([
   }
 ])
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('kadesh_token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 // Toggle Status Modal
 const showToggleStatus = ref(false)
 const togglingStatus = ref(false)
@@ -281,11 +286,9 @@ const deleting = ref(false)
 const fetchUsers = async () => {
   try {
     loading.value = true
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
     const params = { page: pagination.value.page, limit: pagination.value.limit, ...filters.value }
-    
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await api.get('/api/admin/users', {
+      headers: getAuthHeaders(),
       params
     })
 
@@ -353,13 +356,11 @@ const closePromoteModal = () => {
 const handlePromote = async (formData) => {
   try {
     promoting.value = true
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/promote`,
+    const response = await api.post(
+      `/api/admin/users/${selectedUser.value.id}/promote`,
       formData,
       {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: getAuthHeaders()
       }
     )
 
@@ -400,13 +401,11 @@ const handleToggleStatus = async () => {
   try {
     togglingStatus.value = true
     const newStatus = selectedUser.value.status === 'active' ? 'suspended' : 'active'
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    
-        await axios.patch(
-          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}/status`,
+    await api.patch(
+      `/api/admin/users/${selectedUser.value.id}/status`,
       { status: newStatus },
       {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: getAuthHeaders()
       }
     )
 
@@ -440,12 +439,10 @@ const closeDeleteModal = () => {
 const handleDelete = async () => {
   try {
     deleting.value = true
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    
-        await axios.delete(
-          `${import.meta.env.VITE_API_URL}/api/admin/users/${selectedUser.value.id}`,
+    await api.delete(
+      `/api/admin/users/${selectedUser.value.id}`,
       {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: getAuthHeaders()
       }
     )
 
@@ -473,4 +470,3 @@ onMounted(() => {
 <style scoped>
 @import '@/assets/admin-design-system.css';
 </style>
-

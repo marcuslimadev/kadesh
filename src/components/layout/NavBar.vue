@@ -272,9 +272,14 @@ const mobileMenuOpen = ref(false)
 const tokenRef = authStore.token
 const isAuthenticated = computed(() => {
   const token = tokenRef && typeof tokenRef === 'object' && 'value' in tokenRef ? tokenRef.value : tokenRef
-  return Boolean(token)
+  const storedToken = typeof window !== 'undefined' ? localStorage.getItem('kadesh_token') : null
+  const normalizedStored = storedToken && storedToken !== 'undefined' && storedToken !== 'null' ? storedToken : null
+  return Boolean(token || normalizedStored)
 })
-const isAdmin = computed(() => authStore.isAdmin)
+const isAdmin = computed(() => {
+  const raw = authStore.isAdmin
+  return raw && typeof raw === 'object' && 'value' in raw ? raw.value : raw
+})
 const user = computed(() => authStore.user)
 const userInitials = computed(() => authStore.userInitials)
 const isSidebarVisible = computed(() => sidebarVisibleRef.value)
@@ -330,8 +335,8 @@ const adminLink = { to: '/admin/dashboard', label: 'Admin', icon: 'admin' }
 const primaryLinks = computed(() => {
   if (!isAuthenticated.value) return baseLinks.filter(l => !l.auth)
   const links = [...baseLinks]
-  if (viewMode.isContractor) links.push(...contractorLinks)
-  if (viewMode.isProvider) links.push(...providerLinks)
+  if (authStore.isClient) links.push(...contractorLinks)
+  if (authStore.isProvider) links.push(...providerLinks)
   return links
 })
 
@@ -343,8 +348,8 @@ const secondaryLinks = computed(() => {
 const allLinks = computed(() => {
   const list = [...baseLinks]
   if (isAuthenticated.value) {
-    if (viewMode.isContractor) list.push(...contractorLinks)
-    if (viewMode.isProvider) list.push(...providerLinks)
+    if (authStore.isClient) list.push(...contractorLinks)
+    if (authStore.isProvider) list.push(...providerLinks)
     list.push(...sharedLinks)
   }
   return list

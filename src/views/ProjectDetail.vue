@@ -33,7 +33,10 @@
             <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
                 <h1 class="text-3xl font-bold text-heading mb-2">{{ project.title }}</h1>
-                <div class="flex items-center gap-4 text-sm text-gray-500">
+                <p class="text-sm text-body mb-2">
+                  Anunciado por <span class="font-semibold text-heading">{{ clientDisplayName }}</span>
+                </p>
+                <div class="flex items-center gap-4 text-sm text-body">
                   <span class="flex items-center">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -52,13 +55,13 @@
             </div>
 
             <!-- Budget and Deadline -->
-            <div class="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg mb-6">
+            <div class="grid grid-cols-2 gap-4 p-4 bg-[#0F1117] rounded-lg mb-6 border border-[rgba(212,175,55,0.2)]">
               <div>
-                <p class="text-sm text-body mb-1">Orçamento</p>
+                <p class="text-sm text-heading mb-1">Orcamento</p>
                 <p class="text-2xl font-bold text-heading">{{ formatCurrency(project.budget) }}</p>
               </div>
               <div>
-                <p class="text-sm text-body mb-1">Prazo de Entrega</p>
+                <p class="text-sm text-heading mb-1">Prazo de Entrega</p>
                 <p class="text-lg font-semibold text-heading">{{ formatDeadline(project.deadline) }}</p>
                 <!-- Countdown Timer -->
                 <div v-if="project.status === 'open' && formattedTimeRemaining" class="mt-2">
@@ -73,17 +76,37 @@
                 </div>
               </div>
             </div>
-
+            <div v-if="imageAttachments.length" class="mb-6">
+              <div class="rounded-xl overflow-hidden border border-[rgba(212,175,55,0.2)] bg-[#0F1117]">
+                <img
+                  :src="activeImage?.file_url || imageAttachments[0].file_url"
+                  :alt="activeImage?.original_name || 'Imagem do projeto'"
+                  class="w-full h-80 object-cover"
+                />
+              </div>
+              <div class="grid grid-cols-4 gap-3 mt-3">
+                <button
+                  v-for="image in imageAttachments"
+                  :key="image.id"
+                  type="button"
+                  class="rounded-lg overflow-hidden border"
+                  :class="activeImage?.id === image.id ? 'border-[#D4AF37]' : 'border-[rgba(212,175,55,0.2)]'"
+                  @click="activeImage = image"
+                >
+                  <img :src="image.file_url" :alt="image.original_name" class="w-full h-20 object-cover" />
+                </button>
+              </div>
+            </div>
             <!-- Description -->
             <div>
-              <h2 class="text-lg font-semibold text-heading mb-3">Descrição</h2>
-              <p class="text-body whitespace-pre-line">{{ project.description }}</p>
+              <h2 class="text-lg font-semibold text-heading mb-3">Descricao</h2>
+              <p class="text-heading whitespace-pre-line">{{ project.description }}</p>
             </div>
 
             <!-- Requirements -->
             <div v-if="project.requirements" class="mt-6">
               <h2 class="text-lg font-semibold text-heading mb-3">Requisitos</h2>
-              <p class="text-body whitespace-pre-line">{{ project.requirements }}</p>
+              <p class="text-heading whitespace-pre-line">{{ project.requirements }}</p>
             </div>
 
             <!-- Attachments -->
@@ -114,7 +137,7 @@
                     </svg>
                     {{ isUploadingAttachment ? 'Enviando...' : 'Adicionar Anexos' }}
                   </label>
-                  <p class="text-xs text-gray-500">Máx. 5MB por arquivo</p>
+                  <p class="text-xs text-body">Máx. 5MB por arquivo</p>
                 </div>
               </div>
 
@@ -131,13 +154,13 @@
                       :alt="attachment.original_name"
                       class="object-cover w-full h-full"
                     />
-                    <svg v-else class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg v-else class="w-8 h-8 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10M7 11h10M7 15h7" />
                     </svg>
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-heading truncate">{{ attachment.original_name }}</p>
-                    <p class="text-xs text-gray-500">
+                    <p class="text-xs text-body">
                       {{ attachment.mime_type || 'Arquivo' }}
                       <span v-if="attachment.file_size">
                         · {{ formatAttachmentSize(attachment.file_size) }}
@@ -166,7 +189,7 @@
                 </div>
               </div>
 
-              <div v-else class="p-4 border border-dashed rounded-xl text-sm text-gray-500 bg-gray-50">
+              <div v-else class="p-4 border border-dashed rounded-xl text-sm text-body bg-[#0F1117]">
                 Nenhum anexo enviado até o momento.
                 <span v-if="isProjectOwner" class="text-body font-medium">Use o botão acima para subir arquivos de referência.</span>
               </div>
@@ -174,7 +197,7 @@
 
             <!-- Skills -->
             <div v-if="project.skills" class="mt-6">
-              <h2 class="text-lg font-semibold text-heading mb-3">Habilidades Necessárias</h2>
+              <h2 class="text-lg font-semibold text-heading mb-3">Habilidades Necessarias</h2>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="skill in skillsArray"
@@ -212,7 +235,7 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-heading">Leilão Ativo</p>
+                    <p class="font-semibold text-heading">Leilao Ativo</p>
                     <p class="text-sm text-body">Envie sua proposta antes do prazo</p>
                   </div>
                 </div>
@@ -232,11 +255,11 @@
               <div class="flex items-center gap-3">
                 <!-- Sort Dropdown -->
                 <div v-if="bids.length > 1" class="relative">
-                  <label for="bidSort" class="sr-only">Ordenar propostas</label>
+                  <label for="bidSort" class="sr-only">Ordenar Propostas</label>
                   <select
                     id="bidSort"
                     v-model="bidSortBy"
-                    class="block pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md"
+                    class="block pl-3 pr-10 py-2 text-sm border border-[rgba(212,175,55,0.35)] bg-[#0F1117] text-heading focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md"
                   >
                     <option value="score">Melhor Score</option>
                     <option value="price-low">Menor Preço</option>
@@ -257,7 +280,7 @@
             </div>
 
             <!-- Bid Form -->
-            <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div v-if="showBidForm && canSubmitBid" class="mb-6 p-4 bg-[#0F1117] rounded-lg">
               <h3 class="font-medium text-heading mb-4">Nova Proposta</h3>
               <form @submit.prevent="submitBid" class="space-y-4">
                 <div>
@@ -271,21 +294,22 @@
                     min="0"
                     step="0.01"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-[rgba(212,175,55,0.35)] bg-[#0F1117] text-heading rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                     placeholder="0.00"
                   />
                 </div>
                 <div>
                   <label for="bidDescription" class="block text-sm font-medium text-body mb-1">
-                    Descrição da Proposta *
+                    Descricao da Proposta *
                   </label>
                   <textarea
                     id="bidDescription"
                     v-model="bidForm.proposal"
                     rows="4"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
-                    placeholder="Descreva como você pretende realizar o projeto..."
+                    class="w-full px-3 py-2 border border-[rgba(212,175,55,0.35)] bg-[#0F1117] text-heading rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                    :class="canSubmitBid ? 'ring-2 ring-amber-400/40 border-amber-400' : ''"
+                    placeholder="Descreva como voce pretende realizar o projeto..."
                   ></textarea>
                 </div>
                 <div>
@@ -298,7 +322,7 @@
                     type="number"
                     min="1"
                     required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                    class="w-full px-3 py-2 border border-[rgba(212,175,55,0.35)] bg-[#0F1117] text-heading rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
                     placeholder="7"
                   />
                 </div>
@@ -315,7 +339,7 @@
             <!-- Bids Loading State -->
             <div v-if="isBidsLoading" class="text-center py-8">
               <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-              <p class="mt-2 text-body text-sm">Carregando propostas...</p>
+              <p class="mt-2 text-body text-sm">Carregando Propostas...</p>
             </div>
 
             <!-- Bids List -->
@@ -331,8 +355,8 @@
             </div>
 
             <!-- Empty State -->
-            <div v-else class="text-center py-8 text-gray-500">
-              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-else class="text-center py-8 text-body">
+              <svg class="mx-auto h-12 w-12 text-body" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <p class="mt-2">Nenhuma proposta enviada ainda</p>
@@ -352,7 +376,7 @@
               </div>
               <div>
                 <p class="font-medium text-heading">{{ project.client_name }}</p>
-                <p class="text-sm text-gray-500">Contratante</p>
+                <p class="text-sm text-body">Contratante</p>
               </div>
             </div>
           </div>
@@ -366,7 +390,7 @@
                 <span class="text-sm font-medium text-heading">{{ project.bid_count || 0 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm text-body">Orçamento Médio</span>
+                <span class="text-sm text-body">Orcamento Médio</span>
                 <span class="text-sm font-medium text-heading">{{ formatCurrency(project.budget) }}</span>
               </div>
               <div class="flex justify-between">
@@ -378,10 +402,10 @@
 
           <!-- Actions (for project owner) -->
           <div v-if="authStore.user?.id === project.client_id" class="bg-surface rounded-lg shadow-md p-6">
-            <h3 class="text-lg font-semibold text-heading mb-4">Ações</h3>
+            <h3 class="text-lg font-semibold text-heading mb-4">Acoes</h3>
             <div class="space-y-3">
               <button
-                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-body bg-surface hover:bg-gray-50 transition-colors"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-body bg-surface hover:bg-[#0F1117] transition-colors"
               >
                 Editar Projeto
               </button>
@@ -391,9 +415,9 @@
                 :disabled="isClosingAuction"
                 class="w-full px-4 py-2 border border-green-500 rounded-md text-sm font-medium text-green-700 bg-surface hover:bg-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilão e Selecionar Vencedor' }}
+                {{ isClosingAuction ? 'Encerrando...' : '🏁 Encerrar Leilao e Selecionar Vencedor' }}
               </button>
-              <p v-if="project.status === 'open' && bids.length > 0" class="text-xs text-gray-500 text-center">
+              <p v-if="project.status === 'open' && bids.length > 0" class="text-xs text-body text-center">
                 O vencedor será o lance de menor valor
               </p>
               <button
@@ -411,7 +435,7 @@
               <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 class="text-lg font-semibold text-green-800">Vencedor do Leilão</h3>
+              <h3 class="text-lg font-semibold text-green-800">Vencedor do Leilao</h3>
             </div>
             <div class="flex items-center space-x-3">
               <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-semibold">
@@ -473,6 +497,7 @@ const bidSortBy = ref('score') // score, price-low, price-high, date-new, date-o
 const isClosingAuction = ref(false)
 const deletingAttachmentId = ref(null)
 const isUploadingAttachment = ref(false)
+const activeImage = ref(null)
 
 const bidForm = ref({
   amount: null,
@@ -486,7 +511,13 @@ const skillsArray = computed(() => {
 })
 
 const isProjectOwner = computed(() => {
-  return authStore.user?.id === project.value?.client_id
+  return (authStore.user?.value?.id || authStore.user?.id) === project.value?.client_id
+})
+
+const clientDisplayName = computed(() => {
+  if (project.value?.client_name) return project.value.client_name
+  if (project.value?.client?.name) return project.value.client.name
+  return 'Contratante'
 })
 
 const canSubmitBid = computed(() => {
@@ -558,6 +589,9 @@ const sortedBids = computed(() => {
 const attachmentsList = computed(() => {
   if (!project.value?.attachments) return []
   return Array.isArray(project.value.attachments) ? project.value.attachments : []
+})
+const imageAttachments = computed(() => {
+  return attachmentsList.value.filter(att => isImageAttachment(att))
 })
 
 const acceptedBid = computed(() => {
@@ -761,6 +795,8 @@ const loadProject = async () => {
 
     if (result.success) {
       project.value = result.data.project
+      const images = imageAttachments.value
+      activeImage.value = images[0] || null
       // Start countdown if project is open and has a deadline
       if (project.value.status === 'open' && project.value.deadline) {
         startCountdown()
@@ -810,7 +846,7 @@ const submitBid = async () => {
   }
 
   if (!authStore.isProvider) {
-    // toast.error('Apenas prestadores podem enviar propostas')
+    // toast.error('Apenas prestadores podem enviar Propostas')
     return
   }
 
@@ -820,7 +856,7 @@ const submitBid = async () => {
   }
 
   if (!bidForm.value.proposal.trim()) {
-    // toast.error('Descrição da proposta é obrigatória')
+    // toast.error('Descricao da proposta é obrigatória')
     return
   }
 
@@ -858,7 +894,7 @@ const submitBid = async () => {
 }
 
 const acceptBid = async (bidId) => {
-  if (!confirm('Tem certeza que deseja aceitar esta proposta? Isso encerrará o leilão.')) {
+  if (!confirm('Tem certeza que deseja aceitar esta proposta? Isso encerrará o Leilao.')) {
     return
   }
 
@@ -907,13 +943,13 @@ const handlePaymentReleased = async (data) => {
 
 const closeAuction = async () => {
   if (bids.value.length === 0) {
-    // toast.error('Não há propostas para selecionar um vencedor')
+    // toast.error('Não há Propostas para selecionar um vencedor')
     return
   }
 
   const lowestBid = [...bids.value].sort((a, b) => (a.amount || 0) - (b.amount || 0))[0]
   
-  const confirmMessage = `Encerrar o leilão agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat('pt-BR').format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`
+  const confirmMessage = `Encerrar o Leilao agora?\n\nO vencedor será: ${lowestBid.provider_name}\nValor: R$ ${new Intl.NumberFormat('pt-BR').format(lowestBid.amount)}\n\nEsta ação não pode ser desfeita.`
   
   if (!confirm(confirmMessage)) {
     return
@@ -925,15 +961,15 @@ const closeAuction = async () => {
     const result = await projectService.closeAuction(project.value.id)
     
     if (result.success) {
-    // toast.success('🎉 Leilão encerrado com sucesso! O vencedor foi notificado.')
+    // toast.success('🎉 Leilao encerrado com sucesso! O vencedor foi notificado.')
       // Reload project and bids to show updated status
       await loadProject()
     } else {
-    // toast.error(result.error || 'Erro ao encerrar leilão')
+    // toast.error(result.error || 'Erro ao encerrar Leilao')
     }
   } catch (err) {
     console.error('Error closing auction:', err)
-    // toast.error('Erro ao encerrar leilão')
+    // toast.error('Erro ao encerrar Leilao')
   } finally {
     isClosingAuction.value = false
   }
@@ -950,5 +986,18 @@ onUnmounted(() => {
   }
 })
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

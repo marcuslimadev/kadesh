@@ -1,13 +1,13 @@
 <template>
-  <div class="lobby-shell py-8 px-4 sm:px-6 lg:px-8">
+  <div class="lobby-shell py-6 px-4 sm:px-6 lg:px-8">
     <div class="lobby-grid max-w-7xl mx-auto">
       <AdRail position="left" />
 
-      <div class="space-y-8">
+      <div class="lobby-main space-y-6">
         <section class="lobby-hero card">
           <div class="flex flex-wrap items-start justify-between gap-6">
             <div class="space-y-3">
-              <p class="hero-eyebrow">Service Bridge • Acesso premium</p>
+              <p class="hero-eyebrow">Leilao principal - Service Bridge</p>
               <h1 class="hero-title">{{ lobbyTitle }}</h1>
               <p class="hero-sub">{{ lobbyDescription }}</p>
               <div class="flex flex-wrap gap-2">
@@ -24,14 +24,14 @@
           </div>
         </section>
 
-        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
             v-for="highlight in lobbyHighlights"
             :key="highlight.label"
             class="stat-card card"
           >
             <p class="text-sm text-muted">{{ highlight.label }}</p>
-            <p class="text-3xl font-bold text-primary">{{ highlight.value }}</p>
+            <p class="text-2xl font-bold text-primary">{{ highlight.value }}</p>
             <span class="text-xs font-semibold" :class="highlight.text">{{ highlight.caption }}</span>
           </div>
         </section>
@@ -39,7 +39,7 @@
         <section class="card">
           <div class="flex items-center justify-between gap-4 mb-4">
             <div>
-              <p class="text-sm text-muted">Acesso rápido</p>
+              <p class="text-sm text-muted">Acesso rapido</p>
               <h2 class="text-xl font-semibold">Navegue pelo que importa agora</h2>
             </div>
             <button class="cta-outline" @click="showQuickAccess = !showQuickAccess">
@@ -93,11 +93,11 @@
           </transition>
         </section>
 
-        <section class="card">
+        <section class="card filters-card">
           <div class="flex items-center justify-between mb-4">
             <div>
               <p class="text-sm text-muted">Filtros e curadoria</p>
-              <h2 class="text-xl font-semibold">Refine o grid do Lobby</h2>
+              <h2 class="text-lg font-semibold">Refine o grid do Lobby</h2>
             </div>
             <button class="cta-link" @click="showCategoryModal = true">
               <span class="text-lg font-bold mr-1">+</span> Nova categoria
@@ -117,16 +117,16 @@
             </div>
 
             <div>
-              <label class="filter-label">Orçamento (Máx)</label>
+              <label class="filter-label">Orcamento (Max)</label>
               <select
                 v-model="filters.budget"
                 class="filter-input"
               >
                 <option value="">Qualquer</option>
-                <option value="500">Até R$ 500</option>
-                <option value="1000">Até R$ 1.000</option>
-                <option value="5000">Até R$ 5.000</option>
-                <option value="10000">Até R$ 10.000</option>
+                <option value="500">Ate R$ 500</option>
+                <option value="1000">Ate R$ 1.000</option>
+                <option value="5000">Ate R$ 5.000</option>
+                <option value="10000">Ate R$ 10.000</option>
               </select>
             </div>
 
@@ -137,10 +137,10 @@
                 class="filter-input"
               >
                 <option value="">Qualquer</option>
-                <option value="7">Até 7 dias</option>
-                <option value="15">Até 15 dias</option>
-                <option value="30">Até 30 dias</option>
-                <option value="60">Até 60 dias</option>
+                <option value="7">Ate 7 dias</option>
+                <option value="15">Ate 15 dias</option>
+                <option value="30">Ate 30 dias</option>
+                <option value="60">Ate 60 dias</option>
               </select>
             </div>
 
@@ -153,13 +153,13 @@
                 <option value="">Todos</option>
                 <option value="open">Aberto (aceita propostas)</option>
                 <option value="in_progress">Em andamento</option>
-                <option value="completed">Concluído</option>
+                <option value="completed">Concluido</option>
               </select>
             </div>
           </div>
 
           <div v-if="pendingCategories.length" class="pending-chip">
-            Última sugestão: {{ pendingCategories[pendingCategories.length - 1].name }} aguardando validação do ADM.
+            Ultima sugestao: {{ pendingCategories[pendingCategories.length - 1].name }} aguardando validacao do ADM.
           </div>
 
           <div class="mt-4 flex justify-end gap-2">
@@ -191,7 +191,7 @@
         </div>
 
         <div v-else class="space-y-6">
-          <!-- Grid de cards de leilão estilo Monitor Leilão / Vestri -->
+          <!-- Grid de cards de leilao estilo Monitor Leilao / Vestri -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
               v-for="project in filteredProjects"
@@ -201,8 +201,8 @@
               <!-- Image Thumbnail -->
               <div class="relative h-48 overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0F1117]">
                 <img
-                  v-if="project.attachments && project.attachments.length > 0"
-                  :src="project.attachments[0]"
+                  v-if="getCoverImage(project)"
+                  :src="getCoverImage(project)"
                   :alt="project.title"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
@@ -263,6 +263,10 @@
                   {{ getCategoryLabel(project.category) }}
                 </span>
 
+                <p class="text-xs uppercase tracking-wide text-[#C7C7C7] mb-1">
+                  Contratante: <span class="text-[#F5F5F5] font-semibold">{{ project.client_name || 'Contratante' }}</span>
+                </p>
+
                 <!-- Title -->
                 <router-link
                   :to="`/projects/${project.id}`"
@@ -277,21 +281,27 @@
                 </p>
 
                 <!-- Stats Grid -->
-                <div class="grid grid-cols-3 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
                   <div class="text-center">
-                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orçamento</p>
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orcamento</p>
                     <p class="text-base font-bold text-[#D4AF37]">
                       {{ formatCurrencyCompact(project.budget) }}
                     </p>
                   </div>
                   <div class="text-center border-x border-[rgba(212,175,55,0.1)]">
+                    <p class="text-xs text-[#8A8A8A] uppercase mb-1">Prazo</p>
+                    <p class="text-sm font-semibold text-[#F5F5F5]">
+                      {{ formatDeadlineCompact(project.deadline) }}
+                    </p>
+                  </div>
+                  <div class="text-center border-x border-[rgba(212,175,55,0.1)] sm:border-x-0 sm:border-l sm:border-[rgba(212,175,55,0.1)]">
                     <p class="text-xs text-[#8A8A8A] uppercase mb-1">Propostas</p>
                     <p class="text-base font-bold text-[#F5F5F5]">{{ getBidCount(project) }}</p>
                   </div>
                   <div class="text-center">
                     <p class="text-xs text-[#8A8A8A] uppercase mb-1">Menor</p>
                     <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-[#8A8A8A]'">
-                      {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : '—' }}
+                      {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : 'ÔÇö' }}
                     </p>
                   </div>
                 </div>
@@ -309,12 +319,22 @@
                       <p class="text-xs text-[#8A8A8A]">{{ formatDateCompact(project.created_at) }}</p>
                     </div>
                   </div>
-                  <router-link
-                    :to="`/projects/${project.id}`"
-                    class="px-4 py-2 bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] text-[#0F1117] font-bold text-sm rounded-lg hover:shadow-lg hover:shadow-[#D4AF37]/30 transition-all transform hover:scale-105"
-                  >
-                    {{ isProviderView ? 'Dar Lance' : 'Ver' }}
-                  </router-link>
+                  <div class="flex items-center gap-2">
+                    <button
+                      v-if="isProviderView"
+                      type="button"
+                      class="cta-bid"
+                      @click="openBidModal(project)"
+                    >
+                      Dar lance
+                    </button>
+                    <router-link
+                      :to="`/projects/${project.id}`"
+                      class="cta-view"
+                    >
+                      {{ isProviderView ? 'Detalhes' : 'Ver' }}
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -331,20 +351,20 @@
               Anterior
             </button>
             <span class="pagination-current">
-              Página {{ currentPage }}
+              Pagina {{ currentPage }}
             </span>
             <button
               @click="currentPage++"
               :disabled="filteredProjects.length < pageSize"
               class="pagination-button rounded-r-md"
             >
-              Próxima
+              Proxima
             </button>
           </nav>
         </div>
       </div>
 
-      
+      <AdRail position="right" />
     </div>
 
     <transition name="fade">
@@ -363,13 +383,53 @@
               <input v-model="newCategory.name" type="text" class="filter-input" placeholder="Ex: IA Generativa" />
             </div>
             <div>
-              <label class="filter-label">Descrição</label>
+              <label class="filter-label">Descricao</label>
               <textarea v-model="newCategory.description" rows="3" class="filter-input" placeholder="Conte rapidamente o que engloba a categoria" />
             </div>
           </div>
           <div class="mt-6 flex justify-end gap-2">
             <button class="cta-ghost" @click="closeCategoryModal">Cancelar</button>
-            <button class="cta-link" @click="submitCategoryRequest">Enviar para validação</button>
+            <button class="cta-link" @click="submitCategoryRequest">Enviar para validacao</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div v-if="showBidModal" class="modal-overlay" @click.self="closeBidModal">
+        <div class="modal-card">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <p class="text-sm text-muted">Enviar proposta</p>
+              <h3 class="text-xl font-semibold">Lance rapido no leilao</h3>
+            </div>
+            <button class="cta-ghost" @click="closeBidModal">Fechar</button>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-4 rounded-xl border border-[rgba(212,175,55,0.2)] bg-[#0F1117]">
+              <p class="text-sm text-[#8A8A8A] uppercase tracking-wide">Projeto</p>
+              <p class="text-lg font-semibold text-heading">{{ activeBidProject?.title }}</p>
+            </div>
+
+            <div>
+              <label class="filter-label">Valor do lance (R$)</label>
+              <input v-model.number="bidForm.amount" type="number" min="1" class="filter-input" placeholder="0,00" />
+            </div>
+            <div>
+              <label class="filter-label">Prazo (dias)</label>
+              <input v-model.number="bidForm.delivery_time" type="number" min="1" class="filter-input" placeholder="7" />
+            </div>
+            <div>
+              <label class="filter-label">Proposta</label>
+              <textarea v-model="bidForm.proposal" rows="4" class="filter-input proposal-highlight" placeholder="Descreva sua proposta com clareza"></textarea>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-end gap-2">
+            <button class="cta-ghost" @click="closeBidModal">Cancelar</button>
+            <button class="cta-link" :disabled="isSubmittingBid" @click="submitQuickBid">
+              {{ isSubmittingBid ? 'Enviando...' : 'Enviar lance' }}
+            </button>
           </div>
         </div>
       </div>
@@ -378,16 +438,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 // import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
 import projectService from '@/services/projectService'
+import bidService from '@/services/bidService'
 import api from '@/services/api'
 import AdRail from '@/components/layout/AdRail.vue'
 
 const authStore = useAuthStore()
+const router = useRouter()
 const viewModeStore = useViewModeStore()
 const { currentMode } = storeToRefs(viewModeStore)
 // const toast = useToast()
@@ -400,17 +463,17 @@ const userName = computed(() => {
   if (user && user.name) {
     return user.name.split(' ')[0] // Apenas primeiro nome
   }
-  return 'Usuário'
+  return 'Usuario'
 })
 
 const lobbyTitle = computed(() => {
   const mode = isContractorView.value ? 'Contratante' : 'Prestador'
-  return `🎯 Lobby do ${mode} - ${userName.value}`
+  return `­ƒÄ» Lobby do ${mode} - ${userName.value}`
 })
 
 const lobbyDescription = computed(() =>
   isContractorView.value
-    ? 'Gerencie seus leilões, monitore os lances e acompanhe o vencedor em tempo real.'
+    ? 'Gerencie seus leiloes, monitore os lances e acompanhe o vencedor em tempo real.'
     : 'Descubra projetos em aberto, acompanhe disputas e envie lances competitivos instantaneamente.'
 )
 
@@ -424,19 +487,19 @@ const lobbyHighlights = computed(() => {
       {
         label: 'Projetos ativos',
         value: total,
-        caption: 'publicados por você',
+        caption: 'publicados por voce',
         text: 'text-amber-400'
       },
       {
         label: 'Aceitando propostas',
         value: openCount,
-        caption: 'leilões abertos agora',
+        caption: 'leiloes abertos agora',
         text: 'text-amber-400'
       },
       {
         label: 'Prioridade alta',
         value: highPriority,
-        caption: 'precisam de atenção',
+        caption: 'precisam de atencao',
         text: 'text-amber-300'
       }
     ]
@@ -444,7 +507,7 @@ const lobbyHighlights = computed(() => {
 
   return [
     {
-      label: 'Projetos disponíveis',
+      label: 'Projetos disponiveis',
       value: openCount,
       caption: 'aceitando novos lances',
       text: 'text-amber-400'
@@ -486,6 +549,14 @@ const showQuickAccess = ref(true)
 const showCategoryModal = ref(false)
 const newCategory = ref({ name: '', description: '' })
 const pendingCategories = ref([])
+const showBidModal = ref(false)
+const activeBidProject = ref(null)
+const bidForm = ref({
+  amount: null,
+  delivery_time: null,
+  proposal: ''
+})
+const isSubmittingBid = ref(false)
 
 const FILTER_STORAGE_KEYS = {
   contractor: 'kadesh_lobby_filters_contractor',
@@ -511,7 +582,7 @@ const restoreFiltersForMode = () => {
       status: saved.status || ''
     }
   } catch (error) {
-    console.warn('Não foi possível restaurar filtros do lobby:', error)
+    console.warn('Nao foi possivel restaurar filtros do lobby:', error)
   }
 }
 
@@ -520,7 +591,7 @@ const persistFilters = () => {
   try {
     localStorage.setItem(getStorageKey(), JSON.stringify(filters.value))
   } catch (error) {
-    console.warn('Não foi possível salvar filtros do lobby:', error)
+    console.warn('Nao foi possivel salvar filtros do lobby:', error)
   }
 }
 
@@ -545,12 +616,12 @@ const filteredProjects = computed(() => {
 const ensureAuthHeader = () => {
   if (typeof window === 'undefined') return
   const storedToken = localStorage.getItem('kadesh_token')
-  if (!storedToken) {
+  if (!storedToken || storedToken === 'undefined' || storedToken === 'null') {
     console.warn('[Lobby] Nenhum token encontrado para setar header')
     return
   }
 
-  // Setar em múltiplas camadas para garantir
+  // Setar em multiplas camadas para garantir
   if (api?.defaults?.headers?.common) {
     api.defaults.headers.common.Authorization = `Bearer ${storedToken}`
     api.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`
@@ -637,7 +708,14 @@ const formatDateCompact = (dateString) => {
   
   if (diffDays === 0) return 'Hoje'
   if (diffDays === 1) return 'Ontem'
-  if (diffDays < 7) return `${diffDays}d atrás`
+  if (diffDays < 7) return `${diffDays}d atras`
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+}
+
+const formatDeadlineCompact = (dateString) => {
+  if (!dateString) return 'Sem prazo'
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return 'Sem prazo'
   return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 }
 
@@ -647,7 +725,7 @@ const getCategoryLabel = (value) => {
 }
 
 const formatDate = (dateString) => {
-  if (!dateString) return 'Data não disponível'
+  if (!dateString) return 'Data nao disponivel'
   const date = new Date(dateString)
   return date.toLocaleDateString('pt-BR')
 }
@@ -667,7 +745,7 @@ const getStatusLabel = (status) => {
   const labels = {
     open: 'Aberto',
     in_progress: 'Em andamento',
-    completed: 'Concluído',
+    completed: 'Concluido',
     cancelled: 'Cancelado'
   }
   return labels[status] || status
@@ -694,7 +772,7 @@ const getBidCount = (project) => {
 
 const getLowestBid = (project) => {
   if (!project) return null
-  const value = project.lowest_bid_amount ?? null
+  const value = project.lowest_bid_amount ?? project.lowest_bid ?? null
   return typeof value === 'number' ? value : (value ? parseFloat(value) : null)
 }
 
@@ -760,13 +838,66 @@ const submitCategoryRequest = () => {
     return
   }
   pendingCategories.value.push({ ...newCategory.value, created_at: new Date() })
-    // toast.success('Categoria enviada para análise do administrador.')
+    // toast.success('Categoria enviada para analise do administrador.')
   closeCategoryModal()
+}
+
+const openBidModal = (project) => {
+  if (!isProviderView.value) return
+  activeBidProject.value = project
+  bidForm.value = {
+    amount: null,
+    delivery_time: null,
+    proposal: ''
+  }
+  showBidModal.value = true
+}
+
+const closeBidModal = () => {
+  showBidModal.value = false
+  activeBidProject.value = null
+}
+
+const submitQuickBid = async () => {
+  if (!authStore.isAuthenticated) {
+    router.push({ name: 'login', query: { redirect: '/lobby' } })
+    return
+  }
+  if (!bidForm.value.amount || !bidForm.value.delivery_time || !bidForm.value.proposal?.trim()) {
+    return
+  }
+  if (!activeBidProject.value?.id) return
+
+  isSubmittingBid.value = true
+  try {
+    const payload = {
+      project_id: activeBidProject.value.id,
+      amount: bidForm.value.amount,
+      delivery_time: bidForm.value.delivery_time,
+      proposal: bidForm.value.proposal
+    }
+    const result = await bidService.createBid(payload)
+    if (result.success) {
+      await loadProjects()
+      closeBidModal()
+    }
+  } catch (error) {
+    console.error('Erro ao enviar lance rapido:', error)
+  } finally {
+    isSubmittingBid.value = false
+  }
+}
+
+const handleProjectsUpdated = () => {
+  loadProjects()
 }
 
 onMounted(() => {
   restoreFiltersForMode()
   loadProjects()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
 })
 
 watch(currentMode, () => {
@@ -778,6 +909,12 @@ watch(currentMode, () => {
 watch(filters, () => {
   persistFilters()
 }, { deep: true })
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
+})
 </script>
 
 <style scoped>
@@ -789,8 +926,13 @@ watch(filters, () => {
 
 .lobby-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(220px, 260px) 1fr minmax(220px, 260px);
   gap: 18px;
+}
+
+
+.lobby-main {
+  min-width: 0;
 }
 
 .card {
@@ -800,15 +942,19 @@ watch(filters, () => {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+.lobby-hero {
+  padding: 16px 18px;
+}
+
 .hero-eyebrow {
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }
 
 .hero-title {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 800;
 }
 
@@ -819,17 +965,18 @@ watch(filters, () => {
 .tag {
   background: var(--surface);
   color: var(--accent);
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 999px;
   border: 2px solid var(--accent);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .stat-card {
   background: var(--surface);
   border: 2px solid var(--card-border);
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
+  padding: 12px 14px;
 }
 
 .text-muted {
@@ -878,7 +1025,7 @@ watch(filters, () => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: 10px;
   border: 2px solid var(--accent);
   color: var(--text-primary);
@@ -895,27 +1042,48 @@ watch(filters, () => {
 }
 
 .cta-outline {
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: 10px;
   border: 2px solid var(--card-border);
   background: var(--surface);
   color: var(--text-primary);
   transition: all 0.2s ease;
-}
-
-.cta-outline:hover {
+}.cta-outline:hover {
   border-color: var(--accent);
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 }
 
-.cta-ghost {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--muted-border);
-  color: var(--text-secondary);
-  background: transparent;
+
+.cta-bid {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #d4af37;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 12px;
+  border: none;
+  transition: all 0.2s ease;
 }
 
+.cta-bid:hover {
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
+}
+
+.cta-view {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #f5f5f5;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.cta-view:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
 .filter-label {
   display: block;
   font-size: 14px;
@@ -927,7 +1095,7 @@ watch(filters, () => {
 .filter-input {
   width: 100%;
   background: var(--surface);
-  border: 2px solid var(--card-border);
+  border: 1px solid var(--card-border);
   padding: 10px 14px;
   border-radius: 10px;
   color: var(--text-primary);
@@ -940,6 +1108,16 @@ watch(filters, () => {
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
+.proposal-highlight {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.filters-card {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-width: 1px;
+}
+
 .pending-chip {
   margin-top: 12px;
   padding: 10px 12px;
@@ -949,109 +1127,6 @@ watch(filters, () => {
   color: var(--text-primary);
 }
 
-.project-card {
-  border: 2px solid var(--card-border);
-  transition: all 0.3s ease;
-}
-
-.project-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 12px 32px rgba(212, 175, 55, 0.2);
-  transform: translateY(-2px);
-}
-
-/* Auction Card - Novo design */
-.auction-card {
-  background: var(--surface);
-  border: 2px solid var(--card-border);
-  border-radius: 20px;
-  padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.auction-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
-  transform: translateY(-4px);
-}
-
-.countdown-badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.bg-surface-alt {
-  background: var(--surface-alt);
-}
-
-.text-muted {
-  color: var(--text-secondary);
-}
-
-.border-muted {
-  border-color: var(--muted-border);
-}
-
-.pagination-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 16px;
-  border: 2px solid var(--card-border);
-  font-size: 14px;
-  font-weight: 600;
-  background: var(--surface);
-  color: var(--text-primary);
-  transition: all 0.2s ease;
-}
-
-.pagination-button:hover:not(:disabled) {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #0f172a;
-}
-
-.pagination-button:disabled {
-  opacity: 0.5;
-}
-
-.pagination-current {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 20px;
-  border: 2px solid var(--accent);
-  font-size: 14px;
-  font-weight: 700;
-  background: var(--surface);
-  color: var(--accent);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 50;
-}
-
-.modal-card {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 20px;
-  width: 100%;
-  max-width: 520px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.28);
-}
-
-/* Auction Card - Novo design estilo Monitor Leilão/Vestri */
 .auction-card-modern {
   background: transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1072,5 +1147,23 @@ watch(filters, () => {
   .lobby-grid {
     grid-template-columns: 1fr;
   }
+
+.lobby-main {
+  min-width: 0;
+}
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,10 @@
 import api from './api'
 
+const notifyProjectsUpdated = (source) => {
+  if (typeof window === 'undefined') return
+  window.dispatchEvent(new CustomEvent('kadesh:projects-updated', { detail: { source } }))
+}
+
 export const projectService = {
   /**
    * Get all projects with filters and pagination
@@ -45,6 +50,7 @@ export const projectService = {
   async createProject(projectData) {
     try {
       const response = await api.post('/api/projects', projectData)
+      notifyProjectsUpdated('project')
       return {
         success: true,
         data: response.data

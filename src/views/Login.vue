@@ -217,7 +217,7 @@ const handleLogin = async () => {
         return
       }
 
-      // Redirecionar para o Lobby de Leiläes ap¢s login
+      // Redirecionar para o Lobby de Leiloes apos login
       router.push('/lobby')
     } else {
       errors.general = result.error

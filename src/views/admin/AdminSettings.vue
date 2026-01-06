@@ -239,6 +239,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '@/services/api'
 import axios from 'axios'
 
 const router = useRouter()
@@ -252,6 +253,11 @@ const settings = ref([])
 const activeTab = ref('mercadopago')
 const showToken = ref(false)
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('kadesh_token')
+  return token ? { Authorization: `Bearer ${token}` } : {}
+}
+
 // Mercado Pago
 const mpPublicKey = ref('')
 const mpAccessToken = ref('')
@@ -260,23 +266,25 @@ const mpEnvironment = ref('sandbox')
 const fetchSettings = async () => {
   try {
     error.value = null
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/settings`, {
-      headers: { Authorization: `Bearer ${token}` }
+    const response = await api.get('/api/admin/settings', {
+      headers: getAuthHeaders()
     })
 
-    if (response.data.success) {
-      settings.value = response.data.data
-      
-      // Carregar configs do MP
-      const mpPubKey = settings.value.find(s => s.key === 'mp_public_key')
-      const mpAccToken = settings.value.find(s => s.key === 'mp_access_token')
-      const mpEnv = settings.value.find(s => s.key === 'mp_environment')
-      
-      if (mpPubKey) mpPublicKey.value = mpPubKey.value
-      if (mpAccToken) mpAccessToken.value = mpAccToken.value
-      if (mpEnv) mpEnvironment.value = mpEnv.value
-    }
+    const settingsPayload = response.data?.settings || response.data?.data || {}
+    settings.value = Object.entries(settingsPayload).map(([key, info]) => ({
+      key,
+      value: info?.value ?? '',
+      description: info?.description ?? '',
+      is_public: Boolean(info?.is_public)
+    }))
+    
+    const mpPubKey = settings.value.find(s => s.key === 'mp_public_key')
+    const mpAccToken = settings.value.find(s => s.key === 'mp_access_token')
+    const mpEnv = settings.value.find(s => s.key === 'mp_environment')
+    
+    if (mpPubKey) mpPublicKey.value = mpPubKey.value
+    if (mpAccToken) mpAccessToken.value = mpAccToken.value
+    if (mpEnv) mpEnvironment.value = mpEnv.value
   } catch (err) {
     console.error('Error fetching settings:', err)
     if (err.response?.status === 401) {
@@ -295,8 +303,6 @@ const saveMercadoPago = async () => {
     error.value = null
     successMessage.value = null
 
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    
     // Salvar as 3 configurações
     const updates = [
       { key: 'mp_public_key', value: mpPublicKey.value, description: 'Chave pública do Mercado Pago', is_public: true },
@@ -307,18 +313,18 @@ const saveMercadoPago = async () => {
     for (const update of updates) {
       // Tentar atualizar primeiro
       try {
-        await axios.put(
-          `${import.meta.env.VITE_API_URL}/api/admin/settings/${update.key}`,
-          update,
-          { headers: { Authorization: `Bearer ${token}` } }
+        await api.put(
+          '/api/admin/settings',
+          { value: update.value },
+          { params: { key: update.key }, headers: getAuthHeaders() }
         )
       } catch (err) {
         // Se não existe, criar
         if (err.response?.status === 404) {
-          await axios.post(
-            `${import.meta.env.VITE_API_URL}/api/admin/settings`,
+          await api.post(
+            '/api/admin/settings',
             update,
-            { headers: { Authorization: `Bearer ${token}` } }
+            { headers: getAuthHeaders() }
           )
         } else {
           throw err
@@ -393,11 +399,10 @@ const runMigrations = async () => {
 const updateSetting = async (setting) => {
   try {
     error.value = null
-    const token = localStorage.getItem('kadesh_token') || localStorage.getItem('kadesh_token') || localStorage.getItem('adminToken')
-    await axios.put(
-      `${import.meta.env.VITE_API_URL}/api/admin/settings/${setting.key}`,
+    await api.put(
+      '/api/admin/settings',
       { value: setting.value },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { params: { key: setting.key }, headers: getAuthHeaders() }
     )
 
     successMessage.value = 'Configuração atualizada!'

@@ -1,5 +1,10 @@
 import api from './api'
 
+const notifyProjectsUpdated = (source) => {
+  if (typeof window === 'undefined') return
+  window.dispatchEvent(new CustomEvent('kadesh:projects-updated', { detail: { source } }))
+}
+
 export const bidService = {
   /**
    * Create a new bid
@@ -7,6 +12,7 @@ export const bidService = {
   async createBid(bidData) {
     try {
       const response = await api.post('/api/bids', bidData)
+      notifyProjectsUpdated('bid')
       return {
         success: true,
         data: response.data

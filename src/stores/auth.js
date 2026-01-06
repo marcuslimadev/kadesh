@@ -5,13 +5,28 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 
 const SESSION_DURATION_MS = 4 * 60 * 60 * 1000 // 4 HORAS
 
+const normalizeToken = (value) => {
+  if (!value || value === 'undefined' || value === 'null') {
+    return null
+  }
+  return value
+}
+
+const purgeInvalidToken = () => {
+  if (typeof window === 'undefined') return
+  const raw = localStorage.getItem('kadesh_token')
+  if (raw === 'undefined' || raw === 'null') {
+    localStorage.removeItem('kadesh_token')
+  }
+}
+
 const isSessionValid = () => {
   if (typeof window === 'undefined') {
     console.log('[Auth] isSessionValid: window undefined')
     return false
   }
   
-  const token = localStorage.getItem('kadesh_token')
+  const token = normalizeToken(localStorage.getItem('kadesh_token'))
   const expiresAt = localStorage.getItem('kadesh_session_expires')
   
   console.log('[Auth] isSessionValid check:', {
@@ -23,6 +38,9 @@ const isSessionValid = () => {
   
   if (!token || !expiresAt) {
     console.warn('[Auth] isSessionValid: FALSE - token ou expiresAt ausente')
+    if (!token) {
+      localStorage.removeItem('kadesh_token')
+    }
     return false
   }
   
@@ -52,15 +70,15 @@ const renewSession = () => {
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const token = ref(localStorage.getItem('kadesh_token'))
+  const token = ref(normalizeToken(localStorage.getItem('kadesh_token')))
   const isLoading = ref(false)
 
   const isAuthenticated = computed(() => {
     return !!token.value && isSessionValid()
   })
 
-  const isClient = computed(() => user.value?.type === 'client')
-  const isProvider = computed(() => user.value?.type === 'provider' || user.value?.type === 'unified')
+  const isClient = computed(() => user.value?.type === 'client' || user.value?.type === 'both')
+  const isProvider = computed(() => ['provider', 'unified', 'both'].includes(user.value?.type))
   const isAdmin = computed(() => user.value?.isAdmin === true || user.value?.type === 'admin')
   
   const userInitials = computed(() => {
@@ -229,13 +247,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const initializeAuth = () => {
+    purgeInvalidToken()
     if (!isSessionValid()) {
       logout()
       return
     }
 
     const storedUser = localStorage.getItem('kadesh_user')
-    const storedToken = localStorage.getItem('kadesh_token')
+    const storedToken = normalizeToken(localStorage.getItem('kadesh_token'))
     
     if (storedUser && storedToken) {
       try {

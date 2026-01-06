@@ -151,7 +151,7 @@
         </p>
         <div class="mt-6">
           <router-link
-            to="/create-project"
+            to="/projects/create"
             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700"
           >
             Criar Novo Projeto
@@ -159,63 +159,110 @@
         </div>
       </div>
 
-      <div v-else class="space-y-4">
-        <div
-          v-for="project in filteredProjects"
-          :key="project.id"
-          class="bg-surface rounded-lg shadow hover:shadow-md transition-shadow"
-        >
-          <div class="p-6">
-            <div class="flex items-start justify-between">
-              <div class="flex-1">
-                <div class="flex items-center gap-3 mb-2">
-                  <h3 class="text-xl font-semibold text-heading">{{ project.title }}</h3>
-                  <StatusBadge :status="project.status" />
-                </div>
-                <p class="text-body text-sm mb-4 line-clamp-2">{{ project.description }}</p>
-                
-                <div class="flex items-center gap-6 text-sm text-gray-500 mb-4">
-                  <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-                    {{ getCategoryLabel(project.category) }}
-                  </span>
-                  <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {{ formatCurrency(project.budget) }}
-                  </span>
-                  <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                    </svg>
-                    {{ project.bid_count || 0 }} propostas
-                  </span>
-                  <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    {{ formatDate(project.created_at) }}
-                  </span>
+      <div v-else class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            v-for="project in filteredProjects"
+            :key="project.id"
+            class="auction-card-modern group"
+          >
+            <div class="relative h-48 overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0F1117]">
+              <img
+                v-if="getCoverImage(project)"
+                :src="getCoverImage(project)"
+                :alt="project.title"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div v-else class="w-full h-full flex items-center justify-center">
+                <svg class="w-20 h-20 text-[#D4AF37]/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              <div class="absolute top-3 left-3">
+                <span
+                  :class="[
+                    'px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide backdrop-blur-sm',
+                    project.status === 'open' ? 'bg-emerald-500/90 text-white' :
+                    project.status === 'in_progress' ? 'bg-amber-500/90 text-white' :
+                    'bg-gray-500/90 text-white'
+                  ]"
+                >
+                  {{ getStatusLabel(project.status) }}
+                </span>
+              </div>
+              <div v-if="getDeadlineBadge(project)" class="absolute top-3 right-3">
+                <div
+                  class="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-white font-bold text-sm"
+                  :class="getDeadlineBadge(project).bgClass"
+                >
+                  <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                  </svg>
+                  {{ getDeadlineBadge(project).text }}
                 </div>
               </div>
             </div>
-            
-            <div class="flex items-center justify-end gap-3 mt-4 pt-4 border-t border-gray-200">
+
+            <div class="p-5 bg-[#161821] border-x border-b border-[rgba(212,175,55,0.24)] rounded-b-2xl">
+              <span class="inline-block px-3 py-1 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-semibold rounded-full mb-3">
+                {{ getCategoryLabel(project.category) }}
+              </span>
+
+              <p class="text-xs uppercase tracking-wide text-[#C7C7C7] mb-1">
+                Contratante: <span class="text-[#F5F5F5] font-semibold">{{ userName }}</span>
+              </p>
+
               <router-link
                 :to="`/projects/${project.id}`"
-                class="px-4 py-2 text-sm font-medium text-body bg-surface border border-gray-300 rounded-md hover:bg-gray-50"
+                class="block text-lg font-bold text-[#F5F5F5] hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
               >
-                Ver Detalhes
+                {{ project.title }}
               </router-link>
-              <button
-                v-if="project.status === 'open'"
-                class="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-700"
-              >
-                Ver Propostas ({{ project.bid_count || 0 }})
-              </button>
+
+              <p class="text-[#C7C7C7] text-sm line-clamp-2 mb-4">
+                {{ project.description }}
+              </p>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
+                <div class="text-center">
+                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orcamento</p>
+                  <p class="text-base font-bold text-[#D4AF37]">
+                    {{ formatCurrencyCompact(project.budget || project.max_budget) }}
+                  </p>
+                </div>
+                <div class="text-center border-x border-[rgba(212,175,55,0.1)]">
+                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Prazo</p>
+                  <p class="text-sm font-semibold text-[#F5F5F5]">
+                    {{ formatDeadlineCompact(project.deadline) }}
+                  </p>
+                </div>
+                <div class="text-center border-x border-[rgba(212,175,55,0.1)] sm:border-x-0 sm:border-l sm:border-[rgba(212,175,55,0.1)]">
+                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Propostas</p>
+                  <p class="text-base font-bold text-[#F5F5F5]">{{ getBidCount(project) }}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Menor</p>
+                  <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-[#8A8A8A]'">
+                    {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : '—' }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-end gap-2 pt-3 border-t border-[rgba(212,175,55,0.1)]">
+                <router-link
+                  :to="`/projects/${project.id}`"
+                  class="cta-view"
+                >
+                  Ver Detalhes
+                </router-link>
+                <button
+                  v-if="project.status === 'open'"
+                  class="cta-bid"
+                >
+                  Ver Propostas ({{ getBidCount(project) }})
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,9 +281,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import StatusBadge from '@/components/ui/StatusBadge.vue'
 import Pagination from '@/components/ui/Pagination.vue'
 import projectService from '@/services/projectService'
 import { formatDistanceToNow } from 'date-fns'
@@ -249,6 +295,8 @@ const isLoading = ref(false)
 const error = ref(null)
 const currentPage = ref(1)
 const itemsPerPage = 10
+
+const userName = computed(() => authStore.user?.name || 'Voce')
 
 const filters = ref({
   status: '',
@@ -321,15 +369,29 @@ const totalPages = computed(() => {
   return Math.ceil(result.length / itemsPerPage)
 })
 
+const normalizeAttachments = (project) => {
+  if (!project) return []
+  if (!Array.isArray(project.attachments)) return []
+  return project.attachments
+    .map(item => (typeof item === 'string' ? { file_url: item } : item))
+    .filter(Boolean)
+}
+
+const getCoverImage = (project) => {
+  const list = normalizeAttachments(project)
+  const firstImage = list.find(item => item?.mime_type?.startsWith('image/')) || list[0]
+  return firstImage?.file_url || null
+}
+
 const formatDate = (date) => {
-  if (!date) return 'Data não disponível'
+  if (!date) return 'Data nao disponivel'
   try {
     return formatDistanceToNow(new Date(date), { 
       addSuffix: true,
       locale: ptBR 
     })
   } catch (error) {
-    return 'Data inválida'
+    return 'Data invalida'
   }
 }
 
@@ -339,6 +401,88 @@ const formatCurrency = (value) => {
     style: 'currency',
     currency: 'BRL'
   }).format(value)
+}
+
+const formatCurrencyCompact = (value) => {
+  const num = Number(value || 0)
+  if (num >= 1000000) {
+    return `R$ ${(num / 1000000).toFixed(1)}M`
+  } else if (num >= 1000) {
+    return `R$ ${(num / 1000).toFixed(1)}k`
+  }
+  return `R$ ${num.toFixed(0)}`
+}
+
+const formatDeadlineCompact = (dateString) => {
+  if (!dateString) return 'Sem prazo'
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return 'Sem prazo'
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+}
+
+const getStatusLabel = (status) => {
+  const labels = {
+    open: 'Aberto',
+    in_progress: 'Em andamento',
+    completed: 'Concluido',
+    cancelled: 'Cancelado'
+  }
+  return labels[status] || status
+}
+
+const getBidCount = (project) => {
+  if (!project) return 0
+  return project.bid_count ?? project.bids_count ?? 0
+}
+
+const getLowestBid = (project) => {
+  if (!project) return null
+  const value = project.lowest_bid_amount ?? project.lowest_bid ?? null
+  return typeof value === 'number' ? value : (value ? parseFloat(value) : null)
+}
+
+const getDeadlineBadge = (project) => {
+  if (!project?.deadline) return null
+  const deadline = new Date(project.deadline)
+  if (Number.isNaN(deadline.getTime())) return null
+  const now = new Date()
+  const diffMs = deadline - now
+  if (diffMs <= 0) {
+    return {
+      text: 'Prazo encerrado',
+      bgClass: 'bg-red-500/90'
+    }
+  }
+
+  const totalMinutes = Math.floor(diffMs / (1000 * 60))
+  const days = Math.floor(totalMinutes / (60 * 24))
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60)
+  const minutes = totalMinutes % 60
+
+  let label = ''
+  if (days > 0) {
+    label = `${days}d ${hours}h`
+  } else if (hours > 0) {
+    label = `${hours}h ${minutes}m`
+  } else {
+    label = `${minutes}m`
+  }
+
+  let bgClass = 'bg-emerald-500/90'
+  if (days <= 2) {
+    bgClass = 'bg-amber-500/90'
+  }
+  if (hours < 6 && days === 0) {
+    bgClass = 'bg-orange-500/90'
+  }
+  if (hours === 0 && days === 0) {
+    bgClass = 'bg-red-500/90'
+  }
+
+  return {
+    text: label,
+    bgClass
+  }
 }
 
 const getCategoryLabel = (value) => {
@@ -375,6 +519,10 @@ const loadProjects = async () => {
   }
 }
 
+const handleProjectsUpdated = () => {
+  loadProjects()
+}
+
 // Reset to page 1 when filters change
 watch(() => [filters.value.status, filters.value.category], () => {
   currentPage.value = 1
@@ -382,8 +530,69 @@ watch(() => [filters.value.status, filters.value.category], () => {
 
 onMounted(() => {
   loadProjects()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
+})
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('kadesh:projects-updated', handleProjectsUpdated)
+  }
 })
 </script>
+
+<style scoped>
+.auction-card-modern {
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auction-card-modern:hover {
+  transform: translateY(-6px);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cta-bid {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #d4af37;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 12px;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.cta-bid:hover {
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
+}
+
+.cta-view {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #f5f5f5;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.cta-view:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+</style>
+
+
+
 
 
 
