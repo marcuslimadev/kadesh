@@ -2,11 +2,11 @@
   <aside
     v-if="!hidden && slots.length > 0"
     :class="[
-      'grid grid-cols-1 sm:grid-cols-2 gap-4 w-full xl:w-72 xl:flex xl:flex-col xl:gap-6',
-      position === 'left' ? 'xl:mr-8' : 'xl:ml-8'
+      'ad-rail',
+      position === 'left' ? 'ad-rail-left' : 'ad-rail-right'
     ]"
   >
-    <div class="flex items-center justify-between text-xs font-medium text-muted sm:col-span-2">
+    <div class="flex items-center justify-between text-xs font-medium text-muted">
       <span class="uppercase tracking-wider">Patrocinado</span>
       <button
         class="text-muted hover:text-heading transition-colors"
@@ -146,6 +146,29 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.ad-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 260px;
+  max-width: 260px;
+  flex-shrink: 0;
+}
+
+.ad-rail-left {
+  margin-right: 0;
+}
+
+.ad-rail-right {
+  margin-left: 0;
+}
+
+@media (max-width: 1279px) {
+  .ad-rail {
+    display: none;
+  }
+}
+
 .ad-card {
   padding: 20px;
   position: relative;

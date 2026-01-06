@@ -941,17 +941,20 @@ onUnmounted(() => {
   background: radial-gradient(circle at 20% 0%, rgba(212, 175, 55, 0.08), transparent 30%),
     radial-gradient(circle at 80% 10%, rgba(99, 102, 241, 0.1), transparent 28%),
     var(--page-bg);
+  min-height: 100vh;
 }
 
 .lobby-grid {
   display: grid;
   grid-template-columns: minmax(220px, 260px) 1fr minmax(220px, 260px);
-  gap: 18px;
+  gap: 1.5rem;
+  align-items: start;
 }
 
 
 .lobby-main {
   min-width: 0;
+  width: 100%;
 }
 
 .card {
