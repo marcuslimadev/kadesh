@@ -1,29 +1,62 @@
 <template>
   <div class="admin-layout">
-    <!-- Navbar -->
+    <!-- SIDEBAR FIXA DESKTOP - SEMPRE VISÍVEL -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <router-link to="/admin/dashboard" class="admin-sidebar-logo">
+          <svg class="w-10 h-10 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <div>
+            <span class="admin-sidebar-logo-text">Kadesh</span>
+            <span class="admin-sidebar-logo-sub">Admin Panel</span>
+          </div>
+        </router-link>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <router-link
+          v-for="item in menuItems"
+          :key="item.path"
+          :to="item.path"
+          class="admin-sidebar-item"
+          :class="{ 'active': isActive(item.path) }"
+        >
+          <component :is="item.icon" class="admin-sidebar-icon" />
+          <span>{{ item.label }}</span>
+        </router-link>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <router-link to="/" class="admin-sidebar-back">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Voltar ao Site</span>
+        </router-link>
+      </div>
+    </aside>
+
+    <!-- Navbar Mobile + Top Bar Desktop -->
     <nav class="admin-navbar">
       <div class="admin-navbar-container">
         <div class="admin-navbar-left">
-          <router-link to="/admin/dashboard" class="admin-logo">
+          <!-- Mobile Menu Button -->
+          <button @click="toggleMobileMenu" class="admin-mobile-menu-button">
+            <svg v-if="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <router-link to="/admin/dashboard" class="admin-logo-mobile">
             <svg class="admin-logo-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             <span class="admin-logo-text">Kadesh Admin</span>
           </router-link>
-
-          <!-- Desktop Menu -->
-          <div class="admin-menu-desktop">
-            <router-link
-              v-for="item in menuItems"
-              :key="item.path"
-              :to="item.path"
-              class="admin-menu-item"
-              :class="{ 'active': isActive(item.path) }"
-            >
-              <component :is="item.icon" class="admin-menu-icon" />
-              <span>{{ item.label }}</span>
-            </router-link>
-          </div>
         </div>
 
         <div class="admin-navbar-right">
@@ -47,16 +80,15 @@
                   <p class="admin-user-info-email">{{ userEmail }}</p>
                 </div>
                 <div class="admin-user-actions">
-                  <router-link to="/admin/profile" class="admin-dropdown-item">
+                  <router-link to="/" class="admin-dropdown-item">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Perfil
+                    Ir ao Site
                   </router-link>
                   <router-link to="/admin/settings" class="admin-dropdown-item">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     Configurações
                   </router-link>
@@ -70,16 +102,6 @@
               </div>
             </Transition>
           </div>
-
-          <!-- Mobile Menu Button -->
-          <button @click="toggleMobileMenu" class="admin-mobile-menu-button">
-            <svg v-if="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
         </div>
       </div>
 
@@ -581,6 +603,134 @@ onUnmounted(() => {
 .mobile-menu-leave-from {
   opacity: 1;
   max-height: 500px;
+}
+
+/* SIDEBAR FIXA - SEMPRE VISÍVEL */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background: var(--admin-bg-navbar);
+  border-right: 1px solid var(--admin-border);
+  display: none;
+  flex-direction: column;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .admin-sidebar {
+    display: flex;
+  }
+  
+  .admin-layout {
+    margin-left: 260px;
+  }
+}
+
+.admin-sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition: var(--admin-transition);
+}
+
+.admin-sidebar-logo:hover {
+  opacity: 0.9;
+}
+
+.admin-sidebar-logo-text {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--admin-primary);
+  line-height: 1.2;
+}
+
+.admin-sidebar-logo-sub {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--admin-text-secondary);
+  font-weight: 500;
+}
+
+.admin-sidebar-nav {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.admin-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-decoration: none;
+  transition: var(--admin-transition);
+}
+
+.admin-sidebar-item:hover {
+  background: var(--admin-gray-100);
+  color: var(--admin-text-primary);
+}
+
+.admin-sidebar-item.active {
+  background: var(--admin-primary-bg);
+  color: var(--admin-primary);
+}
+
+.admin-sidebar-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.admin-sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--admin-border);
+}
+
+.admin-sidebar-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  text-decoration: none;
+  transition: var(--admin-transition);
+  width: 100%;
+}
+
+.admin-sidebar-back:hover {
+  background: var(--admin-gray-100);
+  color: var(--admin-text-primary);
+}
+
+.admin-logo-mobile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--admin-primary);
+  font-weight: 800;
+  font-size: 1.25rem;
 }
 </style>
 
