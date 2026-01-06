@@ -507,9 +507,9 @@ onUnmounted(() => {
   background: var(--admin-danger-bg);
 }
 
-/* Mobile Menu Button - SEMPRE VISÍVEL */
+/* Mobile Menu Button - SEMPRE VISÍVEL em todas as telas */
 .admin-mobile-menu-button {
-  display: flex;
+  display: flex !important; /* força exibir sempre */
   align-items: center;
   justify-content: center;
   width: 40px;

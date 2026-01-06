@@ -68,17 +68,17 @@
   --admin-secondary-dark: var(--kaddesh-blue-dark);
   --admin-secondary-light: var(--kaddesh-blue-light);
 
-  /* Backgrounds - Tema Escuro Premium */
-  --admin-bg-page: var(--kaddesh-black);
-  --admin-bg-card: #252525;
-  --admin-bg-sidebar: #0F0F0F;
-  --admin-bg-navbar: var(--kaddesh-black);
+  /* Backgrounds - Tema Claro */
+  --admin-bg-page: var(--kaddesh-off-white);
+  --admin-bg-card: var(--kaddesh-white);
+  --admin-bg-sidebar: var(--kaddesh-white);
+  --admin-bg-navbar: var(--kaddesh-white);
 
-  /* Text - Invertido para tema escuro */
-  --admin-text-primary: var(--kaddesh-gold-light);
-  --admin-text-secondary: var(--admin-gray-400);
+  /* Text - Tema Claro */
+  --admin-text-primary: var(--kaddesh-black);
+  --admin-text-secondary: var(--admin-gray-600);
   --admin-text-muted: var(--admin-gray-500);
-  --admin-text-inverse: var(--kaddesh-black);
+  --admin-text-inverse: var(--kaddesh-white);
 
   /* Borders - Dourados sutis */
   --admin-border: rgba(212, 175, 55, 0.2);
