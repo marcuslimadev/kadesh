@@ -5,20 +5,14 @@
 
       <div class="lobby-main space-y-6">
         <section class="lobby-hero card">
-          <div class="flex flex-wrap items-start justify-between gap-4">
-            <div class="space-y-2">
-              <p class="hero-eyebrow">Leilao principal - Service Bridge</p>
-              <h1 class="hero-title">{{ lobbyTitle }}</h1>
-              <p class="hero-sub text-sm">{{ lobbyDescription }}</p>
-              <div class="flex flex-wrap gap-2 text-xs">
-                <span class="tag text-xs">Modo: {{ isContractorView ? 'Contratante' : 'Prestador' }}</span>
-                <span class="tag text-xs">{{ projects.length }} projetos</span>
-              </div>
-            </div>
-            <div class="flex flex-col gap-2 min-w-[200px]">
-              <router-link to="/" class="cta-link text-sm py-2">Voltar para a Home</router-link>
-              <button class="cta-outline text-sm py-2" @click="showQuickAccess = !showQuickAccess">
-                {{ showQuickAccess ? 'Esconder' : 'Mostrar' }} acessos
+          <div class="text-center space-y-3">
+            <p class="hero-eyebrow text-xs uppercase tracking-wider">LEILÃO PRINCIPAL - SERVICE BRIDGE</p>
+            <h1 class="hero-title text-2xl md:text-3xl font-bold">{{ lobbyTitle }}</h1>
+            <p class="hero-sub text-sm max-w-3xl mx-auto">{{ lobbyDescription }}</p>
+            <div class="flex justify-center gap-3 pt-2">
+              <router-link to="/" class="cta-outline text-sm px-4 py-2">Voltar para a Home</router-link>
+              <button class="cta-outline text-sm px-4 py-2" @click="showQuickAccess = !showQuickAccess">
+                {{ showQuickAccess ? 'Esconder acessos' : 'Mostrar acessos' }}
               </button>
             </div>
           </div>
@@ -469,7 +463,7 @@ const userName = computed(() => {
 
 const lobbyTitle = computed(() => {
   const mode = isContractorView.value ? 'Contratante' : 'Prestador'
-  return `­ƒÄ» Lobby do ${mode} - ${userName.value}`
+  return `🎯 Lobby do ${mode} - ${userName.value}`
 })
 
 const lobbyDescription = computed(() =>

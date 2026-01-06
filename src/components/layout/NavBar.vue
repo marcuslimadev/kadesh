@@ -1,6 +1,6 @@
 <template>
-  <!-- Mobile top bar -->
-  <header class="sticky top-0 z-40 bg-nav text-offwhite flex md:hidden items-center justify-between px-4 py-3 shadow-lg">
+  <!-- Mobile top bar - SEMPRE VISÍVEL -->
+  <header class="sticky top-0 z-50 bg-nav text-offwhite flex md:hidden items-center justify-between px-4 py-3 shadow-lg border-b border-gold/20">
     <router-link to="/" class="flex items-center gap-3">
       <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
       <div>
@@ -8,22 +8,23 @@
         <p class="text-xs text-offwhite-muted">Service Bridge</p>
       </div>
     </router-link>
+    <!-- Menu hambúrguer SEMPRE visível -->
     <button
       @click="mobileMenuOpen = !mobileMenuOpen"
-      class="p-2 rounded-md hover:bg-dark-80 transition"
+      class="p-2 rounded-md hover:bg-dark-80 transition-all duration-200 hover:scale-110"
       aria-label="Abrir menu"
     >
-      <svg class="h-6 w-6 text-offwhite" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg class="h-6 w-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
   </header>
 
-  <!-- Mobile drawer -->
+  <!-- Mobile drawer - SEMPRE ACESSÍVEL -->
   <transition name="fade">
-    <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-40 bg-black/50" @click.self="mobileMenuOpen = false">
-      <div class="absolute top-0 right-0 w-72 h-full sidebar-drawer p-4 overflow-y-auto">
+    <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" @click.self="mobileMenuOpen = false">
+      <div class="absolute top-0 right-0 w-72 h-full sidebar-drawer p-4 overflow-y-auto shadow-2xl">
         <div class="flex items-center justify-between mb-4">
           <router-link to="/" class="flex items-center gap-2">
             <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
