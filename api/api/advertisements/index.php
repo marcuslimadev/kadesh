@@ -67,13 +67,13 @@ try {
         FROM advertisements
         WHERE $whereSql
         ORDER BY slot ASC, created_at DESC
-        LIMIT :limit
+        LIMIT ?
     ";
     $stmt = $conn->prepare($sql);
     foreach ($params as $index => $value) {
         $stmt->bindValue($index + 1, $value);
     }
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(count($params) + 1, $limit, PDO::PARAM_INT);
     $stmt->execute();
     $ads = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
