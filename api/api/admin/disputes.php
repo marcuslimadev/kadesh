@@ -41,7 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             ORDER BY c.updated_at DESC
             LIMIT ? OFFSET ?
         ");
-        $stmt->execute([$status, $perPage, $offset]);
+        $stmt->bindValue(1, $status, PDO::PARAM_STR);
+        $stmt->bindValue(2, $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+        $stmt->execute();
         $disputes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         Helpers::jsonResponse([
