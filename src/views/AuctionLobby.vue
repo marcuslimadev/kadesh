@@ -4,57 +4,70 @@
       <AdRail position="left" />
 
       <div class="lobby-main space-y-6">
-        <section class="lobby-hero card">
-          <div class="text-center space-y-3">
-            <p class="hero-eyebrow text-xs uppercase tracking-wider">LEILÃO PRINCIPAL - SERVICE BRIDGE</p>
-            <h1 class="hero-title text-2xl md:text-3xl font-bold">{{ lobbyTitle }}</h1>
-            <p class="hero-sub text-sm max-w-3xl mx-auto">{{ lobbyDescription }}</p>
-            <div class="flex justify-center gap-3 pt-2">
-              <router-link to="/" class="cta-outline text-sm px-4 py-2">Voltar para a Home</router-link>
-              <button class="cta-outline text-sm px-4 py-2" @click="showQuickAccess = !showQuickAccess">
+        <section class="lobby-hero bg-surface rounded-xl p-6">
+          <div class="flex items-start justify-between">
+            <div>
+              <h1 class="text-2xl font-bold text-heading mb-2">{{ lobbyTitle }}</h1>
+              <p class="text-sm text-body">{{ lobbyDescription }}</p>
+            </div>
+            <div class="flex gap-3">
+              <router-link to="/" class="px-4 py-2 bg-surface-elevated hover:bg-surface-alt text-body rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Voltar para Home
+              </router-link>
+              <button class="px-4 py-2 bg-surface-elevated hover:bg-surface-alt text-body rounded-lg text-sm font-medium transition-colors" @click="showQuickAccess = !showQuickAccess">
                 {{ showQuickAccess ? 'Esconder acessos' : 'Mostrar acessos' }}
               </button>
             </div>
           </div>
         </section>
 
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div
             v-for="highlight in lobbyHighlights"
             :key="highlight.label"
-            class="stat-card card"
+            class="bg-surface rounded-xl p-5 border border-border"
           >
-            <p class="text-sm text-muted">{{ highlight.label }}</p>
-            <p class="text-2xl font-bold text-primary">{{ highlight.value }}</p>
-            <span class="text-xs font-semibold" :class="highlight.text">{{ highlight.caption }}</span>
+            <div class="flex items-start justify-between mb-3">
+              <p class="text-sm text-muted">{{ highlight.label }}</p>
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center" :class="highlight.iconBg">
+                <svg class="w-5 h-5" :class="highlight.iconColor" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="highlight.icon" />
+                </svg>
+              </div>
+            </div>
+            <p class="text-3xl font-bold text-heading mb-1">{{ highlight.value }}</p>
+            <p class="text-xs text-muted">{{ highlight.caption }}</p>
           </div>
         </section>
 
-        <section class="card">
-          <div class="flex items-center justify-between gap-4 mb-4">
+        <section class="bg-surface rounded-xl p-6 border border-border">
+          <div class="flex items-center justify-between mb-4">
             <div>
-              <p class="text-sm text-muted">Acesso rapido</p>
-              <h2 class="text-xl font-semibold">Navegue pelo que importa agora</h2>
+              <p class="text-sm text-muted">Acesso rápido</p>
+              <h2 class="text-lg font-semibold text-heading">Navegue pelo que importa agora</h2>
             </div>
-            <button class="cta-outline" @click="showQuickAccess = !showQuickAccess">
+            <button class="px-4 py-2 bg-surface-elevated hover:bg-surface-alt text-body rounded-lg text-sm font-medium transition-colors" @click="showQuickAccess = !showQuickAccess">
               {{ showQuickAccess ? 'Recolher' : 'Expandir' }}
             </button>
           </div>
           <transition name="fade">
-            <div v-if="showQuickAccess" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <router-link to="/dashboard" class="action-tile">
-                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-if="showQuickAccess" class="flex flex-wrap items-center gap-3">
+              <router-link to="/dashboard" class="flex items-center gap-2 px-4 py-2 bg-surface-elevated hover:bg-surface-alt rounded-lg text-sm font-medium transition-colors">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                <span>Dashboard</span>
+                <span class="text-body">Dashboard</span>
               </router-link>
 
               <router-link
                 v-if="isContractorView"
                 to="/projects/create"
-                class="action-tile primary"
+                class="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded-lg text-sm font-semibold transition-colors"
               >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 <span>Novo Projeto</span>
@@ -62,39 +75,42 @@
               <router-link
                 v-else
                 to="/projects"
-                class="action-tile primary"
+                class="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded-lg text-sm font-semibold transition-colors"
               >
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
                 <span>Explorar Projetos</span>
               </router-link>
 
-              <router-link to="/wallet" class="action-tile">
-                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <router-link to="/wallet" class="flex items-center gap-2 px-4 py-2 bg-surface-elevated hover:bg-surface-alt rounded-lg text-sm font-medium transition-colors">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
-                <span>Carteira</span>
+                <span class="text-body">Carteira</span>
               </router-link>
 
-              <router-link to="/contracts" class="action-tile">
-                <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <router-link to="/contracts" class="flex items-center gap-2 px-4 py-2 bg-surface-elevated hover:bg-surface-alt rounded-lg text-sm font-medium transition-colors">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span>Contratos</span>
+                <span class="text-body">Contratos</span>
               </router-link>
             </div>
           </transition>
         </section>
 
-        <section class="card filters-card">
-          <div class="flex items-center justify-between mb-4">
+        <section class="bg-surface rounded-xl p-6 border border-border">
+          <div class="flex items-center justify-between mb-5">
             <div>
               <p class="text-sm text-muted">Filtros e curadoria</p>
-              <h2 class="text-lg font-semibold">Refine o grid do Lobby</h2>
+              <h2 class="text-lg font-semibold text-heading">Refine o grid do Lobby</h2>
             </div>
-            <button class="cta-link" @click="showCategoryModal = true">
-              <span class="text-lg font-bold mr-1">+</span> Nova categoria
+            <button class="px-4 py-2 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded-lg text-sm font-semibold transition-colors flex items-center gap-2" @click="showCategoryModal = true">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Nova categoria
             </button>
           </div>
 
@@ -475,42 +491,62 @@ const lobbyDescription = computed(() =>
 const lobbyHighlights = computed(() => {
   const total = projects.value.length
   const openCount = projects.value.filter(p => p.status === 'open').length
+  const myBidsCount = projects.value.filter(p => p.user_has_bid).length || 0
   const highPriority = projects.value.filter(p => (p.priority || 3) <= 2).length
 
   if (isContractorView.value) {
     return [
       {
-        label: 'Projetos ativos',
-        value: total,
-        caption: 'publicados por voce',
-        text: 'text-amber-400'
+        label: 'Propostas ativas',
+        value: myBidsCount,
+        caption: 'Gerencie suas propostas com correções às propostas ativas',
+        icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+        iconBg: 'bg-amber-500/10',
+        iconColor: 'text-amber-500'
       },
       {
-        label: 'Aceitando propostas',
+        label: 'Aguardando lances',
         value: openCount,
-        caption: 'leiloes abertos agora',
-        text: 'text-amber-400'
+        caption: 'Lances comuns lançes, acompanhe o vencedor dos lances',
+        icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+        iconBg: 'bg-blue-500/10',
+        iconColor: 'text-blue-500'
+      },
+      {
+        label: 'Prioridade alta',
+        value: highPriority,
+        caption: 'Contratador seleccionou alta parcticipação na armadura em tempo real',
+        icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+        iconBg: 'bg-red-500/10',
+        iconColor: 'text-red-500'
       }
     ]
   }
 
   return [
     {
-      label: 'Projetos disponiveis',
-      value: openCount,
-      caption: 'aceitando novos lances',
-      text: 'text-amber-400'
+      label: 'Propostas ativas',
+      value: myBidsCount,
+      caption: 'Gerencie suas propostas com correções às propostas ativas',
+      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+      iconBg: 'bg-amber-500/10',
+      iconColor: 'text-amber-500'
     },
     {
-      label: 'Novos hoje',
-      value: projects.value.filter(p => {
-        const created = new Date(p.created_at)
-        const now = new Date()
-        const diff = now - created
-        return diff <= 24 * 60 * 60 * 1000
-      }).length,
-      caption: 'oportunidades frescas',
-      text: 'text-amber-400'
+      label: 'Aguardando lances',
+      value: openCount,
+      caption: 'Lances comuns lançes, acompanhe o vencedor dos lances',
+      icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+      iconBg: 'bg-blue-500/10',
+      iconColor: 'text-blue-500'
+    },
+    {
+      label: 'Prioridade alta',
+      value: highPriority,
+      caption: 'Contratador seleccionou alta parcticipação na armadura em tempo real',
+      icon: 'M13 10V3L4 14h7v7l9-11h-7z',
+      iconBg: 'bg-red-500/10',
+      iconColor: 'text-red-500'
     }
   ]
 })
