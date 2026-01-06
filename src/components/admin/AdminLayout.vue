@@ -1,7 +1,10 @@
 <template>
   <div class="admin-layout">
-    <!-- SIDEBAR FIXA DESKTOP - SEMPRE VISÍVEL -->
-    <aside class="admin-sidebar">
+    <!-- Backdrop quando sidebar aberta -->
+    <div v-if="showMobileMenu" class="admin-sidebar-backdrop" @click="closeMobileMenu"></div>
+    
+    <!-- SIDEBAR - Controlada pelo botão hambúrguer -->
+    <aside class="admin-sidebar" :class="{ 'open': showMobileMenu }">
       <div class="admin-sidebar-header">
         <router-link to="/admin/dashboard" class="admin-sidebar-logo">
           <svg class="w-10 h-10 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,6 +24,7 @@
           :to="item.path"
           class="admin-sidebar-item"
           :class="{ 'active': isActive(item.path) }"
+          @click="closeMobileMenu"
         >
           <component :is="item.icon" class="admin-sidebar-icon" />
           <span>{{ item.label }}</span>
@@ -28,7 +32,7 @@
       </nav>
 
       <div class="admin-sidebar-footer">
-        <router-link to="/" class="admin-sidebar-back">
+        <router-link to="/" class="admin-sidebar-back" @click="closeMobileMenu">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
@@ -503,7 +507,7 @@ onUnmounted(() => {
   background: var(--admin-danger-bg);
 }
 
-/* Mobile Menu Button */
+/* Mobile Menu Button - SEMPRE VISÍVEL */
 .admin-mobile-menu-button {
   display: flex;
   align-items: center;
@@ -512,20 +516,15 @@ onUnmounted(() => {
   height: 40px;
   border-radius: var(--admin-radius);
   border: none;
-  background: transparent;
-  color: var(--admin-text-primary);
+  background: var(--admin-primary-bg);
+  color: var(--admin-primary);
   cursor: pointer;
   transition: var(--admin-transition);
 }
 
 .admin-mobile-menu-button:hover {
-  background: var(--admin-gray-100);
-}
-
-@media (min-width: 1024px) {
-  .admin-mobile-menu-button {
-    display: none;
-  }
+  background: var(--admin-primary);
+  color: white;
 }
 
 /* Mobile Menu */
@@ -605,29 +604,25 @@ onUnmounted(() => {
   max-height: 500px;
 }
 
-/* SIDEBAR FIXA - SEMPRE VISÍVEL */
+/* SIDEBAR COMO OVERLAY - Controlada pelo botão hambúrguer */
 .admin-sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  left: -260px;
   width: 260px;
   height: 100vh;
   background: var(--admin-bg-navbar);
   border-right: 1px solid var(--admin-border);
-  display: none;
+  display: flex;
   flex-direction: column;
-  z-index: 200;
+  z-index: 300;
   overflow-y: auto;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
 
-@media (min-width: 1024px) {
-  .admin-sidebar {
-    display: flex;
-  }
-  
-  .admin-layout {
-    margin-left: 260px;
-  }
+.admin-sidebar.open {
+  left: 0;
 }
 
 .admin-sidebar-header {
@@ -731,6 +726,24 @@ onUnmounted(() => {
   color: var(--admin-primary);
   font-weight: 800;
   font-size: 1.25rem;
+}
+
+/* Backdrop da Sidebar */
+.admin-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 250;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
 

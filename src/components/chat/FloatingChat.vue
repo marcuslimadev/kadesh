@@ -213,7 +213,8 @@ watch(messages, () => {
 }
 
 .chat-tooltip {
-  @apply absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[#161821] text-heading text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none;
+  @apply absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[#161821] text-sm px-4 py-2 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none;
+  color: var(--text-heading);
 }
 
 /* Chat Window */
@@ -284,7 +285,8 @@ watch(messages, () => {
 }
 
 .chat-input {
-  @apply flex-1 bg-[#0F1117] border border-[#333] text-heading px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent placeholder-[#8A8A8A];
+  @apply flex-1 bg-[#0F1117] border border-[#333] px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent placeholder-[#8A8A8A];
+  color: var(--text-heading);
 }
 
 .chat-send-btn {
