@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap');
 
 /* ============================================
-   KADESH DESIGN SYSTEM
+   KADESH DESIGN SYSTEM - APENAS ADMIN
    Sistema de design baseado na identidade visual
    Paleta: Preto Grafite + Dourado Metálico + Off-White + Azul Royal
+   NOTA: Estas variáveis SÓ afetam o AdminLayout
    ============================================ */
 
 /* ============================================
-   1. CSS VARIABLES - KADDESH BRAND
+   1. CSS VARIABLES - KADDESH BRAND (ADMIN ONLY)
    ============================================ */
-:root {
+.admin-layout {
   /* Brand Colors - Primárias */
   --kaddesh-black: #1A1A1A;        /* Preto Grafite - Fundo principal */
   --kaddesh-gold: #D4AF37;         /* Dourado Metálico - Destaques premium */
@@ -68,13 +69,13 @@
   --admin-secondary-dark: var(--kaddesh-blue-dark);
   --admin-secondary-light: var(--kaddesh-blue-light);
 
-  /* Backgrounds - Tema Claro */
+  /* Backgrounds - Admin sempre usa tema claro */
   --admin-bg-page: var(--kaddesh-off-white);
   --admin-bg-card: var(--kaddesh-white);
   --admin-bg-sidebar: var(--kaddesh-white);
   --admin-bg-navbar: var(--kaddesh-white);
 
-  /* Text - Tema Claro */
+  /* Text - Admin sempre tema claro */
   --admin-text-primary: var(--kaddesh-black);
   --admin-text-secondary: var(--admin-gray-600);
   --admin-text-muted: var(--admin-gray-500);
