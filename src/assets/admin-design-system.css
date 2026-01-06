@@ -69,13 +69,13 @@
   --admin-secondary-dark: var(--kaddesh-blue-dark);
   --admin-secondary-light: var(--kaddesh-blue-light);
 
-  /* Backgrounds - Admin sempre usa tema claro */
+  /* Backgrounds - Admin tema claro (padrão) */
   --admin-bg-page: var(--kaddesh-off-white);
   --admin-bg-card: var(--kaddesh-white);
   --admin-bg-sidebar: var(--kaddesh-white);
   --admin-bg-navbar: var(--kaddesh-white);
 
-  /* Text - Admin sempre tema claro */
+  /* Text - Admin tema claro */
   --admin-text-primary: var(--kaddesh-black);
   --admin-text-secondary: var(--admin-gray-600);
   --admin-text-muted: var(--admin-gray-500);
@@ -86,13 +86,13 @@
   --admin-border-hover: rgba(212, 175, 55, 0.4);
   --admin-border-focus: var(--kaddesh-gold);
 
-  /* Shadows - Mais sutis para tema escuro */
-  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --admin-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --admin-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-  --admin-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-  --admin-shadow-gold: 0 4px 12px rgba(212, 175, 55, 0.3);
+  /* Shadows - Tema claro */
+  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --admin-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --admin-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --admin-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --admin-shadow-gold: 0 4px 12px rgba(212, 175, 55, 0.2);
 
   /* Spacing */
   --admin-spacing-xs: 0.25rem;   /* 4px */
@@ -129,6 +129,33 @@
   --font-heading: 'Montserrat', 'Oswald', sans-serif;  /* Títulos */
   --font-body: 'Open Sans', 'Lato', sans-serif;       /* Corpo de texto */
   --font-ui: 'Open Sans', sans-serif;                 /* Interface */
+}
+
+/* Admin Dark Mode Override */
+.admin-layout.admin-dark {
+  /* Backgrounds - Tema escuro */
+  --admin-bg-page: var(--kaddesh-black);
+  --admin-bg-card: #252525;
+  --admin-bg-sidebar: #0F0F0F;
+  --admin-bg-navbar: var(--kaddesh-black);
+
+  /* Text - Tema escuro */
+  --admin-text-primary: var(--kaddesh-gold-light);
+  --admin-text-secondary: var(--admin-gray-400);
+  --admin-text-muted: var(--admin-gray-500);
+  --admin-text-inverse: var(--kaddesh-black);
+
+  /* Borders */
+  --admin-border: rgba(212, 175, 55, 0.2);
+  --admin-border-hover: rgba(212, 175, 55, 0.4);
+
+  /* Shadows - Mais fortes */
+  --admin-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --admin-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --admin-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --admin-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  --admin-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --admin-shadow-gold: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 /* ============================================
