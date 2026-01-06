@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-page">
     <!-- Admin Navigation -->
-    <nav class="bg-white shadow-lg border-b border-gray-200">
+    <nav class="bg-surface shadow-lg border-b border-theme">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
             <h1 class="text-2xl font-bold text-amber-600">Kaddesh Admin</h1>
             <div class="hidden md:ml-10 md:flex md:space-x-4">
-              <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Dashboard</router-link>
-              <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Usuários</router-link>
-              <router-link to="/admin/projects" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Projetos</router-link>
-              <router-link to="/admin/payments" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Pagamentos</router-link>
-              <router-link to="/admin/disputes" class="px-3 py-2 rounded-md text-sm font-medium text-gray-900 bg-gray-100" :class="{ 'bg-gray-100': $route.path === '/admin/disputes' }">Disputas</router-link>
-              <router-link to="/admin/advertisements" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Anúncios</router-link>
-              <router-link to="/admin/settings" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Configurações</router-link>
+              <router-link to="/admin/dashboard" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Dashboard</router-link>
+              <router-link to="/admin/users" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Usuários</router-link>
+              <router-link to="/admin/projects" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Projetos</router-link>
+              <router-link to="/admin/payments" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Pagamentos</router-link>
+              <router-link to="/admin/disputes" class="px-3 py-2 rounded-md text-sm font-medium text-heading bg-surface-elevated" :class="{ 'bg-surface-elevated': $route.path === '/admin/disputes' }">Disputas</router-link>
+              <router-link to="/admin/advertisements" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Anúncios</router-link>
+              <router-link to="/admin/settings" class="px-3 py-2 rounded-md text-sm font-medium text-body hover:bg-surface-elevated">Configurações</router-link>
             </div>
           </div>
           <div class="flex items-center">
@@ -27,46 +27,46 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="mb-6 flex items-center justify-between">
         <div>
-          <h2 class="text-3xl font-bold text-gray-900">Disputas</h2>
-          <p class="mt-2 text-gray-600">Acompanhe e resolva disputas de contratos</p>
+          <h2 class="text-3xl font-bold text-heading">Disputas</h2>
+          <p class="mt-2 text-body">Acompanhe e resolva disputas de contratos</p>
         </div>
         <div class="flex items-center space-x-3">
-          <select v-model="filters.status" @change="fetchDisputes" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+          <select v-model="filters.status" @change="fetchDisputes" class="px-3 py-2 border border-muted rounded-lg text-sm bg-surface text-body">
             <option value="">Todas</option>
             <option value="open">Abertas</option>
             <option value="closed">Encerradas</option>
           </select>
-          <button @click="fetchDisputes" class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Atualizar</button>
+          <button @click="fetchDisputes" class="px-4 py-2 bg-surface border border-muted rounded-lg text-sm hover:bg-surface-elevated text-body">Atualizar</button>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+      <div class="bg-surface rounded-xl shadow-md overflow-hidden">
         <div v-if="loading" class="text-center py-12">
           <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
         </div>
         <div v-else>
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+          <table class="min-w-full divide-y divide-muted">
+            <thead class="bg-surface-alt">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Projeto</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contratante</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prestador</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Valor</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Atualização</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Projeto</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Contratante</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Prestador</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Valor</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Atualização</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-muted uppercase">Ações</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="d in disputes" :key="d.contract_id" class="hover:bg-gray-50">
+            <tbody class="bg-surface divide-y divide-muted">
+              <tr v-for="d in disputes" :key="d.contract_id" class="hover:bg-surface-elevated">
                 <td class="px-6 py-4">
-                  <div class="font-medium text-gray-900">{{ d.project_title }}</div>
-                  <div class="text-xs text-gray-500">Contrato #{{ d.contract_id }}</div>
+                  <div class="font-medium text-heading">{{ d.project_title }}</div>
+                  <div class="text-xs text-muted">Contrato #{{ d.contract_id }}</div>
                 </td>
-                <td class="px-6 py-4 text-sm text-gray-700">{{ d.client_name }}</td>
-                <td class="px-6 py-4 text-sm text-gray-700">{{ d.provider_name }}</td>
-                <td class="px-6 py-4 text-sm font-semibold text-gray-900">R$ {{ formatCurrency(d.amount) }}</td>
-                <td class="px-6 py-4 text-sm text-gray-600">{{ formatDateTime(d.last_activity) }}</td>
+                <td class="px-6 py-4 text-sm text-body">{{ d.client_name }}</td>
+                <td class="px-6 py-4 text-sm text-body">{{ d.provider_name }}</td>
+                <td class="px-6 py-4 text-sm font-semibold text-heading">R$ {{ formatCurrency(d.amount) }}</td>
+                <td class="px-6 py-4 text-sm text-body">{{ formatDateTime(d.last_activity) }}</td>
                 <td class="px-6 py-4">
                   <span class="px-2 py-1 text-xs font-medium rounded-full" :class="d.is_closed ? 'bg-gray-100 text-gray-800' : 'bg-yellow-100 text-yellow-800'">
                     {{ d.is_closed ? 'Encerrada' : 'Aberta' }}
@@ -86,13 +86,13 @@
 
     <!-- Details Modal -->
     <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div class="bg-white rounded-xl shadow-xl w-full max-w-3xl p-6">
+      <div class="bg-surface rounded-xl shadow-xl w-full max-w-3xl p-6">
         <div class="flex items-start justify-between mb-4">
           <div>
-            <h3 class="text-xl font-bold text-gray-900">Detalhes da Disputa</h3>
-            <p class="text-sm text-gray-600">Contrato #{{ disputeDetail?.contract?.id }} — {{ disputeDetail?.contract?.project_title }}</p>
+            <h3 class="text-xl font-bold text-heading">Detalhes da Disputa</h3>
+            <p class="text-sm text-body">Contrato #{{ disputeDetail?.contract?.id }} — {{ disputeDetail?.contract?.project_title }}</p>
           </div>
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-700">✕</button>
+          <button @click="closeModal" class="text-muted hover:text-heading">✕</button>
         </div>
 
         <div v-if="detailLoading" class="text-center py-8">
