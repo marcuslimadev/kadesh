@@ -150,9 +150,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: 260px;
-  max-width: 260px;
+  width: 280px;
+  max-width: 280px;
   flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
 }
 
 .ad-rail-left {
@@ -163,7 +168,7 @@ onMounted(() => {
   margin-left: 0;
 }
 
-@media (max-width: 1279px) {
+@media (max-width: 1023px) {
   .ad-rail {
     display: none;
   }
