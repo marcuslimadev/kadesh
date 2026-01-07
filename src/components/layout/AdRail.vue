@@ -149,15 +149,16 @@ onMounted(() => {
 .ad-rail {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 280px;
-  max-width: 280px;
+  gap: 1rem;
+  width: 100%;
+  max-width: 100%;
   flex-shrink: 0;
   position: sticky;
-  top: 100px;
+  top: 85px;
   align-self: flex-start;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .ad-rail-left {
@@ -175,52 +176,53 @@ onMounted(() => {
 }
 
 .ad-card {
-  padding: 20px;
+  padding: 12px;
   position: relative;
   overflow: hidden;
+  font-size: 0.875rem;
 }
 
 .ad-badge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 10px;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 9px;
   font-weight: 600;
   background: var(--accent-muted);
   border: 1px solid var(--card-border);
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .ad-title {
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 8px;
-  line-height: 1.4;
+  margin-bottom: 6px;
+  line-height: 1.3;
   letter-spacing: -0.01em;
 }
 
 .ad-description {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 16px;
+  line-height: 1.4;
+  margin-bottom: 10px;
 }
 
 .ad-cta {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;

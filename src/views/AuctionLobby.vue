@@ -1,6 +1,6 @@
 <template>
-  <div class="lobby-shell py-3 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-[1600px] mx-auto">
+  <div class="lobby-shell py-3 px-2">
+    <div class="w-full mx-auto">
       <div class="lobby-grid">
         <!-- Anúncios Esquerda (Desktop) -->
         <AdRail position="left" class="hidden lg:block" />
@@ -49,9 +49,9 @@
           <p class="text-muted">Nenhum projeto encontrado com os filtros atuais</p>
         </div>
 
-        <div v-else class="space-y-6">
+        <div v-else class="space-y-4">
           <!-- Grid de cards de leilao estilo Monitor Leilao / Vestri -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div
               v-for="project in filteredProjects"
               :key="project.id"
@@ -803,9 +803,17 @@ onUnmounted(() => {
 
 .lobby-grid {
   display: grid;
-  grid-template-columns: 280px 1fr 280px;
-  gap: 2rem;
+  grid-template-columns: 10% 80% 10%;
+  gap: 1rem;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 1279px) {
+  .lobby-grid {
+    grid-template-columns: 12% 76% 12%;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -817,6 +825,7 @@ onUnmounted(() => {
 .lobby-main {
   min-width: 0;
   width: 100%;
+  max-width: 100%;
 }
 
 .card {
