@@ -32,7 +32,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
-import { useSidebarStore } from '@/stores/sidebarStore'
 import { wakeUpServer } from '@/services/api'
 import NavBar from '@/components/layout/NavBar.vue'
 import Footer from '@/components/layout/Footer.vue'
@@ -41,7 +40,6 @@ import ModeIndicator from '@/components/ui/ModeIndicator.vue'
 const route = useRoute()
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
-const sidebarStore = useSidebarStore()
 
 const isInitializing = ref(true)
 const INITIALIZATION_FALLBACK_MS = 2000
@@ -67,14 +65,7 @@ const showNavigation = computed(() => {
   return authenticated
 })
 
-const mainClasses = computed(() => {
-  if (!showNavigation.value) return 'app-main'
-  const sidebarVisible = sidebarStore.isVisible && typeof sidebarStore.isVisible === 'object' && 'value' in sidebarStore.isVisible
-    ? sidebarStore.isVisible.value
-    : sidebarStore.isVisible
-
-  return sidebarVisible ? 'app-main pt-16 md:pt-0 md:pl-64' : 'app-main pt-16 md:pt-0'
-})
+const mainClasses = computed(() => showNavigation.value ? 'app-main pt-16 md:pt-20' : 'app-main')
 
 const appClasses = computed(() => [
   'min-h-screen app-shell',

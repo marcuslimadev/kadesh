@@ -1,26 +1,20 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-// SIDEBAR SEMPRE VISÍVEL - NÃO USA MAIS LOCALSTORAGE
-const getInitialVisibility = () => {
-  return true // SEMPRE TRUE
-}
-
+// Sidebar foi removida da UI; mantemos o store para compatibilidade
 export const useSidebarStore = defineStore('sidebar', () => {
-  const isVisible = ref(true) // SEMPRE TRUE
+  const isVisible = ref(false)
 
   const show = () => {
-    isVisible.value = true // SEMPRE TRUE
+    isVisible.value = true
   }
 
   const hide = () => {
-    // NÃO FAZ NADA - SIDEBAR NUNCA ESCONDE
-    isVisible.value = true
+    isVisible.value = false
   }
 
   const toggle = () => {
-    // NÃO FAZ NADA - SIDEBAR NUNCA ESCONDE
-    isVisible.value = true
+    isVisible.value = !isVisible.value
   }
 
   return {

@@ -36,27 +36,16 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useViewModeStore } from '@/stores/viewModeStore'
-import { useSidebarStore } from '@/stores/sidebarStore'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 const viewMode = useViewModeStore()
-const sidebarStore = useSidebarStore()
 
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 
-// Esconde o indicador quando a sidebar está visível (para evitar duplicação)
-const showIndicator = computed(() => {
-  // Não mostrar em telas admin
-  if (route.path.startsWith('/admin')) return false
-  // Mostrar sempre que a sidebar estiver escondida
-  const sidebarVisible = sidebarStore.isVisible && typeof sidebarStore.isVisible === 'object' && 'value' in sidebarStore.isVisible
-    ? sidebarStore.isVisible.value
-    : sidebarStore.isVisible
-
-  return !sidebarVisible
-})
+// Exibir em todas as telas comuns (exceto admin)
+const showIndicator = computed(() => !route.path.startsWith('/admin'))
 
 const toggleMode = () => {
   viewMode.toggleMode()

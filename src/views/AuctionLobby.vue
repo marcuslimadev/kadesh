@@ -1,25 +1,12 @@
 <template>
   <div class="lobby-shell py-6 px-4 sm:px-6 lg:px-8">
-    <div class="lobby-grid max-w-7xl mx-auto">
-      <AdRail position="left" />
-
+    <div class="max-w-7xl mx-auto">
       <div class="lobby-main space-y-6">
-        <section class="lobby-hero bg-surface rounded-xl p-6">
+        <section class="lobby-hero bg-surface rounded-xl p-6 border border-border">
           <div class="flex items-start justify-between">
             <div>
               <h1 class="text-2xl font-bold text-heading mb-2">{{ lobbyTitle }}</h1>
               <p class="text-sm text-body">{{ lobbyDescription }}</p>
-            </div>
-            <div class="flex gap-3">
-              <router-link to="/" class="px-4 py-2 bg-surface-elevated hover:bg-surface-alt text-body rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Voltar para Home
-              </router-link>
-              <button class="px-4 py-2 bg-surface-elevated hover:bg-surface-alt text-body rounded-lg text-sm font-medium transition-colors" @click="showQuickAccess = !showQuickAccess">
-                {{ showQuickAccess ? 'Esconder acessos' : 'Mostrar acessos' }}
-              </button>
             </div>
           </div>
         </section>
@@ -100,79 +87,69 @@
           </transition>
         </section>
 
-        <section class="bg-surface rounded-xl p-6 border border-border">
-          <div class="flex items-center justify-between mb-5">
-            <div>
-              <p class="text-sm text-muted">Filtros e curadoria</p>
-              <h2 class="text-lg font-semibold text-heading">Refine o grid do Lobby</h2>
-            </div>
-            <button class="px-4 py-2 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded-lg text-sm font-semibold transition-colors flex items-center gap-2" @click="showCategoryModal = true">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-              </svg>
-              Nova categoria
+        <section class="bg-surface rounded-lg p-3 border border-muted-border">
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-sm font-medium text-muted">Filtros</h2>
+            <button class="px-2 py-1 bg-surface-elevated hover:bg-surface-alt text-muted rounded text-xs transition-colors" @click="showCategoryModal = true">
+              + Categoria
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
             <div>
-              <label class="filter-label">Categoria</label>
               <select
                 v-model="filters.category"
-                class="filter-input"
+                class="w-full px-2 py-1.5 bg-surface-elevated border border-muted-border rounded text-xs text-body focus:outline-none focus:border-accent transition-colors"
               >
-                <option value="">Todas</option>
+                <option value="">Todas categorias</option>
                 <option v-for="cat in categoryOptions" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
               </select>
             </div>
 
             <div>
-              <label class="filter-label">Orcamento (Max)</label>
               <select
                 v-model="filters.budget"
-                class="filter-input"
+                class="w-full px-2 py-1.5 bg-surface-elevated border border-muted-border rounded text-xs text-body focus:outline-none focus:border-accent transition-colors"
               >
-                <option value="">Qualquer</option>
-                <option value="500">Ate R$ 500</option>
-                <option value="1000">Ate R$ 1.000</option>
-                <option value="5000">Ate R$ 5.000</option>
-                <option value="10000">Ate R$ 10.000</option>
+                <option value="">Qualquer orçamento</option>
+                <option value="500">Até R$ 500</option>
+                <option value="1000">Até R$ 1.000</option>
+                <option value="5000">Até R$ 5.000</option>
+                <option value="10000">Até R$ 10.000</option>
               </select>
             </div>
 
             <div>
-              <label class="filter-label">Prazo</label>
               <select
                 v-model="filters.deadline"
-                class="filter-input"
+                class="w-full px-2 py-1.5 bg-surface-elevated border border-muted-border rounded text-xs text-body focus:outline-none focus:border-accent transition-colors"
               >
-                <option value="">Qualquer</option>
-                <option value="7">Ate 7 dias</option>
-                <option value="15">Ate 15 dias</option>
-                <option value="30">Ate 30 dias</option>
-                <option value="60">Ate 60 dias</option>
+                <option value="">Qualquer prazo</option>
+                <option value="7">Até 7 dias</option>
+                <option value="15">Até 15 dias</option>
+                <option value="30">Até 30 dias</option>
+                <option value="60">Até 60 dias</option>
               </select>
             </div>
 
             <div>
-              <label class="filter-label">Status</label>
               <select
                 v-model="filters.status"
-                class="filter-input"
+                class="w-full px-2 py-1.5 bg-surface-elevated border border-muted-border rounded text-xs text-body focus:outline-none focus:border-accent transition-colors"
               >
-                <option value="">Todos</option>
-                <option value="open">Aberto (aceita propostas)</option>
+                <option value="">Todos status</option>
+                <option value="open">Aberto</option>
                 <option value="in_progress">Em andamento</option>
-                <option value="completed">Concluido</option>
+                <option value="completed">Concluído</option>
               </select>
             </div>
           </div>
 
-          <div v-if="pendingCategories.length" class="pending-chip">
-            Ultima sugestao: {{ pendingCategories[pendingCategories.length - 1].name }} aguardando validacao do ADM.
+          <div v-if="pendingCategories.length" class="mt-2 text-xs text-muted">
+            Sugestão: {{ pendingCategories[pendingCategories.length - 1].name }} aguardando validação.
           </div>
 
-          <div class="mt-4 flex justify-end gap-2">
+          <div class="mt-2 flex justify-end gap-1">
             <button
               @click="clearFilters"
               class="cta-ghost"
@@ -226,8 +203,9 @@
                 <!-- Overlay gradient -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 
-                <!-- Status Badge -->
-                <div class="absolute top-3 left-3">
+                <!-- Top Row: Status + Timer -->
+                <div class="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
+                  <!-- Status Badge -->
                   <span
                     :class="[
                       'px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide backdrop-blur-sm',
@@ -238,14 +216,10 @@
                   >
                     {{ getStatusLabel(project.status) }}
                   </span>
-                </div>
 
-                <!-- Countdown Timer - Prominent Display -->
-                <div
-                  v-if="getDeadlineBadge(project)"
-                  class="absolute top-3 right-3"
-                >
+                  <!-- Countdown Timer -->
                   <div
+                    v-if="getDeadlineBadge(project)"
                     class="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-sm text-white font-bold text-sm"
                     :class="getDeadlineBadge(project).bgClass"
                   >
@@ -374,8 +348,6 @@
           </nav>
         </div>
       </div>
-
-      <AdRail position="right" />
     </div>
 
     <transition name="fade">
@@ -458,7 +430,6 @@ import { useViewModeStore } from '@/stores/viewModeStore'
 import projectService from '@/services/projectService'
 import bidService from '@/services/bidService'
 import api from '@/services/api'
-import AdRail from '@/components/layout/AdRail.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -944,17 +915,11 @@ onUnmounted(() => {
   min-height: 100vh;
 }
 
-.lobby-grid {
-  display: grid;
-  grid-template-columns: minmax(220px, 260px) 1fr minmax(220px, 260px);
-  gap: 1.5rem;
-  align-items: start;
-}
-
-
 .lobby-main {
   min-width: 0;
   width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .card {
