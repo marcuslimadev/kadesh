@@ -207,6 +207,7 @@
                 <div class="absolute top-3 left-3 right-3 flex items-start justify-between gap-2">
                   <!-- Status Badge -->
                   <span
+                    v-if="!isDeadlineExpired(project)"
                     :class="[
                       'px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide backdrop-blur-sm',
                       project.status === 'open' ? 'bg-emerald-500/90 text-white' :
@@ -753,6 +754,13 @@ const getCoverImage = (project) => {
   const list = normalizeAttachments(project)
   const firstImage = list.find(item => item?.mime_type?.startsWith('image/'))
   return firstImage?.file_url || null
+}
+
+const isDeadlineExpired = (project) => {
+  if (!project?.deadline) return false
+  const deadline = new Date(project.deadline)
+  if (Number.isNaN(deadline.getTime())) return false
+  return deadline <= new Date()
 }
 
 const getBidCount = (project) => {

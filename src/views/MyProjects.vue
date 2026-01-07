@@ -179,7 +179,7 @@
                 </svg>
               </div>
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              <div class="absolute top-3 left-3">
+              <div v-if="!isDeadlineExpired(project)" class="absolute top-3 left-3">
                 <span
                   :class="[
                     'px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide backdrop-blur-sm',
@@ -428,6 +428,13 @@ const getStatusLabel = (status) => {
     cancelled: 'Cancelado'
   }
   return labels[status] || status
+}
+
+const isDeadlineExpired = (project) => {
+  if (!project?.deadline) return false
+  const deadline = new Date(project.deadline)
+  if (Number.isNaN(deadline.getTime())) return false
+  return deadline <= new Date()
 }
 
 const getBidCount = (project) => {
