@@ -7,23 +7,34 @@
         
         <div class="lobby-main space-y-2">
           <section class="bg-surface rounded-lg p-2 border border-muted-border">
-          <div class="flex items-center gap-2">
-            <select v-model="filters.category" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
-              <option value="">Categoria</option>
-              <option v-for="cat in categoryOptions" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
-            </select>
-            <select v-model="filters.budget" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
-              <option value="">Orçamento</option>
-              <option value="5000">~R$ 5k</option>
-              <option value="10000">~R$ 10k</option>
-            </select>
-            <select v-model="filters.status" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
-              <option value="">Status</option>
-              <option value="open">Aberto</option>
-            </select>
-            <button @click="clearFilters" class="px-2 py-1 text-xs text-muted hover:text-heading">Limpar</button>
-            <button @click="applyFilters" class="px-3 py-1 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded text-xs font-semibold">Filtrar</button>
-          </div>
+            <div class="flex items-center justify-between mb-2">
+              <button @click="showFilters = !showFilters" class="flex items-center gap-2 text-xs font-medium text-body hover:text-heading">
+                <svg class="w-4 h-4" :class="{'rotate-180': showFilters}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+                <span>Filtros</span>
+              </button>
+              <span class="text-xs text-muted">{{ filteredProjects.length }} projeto(s)</span>
+            </div>
+            <transition name="fade">
+              <div v-if="showFilters" class="flex items-center gap-2">
+                <select v-model="filters.category" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
+                  <option value="">Categoria</option>
+                  <option v-for="cat in categoryOptions" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
+                </select>
+                <select v-model="filters.budget" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
+                  <option value="">Orçamento</option>
+                  <option value="5000">~R$ 5k</option>
+                  <option value="10000">~R$ 10k</option>
+                </select>
+                <select v-model="filters.status" class="flex-1 px-2 py-1 bg-surface-elevated border border-muted-border rounded text-xs text-body">
+                  <option value="">Status</option>
+                  <option value="open">Aberto</option>
+                </select>
+                <button @click="clearFilters" class="px-2 py-1 text-xs text-muted hover:text-heading">Limpar</button>
+                <button @click="applyFilters" class="px-3 py-1 bg-[#D4AF37] hover:bg-[#C5A028] text-[#0F1117] rounded text-xs font-semibold">Filtrar</button>
+              </div>
+            </transition>
         </section>
 
         <div v-if="loading" class="card text-center py-12">
@@ -402,6 +413,7 @@ const filters = ref({
   status: ''
 })
 
+const showFilters = ref(false)
 const showQuickAccess = ref(true)
 const showCategoryModal = ref(false)
 const newCategory = ref({ name: '', description: '' })
@@ -1023,6 +1035,21 @@ onUnmounted(() => {
 .lobby-main {
   min-width: 0;
 }
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
 
