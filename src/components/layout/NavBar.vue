@@ -1,40 +1,65 @@
 <template>
   <header class="sticky top-0 z-50 bg-nav text-offwhite border-b border-gold/20 shadow-lg">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="h-16 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <router-link to="/" class="flex items-center gap-3">
-            <img :src="logoImg" alt="Kaddesh" class="h-12 w-12 rounded-lg border border-gold/40 object-cover" />
-            <div class="leading-tight">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="h-16 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <router-link to="/" class="flex items-center gap-2">
+            <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+            <div class="leading-tight hidden lg:block">
               <p class="text-sm text-gold font-semibold">KADDESH</p>
               <p class="text-xs text-offwhite-muted">Service Bridge</p>
             </div>
           </router-link>
 
-          <nav class="hidden md:flex items-center gap-1">
+          <nav class="hidden lg:flex items-center gap-1">
             <router-link
-              v-for="link in navLinks"
+              v-for="link in mainNavLinks"
               :key="link.to"
               :to="link.to"
               :class="desktopLinkClasses(link.to)"
             >
-              <svg class="h-5 w-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-4 w-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-              <span>{{ link.label }}</span>
+              <span class="text-sm">{{ link.label }}</span>
             </router-link>
+            
+            <div v-if="secondaryNavLinks.length > 0" class="relative" @mouseenter="dropdownOpen = true" @mouseleave="dropdownOpen = false">
+              <button class="nav-link nav-link-idle hidden md:inline-flex">
+                <svg class="h-4 w-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M4 6h16M4 12h16M4 18h16" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="text-sm">Mais</span>
+              </button>
+              <transition name="dropdown">
+                <div v-if="dropdownOpen" class="absolute top-full right-0 mt-1 w-48 bg-nav border border-gold/20 rounded-lg shadow-2xl overflow-hidden z-50">
+                  <router-link
+                    v-for="link in secondaryNavLinks"
+                    :key="link.to"
+                    :to="link.to"
+                    class="flex items-center gap-2 px-3 py-2 text-sm hover:bg-nav-link-idle-hover-bg transition-colors"
+                    :class="isRouteActive(link.to) ? 'text-gold bg-nav-link-active-bg' : 'text-nav-link-idle-text'"
+                  >
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path :d="iconPaths[link.icon] || iconPaths.target" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    {{ link.label }}
+                  </router-link>
+                </div>
+              </transition>
+            </div>
           </nav>
         </div>
 
-        <div class="flex items-center gap-2">
-          <ViewModeSwitch v-if="isAuthenticated" class="hidden md:block" />
+        <div class="flex items-center gap-1.5">
+          <ViewModeSwitch v-if="isAuthenticated" class="hidden lg:block" />
 
           <button
-            class="p-2 rounded-full nav-ghost"
+            class="p-2 rounded-full nav-ghost text-sm"
             @click="toggleTheme"
             :title="themeLabel"
           >
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path :d="themeIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
             </svg>
           </button>
@@ -42,7 +67,7 @@
           <router-link
             v-if="isAuthenticated && isAdmin"
             :to="adminLink.to"
-            class="hidden md:inline-flex nav-badge"
+            class="hidden lg:inline-flex nav-badge text-xs px-2 py-1"
           >
             Admin
           </router-link>
@@ -50,7 +75,7 @@
           <router-link
             v-if="isAuthenticated"
             :to="profileLink.to"
-            class="hidden md:inline-flex nav-ghost"
+            class="hidden lg:inline-flex nav-ghost text-sm px-2 py-1"
           >
             Perfil
           </router-link>
@@ -58,19 +83,19 @@
           <button
             v-if="isAuthenticated"
             @click="handleLogout"
-            class="hidden md:inline-flex nav-ghost text-red-300 hover:text-red-200"
+            class="hidden lg:inline-flex nav-ghost text-red-300 hover:text-red-200 text-sm px-2 py-1"
           >
             Sair
           </button>
 
-          <div v-else class="hidden md:flex items-center gap-2">
-            <router-link to="/login" class="nav-ghost">Entrar</router-link>
-            <router-link to="/register" class="nav-badge">Criar conta</router-link>
+          <div v-else class="hidden lg:flex items-center gap-1.5">
+            <router-link to="/login" class="nav-ghost text-sm px-2 py-1">Entrar</router-link>
+            <router-link to="/register" class="nav-badge text-xs px-2 py-1">Criar conta</router-link>
           </div>
 
           <button
             @click="mobileMenuOpen = !mobileMenuOpen"
-            class="md:hidden p-2 rounded-md nav-ghost transition-all duration-200"
+            class="lg:hidden p-2 rounded-md nav-ghost transition-all duration-200"
             aria-label="Abrir menu"
           >
             <svg class="h-6 w-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,6 +226,7 @@ const authStore = useAuthStore()
 const themeStore = useThemeStore()
 
 const mobileMenuOpen = ref(false)
+const dropdownOpen = ref(false)
 
 const tokenRef = authStore.token
 const isAuthenticated = computed(() => {
@@ -285,7 +311,19 @@ const allLinks = computed(() => {
   return list
 })
 
-const navLinks = computed(() => [...primaryLinks.value, ...secondaryLinks.value])
+// Mostrar apenas links principais na navbar (max 4 links)
+const mainNavLinks = computed(() => {
+  if (!isAuthenticated.value) return baseLinks.filter(l => !l.auth).slice(0, 3)
+  return primaryLinks.value.slice(0, 4)
+})
+
+// Links secundários vão para o dropdown
+const secondaryNavLinks = computed(() => {
+  if (!isAuthenticated.value) return []
+  const main = primaryLinks.value.slice(0, 4)
+  const remaining = primaryLinks.value.slice(4)
+  return [...remaining, ...secondaryLinks.value]
+})
 
 const isRouteActive = (to) => {
   if (to === '/') return activePath.value === '/'
@@ -329,13 +367,14 @@ const toggleTheme = () => {
 .nav-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0.45rem 0.75rem;
-  border-radius: 0.6rem;
+  gap: 6px;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
   transition: all 0.2s ease;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 .nav-link-idle {
   color: var(--nav-link-idle-text);
@@ -352,11 +391,12 @@ const toggleTheme = () => {
 }
 
 .nav-ghost {
-  padding: 0.45rem 0.75rem;
+  padding: 0.375rem 0.625rem;
   border-radius: 999px;
   font-weight: 600;
   color: var(--nav-link-idle-text);
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 .nav-ghost:hover {
   background: var(--nav-link-idle-hover-bg);
@@ -364,12 +404,13 @@ const toggleTheme = () => {
 }
 
 .nav-badge {
-  padding: 0.45rem 0.85rem;
+  padding: 0.375rem 0.75rem;
   border-radius: 999px;
   font-weight: 700;
   color: #0f1117;
   background: var(--accent);
   box-shadow: var(--shadow-gold);
+  white-space: nowrap;
 }
 
 .nav-drawer {
@@ -419,5 +460,13 @@ const toggleTheme = () => {
 }
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.dropdown-enter-active, .dropdown-leave-active {
+  transition: all 0.15s ease;
+}
+.dropdown-enter-from, .dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
 }
 </style>

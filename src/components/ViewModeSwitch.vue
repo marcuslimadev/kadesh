@@ -16,8 +16,8 @@
           viewMode.isContractor ? 'vm-pill--active' : 'vm-pill--inactive'
         ]"
       >
-        <span class="text-lg transition-transform duration-500" :class="viewMode.isContractor ? 'scale-110' : ''">📘</span>
-        <span class="text-sm font-semibold">Contratante</span>
+        <span class="text-base transition-transform duration-500" :class="viewMode.isContractor ? 'scale-110' : ''">📘</span>
+        <span class="text-xs font-semibold">Contratante</span>
       </button>
       
       <button
@@ -28,8 +28,8 @@
           viewMode.isProvider ? 'vm-pill--active' : 'vm-pill--inactive'
         ]"
       >
-        <span class="text-lg transition-transform duration-500" :class="viewMode.isProvider ? 'scale-110' : ''">🛠️</span>
-        <span class="text-sm font-semibold">Prestador</span>
+        <span class="text-base transition-transform duration-500" :class="viewMode.isProvider ? 'scale-110' : ''">🛠️</span>
+        <span class="text-xs font-semibold">Prestador</span>
       </button>
     </div>
 
@@ -116,7 +116,7 @@ const toggleMode = () => {
   background: var(--surface);
   border: 1px solid var(--card-border);
   box-shadow: var(--shadow-md);
-  padding: 0.375rem;
+  padding: 0.25rem;
 }
 
 .vm-shell--sidebar {
@@ -137,14 +137,14 @@ const toggleMode = () => {
 .vm-pill {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
   font-weight: 600;
   transition: all 0.3s ease;
   border-radius: 999px;
 }
 
 .vm-pill--inline {
-  padding: 0.625rem 1.25rem;
+  padding: 0.375rem 0.75rem;
 }
 
 .vm-pill--sidebar {
