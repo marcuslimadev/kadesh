@@ -413,7 +413,7 @@ const filters = ref({
   status: ''
 })
 
-const showFilters = ref(false)
+const showFilters = ref(true)
 const showQuickAccess = ref(true)
 const showCategoryModal = ref(false)
 const newCategory = ref({ name: '', description: '' })
@@ -803,7 +803,7 @@ onUnmounted(() => {
 
 .lobby-grid {
   display: grid;
-  grid-template-columns: 10% 80% 10%;
+  grid-template-columns: 15% 70% 15%;
   gap: 1rem;
   align-items: start;
   width: 100%;
