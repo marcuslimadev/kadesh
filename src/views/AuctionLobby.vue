@@ -1,5 +1,5 @@
 <template>
-  <div class="lobby-shell py-3 px-2">
+  <div class="lobby-shell px-2">
     <div class="w-full mx-auto">
       <div class="lobby-grid">
         <!-- Anúncios Esquerda (Desktop) -->
