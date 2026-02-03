@@ -471,7 +471,7 @@
         <div class="text-center">
           <router-link
             v-if="isAuthenticated"
-            to="/lobby"
+            to="/projects"
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
           >
             🎯 Acessar Leilões Agora
@@ -855,7 +855,7 @@ const getHeroImage = project => {
 }
 
 const goToLogin = () => {
-  router.push({ name: 'login', query: { redirect: '/lobby' } })
+  router.push({ name: 'login', query: { redirect: '/projects' } })
 }
 
 const goToRegister = () => {

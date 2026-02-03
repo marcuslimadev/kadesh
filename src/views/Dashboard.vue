@@ -21,7 +21,7 @@
       <!-- Quick Actions -->
       <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
         <router-link
-          to="/lobby"
+          to="/projects"
           class="flex items-center justify-center p-4 bg-gradient-to-br from-amber-200 via-yellow-100 to-amber-200 text-amber-900 rounded-xl shadow-md hover:shadow-xl transition-all duration-500 transform hover:scale-105"
         >
           <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

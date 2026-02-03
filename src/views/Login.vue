@@ -224,8 +224,8 @@ const handleLogin = async () => {
         return
       }
 
-      // Redirecionar para o Lobby de Leiloes apos login
-      router.push('/lobby')
+      // Redirecionar para projetos após login
+      router.push('/projects')
     } else {
       errors.general = result.error
     }

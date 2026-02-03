@@ -329,8 +329,8 @@ const handleRegister = async () => {
     })
 
     if (result.success) {
-      // Redirecionar para o Lobby de Leilões após registro
-      router.push('/lobby')
+      // Redirecionar para projetos após registro
+      router.push('/projects')
     } else {
       errors.general = result.error
     }
