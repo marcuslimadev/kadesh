@@ -21,9 +21,9 @@
       <div class="relative z-10 h-full flex items-center justify-center">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <!-- Logo + Brand -->
-          <div class="flex items-center justify-center gap-8 mb-12 animate-fade-in-up">
+          <div class="flex flex-col items-center justify-center gap-6 mb-12 animate-fade-in-up">
             <img :src="logoImg" alt="Kaddesh" class="h-80 w-80 md:h-96 md:w-96 lg:h-[32rem] lg:w-[32rem] rounded-[4rem] border-[12px] border-[#D4AF37]/70 shadow-2xl object-cover" />
-            <div class="text-left">
+            <div class="text-center">
               <p class="text-[#D4AF37] text-4xl md:text-5xl lg:text-7xl font-bold uppercase tracking-wider">KADDESH</p>
               <p class="text-heading text-2xl md:text-3xl lg:text-4xl opacity-90">Service Bridge</p>
             </div>
