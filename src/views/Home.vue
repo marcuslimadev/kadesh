@@ -36,12 +36,8 @@
           </h1>
 
           <!-- Subtitle -->
-          <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.4s;">
+          <p class="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.4s;">
             Onde a excelência encontra a demanda.
-          </p>
-
-          <p class="text-base md:text-lg text-gray-300 mb-12 max-w-2xl mx-auto animate-fade-in-up" style="animation-delay: 0.6s;">
-            Conectamos contratantes e prestadores em um ambiente confiável, com anexos, prazos em horas e vencedor automático pelo menor lance elegível.
           </p>
 
           <!-- CTA Buttons - Hospital Style -->
