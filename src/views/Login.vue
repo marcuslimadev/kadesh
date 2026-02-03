@@ -1,6 +1,10 @@
 <template>
-  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Logo como fundo sombreado -->
+    <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+      <img src="/logo.jpeg" alt="" class="w-[80%] max-w-4xl h-auto object-contain" />
+    </div>
+    <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
       <router-link to="/" class="flex justify-center">
         <div class="relative group">
           <div class="absolute -inset-1 bg-gradient-to-r from-gold to-yellow-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
@@ -31,7 +35,7 @@
       </div>
     </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
       <div class="bg-surface py-8 px-4 shadow-2xl sm:rounded-2xl sm:px-10 border border-gold/10 backdrop-blur-sm">
         <form @submit.prevent="handleLogin" class="space-y-6">
           <!-- Email -->

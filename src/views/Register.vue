@@ -1,6 +1,10 @@
 <template>
-  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+  <div class="min-h-screen bg-page flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-all duration-1000 relative overflow-hidden">
+    <!-- Logo como fundo sombreado -->
+    <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+      <img src="/logo.jpeg" alt="" class="w-[80%] max-w-4xl h-auto object-contain" />
+    </div>
+    <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
       <router-link to="/" class="flex justify-center">
         <img :src="logoImg" alt="Kadesh" class="h-32 w-32 object-contain" />
       </router-link>
@@ -15,7 +19,7 @@
       </p>
     </div>
 
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
       <div class="bg-surface/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
         <!-- Info Box -->
         <div class="mb-6 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border border-amber-200 rounded-xl p-4 shadow-sm">
