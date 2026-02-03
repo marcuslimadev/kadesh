@@ -263,7 +263,7 @@ const iconPaths = {
 }
 
 const baseLinks = [
-  { to: '/lobby', label: 'Lobby', icon: 'target', auth: true },
+  { to: '/lobby', label: 'Leilões', icon: 'target', auth: true },
   { to: '/tutorial', label: 'Tutorial', icon: 'book' },
   { to: '/dashboard', label: 'Dashboard', icon: 'dashboard', auth: true }
 ]

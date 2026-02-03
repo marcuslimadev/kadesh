@@ -244,7 +244,7 @@
         <div class="cta-header">
           <p class="cta-eyebrow">Entrar ou criar conta</p>
           <h2 class="cta-heading">Kaddesh: Onde a excelencia encontra a demanda.</h2>
-          <p class="cta-subtext">Use sua conta para acessar o Lobby no modo Contratante ou Prestador e acompanhar os leiloes em tempo real.</p>
+          <p class="cta-subtext">Use sua conta para acessar os Leilões no modo Contratante ou Prestador e acompanhar as disputas em tempo real.</p>
         </div>
 
         <div class="cta-grid">
@@ -255,7 +255,7 @@
               </div>
               <div>
                 <h3 class="cta-title">Já tem conta?</h3>
-                <p class="cta-text">Acesse o Lobby no seu modo preferido.</p>
+                <p class="cta-text">Acesse os Leilões no seu modo preferido.</p>
               </div>
             </div>
             <button @click="goToLogin" class="cta-button primary">
@@ -474,7 +474,7 @@
             to="/lobby"
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
           >
-            🎯 Acessar Lobby Agora
+            🎯 Acessar Leilões Agora
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
@@ -484,7 +484,7 @@
             to="/register"
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-amber-600 to-amber-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition"
           >
-            Cadastre-se para Acessar o Lobby
+            Cadastre-se para Acessar os Leilões
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
