@@ -3,11 +3,11 @@
     <div class="max-w-7xl mx-auto px-4">
       <div class="h-16 flex items-center justify-between gap-3">
         <div class="flex items-center gap-3">
-          <router-link to="/" class="flex items-center gap-2">
-            <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+          <router-link to="/" class="flex items-center gap-3">
+            <img :src="logoImg" alt="Kaddesh" class="h-14 w-14 rounded-lg border-2 border-gold/40 object-cover" />
             <div class="leading-tight hidden lg:block">
-              <p class="text-sm text-gold font-semibold">KADDESH</p>
-              <p class="text-xs text-offwhite-muted">Service Bridge</p>
+              <p class="text-xl text-gold font-bold">KADDESH</p>
+              <p class="text-sm text-offwhite-muted">Service Bridge</p>
             </div>
           </router-link>
 
@@ -112,11 +112,11 @@
     <div v-if="mobileMenuOpen" class="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" @click.self="mobileMenuOpen = false">
       <div class="absolute top-0 right-0 w-72 h-full nav-drawer p-4 overflow-y-auto shadow-2xl">
         <div class="flex items-center justify-between mb-4">
-          <router-link to="/" class="flex items-center gap-2">
-            <img :src="logoImg" alt="Kaddesh" class="h-10 w-10 rounded-lg border border-gold/40 object-cover" />
+          <router-link to="/" class="flex items-center gap-3">
+            <img :src="logoImg" alt="Kaddesh" class="h-14 w-14 rounded-lg border-2 border-gold/40 object-cover" />
             <div>
-              <p class="text-sm font-semibold nav-text">KADDESH</p>
-              <p class="text-xs nav-muted">Service Bridge</p>
+              <p class="text-xl font-bold nav-text">KADDESH</p>
+              <p class="text-sm nav-muted">Service Bridge</p>
             </div>
           </router-link>
           <button @click="mobileMenuOpen = false" class="p-2 rounded nav-close-btn">
