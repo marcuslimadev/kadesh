@@ -45,15 +45,39 @@ npm run dev
 npm test                    # Headless run
 npm run test:headed         # Visual debugging
 npm run test:ui             # Interactive UI mode
+npm run test:debug          # Step-through debugging
 
 # Quick integration test
 .\test-e2e-now.ps1         # PowerShell script for full flow validation
+.\test-disputes-admin.ps1  # Admin dispute workflow testing
 ```
 
 **Testing Patterns**:
 - E2E tests in `tests/*.spec.js` cover auth, projects, bids, contracts, admin disputes
 - Tests use timestamp-based unique users to avoid conflicts (`tests/unified-profile.spec.js`)
 - Tests hit real backend - configure `VITE_API_URL` to point to test environment
+- Playwright config uses `baseURL: 'http://localhost:3000'` and auto-starts dev server
+- Test data uses password `kadesh2025` for consistency (see `USUARIOS-EXEMPLO.md`)
+
+### PowerShell Utility Scripts
+**Development Utilities** (Windows/XAMPP workflows):
+```powershell
+.\restart-limpo.ps1         # Kill Node processes, clear Vite cache, dist, temp files
+.\limpar-cache-total.ps1    # Deep clean cache and node_modules if needed
+.\test-e2e-now.ps1          # Full E2E validation with REST API testing
+```
+
+**Code Maintenance**:
+```powershell
+.\fix-env-requires.ps1      # Fix PHP env require paths in bulk
+.\comment-toasts.ps1        # Comment out toast notifications (debugging)
+.\remove-toasts.ps1         # Remove toast notifications entirely
+```
+
+**Common Issue Resolution**:
+- HMR not working: Run `.\restart-limpo.ps1` to clear Vite cache
+- Port conflicts: Script kills existing Node processes before restart
+- Build artifacts issues: Clears `dist/`, `node_modules\.vite`, temp Vite files
 
 ---
 
@@ -61,15 +85,21 @@ npm run test:ui             # Interactive UI mode
 
 ### Backend Architecture (PHP)
 - **Entry Point**: `api/index.php` - main router that dispatches to modular endpoints
+  - Uses static route mapping with exact match before pattern matching
+  - Path normalization removes `/kadesh/api` or `/api` prefixes
+  - CORS configured via `FRONTEND_URL` env var (comma-separated list)
 - **Database**: MySQL via PDO (`api/config/database.php`)
 - **API Structure**: RESTful endpoints in `api/api/` folders (auth, projects, bids, contracts, etc.)
 - **Middleware**: JWT auth in `api/middleware/auth.php` using custom Helpers class
 - **Environment**: Loads from `api/config/env.production.php` or `env.local.php` (fallback order)
+  - Production file validated - skips if contains `[PREENCHER]` placeholder
+  - Env cascade: `env.production.php` → `env.php` → `env.local.php`
 
 **Key PHP Files**:
 - `api/utils/helpers.php`: JWT generation/verification, password hashing, common utilities
 - `api/config/database.php`: PDO MySQL connection with env vars
 - `api/api/*/index.php`: Each module's endpoints (e.g., `api/api/auth/index.php`)
+- `api/kadesh_mysql_schema.sql`: Database schema (import via phpMyAdmin or MySQL CLI)
 
 ### Authentication & User Profiles
 - **User Types**: `client`, `provider`, `admin` (stored in MySQL `users` table)
@@ -110,6 +140,12 @@ npm run test:ui             # Interactive UI mode
 - Response interceptor handles 401s with console warning only
 
 **CRITICAL**: Default `VITE_API_URL` is empty string which works via Vite proxy in dev. For production, MUST set in `.env` or Vercel settings.
+
+**Vite Development Proxy** (`vite.config.js`):
+- Proxies `/api` requests to `http://localhost/kadesh` (XAMPP default)
+- Change proxy target if XAMPP serves from different path
+- Enables HMR on port 3000 with polling for file watch reliability
+- Build config: Single CSS bundle (`cssCodeSplit: false`) to avoid Apache issues
 
 ---
 
@@ -194,6 +230,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
    - Frontend router only checks token existence in localStorage
    - Backend `AuthMiddleware` validates token signature and expiration
    - Token mismatch causes 401 errors - check `api/utils/helpers.php` for JWT implementation
+
+7. **HMR/Vite Cache Issues**:
+   - Run `.\restart-limpo.ps1` to kill processes and clear Vite cache
+   - Deletes `node_modules\.vite`, `dist/`, and temp files
+   - Fixes most "changes not reflecting" or "port already in use" issues
 
 ---
 

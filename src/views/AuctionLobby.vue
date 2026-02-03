@@ -51,7 +51,7 @@
 
         <div v-else class="space-y-4">
           <!-- Grid de cards de leilao estilo Monitor Leilao / Vestri -->
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div
               v-for="project in filteredProjects"
               :key="project.id"
