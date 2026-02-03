@@ -22,7 +22,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <!-- Logo + Brand -->
           <div class="flex flex-col items-center justify-center gap-6 mb-12 animate-fade-in-up">
-            <img :src="logoImg" alt="Kaddesh" class="h-80 w-80 md:h-96 md:w-96 lg:h-[32rem] lg:w-[32rem] rounded-[4rem] border-[12px] border-[#D4AF37]/70 shadow-2xl object-cover" />
+            <img :src="logoImg" alt="Kaddesh" class="h-[28rem] w-[28rem] md:h-[36rem] md:w-[36rem] lg:h-[48rem] lg:w-[48rem] rounded-[4rem] border-[12px] border-[#D4AF37]/70 shadow-2xl object-cover" />
             <div class="text-center">
               <p class="text-[#D4AF37] text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider">KADDESH</p>
               <p class="text-heading text-lg md:text-xl lg:text-2xl opacity-90">Service Bridge</p>
