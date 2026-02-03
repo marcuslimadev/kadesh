@@ -864,9 +864,9 @@ const goToRegister = () => {
 
 const goToLobby = () => {
   if (isAuthenticated.value) {
-    router.push('/lobby')
+    router.push('/projects')
   } else {
-    router.push({ name: 'login', query: { redirect: '/lobby' } })
+    router.push({ name: 'login', query: { redirect: '/projects' } })
   }
 }
 
