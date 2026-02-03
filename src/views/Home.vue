@@ -874,7 +874,7 @@ const goToCreateProject = () => {
   if (isAuthenticated.value) {
     router.push('/projects/create')
   } else {
-    router.push({ name: 'register', query: { redirect: '/projects/create' } })
+    router.push({ name: 'login', query: { redirect: '/projects/create' } })
   }
 }
 
