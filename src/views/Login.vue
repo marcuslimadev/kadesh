@@ -16,12 +16,18 @@
       <h3 class="mt-6 text-center text-xl font-semibold text-body">
         Entre na sua conta
       </h3>
-      <p class="mt-2 text-center text-sm text-body">
-        Ou
-        <router-link to="/register" class="font-medium text-primary-600 hover:text-primary-500">
-          crie uma nova conta
+      <div class="mt-4 text-center">
+        <p class="text-sm text-body mb-3">Ainda não tem conta?</p>
+        <router-link 
+          to="/register" 
+          class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] text-[#0F1117] rounded-lg font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+        >
+          Criar Conta Gratuitamente
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
         </router-link>
-      </p>
+      </div>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
