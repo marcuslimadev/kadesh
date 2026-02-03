@@ -64,16 +64,16 @@ textarea {
                  *    bg-surface, text-heading, border-muted
                  * ======================================== */
                 
-                --page-bg: #0F1117;
-                --surface: #161821;
-                --surface-alt: #1A1A1A;
-                --surface-elevated: #242424;
-                --surface-hover: #2D2D2D;
+                --page-bg: #9A9898;
+                --surface: #9A9898;
+                --surface-alt: #C7C5C5;
+                --surface-elevated: #C7C5C5;
+                --surface-hover: #C7C5C5;
                 
                 /* Text Colors */
-                --text-primary: #F5F5F5;
-                --text-secondary: #C7C7C7;
-                --text-muted: #8A8A8A;
+                --text-primary: #FFFFFF;
+                --text-secondary: #747271;
+                --text-muted: #747271;
                 
                 /* Accent - Gold */
                 --accent: #D4AF37;
@@ -83,7 +83,7 @@ textarea {
                 
                 /* Borders */
                 --card-border: rgba(212, 175, 55, 0.24);
-                --muted-border: rgba(255, 255, 255, 0.08);
+                --muted-border: rgba(199, 197, 197, 0.3);
                 --accent-border: rgba(212, 175, 55, 0.5);
                 
                 /* Status Colors - Muted for dark theme */
