@@ -228,8 +228,7 @@ const handleLogin = async () => {
         return
       }
 
-      // Redirecionar para projetos após login
-      router.push('/projects')
+      router.push('/lobby')
     } else {
       errors.general = result.error
     }

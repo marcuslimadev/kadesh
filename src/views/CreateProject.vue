@@ -36,7 +36,11 @@
 
       <!-- Form -->
       <div class="rounded-2xl shadow-xl p-8 card-premium" style="background: var(--surface); border: 2px solid var(--card-border);">
-        <form @submit.prevent="handleSubmit" class="space-y-8">
+        <div v-if="successMessage" class="mb-6 rounded-xl border border-green-300 bg-green-50 px-4 py-3 text-sm font-semibold text-green-800">
+          {{ successMessage }}
+        </div>
+
+        <form @submit.prevent="handleSubmit" novalidate class="space-y-8">
           
           <!-- Step 1: Informações Básicas -->
           <div v-show="currentStep === 1" class="space-y-6">
@@ -594,6 +598,7 @@ Preferência por design clean e profissional, com cores azul e branco."
               <li>✓ Seja específico sobre o que você precisa</li>
               <li>✓ Defina um orçamento realista baseado no mercado</li>
               <li>✓ Adicione exemplos ou referências se possível</li>
+              <li>✓ Finalize esta etapa para publicar corretamente</li>
               <li>✓ Responda rapidamente às propostas dos profissionais</li>
             </ul>
           </div>
@@ -678,6 +683,7 @@ const isSubmitting = ref(false)
 const attachments = ref([])
 const showCategoryModal = ref(false)
 const newCategoryName = ref('')
+const successMessage = ref('')
 const MAX_ATTACHMENTS = 3
 const MAX_FILE_SIZE = 5 * 1024 * 1024
 const MAX_FILE_SIZE_MB = Math.round(MAX_FILE_SIZE / (1024 * 1024))
@@ -1027,6 +1033,8 @@ const handleSubmit = async () => {
   isSubmitting.value = true
 
   try {
+    successMessage.value = ''
+
     const projectData = {
       title: form.title.trim(),
       description: form.description.trim(),
@@ -1043,8 +1051,17 @@ const handleSubmit = async () => {
     const result = await projectService.createProject(projectData)
 
     if (result.success) {
-      const projectId = result.data.project.id
+      const projectPayload = result.data?.data?.project || result.data?.project
+      const projectId = projectPayload?.id
+
+      if (!projectId) {
+        throw new Error('Projeto criado sem identificador válido')
+      }
+
       const attachmentSummary = await uploadSelectedAttachments(projectId)
+      successMessage.value = attachmentSummary.uploaded
+        ? `Projeto criado com sucesso e ${attachmentSummary.uploaded} anexo(s) enviados.`
+        : 'Projeto criado com sucesso.'
 
       if (attachmentSummary.uploaded) {
     // toast.success(`🎉 Projeto criado e ${attachmentSummary.uploaded} anexo(s) enviados com sucesso!`)
@@ -1056,7 +1073,9 @@ const handleSubmit = async () => {
     // toast.error(`${attachmentSummary.failed} anexo(s) não puderam ser enviados. Você pode tentar novamente na página do projeto.`)
       }
 
-      router.push(`/projects/${projectId}`)
+      setTimeout(() => {
+        router.push(`/projects/${projectId}`)
+      }, 600)
     } else {
       errors.general = result.error
     // toast.error(result.error)
@@ -1069,5 +1088,3 @@ const handleSubmit = async () => {
   }
 }
 </script>
-
-

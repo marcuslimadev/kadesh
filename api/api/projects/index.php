@@ -1,9 +1,22 @@
 <?php
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 $db = new Database();
 $conn = $db->getConnection();
+
+if (!$conn) {
+    Helpers::jsonResponse([
+        'projects' => fallbackListProjects(),
+        'pagination' => [
+            'page' => 1,
+            'per_page' => 20,
+            'total' => count(fallbackListProjects()),
+            'total_pages' => 1
+        ]
+    ]);
+}
 
 try {
     $status = $_GET['status'] ?? 'open';

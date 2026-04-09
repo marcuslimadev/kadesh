@@ -3,16 +3,14 @@
     
     <!-- Hero Video Section - Inspired by Hospital Metropolitano -->
     <section class="relative h-screen min-h-[700px] w-full overflow-hidden">
-      <!-- Video Background -->
-      <video 
-        autoplay 
-        loop 
-        muted 
-        playsinline
-        class="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/novovideo.mp4" type="video/mp4">
-      </video>
+      <div
+        class="absolute inset-0"
+        style="background:
+          radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.24), transparent 30%),
+          radial-gradient(circle at 80% 10%, rgba(229, 192, 74, 0.18), transparent 28%),
+          linear-gradient(135deg, #05070d 0%, #0f1117 45%, #1a1f2b 100%);"
+        aria-hidden="true"
+      ></div>
 
       <!-- Dark Overlay -->
       <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80"></div>
@@ -24,20 +22,20 @@
           <div class="flex flex-col items-center justify-center gap-6 mb-12 animate-fade-in-up">
             <img :src="logoImg" alt="Kaddesh" class="h-[28rem] w-[28rem] md:h-[36rem] md:w-[36rem] lg:h-[350px] lg:w-[350px] rounded-[4rem] border-[12px] border-[#D4AF37]/70 shadow-2xl object-cover" />
             <div class="text-center">
-              <p class="text-[#D4AF37] text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-wider">KADDESH</p>
+              <p class="text-[#D4AF37] text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider">Kadesh</p>
               <p class="text-heading text-lg md:text-xl lg:text-2xl opacity-90">Service Bridge</p>
             </div>
           </div>
 
           <!-- Main Headline -->
           <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.2s;">
-            Leilões Reversos com<br />
+            Kaddesh conectando clientes e talentos em<br />
             <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">Curadoria e Segurança</span>
           </h1>
 
           <!-- Subtitle -->
           <p class="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.4s;">
-            Onde a excelência encontra a demanda.
+            Conectando oportunidades reais com curadoria, segurança e negociação transparente.
           </p>
 
           <!-- CTA Buttons - Hospital Style -->
@@ -111,7 +109,7 @@
             Oportunidades <span class="bg-gradient-to-r from-accent-400 to-accent-600 bg-clip-text text-transparent">Exclusivas</span>
           </h2>
           <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-            Confira as melhores ofertas e parceiros selecionados pela Kaddesh
+            Confira as melhores ofertas e parceiros selecionados pela plataforma
           </p>
         </div>
 
@@ -140,6 +138,8 @@
                 v-if="banner.image_url"
                 :src="banner.image_url"
                 :alt="banner.title"
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-110"
               />
               <div v-else class="w-full h-full flex items-center justify-center text-gray-600">
@@ -200,7 +200,7 @@
             Vamos explorar <span class="bg-gradient-to-r from-[#D4AF37] to-[#E5C04A] bg-clip-text text-transparent">categorias populares</span>
           </h2>
           <p class="text-body text-lg mt-4 max-w-3xl mx-auto">
-            Use o leilão reverso da Kaddesh para contratar especialistas ou aplicar seus talentos nos projetos certos.
+            Use o leilão reverso da plataforma para contratar especialistas ou aplicar seus talentos nos projetos certos.
           </p>
         </div>
 
@@ -218,6 +218,8 @@
                 v-if="category.image"
                 :src="category.image"
                 :alt="category.title"
+                loading="lazy"
+                decoding="async"
                 class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div
@@ -242,8 +244,8 @@
     <section class="cta-section">
       <div class="cta-shell">
         <div class="cta-header">
-          <p class="cta-eyebrow">Entrar ou criar conta</p>
-          <h2 class="cta-heading">Kaddesh: Onde a excelencia encontra a demanda.</h2>
+          <p class="cta-eyebrow">Acesse ou crie sua conta</p>
+          <h2 class="cta-heading">Kadesh: Onde a excelencia encontra a demanda.</h2>
           <p class="cta-subtext">Use sua conta para acessar os Leilões no modo Contratante ou Prestador e acompanhar as disputas em tempo real.</p>
         </div>
 
@@ -313,7 +315,7 @@
 
           <div class="flex flex-wrap gap-3">
             <button class="px-4 py-3 rounded-xl bg-gold text-dark font-semibold shadow-gold hover:bg-gold/90 transition" @click="goToLogin">
-              Entrar
+              Acessar
             </button>
             <button class="px-4 py-3 rounded-xl bg-dark-80 border border-gold/30 text-offwhite font-semibold hover:border-gold/50 transition" @click="goToRegister">
               Criar conta
@@ -324,7 +326,7 @@
         <div class="flex justify-center lg:justify-end animate-slide-in-right">
           <div class="relative">
             <div class="absolute inset-0 bg-accent-500/20 rounded-full blur-3xl animate-pulse-slow scale-110"></div>
-            <img src="/assets/images/mobile-app.png" alt="Aplicativo Kaddesh" class="relative w-full max-w-md animate-float" />
+            <img src="/assets/images/mobile-app.png" alt="Aplicativo Kaddesh" loading="lazy" decoding="async" class="relative w-full max-w-md animate-float" />
             <div class="absolute top-10 -left-8 bg-white rounded-2xl shadow-xl p-4 w-48">
               <p class="text-sm text-gray-500">Notificações inteligentes</p>
               <p class="font-semibold text-primary-900">12 convites pendentes</p>
@@ -376,6 +378,8 @@
                   v-if="getHeroImage(project)"
                   :src="getHeroImage(project)"
                   :alt="project.title"
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-cover"
                 />
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-400 text-sm">Sem imagem</div>
@@ -516,7 +520,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-heading mb-2">Tutorial Passo a Passo</h3>
+            <h3 class="text-lg font-bold text-heading mb-2">Guia Passo a Passo</h3>
             <p class="text-sm text-body">Guia completo dividido para Contratantes e Prestadores</p>
           </router-link>
 
@@ -547,7 +551,7 @@
               </svg>
             </div>
             <h3 class="text-lg font-bold text-heading mb-2">FAQ & Suporte</h3>
-            <p class="text-sm text-body">Dúvidas frequentes e como entrar em contato</p>
+            <p class="text-sm text-body">Dúvidas frequentes e formas de contato</p>
           </div>
         </div>
 
@@ -574,7 +578,7 @@
     <section class="bg-primary-900 py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="text-3xl font-bold text-white mb-4">Inscreva-se no nosso boletim</h2>
-        <p class="text-gray-300 mb-8">Receba novidades das categorias, eventos e vagas urgentes da comunidade Kaddesh.</p>
+        <p class="text-gray-300 mb-8">Receba novidades das categorias, eventos e vagas urgentes da comunidade.</p>
 
         <form @submit.prevent="handleNewsletter" class="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
           <label class="sr-only" for="newsletterEmail">Informe seu e-mail</label>
@@ -595,18 +599,15 @@
       </div>
     </section>
 
-    <!-- Floating Chat Widget -->
-    <FloatingChat />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import logoImg from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 // import { useToast } from 'vue-toastification'
 import { useAuthStore } from '@/stores/auth'
-import FloatingChat from '@/components/chat/FloatingChat.vue'
 import api from '@/services/api'
 import {
   MagnifyingGlassIcon,
@@ -878,15 +879,9 @@ const goToCreateProject = () => {
   }
 }
 
-onMounted(() => {
-  fetchFeaturedProjects()
-  fetchActiveBanners()
-})
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Lato:wght@400;500;600&display=swap');
-
 .home-shell {
   background: #f5f5f5;
   color: #1a1a1a;
@@ -1237,8 +1232,6 @@ onMounted(() => {
   opacity: 0;
 }
 </style>
-
-
 
 
 

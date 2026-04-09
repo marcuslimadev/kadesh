@@ -4,21 +4,28 @@
  * Backend PHP para Hostinger
  */
 
-// Carregar configurações de ambiente (prioriza produção válida)
+// Carregar configurações de ambiente (localhost usa config local para manter consistência)
+$requestHost = $_SERVER['HTTP_HOST'] ?? '';
+$isLocalHost = preg_match('/^(localhost|127\.0\.0\.1)(:\d+)?$/', $requestHost) === 1;
+
+$envLocalPath = __DIR__ . '/config/env.local.php';
 $envProductionPath = __DIR__ . '/config/env.production.php';
-if (file_exists($envProductionPath)) {
+
+if ($isLocalHost && file_exists($envLocalPath)) {
+    require_once $envLocalPath;
+} elseif (file_exists($envProductionPath)) {
     $envProductionContent = file_get_contents($envProductionPath);
     if ($envProductionContent !== false && strpos($envProductionContent, '[PREENCHER]') === false) {
         require_once $envProductionPath;
     } elseif (file_exists(__DIR__ . '/config/env.php')) {
         require_once __DIR__ . '/config/env.php';
-    } elseif (file_exists(__DIR__ . '/config/env.local.php')) {
-        require_once __DIR__ . '/config/env.local.php';
+    } elseif (file_exists($envLocalPath)) {
+        require_once $envLocalPath;
     }
 } elseif (file_exists(__DIR__ . '/config/env.php')) {
     require_once __DIR__ . '/config/env.php';
-} elseif (file_exists(__DIR__ . '/config/env.local.php')) {
-    require_once __DIR__ . '/config/env.local.php';
+} elseif (file_exists($envLocalPath)) {
+    require_once $envLocalPath;
 }
 
 // Configurações globais
@@ -121,6 +128,9 @@ $staticRoutes = [
     'GET:/reviews' => 'api/reviews/index.php',
     'POST:/reviews' => 'api/reviews/create.php',
     'GET:/reviews-simple' => 'api/reviews/simple.php',
+
+    // Receipts
+    'GET:/receipts' => 'api/receipts/index.php',
     
     // Advertisements
     'GET:/advertisements' => 'api/advertisements/index.php',
@@ -198,6 +208,10 @@ $dynamicRoutes = [
     ['GET', '/^\/reviews\/user\/([^\/]+)$/', 'api/reviews/index.php', 'user_id'],
     ['GET', '/^\/reviews\/project\/([^\/]+)$/', 'api/reviews/index.php', 'project_id'],
     ['GET', '/^\/reviews-simple\/user\/([^\/]+)$/', 'api/reviews/simple.php', 'user_id'],
+
+    // Receipts
+    ['GET', '/^\/receipts\/contract\/([^\/]+)$/', 'api/receipts/index.php', 'id'],
+    ['GET', '/^\/receipts\/transaction\/([^\/]+)$/', 'api/receipts/index.php', 'id'],
     
     // Users
     ['GET', '/^\/users\/([^\/]+)\/public$/', 'api/users/public.php', 'id'],
@@ -222,6 +236,9 @@ foreach ($dynamicRoutes as $route) {
     list($method, $pattern, $file, $paramName) = $route;
     
     if ($requestMethod === $method && preg_match($pattern, $path, $matches)) {
+        if ($file === 'api/receipts/index.php') {
+            $_GET['receipt_type'] = strpos($path, '/receipts/contract/') === 0 ? 'contract' : 'transaction';
+        }
         if (is_array($paramName)) {
             foreach ($paramName as $index => $name) {
                 if (isset($matches[$index + 1])) {

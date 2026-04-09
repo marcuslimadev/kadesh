@@ -91,10 +91,10 @@ const dismissTooltip = () => {
 
 const goToMode = (mode) => {
   viewMode.setMode(mode)
-  const target = { name: 'auction-lobby', query: { mode, ts: Date.now() } }
   const isOnLobby = router.currentRoute.value.name === 'auction-lobby'
-  const navFn = isOnLobby ? router.replace : router.push
-  navFn(target).catch(() => {})
+  if (isOnLobby) {
+    router.replace({ name: 'auction-lobby', query: { mode, ts: Date.now() } }).catch(() => {})
+  }
 }
 
 const toggleMode = () => {

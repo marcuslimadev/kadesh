@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 $user = AuthMiddleware::authenticate();
 
@@ -10,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
+if (!is_array($data) || empty($data)) {
+    $data = $_POST;
+}
 
 $title = $data['title'] ?? null;
 $description = $data['description'] ?? null;
@@ -24,11 +28,44 @@ if (!$title || !$description || !$category || !$budget) {
     Helpers::jsonResponse(['error' => 'Campos obrigatórios ausentes'], 400);
 }
 
+if (mb_strlen(trim((string) $title)) < 5) {
+    Helpers::jsonResponse(['error' => 'Título deve ter pelo menos 5 caracteres'], 400);
+}
+
+if (mb_strlen(trim((string) $description)) < 50) {
+    Helpers::jsonResponse(['error' => 'Descrição deve ter pelo menos 50 caracteres'], 400);
+}
+
+if (floatval($budget) <= 0) {
+    Helpers::jsonResponse(['error' => 'Orçamento deve ser maior que zero'], 400);
+}
+
 $db = new Database();
 $conn = $db->getConnection();
 
+if (!$conn) {
+    $project = fallbackCreateProject($user['userId'], [
+        'title' => $title,
+        'description' => $description,
+        'category' => $category,
+        'budget' => $budget,
+        'deadline' => $deadline,
+        'requirements' => $requirements,
+        'skills_required' => $skills_required,
+        'priority' => $priority
+    ]);
+
+    Helpers::jsonResponse([
+        'success' => true,
+        'project' => $project,
+        'data' => [
+            'project' => $project
+        ]
+    ], 201);
+}
+
 try {
-    $projectId = Helpers::generateUUID();
+    $projectId = (string) intval(round(microtime(true) * 1000) + random_int(10, 99));
 
     // Normalizar deadline: frontend envia ISO (ex.: 2026-01-15T12:00:00.000Z)
     // MySQL DATETIME espera 'Y-m-d H:i:s' sem timezone.
@@ -101,7 +138,11 @@ try {
 
     // Formato esperado pelo frontend: result.data.project.id
     Helpers::jsonResponse([
-        'project' => $project
+        'success' => true,
+        'project' => $project,
+        'data' => [
+            'project' => $project
+        ]
     ], 201);
 
 } catch (PDOException $e) {

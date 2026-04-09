@@ -6,7 +6,7 @@
         <div>
           <h3 class="text-lg font-bold mb-4">Kadesh</h3>
           <p class="text-gray-400 text-sm">
-            Conectando profissionais talentosos com projetos incríveis.
+            Conectando profissionais talentosos com oportunidades incríveis.
           </p>
         </div>
 
@@ -16,7 +16,7 @@
           <ul class="space-y-2">
             <li>
               <router-link to="/projects" class="text-gray-400 hover:text-white text-sm transition">
-                Explorar Projetos
+                Explorar Vagas
               </router-link>
             </li>
             <li>

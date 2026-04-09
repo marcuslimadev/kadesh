@@ -1,17 +1,17 @@
 <template>
   <header class="sticky top-0 z-50 bg-nav text-offwhite border-b border-gold/20 shadow-lg">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="h-16 flex items-center justify-between gap-3">
+      <nav class="h-16 flex items-center justify-between gap-3" aria-label="Principal">
         <div class="flex items-center gap-3">
           <router-link to="/" class="flex items-center gap-3">
             <img :src="logoImg" alt="Kaddesh" class="h-14 w-14 rounded-lg border-2 border-gold/40 object-cover" />
             <div class="leading-tight hidden lg:block">
-              <p class="text-xl text-gold font-bold">KADDESH</p>
+              <p class="text-xl text-gold font-bold">Kadesh</p>
               <p class="text-sm text-offwhite-muted">Service Bridge</p>
             </div>
           </router-link>
 
-          <nav class="hidden lg:flex items-center gap-1">
+          <div v-if="isDesktopViewport" class="flex items-center gap-1">
             <router-link
               v-for="link in mainNavLinks"
               :key="link.to"
@@ -48,7 +48,7 @@
                 </div>
               </transition>
             </div>
-          </nav>
+          </div>
         </div>
 
         <div class="flex items-center gap-1.5">
@@ -90,13 +90,13 @@
 
           <div v-else class="hidden lg:flex items-center gap-1.5">
             <router-link to="/login" class="nav-ghost text-sm px-2 py-1">Entrar</router-link>
-            <router-link to="/register" class="nav-badge text-xs px-2 py-1">Criar conta</router-link>
+            <router-link to="/register" class="nav-badge text-xs px-2 py-1">Cadastrar</router-link>
           </div>
 
           <button
             @click="mobileMenuOpen = !mobileMenuOpen"
             class="lg:hidden p-2 rounded-md nav-ghost transition-all duration-200"
-            aria-label="Abrir menu"
+            aria-label="Menu"
           >
             <svg class="h-6 w-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -104,7 +104,7 @@
             </svg>
           </button>
         </div>
-      </div>
+      </nav>
     </div>
   </header>
 
@@ -115,7 +115,7 @@
           <router-link to="/" class="flex items-center gap-3">
             <img :src="logoImg" alt="Kaddesh" class="h-14 w-14 rounded-lg border-2 border-gold/40 object-cover" />
             <div>
-              <p class="text-xl font-bold nav-text">KADDESH</p>
+              <p class="text-xl font-bold nav-text">Kadesh</p>
               <p class="text-sm nav-muted">Service Bridge</p>
             </div>
           </router-link>
@@ -205,7 +205,7 @@
             <span class="font-semibold">Entrar</span>
           </router-link>
           <router-link to="/register" class="nav-link nav-link-active">
-            <span class="font-semibold">Criar conta</span>
+            <span class="font-semibold">Cadastrar</span>
           </router-link>
         </div>
       </div>
@@ -214,7 +214,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import logoImg from '@/assets/logo.png'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -227,6 +227,7 @@ const themeStore = useThemeStore()
 
 const mobileMenuOpen = ref(false)
 const dropdownOpen = ref(false)
+const isDesktopViewport = ref(typeof window !== 'undefined' ? window.innerWidth >= 1024 : true)
 
 const tokenRef = authStore.token
 const isAuthenticated = computed(() => {
@@ -270,7 +271,7 @@ const baseLinks = [
 
 const contractorLinks = [
   { to: '/projects', label: 'Projetos', icon: 'projects' },
-  { to: '/my-projects', label: 'Meus Projetos', icon: 'projects' }
+  { to: '/my-projects', label: 'Meus Jobs', icon: 'projects' }
 ]
 
 const providerLinks = [
@@ -297,8 +298,7 @@ const primaryLinks = computed(() => {
 })
 
 const secondaryLinks = computed(() => {
-  if (!isAuthenticated.value) return []
-  return sharedLinks
+  return []
 })
 
 const allLinks = computed(() => {
@@ -314,16 +314,18 @@ const allLinks = computed(() => {
 // Mostrar apenas links principais na navbar (max 4 links)
 const mainNavLinks = computed(() => {
   if (!isAuthenticated.value) return baseLinks.filter(l => !l.auth).slice(0, 3)
-  return primaryLinks.value.slice(0, 4)
+  return [...primaryLinks.value, ...sharedLinks]
 })
 
 // Links secundários vão para o dropdown
 const secondaryNavLinks = computed(() => {
-  if (!isAuthenticated.value) return []
-  const main = primaryLinks.value.slice(0, 4)
-  const remaining = primaryLinks.value.slice(4)
-  return [...remaining, ...secondaryLinks.value]
+  return secondaryLinks.value
 })
+
+const updateViewportState = () => {
+  if (typeof window === 'undefined') return
+  isDesktopViewport.value = window.innerWidth >= 1024
+}
 
 const isRouteActive = (to) => {
   if (to === '/') return activePath.value === '/'
@@ -354,6 +356,19 @@ const handleLogout = async () => {
 const toggleTheme = () => {
   themeStore.toggleTheme()
 }
+
+onMounted(() => {
+  updateViewportState()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', updateViewportState)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', updateViewportState)
+  }
+})
 </script>
 
 <style scoped>

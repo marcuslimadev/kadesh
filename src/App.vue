@@ -53,16 +53,7 @@ const showNavigation = computed(() => {
     return false
   }
   
-  // Verifica se está autenticado usando o authStore
-  // Usamos !!authStore.token para garantir que a UI apareça mesmo se a sessão
-  // estiver sendo validada ou se houver desincronia no isSessionValid
-  const currentToken = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
-    ? authStore.token.value
-    : authStore.token
-  const storedToken = typeof window !== 'undefined' ? localStorage.getItem('kadesh_token') : null
-  const authenticated = !!(currentToken || storedToken)
-  
-  return authenticated
+  return true
 })
 
 const mainClasses = computed(() => showNavigation.value ? 'app-main pt-16 md:pt-20' : 'app-main')
@@ -77,14 +68,27 @@ const finishInitialization = () => {
   isInitializing.value = false
 }
 
+const shouldWakeBackend = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_BACKEND_URL || ''
+  if (!apiUrl) return false
+
+  try {
+    const target = new URL(apiUrl, window.location.origin)
+    return target.origin !== window.location.origin
+  } catch {
+    return false
+  }
+}
+
 // Initialize app
 onMounted(() => {
   const fallbackTimer = setTimeout(finishInitialization, INITIALIZATION_FALLBACK_MS)
 
-  // Wake up the server early (handles Render cold start)
-  wakeUpServer().catch(() => {
-    // Silently ignore wake up failures
-  })
+  if (shouldWakeBackend()) {
+    wakeUpServer().catch(() => {
+      // Silently ignore wake up failures
+    })
+  }
 
   // Checa token de forma robusta (pode ser ref ou string)
   const currentToken = authStore.token && typeof authStore.token === 'object' && 'value' in authStore.token
@@ -204,4 +208,3 @@ select:focus {
   transform: translateX(100%);
 }
 </style>
-

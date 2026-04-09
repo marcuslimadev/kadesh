@@ -5,6 +5,7 @@
  */
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     Helpers::jsonResponse(['error' => 'Método não permitido'], 405);
@@ -18,6 +19,41 @@ if (!$projectId) {
 
 $db = new Database();
 $conn = $db->getConnection();
+
+if (!$conn) {
+    $project = fallbackGetProject($projectId);
+    if (!$project) {
+        Helpers::jsonResponse(['error' => 'Projeto não encontrado'], 404);
+    }
+
+    $response = [
+        'id' => $project['id'],
+        'title' => $project['title'],
+        'description' => $project['description'],
+        'category' => $project['category'],
+        'budget' => floatval($project['budget']),
+        'deadline' => $project['deadline'],
+        'requirements' => $project['requirements'],
+        'skills_required' => $project['skills_required'],
+        'status' => $project['status'],
+        'priority' => $project['priority'],
+        'views' => intval($project['views'] ?? 0),
+        'featured' => (bool) ($project['featured'] ?? false),
+        'bid_count' => 0,
+        'lowest_bid' => null,
+        'created_at' => $project['created_at'],
+        'updated_at' => $project['updated_at'],
+        'client_name' => 'Contratante Teste',
+        'client' => [
+            'id' => $project['client_id'],
+            'name' => 'Contratante Teste',
+            'email' => 'contratante@teste.com'
+        ],
+        'attachments' => []
+    ];
+
+    Helpers::jsonResponse(['project' => $response]);
+}
 
 try {
     // Buscar projeto com dados do cliente

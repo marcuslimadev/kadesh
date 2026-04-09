@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     Helpers::jsonResponse(['error' => 'Metodo nao permitido'], 405);
@@ -12,7 +13,15 @@ $db = new Database();
 $conn = $db->getConnection();
 
 if (!$conn) {
-    Helpers::jsonResponse(['error' => 'Erro de conexao com o banco de dados'], 500);
+    $summary = fallbackWalletSummary($user['userId']);
+    Helpers::jsonResponse([
+        'balance' => $summary['balance'],
+        'available' => $summary['available'],
+        'escrow' => $summary['escrow'],
+        'pending' => $summary['pending'],
+        'total' => $summary['total'],
+        'data' => $summary
+    ]);
 }
 
 try {
@@ -35,7 +44,13 @@ try {
     $escrow = max(0, $escrowHold - $escrowRelease);
 
     Helpers::jsonResponse([
+        'balance' => $completedTotal,
+        'available' => $completedTotal,
+        'escrow' => $escrow,
+        'pending' => $pendingTotal,
+        'total' => $completedTotal + $escrow,
         'data' => [
+            'balance' => $completedTotal,
             'available' => $completedTotal,
             'escrow' => $escrow,
             'pending' => $pendingTotal,

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
 require_once __DIR__ . '/../../middleware/auth.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     Helpers::jsonResponse(['error' => 'Metodo nao permitido'], 405);
@@ -12,7 +13,23 @@ $db = new Database();
 $conn = $db->getConnection();
 
 if (!$conn) {
-    Helpers::jsonResponse(['error' => 'Erro de conexao com o banco de dados'], 500);
+    $transactions = fallbackListTransactions($user['userId']);
+    Helpers::jsonResponse([
+        'transactions' => $transactions,
+        'pagination' => [
+            'total' => count($transactions),
+            'limit' => count($transactions),
+            'offset' => 0
+        ],
+        'data' => [
+            'transactions' => $transactions,
+            'pagination' => [
+                'total' => count($transactions),
+                'limit' => count($transactions),
+                'offset' => 0
+            ]
+        ]
+    ]);
 }
 
 $limit = isset($_GET['limit']) ? max(1, min(intval($_GET['limit']), 200)) : 20;
@@ -21,17 +38,17 @@ $type = $_GET['type'] ?? null;
 $status = $_GET['status'] ?? null;
 $sort = strtolower($_GET['sort'] ?? 'desc') === 'asc' ? 'ASC' : 'DESC';
 
-$conditions = ['user_id = ?'];
-$params = [$user['userId']];
+$conditions = ['user_id = :user_id'];
+$params = [':user_id' => $user['userId']];
 
 if ($type) {
-    $conditions[] = 'type = ?';
-    $params[] = $type;
+    $conditions[] = 'type = :type';
+    $params[':type'] = $type;
 }
 
 if ($status) {
-    $conditions[] = 'status = ?';
-    $params[] = $status;
+    $conditions[] = 'status = :status';
+    $params[':status'] = $status;
 }
 
 $whereSql = implode(' AND ', $conditions);
@@ -49,8 +66,8 @@ try {
         LIMIT :limit OFFSET :offset
     ";
     $stmt = $conn->prepare($sql);
-    foreach ($params as $index => $value) {
-        $stmt->bindValue($index + 1, $value);
+    foreach ($params as $name => $value) {
+        $stmt->bindValue($name, $value);
     }
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -64,6 +81,12 @@ try {
     }
 
     Helpers::jsonResponse([
+        'transactions' => $transactions,
+        'pagination' => [
+            'total' => $total,
+            'limit' => $limit,
+            'offset' => $offset
+        ],
         'data' => [
             'transactions' => $transactions,
             'pagination' => [

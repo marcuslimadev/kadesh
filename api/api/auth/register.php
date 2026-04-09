@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../../utils/helpers.php';
+require_once __DIR__ . '/../../utils/local_fallback.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     Helpers::jsonResponse(['error' => 'Método não permitido'], 405);
@@ -30,6 +31,34 @@ if (strlen($password) < 6) {
 
 $db = new Database();
 $conn = $db->getConnection();
+
+if (!$conn) {
+    $userType = $data['user_type'] ?? 'both';
+    $user = fallbackCreateUser($name, $email, $password, $userType);
+
+    if (!$user) {
+        Helpers::jsonResponse(['error' => 'Email já está em uso'], 409);
+    }
+
+    $payload = [
+        'userId' => $user['id'],
+        'email' => $user['email'],
+        'type' => $user['type'],
+        'exp' => time() + (7 * 24 * 60 * 60)
+    ];
+
+    Helpers::jsonResponse([
+        'message' => 'Usuário criado com sucesso',
+        'user' => [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'type' => $user['type'],
+            'created_at' => $user['created_at']
+        ],
+        'token' => Helpers::generateJWT($payload)
+    ], 201);
+}
 
 try {
     // Verificar se usuário já existe

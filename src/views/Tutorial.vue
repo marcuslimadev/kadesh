@@ -39,8 +39,9 @@
       </p>
       <div class="grid md:grid-cols-2 gap-4">
         <div class="bg-surface p-4 rounded-lg">
-          <h3 class="font-semibold text-amber-700 mb-2">👔 Modo Contratante</h3>
+          <h3 class="font-semibold text-amber-700 mb-2">Torre Contratante</h3>
           <ul class="text-sm text-body space-y-1">
+            <li>• Como criar um projeto</li>
             <li>• Criar e publicar projetos</li>
             <li>• Ver propostas recebidas</li>
             <li>• Gerenciar contratos como cliente</li>
@@ -48,8 +49,9 @@
           </ul>
         </div>
         <div class="bg-surface p-4 rounded-lg">
-          <h3 class="font-semibold text-green-700 mb-2">⚙️ Modo Prestador</h3>
+          <h3 class="font-semibold text-green-700 mb-2">Torre Prestador</h3>
           <ul class="text-sm text-body space-y-1">
+            <li>• Como enviar propostas</li>
             <li>• Buscar oportunidades de trabalho</li>
             <li>• Enviar propostas competitivas</li>
             <li>• Gerenciar contratos como executor</li>

@@ -6,6 +6,11 @@
         <AdRail position="left" class="hidden lg:block" />
         
         <div class="lobby-main space-y-2">
+          <section class="bg-surface rounded-lg p-4 border border-muted-border">
+            <h1 class="text-2xl font-bold text-heading">Lobby de Leilões Reversos</h1>
+            <p class="text-sm text-body mt-1">Acompanhe oportunidades e disputas em tempo real.</p>
+          </section>
+
           <section class="bg-surface rounded-lg p-2 border border-muted-border">
             <div class="flex items-center justify-between mb-2">
               <button @click="showFilters = !showFilters" class="flex items-center gap-2 text-xs font-medium text-body hover:text-heading">
@@ -39,14 +44,14 @@
 
         <div v-if="loading" class="card text-center py-12">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gold mx-auto"></div>
-          <p class="mt-4 text-muted">Carregando projetos...</p>
+          <p class="mt-4 text-muted">Carregando oportunidades...</p>
         </div>
 
         <div v-else-if="filteredProjects.length === 0" class="card text-center py-12">
           <svg class="w-16 h-16 text-muted mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <p class="text-muted">Nenhum projeto encontrado com os filtros atuais</p>
+          <p class="text-muted">Nenhum projeto encontrado com os critérios atuais</p>
         </div>
 
         <div v-else class="space-y-4">

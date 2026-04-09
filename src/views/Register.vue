@@ -22,7 +22,7 @@
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
       <div class="bg-surface/80 backdrop-blur-sm py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-gray-100">
         <!-- Info Box -->
-        <div class="mb-6 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border border-amber-200 rounded-xl p-4 shadow-sm">
+        <div class="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4 shadow-sm">
           <div class="flex items-start">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@
               </svg>
             </div>
             <div class="ml-3">
-              <p class="text-sm text-amber-900">
+              <p class="text-sm text-blue-900">
                 <strong>✨ Novidade!</strong> Você pode alternar entre Contratante e Prestador a qualquer momento usando o switch "Ver como" após o login. 🔄
               </p>
             </div>
@@ -333,8 +333,7 @@ const handleRegister = async () => {
     })
 
     if (result.success) {
-      // Redirecionar para projetos após registro
-      router.push('/projects')
+      router.push('/lobby')
     } else {
       errors.general = result.error
     }
