@@ -9,7 +9,7 @@
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,13 +67,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
+      <div class="bg-surface rounded-lg shadow-lg p-6 mb-6 border border-theme">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="open">Aberto</option>
@@ -87,7 +87,7 @@
             <label class="block text-sm font-medium text-body mb-2">Categoria</label>
             <select
               v-model="filters.category"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option v-for="cat in categories" :key="cat.value" :value="cat.value">
@@ -100,7 +100,7 @@
             <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="created_at_desc">Mais Recentes</option>
               <option value="created_at_asc">Mais Antigos</option>
@@ -127,7 +127,7 @@
         <p class="mt-4 text-body">Carregando projetos...</p>
       </div>
 
-      <div v-else-if="error" class="bg-[#161821] rounded-lg shadow-lg p-8 text-center border border-[rgba(212,175,55,0.24)]">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow-lg p-8 text-center border border-theme">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -141,7 +141,7 @@
         </button>
       </div>
 
-      <div v-else-if="filteredProjects.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
+      <div v-else-if="filteredProjects.length === 0" class="bg-surface rounded-lg shadow-lg p-12 text-center border border-theme">
         <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
@@ -166,7 +166,7 @@
             :key="project.id"
             class="auction-card-modern group"
           >
-            <div class="relative h-48 overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#1A1A1A] to-[#0F1117]">
+            <div class="relative h-48 overflow-hidden rounded-t-2xl bg-surface-alt">
               <img
                 v-if="getCoverImage(project)"
                 :src="getCoverImage(project)"
@@ -204,46 +204,46 @@
               </div>
             </div>
 
-            <div class="p-5 bg-[#161821] border-x border-b border-[rgba(212,175,55,0.24)] rounded-b-2xl">
+            <div class="p-5 bg-surface border-x border-b border-theme rounded-b-2xl">
               <span class="inline-block px-3 py-1 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-semibold rounded-full mb-3">
                 {{ getCategoryLabel(project.category) }}
               </span>
 
-              <p class="text-xs uppercase tracking-wide text-[#C7C7C7] mb-1">
-                Contratante: <span class="text-[#F5F5F5] font-semibold">{{ userName }}</span>
+              <p class="text-xs uppercase tracking-wide text-body mb-1">
+                Contratante: <span class="text-heading font-semibold">{{ userName }}</span>
               </p>
 
               <router-link
                 :to="`/projects/${project.id}`"
-                class="block text-lg font-bold text-[#F5F5F5] hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
+                class="block text-lg font-bold text-heading hover:text-[#D4AF37] transition-colors line-clamp-2 mb-3 leading-tight"
               >
                 {{ project.title }}
               </router-link>
 
-              <p class="text-[#C7C7C7] text-sm line-clamp-2 mb-4">
+              <p class="text-body text-sm line-clamp-2 mb-4">
                 {{ project.description }}
               </p>
 
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 p-3 bg-[#0F1117] rounded-xl">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4 p-3 bg-surface-alt rounded-xl">
                 <div class="text-center">
-                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Orcamento</p>
+                  <p class="text-xs text-muted uppercase mb-1">Orcamento</p>
                   <p class="text-base font-bold text-[#D4AF37]">
                     {{ formatCurrencyCompact(project.budget || project.max_budget) }}
                   </p>
                 </div>
                 <div class="text-center border-x border-[rgba(212,175,55,0.1)]">
-                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Prazo</p>
-                  <p class="text-sm font-semibold text-[#F5F5F5]">
+                  <p class="text-xs text-muted uppercase mb-1">Prazo</p>
+                  <p class="text-sm font-semibold text-heading">
                     {{ formatDeadlineCompact(project.deadline) }}
                   </p>
                 </div>
                 <div class="text-center border-x border-[rgba(212,175,55,0.1)] sm:border-x-0 sm:border-l sm:border-[rgba(212,175,55,0.1)]">
-                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Propostas</p>
-                  <p class="text-base font-bold text-[#F5F5F5]">{{ getBidCount(project) }}</p>
+                  <p class="text-xs text-muted uppercase mb-1">Propostas</p>
+                  <p class="text-base font-bold text-heading">{{ getBidCount(project) }}</p>
                 </div>
                 <div class="text-center">
-                  <p class="text-xs text-[#8A8A8A] uppercase mb-1">Menor</p>
-                  <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-[#8A8A8A]'">
+                  <p class="text-xs text-muted uppercase mb-1">Menor</p>
+                  <p class="text-base font-bold" :class="getLowestBid(project) ? 'text-emerald-400' : 'text-muted'">
                     {{ getLowestBid(project) ? formatCurrencyCompact(getLowestBid(project)) : '—' }}
                   </p>
                 </div>
@@ -586,7 +586,7 @@ onUnmounted(() => {
   padding: 8px 12px;
   border-radius: 10px;
   border: 1px solid rgba(212, 175, 55, 0.3);
-  color: #f5f5f5;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 12px;
   transition: all 0.2s ease;
@@ -597,7 +597,6 @@ onUnmounted(() => {
   color: #d4af37;
 }
 </style>
-
 
 
 

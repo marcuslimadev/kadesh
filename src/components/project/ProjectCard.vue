@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#161821] rounded-lg shadow-lg hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all duration-300 overflow-hidden border border-[rgba(212,175,55,0.24)] hover:border-[#D4AF37]">
+  <div class="bg-surface rounded-lg shadow-lg hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all duration-300 overflow-hidden border border-theme hover:border-[#D4AF37]">
     <div class="p-6">
       <!-- Header -->
       <div class="flex items-start justify-between mb-4">
@@ -34,13 +34,13 @@
         <span
           v-for="skill in project.skills_required.slice(0, 5)"
           :key="skill"
-          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-body border border-[rgba(255,255,255,0.08)]"
+          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-surface-alt text-body border border-muted"
         >
           {{ skill }}
         </span>
         <span
           v-if="project.skills_required.length > 5"
-          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#1A1A1A] text-body border border-[rgba(255,255,255,0.08)]"
+          class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-surface-alt text-body border border-muted"
         >
           +{{ project.skills_required.length - 5 }}
         </span>
@@ -72,10 +72,10 @@
     </div>
 
     <!-- View Details Button -->
-    <div class="px-6 py-3 bg-[#0F1117] border-t border-[rgba(212,175,55,0.24)]">
+    <div class="px-6 py-3 bg-surface-alt border-t border-theme">
       <router-link
         :to="`/projects/${project.id}`"
-        class="block w-full text-center px-4 py-2 bg-[#D4AF37] text-[#0F1117] text-sm font-semibold rounded-md hover:bg-[#E5C04A] transition-colors"
+        class="btn-gold block w-full text-center px-4 py-2 text-sm font-semibold rounded-md transition-colors"
       >
         Ver detalhes
       </router-link>

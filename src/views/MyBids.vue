@@ -9,7 +9,7 @@
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@
           </div>
         </div>
         
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center">
             <div class="p-3 rounded-full bg-[rgba(212,175,55,0.15)] text-[#D4AF37] mr-4 border border-[#D4AF37]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,13 +67,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
+      <div class="bg-surface rounded-lg shadow-lg p-6 mb-6 border border-theme">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="pending">Pendente</option>
@@ -87,7 +87,7 @@
             <label class="block text-sm font-medium text-body mb-2">Categoria</label>
             <select
               v-model="filters.category"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option v-for="cat in categories" :key="cat.value" :value="cat.value">
@@ -100,7 +100,7 @@
             <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="created_at_desc">Mais Recentes</option>
               <option value="created_at_asc">Mais Antigas</option>

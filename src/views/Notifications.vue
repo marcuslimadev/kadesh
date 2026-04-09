@@ -19,13 +19,13 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-6 mb-6">
+      <div class="bg-surface rounded-lg shadow border border-theme p-6 mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-medium text-body mb-2">Tipo</label>
             <select
               v-model="filters.type"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-surface-alt border border-muted text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="project">Projetos</option>
@@ -40,7 +40,7 @@
             <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-surface-alt border border-muted text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todas</option>
               <option value="unread">Não Lidas</option>
@@ -52,7 +52,7 @@
             <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 bg-[#0F1117] border border-[#333] text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 bg-surface-alt border border-muted text-heading rounded-md focus:outline-none focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="date_desc">Mais Recentes</option>
               <option value="date_asc">Mais Antigas</option>
@@ -76,7 +76,7 @@
         <p class="mt-4 text-body">Carregando notificações...</p>
       </div>
 
-      <div v-else-if="error" class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-8 text-center">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow border border-theme p-8 text-center">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -90,7 +90,7 @@
         </button>
       </div>
 
-      <div v-else-if="filteredNotifications.length === 0" class="bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] p-12 text-center">
+      <div v-else-if="filteredNotifications.length === 0" class="bg-surface rounded-lg shadow border border-theme p-12 text-center">
         <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
         </svg>
@@ -106,7 +106,7 @@
           :key="notification.id"
           @click="handleNotificationClick(notification)"
           :class="[
-            'bg-[#161821] rounded-lg shadow border border-[rgba(212,175,55,0.24)] hover:shadow-md hover:border-[#D4AF37]/50 transition-all cursor-pointer',
+            'bg-surface rounded-lg shadow border border-theme hover:shadow-md hover:border-[#D4AF37]/50 transition-all cursor-pointer',
             notification.is_read ? 'opacity-75' : 'border-l-4 border-l-[#D4AF37]'
           ]"
         >

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-lg p-4 hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] hover:border-[#D4AF37] transition-all">
+  <div class="bg-surface border border-theme rounded-lg p-4 hover:shadow-[0_4px_20px_rgba(212,175,55,0.25)] hover:border-[#D4AF37] transition-all">
     <!-- Provider Info and Amount -->
     <div class="flex items-start justify-between mb-3">
       <div class="flex items-center space-x-3">
@@ -62,7 +62,7 @@
       </button>
       <button
         @click="$emit('reject', bid.id)"
-        class="px-4 py-2 border border-[rgba(212,175,55,0.24)] text-body rounded-md hover:bg-[#1A1A1A] transition-colors text-sm font-medium"
+        class="px-4 py-2 border border-theme text-body rounded-md hover:bg-surface-alt transition-colors text-sm font-medium"
       >
         Rejeitar
       </button>

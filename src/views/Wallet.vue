@@ -9,7 +9,7 @@
 
       <!-- Balance Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-gradient-to-br from-[#161821] to-[#0F1117] rounded-lg shadow-lg p-6 border border-[#D4AF37]">
+        <div class="rounded-lg border border-accent bg-surface shadow-lg p-6">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-medium text-body">Saldo Disponível</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
           <p class="mt-2 text-sm text-muted">Pronto para saque</p>
         </div>
 
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-medium text-body">Em Escrow</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@
           <p class="mt-2 text-sm text-muted">Bloqueado em projetos</p>
         </div>
 
-        <div class="bg-[#161821] rounded-lg shadow-lg p-6 border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-lg shadow-lg p-6 border border-theme">
           <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-medium text-body">Pendente</h3>
             <svg class="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -44,12 +44,12 @@
       </div>
 
       <!-- Actions -->
-      <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-8 border border-[rgba(212,175,55,0.24)]">
+      <div class="bg-surface rounded-lg shadow-lg p-6 mb-8 border border-theme">
         <h2 class="text-lg font-semibold text-heading mb-4">Ações Rápidas</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
             @click="showDepositModal = true"
-            class="flex items-center justify-center px-6 py-3 bg-[#D4AF37] text-[#0F1117] font-semibold rounded-md hover:bg-[#E5C04A] transition-colors"
+            class="btn-gold flex items-center justify-center px-6 py-3 font-semibold rounded-md transition-colors"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -59,7 +59,7 @@
           <button
             @click="showWithdrawModal = true"
             :disabled="balance.available <= 0"
-            class="flex items-center justify-center px-6 py-3 bg-[#1A1A1A] border-2 border-[#D4AF37] text-[#D4AF37] font-semibold rounded-md hover:bg-[rgba(212,175,55,0.15)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            class="btn-gold-outline flex items-center justify-center px-6 py-3 font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
@@ -88,7 +88,7 @@
             <div
               v-for="intent in pendingDeposits"
               :key="intent.id"
-              class="bg-[#161821] border border-[rgba(212,175,55,0.24)] rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
+               class="bg-surface-alt border border-theme rounded-xl p-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
             >
               <div>
                 <p class="text-base font-semibold text-heading">
@@ -101,14 +101,14 @@
               <div class="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  class="px-4 py-2 text-sm font-medium text-[#0F1117] bg-[#D4AF37] rounded-lg hover:bg-[#E5C04A]"
+                  class="btn-gold px-4 py-2 text-sm font-medium rounded-lg"
                   @click="openCheckoutLink(intent.checkout_url)"
                 >
                   Reabrir checkout
                 </button>
                 <button
                   type="button"
-                  class="px-4 py-2 text-sm font-medium text-[#D4AF37] border border-[#D4AF37] rounded-lg hover:bg-[rgba(212,175,55,0.15)]"
+                  class="btn-gold-outline px-4 py-2 text-sm font-medium rounded-lg"
                   @click="copyCheckoutLink(intent.checkout_url)"
                 >
                   Copiar link
@@ -120,14 +120,14 @@
       </div>
 
       <!-- Filters -->
-      <div class="bg-[#161821] rounded-lg shadow-lg p-6 mb-6 border border-[rgba(212,175,55,0.24)]">
+      <div class="bg-surface rounded-lg shadow-lg p-6 mb-6 border border-theme">
         <h2 class="text-lg font-semibold text-heading mb-4">Histórico de Transações</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block text-sm font-medium text-body mb-2">Tipo</label>
             <select
               v-model="filters.type"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="deposit">Depósito</option>
@@ -146,7 +146,7 @@
             <label class="block text-sm font-medium text-body mb-2">Status</label>
             <select
               v-model="filters.status"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="">Todos</option>
               <option value="completed">Concluído</option>
@@ -159,7 +159,7 @@
             <label class="block text-sm font-medium text-body mb-2">Ordenar Por</label>
             <select
               v-model="filters.sortBy"
-              class="w-full px-3 py-2 border border-[rgba(212,175,55,0.24)] rounded-md bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+              class="w-full px-3 py-2 border border-theme rounded-md bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
             >
               <option value="date_desc">Mais Recentes</option>
               <option value="date_asc">Mais Antigas</option>
@@ -185,7 +185,7 @@
         <p class="mt-4 text-body">Carregando transações...</p>
       </div>
 
-      <div v-else-if="error" class="bg-[#161821] rounded-lg shadow-lg p-8 text-center border border-[rgba(212,175,55,0.24)]">
+      <div v-else-if="error" class="bg-surface rounded-lg shadow-lg p-8 text-center border border-theme">
         <svg class="mx-auto h-12 w-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -193,13 +193,13 @@
         <p class="mt-2 text-sm text-body">{{ error }}</p>
         <button
           @click="loadTransactions"
-          class="mt-6 px-4 py-2 bg-[#D4AF37] text-[#0F1117] font-semibold rounded-md hover:bg-[#E5C04A]"
+          class="mt-6 px-4 py-2 btn-gold font-semibold rounded-md"
         >
           Tentar Novamente
         </button>
       </div>
 
-      <div v-else-if="filteredTransactions.length === 0" class="bg-[#161821] rounded-lg shadow-lg p-12 text-center border border-[rgba(212,175,55,0.24)]">
+      <div v-else-if="filteredTransactions.length === 0" class="bg-surface rounded-lg shadow-lg p-12 text-center border border-theme">
         <svg class="mx-auto h-12 w-12 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
@@ -209,10 +209,10 @@
         </p>
       </div>
 
-      <div v-else class="bg-[#161821] rounded-lg shadow-lg overflow-hidden border border-[rgba(212,175,55,0.24)]">
+      <div v-else class="bg-surface rounded-lg shadow-lg overflow-hidden border border-theme">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-[rgba(212,175,55,0.24)]">
-            <thead class="bg-[#0F1117]">
+          <table class="min-w-full divide-y divide-muted">
+            <thead class="bg-surface-alt">
               <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-[#D4AF37] uppercase tracking-wider">
                   Data
@@ -231,8 +231,8 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="bg-[#161821] divide-y divide-[rgba(255,255,255,0.08)]">
-              <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-[#1A1A1A]">
+            <tbody class="bg-surface divide-y divide-muted">
+              <tr v-for="transaction in filteredTransactions" :key="transaction.id" class="hover:bg-surface-alt">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-heading">
                   {{ formatDate(transaction.created_at) }}
                 </td>
@@ -271,7 +271,7 @@
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
         @click.self="closeDepositModal"
       >
-        <div class="bg-[#161821] rounded-2xl shadow-xl p-8 max-w-lg w-full border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-2xl shadow-xl p-8 max-w-lg w-full border border-theme">
           <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-sm font-medium text-[#D4AF37] uppercase tracking-wide">Adicionar fundos</p>
@@ -295,7 +295,7 @@
                   type="number"
                   min="10"
                   step="0.01"
-                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
+                  class="w-full pl-10 pr-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]"
                   placeholder="0,00"
                 />
               </div>
@@ -306,7 +306,7 @@
               <label class="block text-sm font-medium text-body mb-1">Método de pagamento</label>
               <select
                 v-model="depositForm.method"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] disabled:opacity-50"
+                class="w-full px-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37] disabled:opacity-50"
                 disabled
               >
                 <option v-for="method in depositMethods" :key="method.value" :value="method.value">
@@ -321,7 +321,7 @@
               <input
                 v-model="depositForm.description"
                 type="text"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                 placeholder="Ex.: Depósito para projeto Landing Page"
               />
               <p class="mt-1 text-xs text-muted">Esse texto aparece no comprovante interno da Kaddesh.</p>
@@ -332,7 +332,7 @@
             <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
               <button
                 type="button"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-body hover:bg-[#1A1A1A]"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-theme text-body hover:bg-surface-alt"
                 @click="closeDepositModal"
               >
                 Cancelar
@@ -340,7 +340,7 @@
               <button
                 type="submit"
                 :disabled="isDepositing"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-[#D4AF37] text-[#0F1117] font-medium hover:bg-[#E5C04A] disabled:opacity-60 disabled:cursor-not-allowed"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg btn-gold font-medium disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <span v-if="isDepositing" class="flex items-center justify-center">
                   <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -361,7 +361,7 @@
         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
         @click.self="closeWithdrawModal"
       >
-        <div class="bg-[#161821] rounded-2xl shadow-xl p-8 max-w-lg w-full border border-[rgba(212,175,55,0.24)]">
+        <div class="bg-surface rounded-2xl shadow-xl p-8 max-w-lg w-full border border-theme">
           <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-sm font-medium text-[#D4AF37] uppercase tracking-wide">Solicitar saque</p>
@@ -384,7 +384,7 @@
                   type="number"
                   min="50"
                   step="0.01"
-                  class="w-full pl-10 pr-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  class="w-full pl-10 pr-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                   placeholder="0,00"
                 />
               </div>
@@ -397,7 +397,7 @@
               <label class="block text-sm font-medium text-body mb-1">Método</label>
               <select
                 v-model="withdrawForm.method"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
               >
                 <option v-for="method in withdrawMethods" :key="method.value" :value="method.value">
                   {{ method.label }}
@@ -410,7 +410,7 @@
               <textarea
                 v-model="withdrawForm.notes"
                 rows="3"
-                class="w-full px-4 py-3 border border-[rgba(212,175,55,0.24)] rounded-lg bg-[#1A1A1A] text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                class="w-full px-4 py-3 border border-theme rounded-lg bg-surface-alt text-heading focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
                 placeholder="Informe a chave PIX ou dados bancários para transferência"
               ></textarea>
             </div>
@@ -420,7 +420,7 @@
             <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
               <button
                 type="button"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-[rgba(212,175,55,0.24)] text-body hover:bg-[#1A1A1A]"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-theme text-body hover:bg-surface-alt"
                 @click="closeWithdrawModal"
               >
                 Cancelar
@@ -428,7 +428,7 @@
               <button
                 type="submit"
                 :disabled="isWithdrawing"
-                class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-[#D4AF37] text-[#0F1117] font-medium hover:bg-[#E5C04A] disabled:opacity-60 disabled:cursor-not-allowed"
+                class="w-full sm:w-auto px-4 py-2.5 rounded-lg btn-gold font-medium disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <span v-if="isWithdrawing" class="flex items-center justify-center">
                   <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">

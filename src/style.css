@@ -191,6 +191,53 @@ textarea {
                 color: var(--text-primary) !important;
         }
 
+        .theme-light [class~="bg-[#161821]"] {
+                background: var(--surface) !important;
+                background-image: none !important;
+        }
+
+        .theme-light [class~="bg-[#1A1A1A]"],
+        .theme-light [class~="bg-[#0F1117]"] {
+                background: var(--surface-alt) !important;
+                background-image: none !important;
+        }
+
+        .theme-light [class~="from-[#161821]"],
+        .theme-light [class~="from-[#1A1A1A]"] {
+                --tw-gradient-from: var(--surface) var(--tw-gradient-from-position) !important;
+                --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position) !important;
+                --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+        }
+
+        .theme-light [class~="to-[#0F1117]"],
+        .theme-light [class~="to-[#1A1A1A]"] {
+                --tw-gradient-to: var(--surface-alt) var(--tw-gradient-to-position) !important;
+        }
+
+        .theme-light [class~="border-[rgba(212,175,55,0.24)]"],
+        .theme-light [class~="border-[rgba(255,255,255,0.08)]"],
+        .theme-light [class~="border-[#333]"] {
+                border-color: var(--card-border) !important;
+        }
+
+        .theme-light [class~="divide-[rgba(255,255,255,0.08)]"] > :not([hidden]) ~ :not([hidden]) {
+                border-color: var(--muted-border) !important;
+        }
+
+        .theme-light [class~="hover:bg-[#1A1A1A]"]:hover,
+        .theme-light [class~="hover:bg-[#0F1117]"]:hover {
+                background: var(--surface-hover) !important;
+        }
+
+        .theme-light [class~="text-[#F5F5F5]"] {
+                color: var(--text-primary) !important;
+        }
+
+        .theme-light [class~="text-[#C7C7C7]"],
+        .theme-light [class~="text-[#8A8A8A]"] {
+                color: var(--text-secondary) !important;
+        }
+
         .theme-dark {
                 --page-bg: #0F1117;
                 --surface: #161821;
